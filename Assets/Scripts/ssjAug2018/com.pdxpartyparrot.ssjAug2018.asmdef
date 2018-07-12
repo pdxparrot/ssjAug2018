@@ -1,0 +1,11 @@
+{
+    "name": "com.pdxpartyparrot.ssjAug2018",
+    "references": [
+        "com.pdxpartyparrot.Core",
+        "com.pdxpartyparrot.Game"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
