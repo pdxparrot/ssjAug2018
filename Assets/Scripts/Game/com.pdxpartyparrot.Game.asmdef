@@ -1,0 +1,10 @@
+{
+    "name": "com.pdxpartyparrot.Game",
+    "references": [
+        "com.pdxpartyparrot.Core"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

@@ -1,0 +1,12 @@
+{
+    "name": "com.pdxpartyparrot.Core.Editor",
+    "references": [
+        "com.pdxpartyparrot.Core"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

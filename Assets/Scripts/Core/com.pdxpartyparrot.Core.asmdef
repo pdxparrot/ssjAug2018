@@ -1,0 +1,12 @@
+{
+    "name": "com.pdxpartyparrot.Core",
+    "references": [
+        "Unity.TextMeshPro",
+        "Unity.InputSystem",
+        "com.unity.postprocessing.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

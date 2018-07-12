@@ -1,6 +1,6 @@
 // GENERATED AUTOMATICALLY FROM 'Assets/Data/Input/Controls.inputactions'
 
-namespace com.pdxpartyparrot.ssjAug2018
+namespace pdxpartyparrot.Core.Input
 {
     [System.Serializable]
     public class Controls : UnityEngine.Experimental.Input.InputActionWrapper
