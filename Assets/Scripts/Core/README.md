@@ -44,7 +44,7 @@
   * 2 Master sub-groups
     * Music
     * SFX
-  * TODO: expose the volumes for all of these
+  * *TODO:* expose the volumes for all of these
 * Data/Input/Controls.inputactions
   * Enable the C# Wrapper Class
     * Code Path: Assets\Scripts\Core\Input\Controls.cs
@@ -108,7 +108,7 @@
   * Clear Mode: Background Color
   * Background Color: Opaque Black
   * Culling Mask: Nothing
-  * Projection: Perspective (TODO: would ortho make more sense for this?)
+  * Projection: Perspective (*TODO:* would ortho make more sense for this?)
   * Leave the Audio Listener attached to the camera for audio to work
 * Add the scene to the Build Settings and ensure that it is Scene 0
 * Add a new GameObject to the scene and add the SplashScreen component to it
@@ -125,7 +125,7 @@
   * Clear Mode: Background Color
   * Background Color: Opaque Black
   * Culling Mask: Nothing
-  * Projection: Perspective (TODO: would ortho make more sense for this?)
+  * Projection: Perspective (*TODO:* would ortho make more sense for this?)
   * Turn off Clear Depth
   * Leave the Audio Listener attached to the camera for audio to work
 
