@@ -91,8 +91,8 @@
       * Remove the AudioListener
       * Add an Aspect Ratio component to the Camera (UI) object
     * Add an empty GameObject under the prefab and add a Post Process Volume to it
-      * Set Is Global
-      * Priority: 1
+    * Attach the Cameras and the Post Process Volume to the Viewer component
+    * **Create the Post Process Layer (one per-viewer, Viewer{N}_PostProcess)**
   * Create an empty Prefab and add the CameraManager component to it
 * InputManager
   * Create an empty Prefab and add the InputManager component to it

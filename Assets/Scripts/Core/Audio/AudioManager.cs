@@ -75,7 +75,26 @@ namespace pdxpartyparrot.Core.Audio
         private float _updateCrossfadeUpdateMs = 100.0f;
 #endregion
 
+        [Space(10)]
+
 #region Volume
+        [Header("Volume")]
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _mute;
+
+        public bool Mute
+        {
+            get { return _mute; }
+
+            set
+            {
+                _mute = value;
+                Mixer.SetFloat(_masterVolumeParameter, _mute ? 0.0f : MasterVolume);
+            }
+        }
+
         public float MasterVolume
         {
             get { return PartyParrotManager.Instance.GetFloat(MasterVolumeKey, 1.0f); }
@@ -118,21 +137,6 @@ namespace pdxpartyparrot.Core.Audio
                 PartyParrotManager.Instance.SetFloat(SFXVolumeKey, value);
 
                 Mute = false;
-            }
-        }
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _mute;
-
-        public bool Mute
-        {
-            get { return _mute; }
-
-            set
-            {
-                _mute = value;
-                Mixer.SetFloat(_masterVolumeParameter, _mute ? 0.0f : MasterVolume);
             }
         }
 #endregion

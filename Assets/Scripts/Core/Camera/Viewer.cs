@@ -10,9 +10,9 @@ namespace pdxpartyparrot.Core.Camera
     {
         [SerializeField]
         [ReadOnly]
-        private int _playerId;
+        private int _id;
 
-        public int PlayerId => _playerId;
+        public int Id => _id;
 
         [Space(10)]
 
@@ -62,19 +62,18 @@ namespace pdxpartyparrot.Core.Camera
 
         public virtual void Initialize(int id)
         {
-            _playerId = id;
+            _id = id;
 
-            name = $"Viewer P{PlayerId}";
-            Camera.name = $"Camera P{PlayerId}";
-            UICamera.name = $"UI Camera P{PlayerId}";
+            name = $"Viewer {Id}";
 
             // setup the camera to only render it's own post processing volume
-            LayerMask postProcessLayer =  LayerMask.NameToLayer($"P{PlayerId}_PostProcess");
+            LayerMask postProcessLayer = LayerMask.NameToLayer($"Viewer{Id}_PostProcess");
+            if(postProcessLayer != -1) {
+                _globalPostProcessVolume.gameObject.layer = postProcessLayer;
 
-            _globalPostProcessVolume.gameObject.layer = postProcessLayer;
-
-            PostProcessLayer layer = Camera.GetComponent<PostProcessLayer>();
-            layer.volumeLayer = 1 << postProcessLayer.value;
+                PostProcessLayer layer = Camera.GetComponent<PostProcessLayer>();
+                layer.volumeLayer = 1 << postProcessLayer.value;
+            }
         }
 
         public void ResetCameraPosition()

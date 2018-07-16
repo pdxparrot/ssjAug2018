@@ -52,5 +52,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewportEpsilon: 0.005
-  _viewerPrefab: {fileID: 114321273920341628, guid: 90d2034f2dac7c8418bb452cda507c68,
+  _viewerPrefab: {fileID: 114106842663392620, guid: 90d2034f2dac7c8418bb452cda507c68,
     type: 2}
