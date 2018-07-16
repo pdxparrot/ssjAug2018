@@ -10,8 +10,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Core.Camera
 {
-    // TODO: rename this viewer manager :\
-    public sealed class CameraManager : SingletonBehavior<CameraManager>
+    public sealed class ViewerManager : SingletonBehavior<ViewerManager>
     {
         [SerializeField]
         private float _viewportEpsilon = 0.005f;
@@ -48,9 +47,10 @@ namespace pdxpartyparrot.Core.Camera
         }
 #endregion
 
-        public void SpawnViewers(int count)
+#region Allocate
+        public void AllocateViewers(int count)
         {
-            Debug.Log($"Spawning {count} viewers...");
+            Debug.Log($"Allocating {count} viewers...");
 
             for(int i=0; i<count; ++i) {
                 Viewer viewer = Instantiate(_viewerPrefab, _viewerContainer.transform);
@@ -64,6 +64,20 @@ namespace pdxpartyparrot.Core.Camera
             ResizeViewports();
         }
 
+        public void FreeViewers()
+        {
+            _assignedViewers.Clear();
+            _unassignedViewers.Clear();
+
+            foreach(Viewer viewer in _viewers) {
+                Destroy(viewer);
+            }
+
+            _viewers.Clear();
+        }
+#endregion
+
+#region Acquire
         [CanBeNull]
         public Viewer AcquireViewer()
         {
@@ -108,6 +122,7 @@ namespace pdxpartyparrot.Core.Camera
             }
             ResizeViewports();
         }
+#endregion
 
         public void ResizeViewports()
         {
@@ -145,7 +160,7 @@ namespace pdxpartyparrot.Core.Camera
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "CameraManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ViewerManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Viewers", GUI.skin.box);
                     GUILayout.Label($"Total Viewers: {_viewers.Count}");

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 using DG.Tweening;
 
@@ -28,7 +27,7 @@ namespace pdxpartyparrot.Core.Loading
         private AudioManager _audioManagerPrefab;
 
         [SerializeField]
-        private CameraManager _cameraManagerPrefab;
+        private ViewerManager _viewerManagerPrefab;
 
         [SerializeField]
         private InputManager _inputManagerPrefab;
@@ -99,7 +98,7 @@ namespace pdxpartyparrot.Core.Loading
             TimeManager.Create(ManagersContainer);
             AudioManager.CreateFromPrefab(_audioManagerPrefab, ManagersContainer);
             ObjectPoolManager.Create(ManagersContainer);
-            CameraManager.CreateFromPrefab(_cameraManagerPrefab, ManagersContainer);
+            ViewerManager.CreateFromPrefab(_viewerManagerPrefab, ManagersContainer);
             InputManager.CreateFromPrefab(_inputManagerPrefab, ManagersContainer);
             Instantiate(_networkManagerPrefab, ManagersContainer.transform);
             SceneManager.CreateFromPrefab(_sceneManagerPrefab, ManagersContainer);

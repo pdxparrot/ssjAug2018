@@ -103,10 +103,10 @@ namespace pdxpartyparrot.Core.Camera
             float viewportY = y * viewportHeight;
 
             Rect viewport = new Rect(
-                viewportX + CameraManager.Instance.ViewportEpsilon,
-                viewportY + CameraManager.Instance.ViewportEpsilon,
-                viewportWidth - (CameraManager.Instance.ViewportEpsilon * 2),
-                viewportHeight - (CameraManager.Instance.ViewportEpsilon * 2));
+                viewportX + ViewerManager.Instance.ViewportEpsilon,
+                viewportY + ViewerManager.Instance.ViewportEpsilon,
+                viewportWidth - (ViewerManager.Instance.ViewportEpsilon * 2),
+                viewportHeight - (ViewerManager.Instance.ViewportEpsilon * 2));
 
             Camera.rect = viewport;
             UICamera.rect = viewport;
