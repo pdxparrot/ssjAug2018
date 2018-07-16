@@ -1,4 +1,4 @@
-﻿using pdxpartyparrot.Core.Loading;
+﻿using pdxpartyparrot.Game.Loading;
 
 namespace pdxpartyparrot.ssjAug2018.Loading
 {

@@ -104,6 +104,8 @@
 * NetworkManager
   * Create an empty Prefab and add the NetworkManager component to it
     * Disable Don't Destroy on Load
+* GameStateManager
+  * Create an empty Prefab and add the GameStateManager component to it
 
 # Splash Screen Setup
 
@@ -181,3 +183,8 @@
 
 # Game Scene Setup
 * Do not add a Main Camera to these scenes
+
+# Initial Game State Setup
+* Create a new GameState subclass and attach it to a new empty Prefab
+  * This state should probably get the ViewerManager and InputManager state setup
+* Attach the new GameState prefab to the GameStateManager prefab

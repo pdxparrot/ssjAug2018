@@ -869,7 +869,8 @@ MonoBehaviour:
     type: 2}
   _sceneManagerPrefab: {fileID: 114774362551610632, guid: b2583e1f2d7c707448d4c243af775124,
     type: 2}
-  _defaultSceneName: test
+  _gameStateManagerPrefab: {fileID: 114906633514924052, guid: a40a8ff02efcb0b4b99b6533e327fe14,
+    type: 2}
 --- !u!1 &2071533183
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,10 +41,6 @@ namespace pdxpartyparrot.Core.Loading
 
         protected GameObject ManagersContainer { get; private set; }
 
-        // TODO: this should come from the game state
-        [SerializeField]
-        private string _defaultSceneName;
-
 #region Unity Lifecycle
         protected virtual void Awake()
         {
@@ -66,24 +62,19 @@ namespace pdxpartyparrot.Core.Loading
             CreateManagers();
             yield return null;
 
-            _loadingScreen.Progress.Percent = 0.25f;
+            _loadingScreen.Progress.Percent = 0.5f;
             _loadingScreen.ProgressText = "Initializing managers...";
             yield return null;
 
             InitializeManagers();
             yield return null;
 
-            _loadingScreen.Progress.Percent = 0.75f;
-            _loadingScreen.ProgressText = "Loading default scene...";
-            SceneManager.Instance.LoadDefaultScene(() => {
-                _loadingScreen.Progress.Percent = 1.0f;
-                _loadingScreen.ProgressText = "Loading complete!";
+            _loadingScreen.Progress.Percent = 1.0f;
+            _loadingScreen.ProgressText = "Loading complete!";
 
-// TODO:
-                //GameStateManager.Instance.TransitionToInitialState();
+            OnLoad();
 
-                Destroy();
-            });
+            Destroy();
         }
 
         protected virtual void CreateManagers()
@@ -106,8 +97,10 @@ namespace pdxpartyparrot.Core.Loading
 
         protected virtual void InitializeManagers()
         {
-// TODO:
-            SceneManager.Instance.DefaultSceneName = _defaultSceneName;
+        }
+
+        protected virtual void OnLoad()
+        {
         }
 
         private void Destroy()

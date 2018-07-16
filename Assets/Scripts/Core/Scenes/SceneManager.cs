@@ -15,12 +15,6 @@ namespace pdxpartyparrot.Core.Scenes
         [SerializeField]
         private string _mainSceneName = "main";
 
-        [SerializeField]
-        [ReadOnly]
-        private string _defaultSceneName;
-
-        public string DefaultSceneName { get { return _defaultSceneName; } set { _defaultSceneName = value; } }
-
         private readonly List<string> _loadedScenes = new List<string>();
 
 #region Unity Lifecycle
@@ -34,11 +28,6 @@ namespace pdxpartyparrot.Core.Scenes
         public void SetScene(string sceneName)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-        }
-
-        public void LoadDefaultScene(Action callback)
-        {
-            LoadScene(DefaultSceneName, callback, true);
         }
 
         public void LoadScene(string sceneName, Action callback, bool setActive=false)
@@ -66,12 +55,6 @@ namespace pdxpartyparrot.Core.Scenes
 #endregion
 
 #region Unload Scene
-        public void UnloadDefaultScene(Action callback)
-        {
-            UnloadScene(DefaultSceneName, callback);
-            UnityEngine.SceneManagement.SceneManager.SetActiveScene(UnityEngine.SceneManagement.SceneManager.GetSceneByName(_mainSceneName));
-        }
-
         public void UnloadScene(string sceneName, Action callback)
         {
             StartCoroutine(UnloadSceneRoutine(sceneName, () => {
@@ -125,11 +108,6 @@ namespace pdxpartyparrot.Core.Scenes
             UnloadAllScenes(() => {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(_mainSceneName);
             });
-        }
-
-        public void ReloadDefaultScene(Action callback)
-        {
-            ReloadScene(DefaultSceneName, callback);
         }
 
         public void ReloadScene(string sceneName, Action callback)
