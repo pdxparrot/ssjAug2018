@@ -44,6 +44,8 @@ namespace pdxpartyparrot.Core.Input
         }
 #endregion
 
+// TODO: acquire/release gamepads
+
         private List<Gamepad> GetGamepads()
         {
             return (from device in InputSystem.devices where device is Gamepad select (Gamepad)device).ToList();

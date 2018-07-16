@@ -13,7 +13,6 @@ namespace pdxpartyparrot.Core.Audio
         private const string MasterVolumeKey = "audio.volume.master";
         private const string MusicVolumeKey = "audio.volume.music";
         private const string SFXVolumeKey = "audio.volume.sfx";
-        private const string MuteKey = "audio.mute";
 
         [SerializeField]
         private AudioMixer _mixer;
@@ -149,6 +148,7 @@ namespace pdxpartyparrot.Core.Audio
             InitAudioMixerGroup(_music2AudioSource, _musicMixerGroupName);
             _music2AudioSource.loop = true;
 
+            // this ensures we've loaded the volumes from the config
             MasterVolume = MasterVolume;
             MusicVolume = MusicVolume;
             SFXVolume = SFXVolume;
