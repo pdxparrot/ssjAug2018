@@ -52,3 +52,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sceneName: test
+  _menuPrefab: {fileID: 114164835803517684, guid: b7d91440657cfd641b3a3cad0523e566,
+    type: 2}

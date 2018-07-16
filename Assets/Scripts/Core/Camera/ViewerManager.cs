@@ -71,6 +71,8 @@ namespace pdxpartyparrot.Core.Camera
 
         public void FreeViewers()
         {
+            Debug.Log($"Freeing {_viewers.Count} viewers...");
+
             _assignedViewers.Clear();
             _unassignedViewers.Clear();
 
