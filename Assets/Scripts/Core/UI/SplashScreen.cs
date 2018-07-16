@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
-namespace pdxpartyparrot.Core
+namespace pdxpartyparrot.Core.UI
 {
-    public class SplashScreen : MonoBehaviour
+    public sealed class SplashScreen : MonoBehaviour
     {
         [SerializeField]
         private VideoClip[] _splashScreens;
