@@ -27,6 +27,7 @@ namespace pdxpartyparrot.Core.Scenes
 #region Load Scene
         public void SetScene(string sceneName)
         {
+            Debug.Log($"Setting scene {sceneName}");
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
         }
 
@@ -39,6 +40,8 @@ namespace pdxpartyparrot.Core.Scenes
 
         public IEnumerator LoadSceneRoutine(string sceneName, Action callback, bool setActive=false)
         {
+            Debug.Log($"Loading scene {sceneName}");
+
             AsyncOperation asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             while(!asyncOp.isDone) {
                 yield return null;
@@ -64,6 +67,8 @@ namespace pdxpartyparrot.Core.Scenes
 
         public IEnumerator UnloadSceneRoutine(string sceneName, Action callback)
         {
+            Debug.Log($"Unloading scene {sceneName}");
+
             AsyncOperation asyncOp = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
             while(!asyncOp.isDone) {
                 yield return null;
@@ -78,6 +83,8 @@ namespace pdxpartyparrot.Core.Scenes
 
         public void UnloadAllScenes(Action callback)
         {
+            Debug.Log("Unloading all scenes");
+
             foreach(string sceneName in _loadedScenes) {
                 UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
             }
@@ -88,6 +95,8 @@ namespace pdxpartyparrot.Core.Scenes
 
         public IEnumerator UnloadAllScenesRoutine(Action callback)
         {
+            Debug.Log("Unloading all scenes");
+
             foreach(string sceneName in _loadedScenes) {
                 IEnumerator runner = UnloadSceneRoutine(sceneName, null);
                 while(runner.MoveNext()) {
@@ -105,6 +114,8 @@ namespace pdxpartyparrot.Core.Scenes
 #region Reload Scene
         public void ReloadMainScene()
         {
+            Debug.Log("Reloading main scene");
+
             UnloadAllScenes(() => {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(_mainSceneName);
             });
@@ -112,6 +123,8 @@ namespace pdxpartyparrot.Core.Scenes
 
         public void ReloadScene(string sceneName, Action callback)
         {
+            Debug.Log($"Reloading scene {sceneName}");
+
             UnloadScene(sceneName, () => {
                 LoadScene(sceneName, callback);
             });

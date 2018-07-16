@@ -19,9 +19,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4076774062001356}
-  - component: {fileID: 114464068976828966}
+  - component: {fileID: 114033414473887294}
   m_Layer: 0
-  m_Name: Intro
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114464068976828966
+--- !u!114 &114033414473887294
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,9 +48,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1090362287434824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a78211a707553044832811faac20916, type: 3}
+  m_Script: {fileID: 11500000, guid: f82117a3f2140234cae3f7dcb4a608db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneName: intro
-  _mainMenuState: {fileID: 114033414473887294, guid: 63ed3b97d29d66144973d80f8643a395,
+  _menuPrefab: {fileID: 114164835803517684, guid: b7d91440657cfd641b3a3cad0523e566,
     type: 2}

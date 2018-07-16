@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
@@ -9,14 +10,27 @@ namespace pdxpartyparrot.Game.State
 {
     public sealed class GameStateManager : SingletonBehavior<GameStateManager>
     {
+        public interface IGameState
+        {
+            string Name { get; }
+
+            void OnEnter();
+
+            void OnUpdate(float dt);
+
+            void OnExit();
+        }
+
         [SerializeField]
         private GameState _initialGameStatePrefab;
 
         [SerializeField]
         [ReadOnly]
-        private GameState _currentGameState;
+        private IGameState _currentGameState;
 
-        public GameState CurrentState => _currentGameState;
+        public IGameState CurrentState => _currentGameState;
+
+        private readonly Queue<IGameState> _stateQueue = new Queue<IGameState>();
 
 #region Unity Lifecycle
         private void Awake()
@@ -37,12 +51,15 @@ namespace pdxpartyparrot.Game.State
 
         private void Update()
         {
-            _currentGameState?.OnUpdate(Time.deltaTime);
+            float dt = Time.deltaTime;
+
+            _currentGameState?.OnUpdate(dt);
         }
 #endregion
 
         public void TransitionToInitialState(Action<GameState> initializeState=null)
         {
+            Debug.Log("Transition to initial state");
             TransitionState(_initialGameStatePrefab, initializeState);
         }
 
@@ -52,15 +69,14 @@ namespace pdxpartyparrot.Game.State
 
             ExitCurrentState(() => {
                 // TODO: this should enable the state from the set rather than allocating
-                _currentGameState = Instantiate(gameStatePrefab, transform);
-                initializeState?.Invoke(_currentGameState);
+                GameState gameState = Instantiate(gameStatePrefab, transform);
+                initializeState?.Invoke(gameState);
 
-                _currentGameState.LoadScene(() => {
+                gameState.LoadScene(() => {
+                    _currentGameState = gameState;
                     _currentGameState.OnEnter();
 
                     ShowLoadingScreen(false);
-
-                    Debug.Log($"State: {_currentGameState.Name}");
                 });
 
             });
@@ -73,15 +89,48 @@ namespace pdxpartyparrot.Game.State
                 return;
             }
 
-            _currentGameState.UnloadScene(() => {
-                _currentGameState?.OnExit();
+            while(_stateQueue.Count > 0) {
+                PopSubState();
+            }
+
+            GameState gameState = (GameState)_currentGameState;
+            _currentGameState = null;
+
+            gameState.UnloadScene(() => {
+                gameState?.OnExit();
 
                 // TODO: disable the state, don't destroy it
-                Destroy(_currentGameState?.gameObject);
-                _currentGameState = null;
+                Destroy(gameState?.gameObject);
 
                 callback?.Invoke();
             });
+        }
+
+        public void PushSubState(SubGameState gameStatePrefab, Action<SubGameState> initializeState=null)
+        {
+            // enqueue the current state if we have one
+            if(null != _currentGameState) {
+                _stateQueue.Enqueue(_currentGameState);
+            }
+
+            // new state is now the current state
+            // TODO: this should enable the state from the set rather than allocating
+            SubGameState gameState = Instantiate(gameStatePrefab, transform);
+            initializeState?.Invoke(gameState);
+
+            _currentGameState = gameState;
+            _currentGameState.OnEnter();
+        }
+
+        public void PopSubState()
+        {
+            SubGameState previousState = (SubGameState)_currentGameState;
+            _currentGameState = null;
+
+            previousState?.OnExit();
+            Destroy(previousState?.gameObject);
+
+            _currentGameState = _stateQueue.Count > 0 ? _stateQueue.Dequeue() : null;
         }
 
         private void ShowLoadingScreen(bool show)
@@ -93,7 +142,7 @@ Debug.Log($"TODO: show loading screen: {show}");
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
-                GUILayout.Label($"Current Game State: {CurrentState.name}");
+                GUILayout.Label($"Current Game State: {CurrentState.Name}");
             };
         }
     }

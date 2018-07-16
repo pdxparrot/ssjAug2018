@@ -1,5 +1,4 @@
 ﻿using pdxpartyparrot.Core.Camera;
-using pdxpartyparrot.Game.Menu;
 using pdxpartyparrot.Game.State;
 
 using UnityEngine;
@@ -9,11 +8,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
     public sealed class Intro : Game.State.GameState
     {
         [SerializeField]
-        private Game.Menu.Menu _menuPrefab;
+        private MainMenu _mainMenuState;
 
         private Viewer _viewer;
-
-        private Game.Menu.Menu _menu;
 
         public override void OnEnter()
         {
@@ -21,20 +18,26 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             InitializeManagers();
 
-            _menu = Instantiate(_menuPrefab, transform);
-
             _viewer = ViewerManager.Instance.AcquireViewer();
 
             // TODO: acquire a gamepad
         }
 
+        public override void OnUpdate(float dt)
+        {
+            base.OnUpdate(dt);
+
+            GameStateManager.Instance.PushSubState(_mainMenuState);
+        }
+
         public override void OnExit()
         {
-            ViewerManager.Instance.ReleaseViewer(_viewer);
+            if(ViewerManager.HasInstance) {
+                ViewerManager.Instance.ReleaseViewer(_viewer);
+            }
             _viewer = null;
 
-            Destroy(_menu);
-            _menu = null;
+            base.OnExit();
         }
 
         private void InitializeManagers()

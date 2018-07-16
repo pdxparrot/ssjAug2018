@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.State
 {
-    public abstract class GameState : MonoBehaviour
+    public abstract class GameState : MonoBehaviour, GameStateManager.IGameState
     {
         public string Name => name;
 
@@ -19,7 +19,7 @@ namespace pdxpartyparrot.Game.State
 
         public void LoadScene(Action callback)
         {
-            if(string.IsNullOrWhiteSpace(SceneName)) {
+            if(!HasScene) {
                 callback?.Invoke();
                 return;
             }
@@ -29,7 +29,7 @@ namespace pdxpartyparrot.Game.State
 
         public void UnloadScene(Action callback)
         {
-            if(string.IsNullOrWhiteSpace(SceneName)) {
+            if(!HasScene) {
                 callback?.Invoke();
                 return;
             }
@@ -41,6 +41,7 @@ namespace pdxpartyparrot.Game.State
 
         public virtual void OnEnter()
         {
+            Debug.Log($"Enter State: {Name}");
         }
 
         public virtual void OnUpdate(float dt)
@@ -49,6 +50,7 @@ namespace pdxpartyparrot.Game.State
 
         public virtual void OnExit()
         {
+            Debug.Log($"Exit State: {Name}");
         }
     }
 }
