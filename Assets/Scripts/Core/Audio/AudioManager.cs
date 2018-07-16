@@ -10,6 +10,11 @@ namespace pdxpartyparrot.Core.Audio
 {
     public sealed class AudioManager : SingletonBehavior<AudioManager>
     {
+        private const string MasterVolumeKey = "audio.volume.master";
+        private const string MusicVolumeKey = "audio.volume.music";
+        private const string SFXVolumeKey = "audio.volume.sfx";
+        private const string MuteKey = "audio.mute";
+
         [SerializeField]
         private AudioMixer _mixer;
 
@@ -27,10 +32,27 @@ namespace pdxpartyparrot.Core.Audio
 
         [Space(10)]
 
+#region Attributes
+        [Header("Parameters")]
+
+        [SerializeField]
+        private string _masterVolumeParameter = "MasterVolume";
+
+        [SerializeField]
+        private string _musicVolumeParameter = "MusicVolume";
+
+        [SerializeField]
+        private string _sfxVolumeParameter = "SFXVolume";
+#endregion
+
+        [Space(10)]
+
+#region SFX
         [Header("SFX")]
 
         [SerializeField]
         private AudioSource _oneShotAudioSource;
+#endregion
 
         [Space(10)]
 
@@ -54,6 +76,68 @@ namespace pdxpartyparrot.Core.Audio
         private float _updateCrossfadeUpdateMs = 100.0f;
 #endregion
 
+#region Volume
+        public float MasterVolume
+        {
+            get { return PartyParrotManager.Instance.GetFloat(MasterVolumeKey, 1.0f); }
+
+            set
+            {
+                value = Mathf.Clamp01(value);
+
+                Mixer.SetFloat(_masterVolumeParameter, value);
+                PartyParrotManager.Instance.SetFloat(MasterVolumeKey, value);
+
+                Mute = false;
+            }
+        }
+
+        public float MusicVolume
+        {
+            get { return PartyParrotManager.Instance.GetFloat(MusicVolumeKey, 0.5f); }
+
+            set
+            {
+                value = Mathf.Clamp01(value);
+
+                Mixer.SetFloat(_musicVolumeParameter, value);
+                PartyParrotManager.Instance.SetFloat(MusicVolumeKey, value);
+
+                Mute = false;
+            }
+        }
+
+        public float SFXVolume
+        {
+            get { return PartyParrotManager.Instance.GetFloat(SFXVolumeKey, 1.0f); }
+
+            set
+            {
+                value = Mathf.Clamp01(value);
+
+                Mixer.SetFloat(_sfxVolumeParameter, value);
+                PartyParrotManager.Instance.SetFloat(SFXVolumeKey, value);
+
+                Mute = false;
+            }
+        }
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _mute;
+
+        public bool Mute
+        {
+            get { return _mute; }
+
+            set
+            {
+                _mute = value;
+                Mixer.SetFloat(_masterVolumeParameter, _mute ? 0.0f : MasterVolume);
+            }
+        }
+#endregion
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -64,6 +148,10 @@ namespace pdxpartyparrot.Core.Audio
 
             InitAudioMixerGroup(_music2AudioSource, _musicMixerGroupName);
             _music2AudioSource.loop = true;
+
+            MasterVolume = MasterVolume;
+            MusicVolume = MusicVolume;
+            SFXVolume = SFXVolume;
 
             InitDebugMenu();
         }
@@ -130,6 +218,13 @@ namespace pdxpartyparrot.Core.Audio
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "AudioManager");
             debugMenuNode.RenderContentsAction = () => {
+                GUILayout.BeginVertical("Volume", GUI.skin.box);
+                    GUILayout.Label($"Master Volume: {MasterVolume}");
+                    GUILayout.Label($"Music Volume: {MusicVolume}");
+                    GUILayout.Label($"SFX Volume: {SFXVolume}");
+                    GUILayout.Label($"Mute: {Mute}");
+                GUILayout.EndVertical();
+
                 GUILayout.BeginVertical("SFX", GUI.skin.box);
                     GUILayout.Label("TODO");
                 GUILayout.EndVertical();

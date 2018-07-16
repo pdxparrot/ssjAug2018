@@ -43,8 +43,13 @@
 * Data/Audio/main.mixer
   * 2 Master sub-groups
     * Music
+      * Expose the Volume parameter and set it to -4db
+        * Rename it to MusicVolume
     * SFX
-  * **TODO:** expose the volumes for all of these
+      * Expose the Volume parameter and set it to 0db
+        * Rename it to SFXVolume
+  * Expose the Master Volume parameter and set it to 0db
+    * Rename it to MasterVolume
 * Data/Input/Controls.inputactions
   * Enable the C# Wrapper Class
     * Code Path: Assets\Scripts\Core\Input\Controls.cs

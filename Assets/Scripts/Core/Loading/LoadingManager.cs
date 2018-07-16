@@ -92,8 +92,9 @@ namespace pdxpartyparrot.Core.Loading
             // third party stuff
             DOTween.Init();
 
-            // should always be the first of our stuff
+            // these managers must come first, in this order
             DebugMenuManager.Create(ManagersContainer);
+            PartyParrotManager.Create(ManagersContainer);
 
             TimeManager.Create(ManagersContainer);
             AudioManager.CreateFromPrefab(_audioManagerPrefab, ManagersContainer);
