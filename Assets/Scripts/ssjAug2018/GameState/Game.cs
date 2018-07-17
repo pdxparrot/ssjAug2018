@@ -1,15 +1,11 @@
 ﻿using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.State;
-
-using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
-    public sealed class Intro : pdxpartyparrot.Game.State.GameState
+    public sealed class Game : pdxpartyparrot.Game.State.GameState
     {
-        [SerializeField]
-        private MainMenu _mainMenuState;
-
         private Viewer _viewer;
 
         public override void OnEnter()
@@ -21,17 +17,14 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _viewer = ViewerManager.Instance.AcquireViewer();
 
             // TODO: acquire a gamepad
-        }
 
-        public override void OnUpdate(float dt)
-        {
-            base.OnUpdate(dt);
-
-            GameStateManager.Instance.PushSubState(_mainMenuState);
+            NetworkManager.Instance.StartLANHost();
         }
 
         public override void OnExit()
         {
+            NetworkManager.Instance.Stop();
+
             if(ViewerManager.HasInstance) {
                 ViewerManager.Instance.ReleaseViewer(_viewer);
             }

@@ -39,8 +39,10 @@ namespace pdxpartyparrot.Core.Input
         {
             InputSystem.onDeviceChange -= OnDeviceChange;
 
-            Destroy(EventSystem);
+            Destroy(EventSystem.gameObject);
             EventSystem = null;
+
+            base.OnDestroy();
         }
 #endregion
 

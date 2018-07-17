@@ -104,6 +104,8 @@
 * NetworkManager
   * Create an empty Prefab and add the NetworkManager component to it
     * Disable Don't Destroy on Load
+    * Set the Network Info as desired
+    * Disable Auto Create Player
 * GameStateManager
   * Create an empty Prefab and add the GameStateManager component to it
 

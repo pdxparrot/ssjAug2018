@@ -34,7 +34,7 @@ namespace pdxpartyparrot.Core.UI
 
         private void OnDestroy()
         {
-            Destroy(_videoPlayer);
+            Destroy(_videoPlayer.gameObject);
             _videoPlayer = null;
         }
 

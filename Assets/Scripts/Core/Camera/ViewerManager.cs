@@ -77,7 +77,7 @@ namespace pdxpartyparrot.Core.Camera
             _unassignedViewers.Clear();
 
             foreach(Viewer viewer in _viewers) {
-                Destroy(viewer);
+                Destroy(viewer.gameObject);
             }
 
             _viewers.Clear();

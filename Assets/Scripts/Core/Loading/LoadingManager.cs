@@ -8,6 +8,7 @@ using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Core.Scenes;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
 
@@ -93,6 +94,7 @@ namespace pdxpartyparrot.Core.Loading
             InputManager.CreateFromPrefab(_inputManagerPrefab, ManagersContainer);
             Instantiate(_networkManagerPrefab, ManagersContainer.transform);
             SceneManager.CreateFromPrefab(_sceneManagerPrefab, ManagersContainer);
+            UIManager.Create(ManagersContainer);
         }
 
         protected virtual void InitializeManagers()
