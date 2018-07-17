@@ -190,3 +190,6 @@
 * Create a new GameState subclass and attach it to a new empty Prefab
   * This state should probably get the ViewerManager and InputManager state setup
 * Attach the new GameState prefab to the GameStateManager prefab
+* **TODO:** Create the PlayerManager script/prefab
+  * This must be a prefab due to the abstract base class
+* **TODO:** Create the Player script/prefab
