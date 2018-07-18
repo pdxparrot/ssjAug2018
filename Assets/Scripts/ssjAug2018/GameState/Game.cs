@@ -6,17 +6,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public sealed class Game : pdxpartyparrot.Game.State.GameState
     {
-        private Viewer _viewer;
-
         public override void OnEnter()
         {
             base.OnEnter();
 
             InitializeManagers();
-
-            _viewer = ViewerManager.Instance.AcquireViewer();
-
-            // TODO: acquire a gamepad
 
             NetworkManager.Instance.StartLANHost();
         }
@@ -24,11 +18,6 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public override void OnExit()
         {
             NetworkManager.Instance.Stop();
-
-            if(ViewerManager.HasInstance) {
-                ViewerManager.Instance.ReleaseViewer(_viewer);
-            }
-            _viewer = null;
 
             base.OnExit();
         }
