@@ -1,6 +1,7 @@
 ﻿using System;
 
 using pdxpartyparrot.Core;
+using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Players
 {
-    public sealed class FlightController : Core.Actors.ActorController
+    public class FlightController : ActorController
     {
 #region Physics
         [SerializeField]
@@ -17,9 +18,41 @@ namespace pdxpartyparrot.Game.Players
 
         public Vector3 BankForce => _bankForce;
 
-        public float Speed => PartyParrotManager.Instance.IsPaused ? _pauseState.Velocity.magnitude : Rigidbody.velocity.magnitude;
+        public float Speed => Owner.CanMove ? 0.0f : (PartyParrotManager.Instance.IsPaused ? _pauseState.Velocity.magnitude : Rigidbody.velocity.magnitude);
 
         public float Altitude => Owner.GameObject.transform.position.y;
+#endregion
+
+#region Movement Params
+        [SerializeField]
+        private float _maxAttackAngle = 45.0f;
+
+        public float MaxAttackAngle => _maxAttackAngle;
+
+        [SerializeField]
+        private float _maxBankAngle = 45.0f;
+
+        public float MaxBankAngle => _maxBankAngle;
+
+        [SerializeField]
+        private float _rotationAnimationSpeed = 5.0f;
+
+        public float RotationAnimationSpeed => _rotationAnimationSpeed;
+
+        [SerializeField]
+        private float _linearThrust = 10.0f;
+
+        public float LinearThrust => _linearThrust;
+
+        [SerializeField]
+        private float _turnSpeed = 10.0f;
+
+        public float TurnSpeed => _turnSpeed;
+
+        [SerializeField]
+        private float _terminalVelocity = 10.0f;
+
+        public float TerminalVelocity => _terminalVelocity;
 #endregion
 
         [SerializeField]
@@ -75,6 +108,13 @@ namespace pdxpartyparrot.Game.Players
             Rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
+        public void InitPhysics(float mass, float drag, float angularDrag)
+        {
+            Rigidbody.mass = mass;
+            Rigidbody.drag = drag;
+            Rigidbody.angularDrag = angularDrag;
+        }
+
         public void Redirect(Vector3 velocity)
         {
             Debug.Log($"Redirecting player {Owner.Id}: {velocity}");
@@ -103,27 +143,33 @@ namespace pdxpartyparrot.Game.Players
 #endif
 #endregion
 
-        public void RotateModel(Vector3 axes, float dt)
+        public override void RotateModel(Vector3 axes, float dt)
         {
+            if(!Owner.CanMove) {
+                return;
+            }
+
             Quaternion rotation = Owner.Model.transform.localRotation;
-            Vector3 eulerAngles = Owner.Model.transform.localEulerAngles;
 
             Vector3 targetEuler = new Vector3();
-
-            targetEuler.z = axes.x;
-            targetEuler.x = axes.y;
+            targetEuler.z = axes.x * -MaxBankAngle;
+            targetEuler.x = axes.y * -MaxAttackAngle;
 
             Quaternion targetRotation = Quaternion.Euler(targetEuler);
-            rotation = Quaternion.Lerp(rotation, targetRotation, dt);
+            rotation = Quaternion.Lerp(rotation, targetRotation, RotationAnimationSpeed * dt);
 
             Owner.Model.transform.localRotation = rotation;
         }
 
 #region Movement
-        public void Turn(Vector3 axes, float dt)
+        public override void Turn(Vector3 axes, float dt)
         {
+            if(!Owner.CanMove) {
+                return;
+            }
+
 #if true
-            float turnSpeed = axes.x;
+            float turnSpeed = TurnSpeed * axes.x;
             Quaternion rotation = Quaternion.AngleAxis(turnSpeed * dt, Vector3.up);
             Rigidbody.MoveRotation(Rigidbody.rotation * rotation);
 #else
@@ -139,34 +185,25 @@ namespace pdxpartyparrot.Game.Players
             Rigidbody.AddForce(_bankForce);
         }
 
-        public void Move(Vector3 axes, float dt)
+        public override void Move(Vector3 axes, float dt)
         {
-            float attackAngle = axes.y;
+            if(!Owner.CanMove) {
+                return;
+            }
+
+            float attackAngle = axes.y * -MaxAttackAngle;
             Vector3 attackVector = Quaternion.AngleAxis(attackAngle, Vector3.right) * Vector3.forward;
-
-/*
-            Rigidbody.AddRelativeForce(attackVector * Owner.Bird.Type.Physics.LinearThrust);
-
-            if(Owner.State.IsBraking) {
-                Rigidbody.AddRelativeForce(Vector3.forward * -Owner.Bird.Type.Physics.BrakeThrust * Owner.State.BrakeAmount);
-            }
-
-            if(Owner.State.IsBoosting) {
-                Rigidbody.AddRelativeForce(Vector3.forward * Owner.Bird.Type.Physics.BoostThrust * Owner.State.BoostAmount);
-            }
-*/
+            Rigidbody.AddRelativeForce(attackVector * LinearThrust);
 
             // lift if we're not falling
             if(axes.y >= 0.0f) {
                 Rigidbody.AddForce(-Physics.gravity, ForceMode.Acceleration);
             }
 
-/*
             // cap our fall speed
-            if(Rigidbody.velocity.y < -Owner.Bird.Type.Physics.TerminalVelocity) {
-                Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, -Owner.Bird.Type.Physics.TerminalVelocity, Rigidbody.velocity.z);
+            if(Rigidbody.velocity.y < -TerminalVelocity) {
+                Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, -TerminalVelocity, Rigidbody.velocity.z);
             }
-*/
         }
 #endregion
 

@@ -12,6 +12,8 @@ namespace pdxpartyparrot.Core.Actors
 
         ActorController Controller { get; }
 
+        bool CanMove { get; }
+
         void Initialize(int id);
 
 #region Callbacks

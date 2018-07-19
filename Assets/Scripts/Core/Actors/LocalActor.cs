@@ -25,6 +25,8 @@ namespace pdxpartyparrot.Core.Actors
 
         public ActorController Controller => _controller;
 
+        public bool CanMove => true;
+
         public virtual void Initialize(int id)
         {
             _id = id;

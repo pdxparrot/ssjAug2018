@@ -49,10 +49,33 @@ namespace pdxpartyparrot.Core.Actors
             _driver.Initialize(owner, this);
         }
 
-        public void MoveTo(Vector3 position)
+        public virtual void MoveTo(Vector3 position)
         {
             Debug.Log($"Teleporting actor {Owner.Id} to {position}");
             Rigidbody.position = position;
+        }
+
+        public virtual void RotateModel(Vector3 axes, float dt)
+        {
+            if(!Owner.CanMove) {
+                return;
+            }
+        }
+
+        public virtual void Turn(Vector3 axes, float dt)
+        {
+            if(!Owner.CanMove) {
+                return;
+            }
+        }
+
+        public virtual void Move(Vector3 axes, float dt)
+        {
+            if(!Owner.CanMove) {
+                return;
+            }
+
+            Owner.GameObject.transform.position += axes * dt;
         }
     }
 }

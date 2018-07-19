@@ -27,6 +27,8 @@ namespace pdxpartyparrot.Core.Actors
 
         public ActorController Controller => _controller;
 
+        public bool CanMove => true;
+
         protected NetworkIdentity NetworkIdentity { get; private set; }
 
 #region Unity Lifecycle

@@ -42,7 +42,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _viewer.Set3D();
 _viewer.transform.position = new Vector3(0.0f, 5.0f, -10.0f);
 
-            // TODO: acquire a gamepad
+            Controller.Initialize(this);
 
             return true;
         }

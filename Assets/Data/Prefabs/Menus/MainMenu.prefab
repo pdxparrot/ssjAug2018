@@ -595,6 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f3617d606def348a3ea71e0206d2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initialSelection: {fileID: 114581330688917766}
   _gameStatePrefab: {fileID: 114305255165609082, guid: 888ea60fc1fee3b4a8141ba132bdea90,
     type: 2}
 --- !u!114 &114745872808770864
