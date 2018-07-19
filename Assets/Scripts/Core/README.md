@@ -83,6 +83,7 @@
       * Projection: Depends on viewer needs
       * Remove the Audio Listener
       * Add a Post Process Layer component to the Camera object
+      * Add an Aspect Ratio component to the Camera (UI) object
     * Add another camera under the prefab (UI)
       * Layer: UI
       * Clear Mode: None
@@ -135,6 +136,7 @@
   * Culling Mask: Nothing
   * Projection: Perspective (**TODO:** would ortho make more sense for this?)
   * Turn off Clear Depth
+  * Disable Occlusion Culling (**TODO:** is this right?)
   * Leave the Audio Listener attached to the camera for audio to work
 
 ## Loading Screen Setup

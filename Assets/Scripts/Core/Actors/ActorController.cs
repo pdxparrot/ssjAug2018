@@ -1,10 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace pdxpartyparrot.Core.Actors
 {
     [RequireComponent(typeof(Rigidbody))]
     public abstract class ActorController : MonoBehaviour
     {
+        [Serializable]
+        protected struct PauseState
+        {
+            private Vector3 _velocity;
+
+            public Vector3 Velocity => _velocity;
+
+            public void Save(Rigidbody rigidbody)
+            {
+                _velocity = rigidbody.velocity;
+                rigidbody.velocity = Vector3.zero;
+            }
+
+            public void Restore(Rigidbody rigidbody)
+            {
+                rigidbody.velocity = _velocity;
+            }
+        }
+
         [SerializeField]
         private ActorDriver _driver;
 

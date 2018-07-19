@@ -94,7 +94,6 @@ namespace pdxpartyparrot.Core.Loading
             InputManager.CreateFromPrefab(_inputManagerPrefab, ManagersContainer);
             Instantiate(_networkManagerPrefab, ManagersContainer.transform);
             SceneManager.CreateFromPrefab(_sceneManagerPrefab, ManagersContainer);
-            UIManager.Create(ManagersContainer);
         }
 
         protected virtual void InitializeManagers()

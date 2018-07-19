@@ -30,7 +30,12 @@ namespace pdxpartyparrot.Core.Input
         {
             InitDebugMenu();
 
-            EventSystem = Instantiate(_eventSystemPrefab, transform);
+            if(PartyParrotManager.Instance.EnableGoogleVR) {
+                // TODO
+            } else {
+                Debug.Log("Creating EventSystem (no VR)...");
+                EventSystem = Instantiate(_eventSystemPrefab, transform);
+            }
 
             InputSystem.onDeviceChange += OnDeviceChange;
         }

@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: -1
+  _model: {fileID: 1601469365389694}
   _controller: {fileID: 114351173879888106}
 --- !u!114 &114351173879888106
 MonoBehaviour:

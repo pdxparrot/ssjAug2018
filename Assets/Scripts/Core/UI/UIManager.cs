@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Core.UI
 {
-    public sealed class UIManager : SingletonBehavior<UIManager>
+    public abstract class UIManager : SingletonBehavior<UIManager>
     {
         private GameObject _uiContainer;
 

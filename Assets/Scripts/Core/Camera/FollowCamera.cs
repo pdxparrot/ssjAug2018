@@ -103,10 +103,10 @@ namespace pdxpartyparrot.Core.Camera
 
         [SerializeField]
         [CanBeNull]
-        private IFollowTarget _target;
+        private FollowTarget _target;
 
         [CanBeNull]
-        public IFollowTarget Target => _target;
+        public FollowTarget Target => _target;
 #endregion
 
         [Space(10)]
@@ -152,7 +152,7 @@ namespace pdxpartyparrot.Core.Camera
         }
 #endregion
 
-        public void SetTarget(IFollowTarget target)
+        public void SetTarget(FollowTarget target)
         {
             _target = target;
             _orbitRotation = _defaultOrbitRotation;
@@ -204,7 +204,7 @@ namespace pdxpartyparrot.Core.Camera
             if(null != Target) {
                 // avoid zooming into the target
                 Vector3 closestBoundsPoint = Target.Collider.ClosestPointOnBounds(transform.position);
-                float distanceToPoint = (closestBoundsPoint - Target.GameObject.transform.position).magnitude;
+                float distanceToPoint = (closestBoundsPoint - Target.transform.position).magnitude;
 
                 minDistance += distanceToPoint;
                 maxDistance += distanceToPoint;
@@ -231,23 +231,19 @@ namespace pdxpartyparrot.Core.Camera
                 return;
             }
 
-            if(Target.IsPaused) {
-                return;
-            }
-
             Profiler.BeginSample("FollowCamera.FollowTarget");
             try {
                 Quaternion orbitRotation = Quaternion.Euler(_orbitRotation.y, _orbitRotation.x, 0.0f);
                 Quaternion lookRotation = Quaternion.Euler(_lookRotation.y, _lookRotation.x, 0.0f);
 
-                Quaternion targetRotation = Quaternion.Euler(0.0f, Target.GameObject.transform.eulerAngles.y, 0.0f);
+                Quaternion targetRotation = Quaternion.Euler(0.0f, Target.transform.eulerAngles.y, 0.0f);
 
                 Quaternion finalOrbitRotation = targetRotation * orbitRotation;
                 transform.rotation = finalOrbitRotation * lookRotation;
 
                 // TODO: this doens't work if we free-look and zoom
                 // because we're essentially moving the target position, not the camera position
-                Vector3 targetPosition = Target.GameObject.transform.position;
+                Vector3 targetPosition = Target.transform.position;
                 targetPosition = _smooth
                     ? Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, _smoothTime)
                     : targetPosition;

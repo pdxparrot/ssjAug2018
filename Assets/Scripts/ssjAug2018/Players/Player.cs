@@ -32,12 +32,25 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
-        public void Initialize()
+        public bool Initialize()
         {
             _viewer = ViewerManager.Instance.AcquireViewer();
-_viewer.transform.position = new Vector3(0.0f, 5.0f, -15.0f);
+            if(null == _viewer) {
+                return false;
+            }
+
+            _viewer.Set3D();
+_viewer.transform.position = new Vector3(0.0f, 5.0f, -10.0f);
 
             // TODO: acquire a gamepad
+
+            return true;
         }
+
+#region Callbacks
+        public override void OnSpawn()
+        {
+        }
+#endregion
     }
 }

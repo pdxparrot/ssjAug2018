@@ -2,7 +2,8 @@
     "name": "com.pdxpartyparrot.ssjAug2018",
     "references": [
         "com.pdxpartyparrot.Core",
-        "com.pdxpartyparrot.Game"
+        "com.pdxpartyparrot.Game",
+        "Unity.InputSystem"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

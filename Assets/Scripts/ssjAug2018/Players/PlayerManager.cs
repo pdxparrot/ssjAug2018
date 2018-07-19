@@ -1,6 +1,8 @@
-﻿using pdxpartyparrot.Core.Actors;
-using pdxpartyparrot.Core.Network;
+﻿using JetBrains.Annotations;
 
+using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Network;
+using pdxpartyparrot.Game.World;
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Players
@@ -29,11 +31,20 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+        [CanBeNull]
         private NetworkActor PlayerSpawnFunc()
         {
-            Player player = Instantiate(_playerPrefab, _playerContainer.transform);
-            player.Initialize();
+            SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+            if(null == spawnPoint) {
+                return null;
+            }
 
+            Player player = Instantiate(_playerPrefab, _playerContainer.transform);
+            if(!player.Initialize()) {
+                return null;
+            }
+
+            spawnPoint.Spawn(player);
             return player;
         }
     }

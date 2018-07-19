@@ -1,5 +1,7 @@
 ﻿using pdxpartyparrot.Game.Loading;
+using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 
@@ -9,6 +11,9 @@ namespace pdxpartyparrot.ssjAug2018.Loading
     {
 #region Manager Prefabs
         [SerializeField]
+        private UIManager _uiManagerPrefab;
+
+        [SerializeField]
         private PlayerManager _playerManagerPrefab;
 #endregion
 
@@ -16,7 +21,9 @@ namespace pdxpartyparrot.ssjAug2018.Loading
         {
             base.CreateManagers();
 
+            UIManager.CreateFromPrefab(_uiManagerPrefab, ManagersContainer);
             PlayerManager.CreateFromPrefab(_playerManagerPrefab, ManagersContainer);
+            SpawnManager.Create(ManagersContainer);
         }
     }
 }

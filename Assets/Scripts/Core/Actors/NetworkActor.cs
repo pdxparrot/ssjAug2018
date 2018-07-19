@@ -15,6 +15,13 @@ namespace pdxpartyparrot.Core.Actors
 
         public int Id => _id;
 
+        public GameObject GameObject => gameObject;
+
+        [SerializeField]
+        private GameObject _model;
+
+        public GameObject Model => _model;
+
         [SerializeField]
         private ActorController _controller;
 
@@ -35,5 +42,7 @@ namespace pdxpartyparrot.Core.Actors
 
             _controller.Initialize(this);
         }
+
+        public abstract void OnSpawn();
     }
 }

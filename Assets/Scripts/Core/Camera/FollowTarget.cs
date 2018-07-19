@@ -2,14 +2,14 @@
 
 namespace pdxpartyparrot.Core.Camera
 {
-    public interface IFollowTarget
+// TODO: make 2D vs 3D subclasses
+    public abstract class FollowTarget : MonoBehaviour
     {
-        GameObject GameObject { get; }
+        [SerializeField]
+        private Collider _collider;
 
-        Collider Collider { get; }
+        public Collider Collider => _collider;
 
-        Vector3 LookAxis { get; }
-
-        bool IsPaused { get; }
+        public abstract Vector3 LookAxis { get; }
     }
 }

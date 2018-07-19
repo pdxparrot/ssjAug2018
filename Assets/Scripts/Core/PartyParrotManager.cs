@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using System;
+
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
@@ -6,6 +8,45 @@ namespace pdxpartyparrot.Core
 {
     public sealed class PartyParrotManager : SingletonBehavior<PartyParrotManager>
     {
+#region Events
+        public event EventHandler<EventArgs> PauseEvent;
+#endregion
+
+#region VR Config
+        [SerializeField]
+        private bool _enableVR;
+
+        public bool EnableVR => _enableVR;
+
+        [SerializeField]
+        private bool _enableGoogleVR;
+
+        public bool EnableGoogleVR => _enableGoogleVR;
+#endregion
+
+        [Space(10)]
+
+#region Game State
+        [Header("Game State")]
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _isPaused;
+
+        public bool IsPaused => _isPaused;
+#endregion
+
+#region Unity Lifecycle
+        private void Awake()
+        {
+            QualitySettings.vSyncCount = 0;
+
+            Debug.Log($"Gravity: {Physics.gravity}");
+        }
+#endregion
+
+#region Player Config
+
 #region Bool
         public bool GetBool(string key)
         {
@@ -90,5 +131,14 @@ namespace pdxpartyparrot.Core
             PlayerPrefs.SetString(key, JsonUtility.ToJson(value));
         }
 #endregion
+
+#endregion
+
+        public void TogglePause()
+        {
+            _isPaused = !_isPaused;
+
+            PauseEvent?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
