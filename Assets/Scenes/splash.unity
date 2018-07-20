@@ -140,7 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3bd78baa0ad22a46829596980375397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _splashScreens: []
+  _splashScreens:
+  - {fileID: 32900000, guid: f6095a099d2a6f747befc89a737f24a7, type: 3}
   _mainSceneName: main
   _camera: {fileID: 1421226298}
   _currentSplashScreen: 0
