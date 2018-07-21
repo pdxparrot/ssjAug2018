@@ -9,6 +9,7 @@
   * ProGrids
   * Shader Graph
   * Asset Bundle Browser
+  * Cinemachine
   * Burst/Entities (if using ECS)
 * Add desired assets
   * ConsoleE
@@ -56,10 +57,10 @@
     * Class Name: Controls
     * Namespace: pdxpartyparrot.Core.Input
   * Add the Action Map and the desired controls
-* Data/Prefabs/EventSystem.prefab
+* Data/Prefabs/Input/EventSystem.prefab
   * Create using default EventSystem that gets added automatically when adding a UI object
 * Scripts/Core/com.pdxpartyparrot.Core.asmdef
-  * References: Unity.InputSystem, com.unity.postprocessing.Runtime, Unity.TextMeshPro
+  * References: Unity.InputSystem, Unity.Postprocessing.Runtime, Unity.TextMeshPro
 * Scripts/Game/com.pdxpartyparrot.Game.asmdef
   * References: com.pdxpartyparrot.Core.asmdef
 * Scripts/<project>/com.pdxpartyparrot.<projext>.asmdef
@@ -75,7 +76,7 @@
   * Attach the non-looping source to the One Shot Audio Source
   * Attach the looping sources to the Music Audio Sources
 * CameraManager
-  * Create a new Viewer script that overrides Core Viewer
+  * Create a new Viewer script that overrides a Core Viewer
   * Create an empty Prefab and add the Viewer component to it
     * Add a camera under the prefab
       * Clear Mode: Sky
@@ -112,13 +113,9 @@
 # Splash Screen Setup
 
 * Create and save a new scene
-  * The only object in the scene should be a camera
-* Setup the camera
-  * Clear Mode: Background Color
-  * Background Color: Opaque Black
-  * Culling Mask: Nothing
-  * Projection: Perspective (**TODO:** would ortho make more sense for this?)
+  * The only object in the scene should be a Main Camera
   * Leave the Audio Listener attached to the camera for audio to work
+  * Add the AspectRatio component to the camera
 * Add the scene to the Build Settings and ensure that it is Scene 0
 * Add a new GameObject to the scene and add the SplashScreen component to it
 * Attach the camera to the Camera field of the SplashScreen component

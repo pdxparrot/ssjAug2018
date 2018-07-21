@@ -13,19 +13,23 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private Vector3 _lastMoveAxes;
 
+        private Gamepad _gamepad;
+
 #region Unity Lifecycle
         private void Awake()
         {
-// acquire a gamepad
+            // TODO: acquire gamepad in a better way
+            // also need to watch for connection state changes
+            _gamepad = Gamepad.current;
         }
 
         private void Update()
         {
-            if(PartyParrotManager.Instance.IsPaused) {
+            if(PartyParrotManager.Instance.IsPaused || null == _gamepad) {
                 return;
             }
 
-            Vector2 axes = Gamepad.current.leftStick.ReadValue();
+            Vector2 axes = _gamepad.leftStick.ReadValue();
             _lastMoveAxes = new Vector3(axes.x, 0.0f, axes.y);
 
             float dt = Time.deltaTime;

@@ -33,6 +33,10 @@ namespace pdxpartyparrot.Game.World
         [CanBeNull]
         public SpawnPoint GetSpawnPoint()
         {
+            if(_spawnPoints.Count < 1) {
+                Debug.LogWarning("No spawn points registered on spawn, are there any in the scene?");
+                return null;
+            }
             return Random.GetRandomEntry(_spawnPoints);
         }
     }

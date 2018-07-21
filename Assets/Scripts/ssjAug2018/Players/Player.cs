@@ -1,13 +1,34 @@
 ﻿using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
+
+using pdxpartyparrot.ssjAug2018.Camera;
 
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
+    [RequireComponent(typeof(FollowTarget))]
+    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(AudioSource))]
     public sealed class Player : NetworkActor
     {
-        private Viewer _viewer;
+#region Animations
+        [Header("Animations")]
+
+        [SerializeField]
+        private Animator _animator;
+#endregion
+
+        public FollowTarget FollowTarget { get; private set; }
+
+        public Collider Collider { get; private set; }
+
+        public PlayerController PlayerController => (PlayerController)Controller;
+
+        private AudioSource _audioSource;
+
+        private Camera.Viewer _viewer;
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -15,6 +36,19 @@ namespace pdxpartyparrot.ssjAug2018.Players
             base.Awake();
 
             NetworkIdentity.localPlayerAuthority = true;
+
+#if UNITY_EDITOR
+            if(!(Controller is PlayerController)) {
+                Debug.LogError("Player controller must be a PlayerController!");
+            }
+#endif
+
+            FollowTarget = GetComponent<FollowTarget>();
+            Collider = GetComponent<Collider>();
+
+            _audioSource = GetComponent<AudioSource>();
+            _audioSource.playOnAwake = false;
+            AudioManager.Instance.InitSFXAudioMixerGroup(_audioSource);
 
             PlayerManager.Instance.Register(this);
         }
@@ -34,15 +68,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public bool Initialize()
         {
-            _viewer = ViewerManager.Instance.AcquireViewer();
+            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
             if(null == _viewer) {
                 return false;
             }
 
-            _viewer.Set3D();
-_viewer.transform.position = new Vector3(0.0f, 5.0f, -10.0f);
-
-            Controller.Initialize(this);
+            PlayerController.Initialize(this);
 
             return true;
         }
@@ -50,6 +81,7 @@ _viewer.transform.position = new Vector3(0.0f, 5.0f, -10.0f);
 #region Callbacks
         public override void OnSpawn()
         {
+            _viewer.Initialize(this);
         }
 #endregion
     }

@@ -26,6 +26,17 @@ namespace pdxpartyparrot.Core
 
         [Space(10)]
 
+#region Physics
+        [Header("Physics")]
+
+        [SerializeField]
+        private PhysicMaterial _frictionlesssMaterial;
+
+        public PhysicMaterial FrictionlessMaterial => _frictionlesssMaterial;
+#endregion
+
+        [Space(10)]
+
 #region Game State
         [Header("Game State")]
 

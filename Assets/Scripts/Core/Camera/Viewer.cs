@@ -1,5 +1,6 @@
 ﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Rendering;
+using pdxpartyparrot.Core.UI;
 
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -49,6 +50,11 @@ namespace pdxpartyparrot.Core.Camera
         protected virtual void Awake()
         {
             _defaultCameraPosition = Camera.transform.localPosition;
+
+            _uiCamera.clearFlags = CameraClearFlags.Nothing;
+            _uiCamera.backgroundColor = Color.black;
+            _uiCamera.orthographic = true;
+            _uiCamera.cullingMask = UIManager.Instance.UILayer;
 
             _globalPostProcessVolume.isGlobal = true;
             _globalPostProcessVolume.priority = 1;

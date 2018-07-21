@@ -26,6 +26,11 @@ namespace pdxpartyparrot.Core.UI
 #region Unity Lifecycle
         private void Awake()
         {
+            _camera.clearFlags = CameraClearFlags.Color;
+            _camera.backgroundColor = Color.black;
+            _camera.cullingMask = -1;
+            _camera.orthographic = true;
+
             _videoPlayer = _camera.gameObject.AddComponent<VideoPlayer>();
             _videoPlayer.playOnAwake = false;
             _videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;

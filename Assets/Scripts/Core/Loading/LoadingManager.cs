@@ -8,7 +8,6 @@ using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Core.Scenes;
-using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
 
@@ -24,6 +23,9 @@ namespace pdxpartyparrot.Core.Loading
         protected LoadingScreen LoadingScreen => _loadingScreen;
 
 #region Manager Prefabs
+        [SerializeField]
+        private PartyParrotManager _engineManagerPrefab;
+
         [SerializeField]
         private AudioManager _audioManagerPrefab;
 
@@ -85,7 +87,7 @@ namespace pdxpartyparrot.Core.Loading
 
             // these managers must come first, in this order
             DebugMenuManager.Create(ManagersContainer);
-            PartyParrotManager.Create(ManagersContainer);
+            PartyParrotManager.CreateFromPrefab(_engineManagerPrefab, ManagersContainer);
 
             TimeManager.Create(ManagersContainer);
             AudioManager.CreateFromPrefab(_audioManagerPrefab, ManagersContainer);

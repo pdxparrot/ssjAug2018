@@ -35,6 +35,10 @@ namespace pdxpartyparrot.Core.Actors
 
         protected IActor Owner { get; private set; }
 
+#region Physics
+        public float MoveSpeed { get; set; } = 1.0f;
+#endregion
+
 #region Unity Lifecycle
         protected virtual void Awake()
         {
@@ -75,7 +79,7 @@ namespace pdxpartyparrot.Core.Actors
                 return;
             }
 
-            Owner.GameObject.transform.position += axes * dt;
+            Owner.GameObject.transform.position += axes * MoveSpeed * dt;
         }
     }
 }

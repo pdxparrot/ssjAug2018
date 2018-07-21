@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Core.Actors
 {
-    [RequireComponent(typeof(ActorController))]
     public abstract class LocalActor : MonoBehaviour, IActor
     {
+#region IActor
         [SerializeField]
         [ReadOnly]
         private int _id = -1;
@@ -25,7 +25,12 @@ namespace pdxpartyparrot.Core.Actors
 
         public ActorController Controller => _controller;
 
-        public bool CanMove => true;
+        [SerializeField]
+        [ReadOnly]
+        private bool _canMove = true;
+
+        public bool CanMove => _canMove;
+#endregion
 
         public virtual void Initialize(int id)
         {

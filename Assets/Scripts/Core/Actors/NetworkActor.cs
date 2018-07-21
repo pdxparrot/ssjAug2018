@@ -9,6 +9,7 @@ namespace pdxpartyparrot.Core.Actors
     [RequireComponent(typeof(NetworkTransform))]
     public abstract class NetworkActor : NetworkBehaviour, IActor
     {
+#region IActor
         [SerializeField]
         [ReadOnly]
         private int _id = -1;
@@ -27,7 +28,12 @@ namespace pdxpartyparrot.Core.Actors
 
         public ActorController Controller => _controller;
 
-        public bool CanMove => true;
+        [SerializeField]
+        [ReadOnly]
+        private bool _canMove = true;
+
+        public bool CanMove => _canMove;
+#endregion
 
         protected NetworkIdentity NetworkIdentity { get; private set; }
 
