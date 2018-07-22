@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df06518d69d3fd14a80c7753fac90bba, type: 3}
   m_Name: ThirdPersonControllerData
   m_EditorClassIdentifier: 
-  _moveSpeed: 25
+  _moveSpeed: 15
   _jumpHeight: 1
