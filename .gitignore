@@ -157,6 +157,8 @@ UpgradeLog*.htm
 
 /Assets/Plugins/AmplifyShaderEditor/
 Assets/Plugins/AmplifyShaderEditor.meta
+Assets/ProBuilder Data/ProBuilderPreferences.asset
+Assets/ProBuilder Data/ProBuilderPreferences.asset.meta
 
 *.swp
 *.swo
