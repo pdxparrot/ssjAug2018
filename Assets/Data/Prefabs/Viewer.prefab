@@ -248,8 +248,8 @@ MonoBehaviour:
   _enableOrbit: 1
   _orbitSpeedX: 100
   _orbitSpeedY: 100
-  _returnToDefault: 0
-  _defaultOrbitRotation: {x: 0, y: 0}
+  _returnToDefault: 1
+  _defaultOrbitRotation: {x: 0, y: 20}
   _defaultOrbitReturnTime: 0.5
   _orbitReturnVelocity: {x: 0, y: 0}
   _orbitRotation: {x: 0, y: 0}
@@ -262,12 +262,12 @@ MonoBehaviour:
   _minZoomDistance: 5
   _maxZoomDistance: 100
   _zoomSpeed: 500
-  _enableLook: 0
+  _enableLook: 1
   _lookSpeedX: 100
   _lookSpeedY: 100
   _lookRotation: {x: 0, y: 0}
   _target: {fileID: 0}
-  _smooth: 0
+  _smooth: 1
   _smoothTime: 0.05
   _velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &114103858660162602
