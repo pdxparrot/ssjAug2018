@@ -71,7 +71,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
             _viewer.SetFocus(transform);
 
-            PlayerController.Initialize(this);
+            PlayerController.Initialize(this, PlayerManager.Instance.PlayerData.ControllerData);
+            PlayerController.Rigidbody.mass = PlayerManager.Instance.PlayerData.Mass;
 
             return true;
         }

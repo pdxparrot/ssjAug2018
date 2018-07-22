@@ -64,6 +64,13 @@ namespace pdxpartyparrot.Game.Actors
         }
 #endregion
 
+        public void Initialize(IActor actor, ThirdPersonControllerData data)
+        {
+            base.Initialize(actor);
+
+            ControllerData = data;
+        }
+
         private void InitRigidbody()
         {
             Rigidbody.isKinematic = false;

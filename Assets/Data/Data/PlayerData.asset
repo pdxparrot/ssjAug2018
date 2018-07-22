@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   _controllerData: {fileID: 11400000, guid: b1063409d4080b544b23ec155a621d14, type: 2}
+  _mass: 150
