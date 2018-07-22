@@ -26,7 +26,7 @@ namespace pdxpartyparrot.Core.Camera
         private bool _returnToDefault;
 
         [SerializeField]
-        private Vector2 _defaultOrbitRotation;
+        private Vector2 _defaultOrbitRotation = new Vector2(0.0f, 30.0f);
 
         [SerializeField]
         private float _defaultOrbitReturnTime = 0.5f;
@@ -40,23 +40,23 @@ namespace pdxpartyparrot.Core.Camera
         private Vector2 _orbitRotation;
 
         [SerializeField]
-        private float _orbitRadius = 25.0f;
+        private float _orbitRadius = 15.0f;
 
         public float OrbitRadius { get { return _orbitRadius; } set { _orbitRadius = value; } }
 #endregion
 
 #region Orbit Constraints
         [SerializeField]
-        private float _orbitXMin = -360.0f;
+        private float _orbitXMin = -90.0f;
 
         [SerializeField]
-        private float _orbitXMax = 360.0f;
+        private float _orbitXMax = 90.0f;
 
         [SerializeField]
-        private float _orbitYMin = -360.0f;
+        private float _orbitYMin = -90.0f;
 
         [SerializeField]
-        private float _orbitYMax = 360.0f;
+        private float _orbitYMax = 90.0f;
 #endregion
 
         [Space(10)]

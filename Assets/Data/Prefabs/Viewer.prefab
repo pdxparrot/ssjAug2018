@@ -249,20 +249,20 @@ MonoBehaviour:
   _orbitSpeedX: 100
   _orbitSpeedY: 100
   _returnToDefault: 1
-  _defaultOrbitRotation: {x: 0, y: 20}
+  _defaultOrbitRotation: {x: 0, y: 30}
   _defaultOrbitReturnTime: 0.5
   _orbitReturnVelocity: {x: 0, y: 0}
   _orbitRotation: {x: 0, y: 0}
-  _orbitRadius: 25
-  _orbitXMin: -360
-  _orbitXMax: 360
-  _orbitYMin: -360
-  _orbitYMax: 360
+  _orbitRadius: 15
+  _orbitXMin: -90
+  _orbitXMax: 90
+  _orbitYMin: -90
+  _orbitYMax: 90
   _enableZoom: 0
   _minZoomDistance: 5
   _maxZoomDistance: 100
   _zoomSpeed: 500
-  _enableLook: 1
+  _enableLook: 0
   _lookSpeedX: 100
   _lookSpeedY: 100
   _lookRotation: {x: 0, y: 0}
