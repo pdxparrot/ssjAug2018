@@ -35,10 +35,6 @@ namespace pdxpartyparrot.Core.Actors
 
         protected IActor Owner { get; private set; }
 
-#region Physics
-        public float MoveSpeed { get; set; } = 1.0f;
-#endregion
-
 #region Unity Lifecycle
         protected virtual void Awake()
         {
@@ -59,27 +55,10 @@ namespace pdxpartyparrot.Core.Actors
             Rigidbody.position = position;
         }
 
-        public virtual void RotateModel(Vector3 axes, float dt)
-        {
-            if(!Owner.CanMove) {
-                return;
-            }
-        }
+        public abstract void RotateModel(Vector3 axes, float dt);
 
-        public virtual void Turn(Vector3 axes, float dt)
-        {
-            if(!Owner.CanMove) {
-                return;
-            }
-        }
+        public abstract void Turn(Vector3 axes, float dt);
 
-        public virtual void Move(Vector3 axes, float dt)
-        {
-            if(!Owner.CanMove) {
-                return;
-            }
-
-            Owner.GameObject.transform.position += axes * MoveSpeed * dt;
-        }
+        public abstract void Move(Vector3 axes, float dt);
     }
 }

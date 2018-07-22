@@ -8,7 +8,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Initialize(player);
 
-            MoveSpeed = PlayerManager.Instance.PlayerData.MoveSpeed;
+            ControllerData = PlayerManager.Instance.PlayerData.ControllerData;
         }
     }
 }

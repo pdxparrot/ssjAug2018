@@ -1,5 +1,7 @@
 ﻿using System;
 
+using pdxpartyparrot.Game.Data;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Data
@@ -8,16 +10,9 @@ namespace pdxpartyparrot.ssjAug2018.Data
     [Serializable]
     public sealed class PlayerData : ScriptableObject
     {
-#region Physics
         [SerializeField]
-        private float _moveSpeed = 1.0f;
+        private ThirdPersonControllerData _controllerData;
 
-        public float MoveSpeed => _moveSpeed;
-
-        [SerializeField]
-        private float _jumpHeight = 1.0f;
-
-        public float JumpHeight => _jumpHeight;
-#endregion
+        public ThirdPersonControllerData ControllerData => _controllerData;
     }
 }

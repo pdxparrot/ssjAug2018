@@ -1,5 +1,8 @@
-﻿using pdxpartyparrot.Core;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core;
 using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
@@ -13,23 +16,24 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private Vector3 _lastMoveAxes;
 
+        [CanBeNull]
         private Gamepad _gamepad;
+
+        public bool HasGamepad => null != _gamepad;
 
 #region Unity Lifecycle
         private void Awake()
         {
-            // TODO: acquire gamepad in a better way
-            // also need to watch for connection state changes
-            _gamepad = Gamepad.current;
+            InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
 
         private void Update()
         {
-            if(PartyParrotManager.Instance.IsPaused || null == _gamepad) {
+            if(PartyParrotManager.Instance.IsPaused) {
                 return;
             }
 
-            Vector2 axes = _gamepad.leftStick.ReadValue();
+            Vector2 axes = _gamepad?.leftStick.ReadValue() ?? new Vector2();
             _lastMoveAxes = new Vector3(axes.x, 0.0f, axes.y);
 
             float dt = Time.deltaTime;
@@ -47,6 +51,18 @@ namespace pdxpartyparrot.Game.Actors
 
             //Controller.Turn(_lastMoveAxes, dt);
             Controller.Move(_lastMoveAxes, dt);
+        }
+#endregion
+
+#region Event Handlers
+        private void OnAcquireGamepad(Gamepad gamepad)
+        {
+            _gamepad = gamepad;
+        }
+
+        private void OnGamepadDisconnect(Gamepad gamepad)
+        {
+            _gamepad = null;
         }
 #endregion
     }

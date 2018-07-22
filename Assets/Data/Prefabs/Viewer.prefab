@@ -320,7 +320,7 @@ MonoBehaviour:
   _camera: {fileID: 20970023169495906}
   _uiCamera: {fileID: 20623282611448672}
   _globalPostProcessVolume: {fileID: 114578935368077958}
-  _bokehEffect: {fileID: 0}
+  _bokehEffect: {fileID: 114875076233759402}
   _defaultCameraPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114578935368077958
 MonoBehaviour:

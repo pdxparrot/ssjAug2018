@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using pdxpartyparrot.Core.DebugMenu;
@@ -15,15 +16,32 @@ namespace pdxpartyparrot.Core.Input
 
     public sealed class InputManager : SingletonBehavior<InputManager>
     {
+        private class GamepadListener
+        {
+            public Action<Gamepad> acquireCallback;
+
+            public Action<Gamepad> disconnectCallback;
+        }
+
+#region Controls
         [SerializeField]
         private Controls _controls;
 
         public Controls Controls => _controls;
+#endregion
 
         [SerializeField]
         private EventSystem _eventSystemPrefab;
 
         public EventSystem EventSystem { get; private set; }
+
+#region Gamepads
+        private readonly List<Gamepad> _unacquiredGamepads = new List<Gamepad>();
+
+        private readonly Dictionary<Gamepad, GamepadListener> _acquiredGamepads = new Dictionary<Gamepad, GamepadListener>();
+
+        private readonly Queue<GamepadListener> _gamepadListeners = new Queue<GamepadListener>();
+#endregion
 
 #region Unity Lifecycle
         private void Awake()
@@ -36,6 +54,8 @@ namespace pdxpartyparrot.Core.Input
                 Debug.Log("Creating EventSystem (no VR)...");
                 EventSystem = Instantiate(_eventSystemPrefab, transform);
             }
+
+            InitGamepads();
 
             InputSystem.onDeviceChange += OnDeviceChange;
         }
@@ -51,32 +71,93 @@ namespace pdxpartyparrot.Core.Input
         }
 #endregion
 
-// TODO: acquire/release gamepads
-
-        private List<Gamepad> GetGamepads()
+#region Gamepads
+        public void AcquireGamepad(Action<Gamepad> acquireCallback, Action<Gamepad> disconnectCallback)
         {
-            return (from device in InputSystem.devices where device is Gamepad select (Gamepad)device).ToList();
+            GamepadListener listener = new GamepadListener
+            {
+                acquireCallback = acquireCallback,
+                disconnectCallback = disconnectCallback
+            };
+
+            if(_unacquiredGamepads.Count < 1) {
+                _gamepadListeners.Enqueue(listener);
+                return;
+            }
+
+            Gamepad gamepad = _unacquiredGamepads.RemoveFront();
+            listener.acquireCallback.Invoke(gamepad);
+            _acquiredGamepads[gamepad] = listener;
         }
+
+        private void InitGamepads()
+        {
+            var gamepads = from device in InputSystem.devices where device is Gamepad select (Gamepad)device;
+            foreach(Gamepad gamepad in gamepads) {
+                _unacquiredGamepads.Add(gamepad);
+            }
+            Debug.Log($"Found {_unacquiredGamepads.Count} gamepads");
+        }
+
+        private void AddGamepad(Gamepad gamepad)
+        {
+            Debug.Log("Gamepad added");
+
+            if(!NotifyAddGamepad(gamepad)) {
+                _unacquiredGamepads.Add(gamepad);
+            }
+        }
+
+        private void RemoveGamepad(Gamepad gamepad)
+        {
+            Debug.Log("Gamepad removed");
+
+            if(_unacquiredGamepads.Remove(gamepad)) {
+                return;
+            }
+
+            NotifyRemoveGamepad(gamepad);
+        }
+
+        private bool NotifyAddGamepad(Gamepad gamepad)
+        {
+            if(_gamepadListeners.Count < 1) {
+                return false;
+            }
+
+            GamepadListener listener = _gamepadListeners.Dequeue();
+            listener.acquireCallback.Invoke(gamepad);
+            _acquiredGamepads[gamepad] = listener;
+            return true;
+        }
+
+        private void NotifyRemoveGamepad(Gamepad gamepad)
+        {
+            GamepadListener listener = _acquiredGamepads.GetOrDefault(gamepad);
+            listener?.disconnectCallback.Invoke(gamepad);
+            _acquiredGamepads.Remove(gamepad);
+            _gamepadListeners.Enqueue(listener);
+        }
+#endregion
 
 #region Event Handlers
         private void OnDeviceChange(InputDevice device, InputDeviceChange change)
         {
+            if(device is Gamepad) {
+                OnGamepadChange((Gamepad)device, change);
+                return;
+            }
+        }
+
+        private void OnGamepadChange(Gamepad gamepad, InputDeviceChange change)
+        {
             switch (change)
             {
             case InputDeviceChange.Added:
-                Debug.Log("Input device added");
+                AddGamepad(gamepad);
                 break;
             case InputDeviceChange.Removed:
-                Debug.Log("Input device removed");
-                break;
-            case InputDeviceChange.Enabled:
-                Debug.Log("Input device enabled");
-                break;
-            case InputDeviceChange.Disabled:
-                Debug.Log("Input device disabled");
-                break;
-            default:
-                // not sure if we need to handle the rest of these
+                RemoveGamepad(gamepad);
                 break;
             }
         }
@@ -86,11 +167,20 @@ namespace pdxpartyparrot.Core.Input
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "InputManager");
             debugMenuNode.RenderContentsAction = () => {
-                GUILayout.BeginVertical("Joysticks", GUI.skin.box);
-                    var gamepads = GetGamepads();
-                    foreach(Gamepad gamepad in gamepads) {
-                        GUILayout.Label(gamepad.name);
-                    }
+                GUILayout.BeginVertical("Gamepads");
+                    GUILayout.Label($"Queued listeners: {_gamepadListeners.Count}");
+
+                    GUILayout.BeginVertical("Unacquired:", GUI.skin.box);
+                        foreach(Gamepad gamepad in _unacquiredGamepads) {
+                            GUILayout.Label(gamepad.name);
+                        }
+                    GUILayout.EndVertical();
+
+                    GUILayout.BeginVertical("Acquired:", GUI.skin.box);
+                        foreach(var kvp in _acquiredGamepads) {
+                            GUILayout.Label(kvp.Key.name);
+                        }
+                    GUILayout.EndVertical();
                 GUILayout.EndVertical();
             };
         }
