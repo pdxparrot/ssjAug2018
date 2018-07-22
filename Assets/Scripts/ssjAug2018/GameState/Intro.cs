@@ -19,7 +19,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             InitializeManagers();
 
             _viewer = ViewerManager.Instance.AcquireViewer();
-            _viewer.Set2D();
+            _viewer?.Set2D();
+            _viewer?.EnableCamera(false);
 
             // TODO: acquire a gamepad
         }

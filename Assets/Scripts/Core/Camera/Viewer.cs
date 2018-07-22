@@ -107,6 +107,16 @@ namespace pdxpartyparrot.Core.Camera
         }
 #endregion
 
+        public void EnableCamera(bool enable)
+        {
+            Camera.enabled = enable;
+        }
+
+        public void EnableUICamera(bool enable)
+        {
+            UICamera.enabled = enable;
+        }
+
         public void ResetCameraPosition()
         {
             Camera.transform.localPosition = _defaultCameraPosition;
