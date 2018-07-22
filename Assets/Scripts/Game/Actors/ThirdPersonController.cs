@@ -8,6 +8,11 @@ namespace pdxpartyparrot.Game.Actors
 {
     public class ThirdPersonController : ActorController
     {
+        [SerializeField]
+        private float _collisionCheckStartEpsilon = 0.01f;
+
+        protected float CollisionCheckStartEpsilon => _collisionCheckStartEpsilon;
+
 #region Ground Check
         [Header("Ground Check")]
 
@@ -85,11 +90,13 @@ namespace pdxpartyparrot.Game.Actors
 
         private void CheckGrounded()
         {
-            _groundCheckStart = Owner.Collider.bounds.center;
-            float groundCheckY = Owner.Collider.bounds.min.y - _groundCheckEpsilon;
+            Vector3 center = Owner.Collider.bounds.center;
+            Vector3 min = Owner.Collider.bounds.min;
 
-            _groundCheckEnd = new Vector3(_groundCheckStart.x, groundCheckY, _groundCheckStart.z);
-            _groundCheckRadius = Owner.Collider.bounds.extents.x;
+            _groundCheckStart = new Vector3(center.x, min.y + _collisionCheckStartEpsilon, center.z);
+            _groundCheckEnd = new Vector3(_groundCheckStart.x, min.y - _groundCheckEpsilon, _groundCheckStart.z);
+            _groundCheckRadius = Owner.Collider.bounds.extents.x - _collisionCheckStartEpsilon;
+
             _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, _groundCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
         }
 
