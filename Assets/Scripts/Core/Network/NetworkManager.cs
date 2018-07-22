@@ -13,6 +13,8 @@ namespace pdxpartyparrot.Core.Network
     {
         public static NetworkManager Instance => (NetworkManager)singleton;
 
+        public static bool HasInstance => null != Instance;
+
         [SerializeField]
         private int _maxNetworkPlayers = 16;
 

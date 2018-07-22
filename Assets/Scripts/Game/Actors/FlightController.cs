@@ -9,6 +9,7 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Players
 {
+    // TODO: create a FlightControllerData, similar to ThirdPersonControllerData
     public class FlightController : ActorController
     {
 #region Physics

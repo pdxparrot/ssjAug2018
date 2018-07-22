@@ -156,8 +156,19 @@ namespace pdxpartyparrot.Core.Input
             case InputDeviceChange.Added:
                 AddGamepad(gamepad);
                 break;
+            case InputDeviceChange.Enabled:
+                Debug.LogWarning("Unhandled gamepad enabled");
+                break;
             case InputDeviceChange.Removed:
                 RemoveGamepad(gamepad);
+                break;
+            case InputDeviceChange.Disabled:
+                Debug.LogWarning("Unhandled gamepad disabled");
+                break;
+            case InputDeviceChange.StateChanged:
+                break;
+            default:
+                Debug.LogWarning($"Unhandled gamepad change: {change}");
                 break;
             }
         }

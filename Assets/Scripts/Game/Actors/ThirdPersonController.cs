@@ -16,13 +16,22 @@ namespace pdxpartyparrot.Game.Actors
 
             InitRigidbody();
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + Rigidbody.angularVelocity);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, transform.position + Rigidbody.velocity);
+        }
 #endregion
 
         private void InitRigidbody()
         {
             Rigidbody.isKinematic = false;
             Rigidbody.useGravity = true;
-            Rigidbody.freezeRotation = true;
+            Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             Rigidbody.detectCollisions = true;
             Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 

@@ -3,6 +3,10 @@ guid: 6e7ccafa90f072343b8e3207f18b7979
 ScriptedImporter:
   fileIDToRecycleName:
     11400000: <root>
+    11400002: game/move
+    11400004: game/look
+    11400006: game/pause
+    11400008: game/jump
   externalObjects: {}
   userData: 
   assetBundleName: 
