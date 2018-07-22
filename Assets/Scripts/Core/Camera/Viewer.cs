@@ -55,6 +55,7 @@ namespace pdxpartyparrot.Core.Camera
             _uiCamera.backgroundColor = Color.black;
             _uiCamera.orthographic = true;
             _uiCamera.cullingMask = UIManager.Instance.UILayer;
+            _uiCamera.useOcclusionCulling = false;
 
             _globalPostProcessVolume.isGlobal = true;
             _globalPostProcessVolume.priority = 1;

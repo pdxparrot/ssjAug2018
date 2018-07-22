@@ -28,8 +28,9 @@ namespace pdxpartyparrot.Core.UI
         {
             _camera.clearFlags = CameraClearFlags.Color;
             _camera.backgroundColor = Color.black;
-            _camera.cullingMask = -1;
+            _camera.cullingMask = 0;
             _camera.orthographic = true;
+            _camera.useOcclusionCulling = false;
 
             _videoPlayer = _camera.gameObject.AddComponent<VideoPlayer>();
             _videoPlayer.playOnAwake = false;
