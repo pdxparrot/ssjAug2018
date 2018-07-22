@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/testworld.unity
     guid: 4507e5b9d9bc39042bc319f84f6149da
+  - enabled: 1
+    path: Assets/Scenes/test_terrain.unity
+    guid: d0272dece4256a6458285c5c9af74524
   m_configObjects: {}
