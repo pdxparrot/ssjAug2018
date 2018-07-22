@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using Kino;
+
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Rendering;
 using pdxpartyparrot.Core.UI;
 
@@ -40,6 +42,9 @@ namespace pdxpartyparrot.Core.Camera
         private PostProcessVolume _globalPostProcessVolume;
 
         public PostProcessProfile GlobalPostProcessProfile { get; private set; }
+
+        [SerializeField]
+        private Bokeh _bokehEffect;
 #endregion
 
         [SerializeField]
@@ -115,6 +120,13 @@ namespace pdxpartyparrot.Core.Camera
         public void EnableUICamera(bool enable)
         {
             UICamera.enabled = enable;
+        }
+
+        public void SetFocus(Transform focus)
+        {
+            if(null != _bokehEffect) {
+                _bokehEffect.pointOfFocus = focus;
+            }
         }
 
         public void ResetCameraPosition()

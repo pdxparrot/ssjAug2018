@@ -1,7 +1,7 @@
 {
-    "name": "com.pdxpartyparrot.Game.Editor",
+    "name": "Keijiro.Editor",
     "references": [
-        "com.pdxpartyparrot.Game"
+        "Keijiro"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

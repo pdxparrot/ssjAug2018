@@ -72,6 +72,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null == _viewer) {
                 return false;
             }
+            _viewer.SetFocus(transform);
 
             PlayerController.Initialize(this);
 

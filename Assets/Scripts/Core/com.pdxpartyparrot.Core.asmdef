@@ -3,7 +3,8 @@
     "references": [
         "Unity.TextMeshPro",
         "Unity.InputSystem",
-        "Unity.Postprocessing.Runtime"
+        "Unity.Postprocessing.Runtime",
+        "Keijiro"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

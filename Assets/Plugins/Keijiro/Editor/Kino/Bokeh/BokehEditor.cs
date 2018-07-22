@@ -27,7 +27,7 @@ using UnityEditor;
 
 namespace Kino
 {
-    [CanEditMultipleObjects, CustomEditor(typeof(Bokeh))]
+    [CanEditMultipleObjects, CustomEditor(typeof(Kino.Bokeh))]
     public class BokehEditor : Editor
     {
         SerializedProperty _pointOfFocus;
