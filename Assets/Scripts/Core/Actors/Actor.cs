@@ -10,6 +10,8 @@ namespace pdxpartyparrot.Core.Actors
 
         GameObject Model { get; }
 
+        Collider Collider { get; }
+
         ActorController Controller { get; }
 
         bool CanMove { get; }

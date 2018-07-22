@@ -19,6 +19,11 @@ namespace pdxpartyparrot.Core.Actors
         public GameObject GameObject => gameObject;
 
         [SerializeField]
+        private Collider _collider;
+
+        public Collider Collider => _collider;
+
+        [SerializeField]
         private GameObject _model;
 
         public GameObject Model => _model;

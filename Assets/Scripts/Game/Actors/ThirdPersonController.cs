@@ -1,4 +1,5 @@
 ﻿using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Data;
 
 using UnityEngine;
@@ -7,6 +8,35 @@ namespace pdxpartyparrot.Game.Actors
 {
     public class ThirdPersonController : ActorController
     {
+#region Ground Check
+        [Header("Ground Check")]
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _groundCheckStart;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _groundCheckEnd;
+
+        [SerializeField]
+        [ReadOnly]
+        private float _groundCheckRadius;
+
+        [SerializeField]
+        private float _groundCheckEpsilon = 0.1f;
+
+        [SerializeField]
+        [ReadOnly]
+        private LayerMask _groundCheckIgnoreLayerMask;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _isGrounded;
+
+        public bool IsGrounded => _isGrounded;
+#endregion
+
         public ThirdPersonControllerData ControllerData { get; set; }
 
 #region Unity Lifecycle
@@ -15,6 +45,13 @@ namespace pdxpartyparrot.Game.Actors
             base.Awake();
 
             InitRigidbody();
+
+            _groundCheckIgnoreLayerMask = ~(1 << gameObject.layer);
+        }
+
+        private void FixedUpdate()
+        {
+            CheckGrounded();
         }
 
         private void OnDrawGizmos()
@@ -39,6 +76,16 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
+        private void CheckGrounded()
+        {
+            _groundCheckStart = Owner.Collider.bounds.center;
+            float groundCheckY = Owner.Collider.bounds.min.y - _groundCheckEpsilon;
+
+            _groundCheckEnd = new Vector3(_groundCheckStart.x, groundCheckY, _groundCheckStart.z);
+            _groundCheckRadius = Owner.Collider.bounds.extents.x;
+            _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, _groundCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+        }
+
         public override void RotateModel(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
@@ -59,7 +106,15 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            Owner.GameObject.transform.position += axes * ControllerData.MoveSpeed * dt;
+            float speed = ControllerData.MoveSpeed;
+            Rigidbody.MovePosition(transform.position + axes * speed * dt);
+        }
+
+        public void Jump()
+        {
+            if(!Owner.CanMove || !IsGrounded) {
+                return;
+            }
         }
     }
 }

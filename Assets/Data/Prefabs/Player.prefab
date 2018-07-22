@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4371529177874640}
   - component: {fileID: 95767685987459318}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 54429878804720558}
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114416925496739310}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 4469397025458326}
   - component: {fileID: 33003255032445802}
   - component: {fileID: 23461663716281692}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 4476920035319580}
   - component: {fileID: 33719593049935190}
   - component: {fileID: 23022537533227536}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,8 +106,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1194441358119842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4476920035319580}
   - {fileID: 4469397025458326}
@@ -231,7 +231,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1356650051019368}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 150
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -364,6 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: -1
+  _collider: {fileID: 136952311265174156}
   _model: {fileID: 1194441358119842}
   _controller: {fileID: 114450802372136796}
   _canMove: 1
@@ -392,6 +393,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _driver: {fileID: 114416925496739310}
+  _groundCheckStart: {x: 0, y: 0, z: 0}
+  _groundCheckEnd: {x: 0, y: 0, z: 0}
+  _groundCheckRadius: 0
+  _groundCheckEpsilon: 0.1
+  _groundCheckIgnoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _isGrounded: 0
 --- !u!114 &114748589338881858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -466,7 +475,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 1
+  m_Height: 4
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 2, z: 0}

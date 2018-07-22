@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: ThirdPersonControllerData
   m_EditorClassIdentifier: 
   _moveSpeed: 15
-  _jumpHeight: 1
+  _jumpHeight: 5

@@ -8,6 +8,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerDriver : GamepadDriver
     {
+        public new Player Owner => (Player)base.Owner;
+
 #region Unity Lifecycle
         protected override void Awake()
         {
@@ -65,7 +67,7 @@ Debug.Log("look");
                 return;
             }
 
-Debug.Log("jump");
+            Owner.PlayerController.Jump();
         }
 #endregion
     }

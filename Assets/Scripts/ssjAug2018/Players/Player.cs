@@ -22,8 +22,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public FollowTarget FollowTarget { get; private set; }
 
-        public Collider Collider { get; private set; }
-
         public PlayerController PlayerController => (PlayerController)Controller;
 
         private AudioSource _audioSource;
@@ -44,7 +42,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #endif
 
             FollowTarget = GetComponent<FollowTarget>();
-            Collider = GetComponent<Collider>();
 
             _audioSource = GetComponent<AudioSource>();
             _audioSource.playOnAwake = false;
