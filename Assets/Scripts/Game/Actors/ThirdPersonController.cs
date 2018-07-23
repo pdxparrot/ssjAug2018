@@ -133,15 +133,20 @@ namespace pdxpartyparrot.Game.Actors
 #endregion
 
 #region Grounded Check
-        private Vector3 GetGroundCheckCenter()
+        protected Vector3 GetGroundCheckCenter()
         {
             Vector3 center = _groundCheckTransform != null ? _groundCheckTransform.position : transform.position;
             return new Vector3(center.x, center.y + _groundCheckRadius - 0.1f, center.z);
         }
 
+        protected bool CheckIsGrounded(Vector3 center)
+        {
+            return Physics.CheckSphere(center, _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);;
+        }
+
         private void UpdateIsGrounded()
         {
-            _isGrounded = Physics.CheckSphere(GetGroundCheckCenter(), _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+            _isGrounded = CheckIsGrounded(GetGroundCheckCenter());
         }
 #endregion
 

@@ -230,20 +230,23 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
+            float radius = Player.CapsuleCollider.radius;
+            float armheight = _rightGrabCheckTransform.localPosition.y - _grabCheckRadius;
+
 // TODO: smooth/animate these things
             if(!_canGrabLeft && _canGrabRight) {
                 if(CheckRotateLeft()) {
                     transform.Rotate(Vector3.up, 90.0f);
-                    transform.position += transform.localRotation * new Vector3(-1.1f, 0.0f, -1.0f);
+                    transform.position += transform.localRotation * new Vector3(-radius - 0.1f, 0.0f, -radius);
                 }
             } else if(_canGrabLeft && !_canGrabRight) {
                 if(CheckRotateRight()) {
                     transform.Rotate(Vector3.up, -90.0f);
-                    transform.position += transform.localRotation * new Vector3(1.1f, 0.0f, -1.0f);
+                    transform.position += transform.localRotation * new Vector3(radius + 0.1f, 0.0f, -radius);
                 }
             } else if(!_canGrabLeft && !_canGrabRight) {
                 if(CheckClimbUp()) {
-Debug.Log("TODO: climb up");
+                    transform.position += transform.localRotation * new Vector3(0.0f, armheight, radius);
                 } else {
                     //Debug.Log("fell off");
                     EnableGrabbing(false);
@@ -251,8 +254,11 @@ Debug.Log("TODO: climb up");
             }
         }
 
+// TODO: these could probably pass back the predicted position/rotation to so we don't have to re-do the math in CheckShouldRotateOrClimb()
+
         private bool CheckRotateLeft()
         {
+            // TODO: 0.5 necessary?
             float radius = Player.CapsuleCollider.radius * 0.5f;
 
             Vector3 movement = transform.localRotation * new Vector3(radius, 0.0f, radius);
@@ -263,30 +269,24 @@ Debug.Log("TODO: climb up");
 
         private bool CheckRotateRight()
         {
+            // TODO: 0.5 necessary?
             float radius = Player.CapsuleCollider.radius * 0.5f;
 
             Vector3 movement = transform.localRotation * new Vector3(-radius, 0.0f, radius);
-            Vector3 position =RightGrabCheckCenter() + movement;
+            Vector3 position = RightGrabCheckCenter() + movement;
 
             return Physics.CheckSphere(position, _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
         }
 
         private bool CheckClimbUp()
         {
-/*
-// TODO: gotta be a better way to do this
-            float height = Player.CapsuleCollider.height * 0.5f;
             float radius = Player.CapsuleCollider.radius;
+            float armheight = _rightGrabCheckTransform.localPosition.y - _grabCheckRadius;
 
-            Vector3 movement = new Vector3(0.0f, height, radius);
-Debug.Log($"Checking up {movement} : {_grabCheckRadius}");
-            Vector3 leftPosition = LeftGrabCheckCenter() + movement;
-            Vector3 rightPosition = RightGrabCheckCenter() + movement;
+            Vector3 groundCheckCenter = GetGroundCheckCenter();
+            Vector3 movement = transform.localRotation * new Vector3(0.0f, armheight, radius);
 
-            return Physics.CheckSphere(leftPosition, _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore)
-                || Physics.CheckSphere(rightPosition, _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-*/
-return false;
+            return CheckIsGrounded(groundCheckCenter + movement);
         }
 #endregion
     }
