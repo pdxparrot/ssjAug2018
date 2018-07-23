@@ -3,11 +3,11 @@
 using UnityEngine;
 
 // TODO: Lots. Basic class implementation so I can reference this in the manager
-namespace pdxpartyparrot.ssjAug2018.DeliveryTargets
+namespace pdxpartyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class DeliveryTarget : NetworkActor {
+    public sealed class Mailbox : NetworkActor {
 
         /* Unsure if this is going to get animations.
         #region Animations

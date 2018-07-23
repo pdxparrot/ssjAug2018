@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace pdxpartyparrot.ssjAug2018.DeliveryTargets
+namespace pdxpartyparrot.ssjAug2018.World
 {
-    public class DeliveryTargetSpawnManager : SingletonBehavior<DeliveryTargetSpawnManager>
+    public class MailboxSpawnManager : SingletonBehavior<MailboxSpawnManager>
     {
 
-        private readonly HashSet<DeliveryTargetSpawnPoint> _spawnPoints = new HashSet<DeliveryTargetSpawnPoint>();
+        private readonly HashSet<MailboxSpawnPoint> _spawnPoints = new HashSet<MailboxSpawnPoint>();
 
 #region Registration
-        public virtual void RegisterDeliveryTargetSpawnPoint(DeliveryTargetSpawnPoint spawnPoint)
+        public virtual void RegisterDeliveryTargetSpawnPoint(MailboxSpawnPoint spawnPoint)
         {
             _spawnPoints.Add(spawnPoint);
         }
 
-        public virtual void UnregisterDeliveryTargetSpawnPoint(DeliveryTargetSpawnPoint spawnPoint)
+        public virtual void UnregisterDeliveryTargetSpawnPoint(MailboxSpawnPoint spawnPoint)
         {
             _spawnPoints.Remove(spawnPoint);
         }
 #endregion
 
-        public DeliveryTargetSpawnPoint GetFarSpawnPoint()
+        public MailboxSpawnPoint GetFarSpawnPoint()
         {
             // TODO: Math. Get Player distance from spawn points, relative distance to spawn points.
             // Pick a 'Seed' Spawn as random mailbox within parameters, then choose 1 - 4 others within a radius of seed

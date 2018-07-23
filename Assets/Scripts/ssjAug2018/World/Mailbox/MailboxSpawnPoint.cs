@@ -2,21 +2,21 @@
 
 using UnityEngine;
 
-namespace pdxpartyparrot.ssjAug2018.DeliveryTargets
+namespace pdxpartyparrot.ssjAug2018.World
 { 
-    public class DeliveryTargetSpawnPoint : MonoBehaviour {
+    public class MailboxSpawnPoint : MonoBehaviour {
 
 #region Unity Lifecycle
         protected virtual void Awake()
         {
-            DeliveryTargetSpawnManager.Instance.RegisterDeliveryTargetSpawnPoint(this);
+            MailboxSpawnManager.Instance.RegisterDeliveryTargetSpawnPoint(this);
         }
 
         protected virtual void OnDestroy()
         {
-            if (DeliveryTargetSpawnManager.HasInstance)
+            if (MailboxSpawnManager.HasInstance)
             {
-                DeliveryTargetSpawnManager.Instance.UnregisterDeliveryTargetSpawnPoint(this);
+                MailboxSpawnManager.Instance.UnregisterDeliveryTargetSpawnPoint(this);
             }
         }
 #endregion
@@ -28,9 +28,6 @@ namespace pdxpartyparrot.ssjAug2018.DeliveryTargets
 
             actor.GameObject.SetActive(true);
             actor.OnSpawn();
-
-            // Self-Destruction unregisters the spawn point so it cannot be reused.
-            Destroy(this);
         }
     }
 }
