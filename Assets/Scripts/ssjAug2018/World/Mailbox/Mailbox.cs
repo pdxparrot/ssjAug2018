@@ -1,43 +1,32 @@
-﻿using pdxpartyparrot.Core.Actors;
+﻿using UnityEngine;
 
-using UnityEngine;
-
-// TODO: Lots. Basic class implementation so I can reference this in the manager
 namespace pdxpartyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(AudioSource))]
-    public sealed class Mailbox : NetworkActor {
+    public sealed class Mailbox : MonoBehaviour {
 
-        /* Unsure if this is going to get animations.
-        #region Animations
+#region Animations
         [Header("Animations")]
 
         [SerializeField]
         private Animator _animator;
-        #endregion
-        */
+#endregion
+        
+        [Space(10)]
 
-        public int DeliveriesRequired;
-
-        private AudioSource _audiosource;
+        [SerializeField]
+        private int _mailRequired =1;
 
         #region Unity Lifecycle
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
-            NetworkIdentity.localPlayerAuthority = false;
-
-            _audiosource = GetComponent<AudioSource>();
-            _audiosource.playOnAwake = false;
 
 
         }
 
         private void OnDestroy()
         {
-            _audiosource.Stop();
+
         }
 
         #endregion
@@ -46,9 +35,5 @@ namespace pdxpartyparrot.ssjAug2018.World
         // Also decrement the required deliveries
         // At 0, change to 'done' state (VFX applies)
         // Add UI for remaining delivers/total required
-
-        public override void OnSpawn() {
-            Debug.Log("Spawned " + this.name);
-        }
     }
 }
