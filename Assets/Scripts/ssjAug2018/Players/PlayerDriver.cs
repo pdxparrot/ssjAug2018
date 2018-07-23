@@ -8,7 +8,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerDriver : GamepadDriver
     {
-        public Player Player => (Player)base.Owner;
+        public Player Player => (Player)Owner;
 
         protected override bool CanDrive => base.CanDrive && Player.isLocalPlayer;
 
@@ -55,7 +55,7 @@ Debug.Log("pause");
             }
 
             Vector2 axes = ctx.ReadValue<Vector2>();
-            LastMoveAxes = new Vector3(axes.x, 0.0f, axes.y);
+            LastMoveAxes = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnLook(InputAction.CallbackContext ctx)
@@ -64,7 +64,8 @@ Debug.Log("pause");
                 return;
             }
 
-Debug.Log("look");
+            Vector2 axes = ctx.ReadValue<Vector2>();
+            Player.FollowTarget.LookAxis = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnJump(InputAction.CallbackContext ctx)

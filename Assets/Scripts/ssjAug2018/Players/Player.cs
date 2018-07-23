@@ -9,7 +9,7 @@ using UnityEngine;
 namespace pdxpartyparrot.ssjAug2018.Players
 {
     [RequireComponent(typeof(FollowTarget))]
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(AudioSource))]
     public sealed class Player : NetworkActor
     {
@@ -23,6 +23,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public FollowTarget FollowTarget { get; private set; }
 
         public PlayerController PlayerController => (PlayerController)Controller;
+
+        public CapsuleCollider CapsuleCollider => (CapsuleCollider)Collider;
 
         private AudioSource _audioSource;
 

@@ -11,6 +11,21 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1356650051019368}
   m_IsPrefabAsset: 1
+--- !u!1 &1099906939216588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4805528540693168}
+  m_Layer: 9
+  m_Name: RightGrabCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1194441358119842
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,6 +100,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1758766577438008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4594389412127694}
+  m_Layer: 9
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1821381394592196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4350808608469060}
+  m_Layer: 9
+  m_Name: LeftGrabCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4021666756528148
 Transform:
   m_ObjectHideFlags: 1
@@ -96,8 +141,24 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4371529177874640}
+  - {fileID: 4594389412127694}
+  - {fileID: 4350808608469060}
+  - {fileID: 4805528540693168}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4350808608469060
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1821381394592196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4021666756528148}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4371529177874640
 Transform:
@@ -139,6 +200,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4371529177874640}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4594389412127694
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1758766577438008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4021666756528148}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4805528540693168
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1099906939216588}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4021666756528148}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23022537533227536
 MeshRenderer:
@@ -395,15 +482,20 @@ MonoBehaviour:
   _driver: {fileID: 114416925496739310}
   _lastVelocity: {x: 0, y: 0, z: 0}
   _lastAngularVelocity: {x: 0, y: 0, z: 0}
-  _collisionCheckStartEpsilon: 0.1
-  _groundCheckStart: {x: 0, y: 0, z: 0}
-  _groundCheckEnd: {x: 0, y: 0, z: 0}
-  _groundCheckRadius: 0
-  _groundCheckEpsilon: 0.1
-  _groundCheckIgnoreLayerMask:
+  _collisionCheckIgnoreLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  _groundCheckTransform: {fileID: 4594389412127694}
+  _groundCheckRadius: 0.9
   _isGrounded: 0
+  _isFalling: 0
+  _leftGrabCheckTransform: {fileID: 4350808608469060}
+  _rightGrabCheckTransform: {fileID: 4805528540693168}
+  _grabCheckRadius: 0.25
+  _canGrabLeft: 0
+  _canGrabRight: 0
+  _isClimbing: 0
+  _isSwinging: 0
 --- !u!114 &114748589338881858
 MonoBehaviour:
   m_ObjectHideFlags: 1
