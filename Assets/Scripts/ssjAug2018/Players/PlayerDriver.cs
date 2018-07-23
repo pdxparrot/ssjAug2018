@@ -8,7 +8,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerDriver : GamepadDriver
     {
-        public new Player Owner => (Player)base.Owner;
+        public Player Player => (Player)base.Owner;
+
+        protected override bool CanDrive => base.CanDrive && Player.isLocalPlayer;
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -35,7 +37,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Event Handlers
         private void OnPause(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx)) {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
@@ -44,7 +46,7 @@ Debug.Log("pause");
 
         private void OnMove(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx)) {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
@@ -54,7 +56,7 @@ Debug.Log("pause");
 
         private void OnLook(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx)) {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
@@ -63,11 +65,11 @@ Debug.Log("look");
 
         private void OnJump(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx)) {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
-            Owner.PlayerController.Jump();
+            Player.PlayerController.Jump();
         }
 #endregion
     }

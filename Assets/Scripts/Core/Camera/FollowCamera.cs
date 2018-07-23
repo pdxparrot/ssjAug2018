@@ -17,9 +17,11 @@ namespace pdxpartyparrot.Core.Camera
         private bool _enableOrbit = true;
 
         [SerializeField]
+        [Range(0, 100)]
         private float _orbitSpeedX = 100.0f;
 
         [SerializeField]
+        [Range(0, 100)]
         private float _orbitSpeedY = 100.0f;
 
         [SerializeField]
@@ -29,6 +31,7 @@ namespace pdxpartyparrot.Core.Camera
         private Vector2 _defaultOrbitRotation = new Vector2(0.0f, 30.0f);
 
         [SerializeField]
+        [Range(0, 1)]
         private float _defaultOrbitReturnTime = 0.5f;
 
         [SerializeField]
@@ -40,6 +43,7 @@ namespace pdxpartyparrot.Core.Camera
         private Vector2 _orbitRotation;
 
         [SerializeField]
+        [Range(0, 50)]
         private float _orbitRadius = 15.0f;
 
         public float OrbitRadius { get { return _orbitRadius; } set { _orbitRadius = value; } }
@@ -47,15 +51,19 @@ namespace pdxpartyparrot.Core.Camera
 
 #region Orbit Constraints
         [SerializeField]
+        [Range(-360, 0)]
         private float _orbitXMin = -90.0f;
 
         [SerializeField]
+        [Range(0, 360)]
         private float _orbitXMax = 90.0f;
 
         [SerializeField]
+        [Range(-360, 0)]
         private float _orbitYMin = -90.0f;
 
         [SerializeField]
+        [Range(0, 360)]
         private float _orbitYMax = 90.0f;
 #endregion
 
@@ -68,12 +76,15 @@ namespace pdxpartyparrot.Core.Camera
         private bool _enableZoom = false;
 
         [SerializeField]
+        [Range(0, 10)]
         private float _minZoomDistance = 5.0f;
 
         [SerializeField]
+        [Range(0, 100)]
         private float _maxZoomDistance = 100.0f;
 
         [SerializeField]
+        [Range(0, 500)]
         private float _zoomSpeed = 500.0f;
 #endregion
 
@@ -86,9 +97,11 @@ namespace pdxpartyparrot.Core.Camera
         private bool _enableLook = false;
 
         [SerializeField]
+        [Range(0, 100)]
         private float _lookSpeedX = 100.0f;
 
         [SerializeField]
+        [Range(0, 100)]
         private float _lookSpeedY = 100.0f;
 
         [SerializeField]
@@ -115,6 +128,7 @@ namespace pdxpartyparrot.Core.Camera
         private bool _smooth;
 
         [SerializeField]
+        [Range(0, 0.5f)]
         private float _smoothTime = 0.05f;
 
         [SerializeField]

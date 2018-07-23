@@ -393,6 +393,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _driver: {fileID: 114416925496739310}
+  _lastVelocity: {x: 0, y: 0, z: 0}
+  _lastAngularVelocity: {x: 0, y: 0, z: 0}
+  _collisionCheckStartEpsilon: 0.1
   _groundCheckStart: {x: 0, y: 0, z: 0}
   _groundCheckEnd: {x: 0, y: 0, z: 0}
   _groundCheckRadius: 0

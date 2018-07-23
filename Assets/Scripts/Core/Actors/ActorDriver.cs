@@ -21,10 +21,12 @@ namespace pdxpartyparrot.Core.Actors
 
         protected IActor Owner { get; private set; }
 
+        protected virtual bool CanDrive => !PartyParrotManager.Instance.IsPaused;
+
 #region Unity Lifecycle
         private void Update()
         {
-            if(PartyParrotManager.Instance.IsPaused) {
+            if(!CanDrive) {
                 return;
             }
 
@@ -35,7 +37,7 @@ namespace pdxpartyparrot.Core.Actors
 
         private void FixedUpdate()
         {
-            if(PartyParrotManager.Instance.IsPaused) {
+            if(!CanDrive) {
                 return;
             }
 

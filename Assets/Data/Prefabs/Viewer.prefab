@@ -253,7 +253,7 @@ MonoBehaviour:
   _defaultOrbitReturnTime: 0.5
   _orbitReturnVelocity: {x: 0, y: 0}
   _orbitRotation: {x: 0, y: 0}
-  _orbitRadius: 15
+  _orbitRadius: 10
   _orbitXMin: -90
   _orbitXMax: 90
   _orbitYMin: -90

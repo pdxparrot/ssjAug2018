@@ -72,7 +72,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _viewer.SetFocus(transform);
 
             PlayerController.Initialize(this, PlayerManager.Instance.PlayerData.ControllerData);
+
+            // TODO: encapsulate this somewhere better
             PlayerController.Rigidbody.mass = PlayerManager.Instance.PlayerData.Mass;
+            PlayerController.Rigidbody.drag = PlayerManager.Instance.PlayerData.Drag;
+            PlayerController.Rigidbody.angularDrag = PlayerManager.Instance.PlayerData.AngularDrag;
 
             return true;
         }

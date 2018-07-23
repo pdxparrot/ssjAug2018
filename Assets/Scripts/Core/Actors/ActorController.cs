@@ -1,5 +1,7 @@
 ﻿using System;
 
+using pdxpartyparrot.Core.Util;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.Core.Actors
@@ -29,6 +31,20 @@ namespace pdxpartyparrot.Core.Actors
         [SerializeField]
         private ActorDriver _driver;
 
+        [Space(10)]
+
+#region Physics
+        [Header("Physics")]
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastVelocity;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastAngularVelocity;
+#endregion
+
         public ActorDriver Driver => _driver;
 
         public Rigidbody Rigidbody { get; private set; }
@@ -39,6 +55,12 @@ namespace pdxpartyparrot.Core.Actors
         protected virtual void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
+        }
+
+        private void LateUpdate()
+        {
+            _lastVelocity = Rigidbody.velocity;
+            _lastAngularVelocity = Rigidbody.angularVelocity;
         }
 #endregion
 

@@ -28,6 +28,16 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _mass = 1.0f;
 
         public float Mass => _mass;
+
+        [SerializeField]
+        private float _drag = 0.0f;
+
+        public float Drag => _drag;
+
+        [SerializeField]
+        private float _angularDrag = 0.0f;
+
+        public float AngularDrag => _angularDrag;
 #endregion
     }
 }

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 15
   _jumpHeight: 5
+  _allowAirControl: 1

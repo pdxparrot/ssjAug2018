@@ -3,13 +3,15 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Data;
 
 using UnityEngine;
+using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Actors
 {
+// TODO: this has nothing to do with ThirdPerson or whatever, just merge it all into ActorController and kill this class
     public class ThirdPersonController : ActorController
     {
         [SerializeField]
-        private float _collisionCheckStartEpsilon = 0.01f;
+        private float _collisionCheckStartEpsilon = 0.1f;
 
         protected float CollisionCheckStartEpsilon => _collisionCheckStartEpsilon;
 
@@ -40,6 +42,11 @@ namespace pdxpartyparrot.Game.Actors
         private bool _isGrounded;
 
         public bool IsGrounded => _isGrounded;
+
+        [SerializeField]
+        private bool _isFalling;
+
+        public bool IsFalling => _isFalling;
 #endregion
 
         public ThirdPersonControllerData ControllerData { get; set; }
@@ -51,12 +58,29 @@ namespace pdxpartyparrot.Game.Actors
 
             InitRigidbody();
 
+            // prevent self-collision when doing cast checks
             _groundCheckIgnoreLayerMask = ~(1 << gameObject.layer);
         }
 
         private void FixedUpdate()
         {
             CheckGrounded();
+
+            _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
+
+            Vector3 adjustedVelocity = Rigidbody.velocity;
+
+            // do some fudging to jumping/falling so it feels better
+            if(!IsGrounded) {
+                adjustedVelocity.y -= ControllerData.FallSpeedAdjustment;
+            }
+
+            // apply terminal velocity
+            if(adjustedVelocity.y < -ControllerData.TerminalVelocity) {
+                adjustedVelocity.y = -ControllerData.TerminalVelocity;
+            }
+
+            Rigidbody.velocity = adjustedVelocity;
         }
 
         private void OnDrawGizmos()
@@ -66,6 +90,10 @@ namespace pdxpartyparrot.Game.Actors
 
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(transform.position, transform.position + Rigidbody.velocity);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_groundCheckStart, _groundCheckRadius);
+            Gizmos.DrawSphere(_groundCheckEnd, _groundCheckRadius);
         }
 #endregion
 
@@ -93,8 +121,8 @@ namespace pdxpartyparrot.Game.Actors
             Vector3 center = Owner.Collider.bounds.center;
             Vector3 min = Owner.Collider.bounds.min;
 
-            _groundCheckStart = new Vector3(center.x, min.y + _collisionCheckStartEpsilon, center.z);
-            _groundCheckEnd = new Vector3(_groundCheckStart.x, min.y - _groundCheckEpsilon, _groundCheckStart.z);
+            _groundCheckStart = new Vector3(center.x, min.y + _collisionCheckStartEpsilon + _groundCheckRadius, center.z);
+            _groundCheckEnd = new Vector3(_groundCheckStart.x, min.y - _groundCheckEpsilon + _groundCheckRadius, _groundCheckStart.z);
             _groundCheckRadius = Owner.Collider.bounds.extents.x - _collisionCheckStartEpsilon;
 
             _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, _groundCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
@@ -120,15 +148,28 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            float speed = ControllerData.MoveSpeed;
-            Rigidbody.MovePosition(transform.position + axes * speed * dt);
+            if(!ControllerData.AllowAirControl && !IsGrounded) {
+                return;
+            }
+
+            Vector3 velocity = axes * ControllerData.MoveSpeed;
+            velocity.y = Rigidbody.velocity.y;
+
+            Rigidbody.velocity = velocity;
         }
 
         public void Jump()
         {
-            if(!Owner.CanMove || !IsGrounded) {
+            if(!Owner.CanMove) {
                 return;
             }
+
+            if(!IsGrounded) {
+                return;
+            }
+
+            Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y) * 2.0f;
+            Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
         }
     }
 }

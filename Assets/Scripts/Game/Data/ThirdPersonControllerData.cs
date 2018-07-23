@@ -10,14 +10,33 @@ namespace pdxpartyparrot.Game.Data
     {
 #region Physics
         [SerializeField]
+        [Range(0, 50)]
         private float _moveSpeed = 1.0f;
 
         public float MoveSpeed => _moveSpeed;
 
         [SerializeField]
+        [Range(0, 50)]
         private float _jumpHeight = 1.0f;
 
         public float JumpHeight => _jumpHeight;
+
+        [SerializeField]
+        [Range(0, 10)]
+        private float _fallSpeedAdjustment = 0.0f;
+
+        public float FallSpeedAdjustment => _fallSpeedAdjustment;
+
+        [SerializeField]
+        [Range(0, 100)]
+        private float _terminalVelocity = 50.0f;
+
+        public float TerminalVelocity => _terminalVelocity;
 #endregion
+
+        [SerializeField]
+        private bool _allowAirControl;
+
+        public bool AllowAirControl => _allowAirControl;
     }
 }
