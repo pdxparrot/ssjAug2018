@@ -154,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1821381394592196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 2, z: 2}
+  m_LocalPosition: {x: -1, y: 4, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
@@ -167,8 +167,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1194441358119842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 4476920035319580}
   - {fileID: 4469397025458326}
@@ -221,7 +221,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1099906939216588}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 2, z: 2}
+  m_LocalPosition: {x: 1, y: 4, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
@@ -491,7 +491,7 @@ MonoBehaviour:
   _isFalling: 0
   _leftGrabCheckTransform: {fileID: 4350808608469060}
   _rightGrabCheckTransform: {fileID: 4805528540693168}
-  _grabCheckRadius: 0.25
+  _grabCheckRadius: 0.5
   _canGrabLeft: 0
   _canGrabRight: 0
   _isClimbing: 0
@@ -570,7 +570,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1
-  m_Height: 4
+  m_Radius: 1.5
+  m_Height: 6
   m_Direction: 1
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Center: {x: 0, y: 3, z: 0}
