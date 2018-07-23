@@ -168,7 +168,9 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y) * 2.0f;
+            // TODO: so this is mathmatically correct, but it doesn't actually hit the height if we sqrt it...
+            //Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y);
+            Vector3 velocity = Vector3.up * ControllerData.JumpHeight * -2.0f * Physics.gravity.y;
             Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
         }
     }
