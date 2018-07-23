@@ -7,6 +7,8 @@ ScriptedImporter:
     11400004: game/look
     11400006: game/pause
     11400008: game/jump
+    11400010: game/drop
+    11400012: game/grab
   externalObjects: {}
   userData: 
   assetBundleName: 

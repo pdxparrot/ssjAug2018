@@ -38,6 +38,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _angularDrag = 0.0f;
 
         public float AngularDrag => _angularDrag;
+
+        [SerializeField]
+        private float _climbCheckEpsilon = 1.0f;
+
+        public float ClimbCheckEpsilon => _climbCheckEpsilon;
 #endregion
     }
 }

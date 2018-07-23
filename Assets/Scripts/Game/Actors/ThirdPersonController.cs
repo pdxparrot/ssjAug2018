@@ -3,7 +3,6 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Data;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Actors
 {
@@ -11,9 +10,10 @@ namespace pdxpartyparrot.Game.Actors
     public class ThirdPersonController : ActorController
     {
         [SerializeField]
-        private float _collisionCheckStartEpsilon = 0.1f;
+        [ReadOnly]
+        private LayerMask _collisionCheckIgnoreLayerMask;
 
-        protected float CollisionCheckStartEpsilon => _collisionCheckStartEpsilon;
+        protected LayerMask CollisionCheckIgnoreLayerMask => _collisionCheckIgnoreLayerMask;
 
 #region Ground Check
         [Header("Ground Check")]
@@ -29,13 +29,6 @@ namespace pdxpartyparrot.Game.Actors
         [SerializeField]
         [ReadOnly]
         private float _groundCheckRadius;
-
-        [SerializeField]
-        private float _groundCheckEpsilon = 0.1f;
-
-        [SerializeField]
-        [ReadOnly]
-        private LayerMask _groundCheckIgnoreLayerMask;
 
         [SerializeField]
         [ReadOnly]
@@ -59,10 +52,10 @@ namespace pdxpartyparrot.Game.Actors
             InitRigidbody();
 
             // prevent self-collision when doing cast checks
-            _groundCheckIgnoreLayerMask = ~(1 << gameObject.layer);
+            _collisionCheckIgnoreLayerMask = ~(1 << gameObject.layer);
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             CheckGrounded();
 
@@ -83,7 +76,7 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = adjustedVelocity;
         }
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + Rigidbody.angularVelocity);
@@ -91,9 +84,11 @@ namespace pdxpartyparrot.Game.Actors
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(transform.position, transform.position + Rigidbody.velocity);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(_groundCheckStart, _groundCheckRadius);
-            Gizmos.DrawSphere(_groundCheckEnd, _groundCheckRadius);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(_groundCheckStart, _groundCheckRadius);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(_groundCheckEnd, _groundCheckRadius);
         }
 #endregion
 
@@ -120,19 +115,13 @@ namespace pdxpartyparrot.Game.Actors
         {
             Vector3 center = Owner.Collider.bounds.center;
             Vector3 min = Owner.Collider.bounds.min;
+            Vector3 extents = Owner.Collider.bounds.extents;
 
-            _groundCheckStart = new Vector3(center.x, min.y + _collisionCheckStartEpsilon + _groundCheckRadius, center.z);
-            _groundCheckEnd = new Vector3(_groundCheckStart.x, min.y - _groundCheckEpsilon + _groundCheckRadius, _groundCheckStart.z);
-            _groundCheckRadius = Owner.Collider.bounds.extents.x - _collisionCheckStartEpsilon;
+            _groundCheckRadius = extents.x - 0.1f;
+            _groundCheckStart = new Vector3(center.x, min.y + _groundCheckRadius + 0.1f, center.z);
+            _groundCheckEnd   = new Vector3(center.x, min.y + _groundCheckRadius - ControllerData.GroundedCheckEpsilon, center.z);
 
-            _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, _groundCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-        }
-
-        public override void RotateModel(Vector3 axes, float dt)
-        {
-            if(!Owner.CanMove) {
-                return;
-            }
+            _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
         }
 
         public override void Turn(Vector3 axes, float dt)
@@ -140,6 +129,8 @@ namespace pdxpartyparrot.Game.Actors
             if(!Owner.CanMove) {
                 return;
             }
+
+// TODO
         }
 
         public override void Move(Vector3 axes, float dt)
@@ -158,7 +149,7 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = velocity;
         }
 
-        public void Jump()
+        public virtual void Jump()
         {
             if(!Owner.CanMove) {
                 return;

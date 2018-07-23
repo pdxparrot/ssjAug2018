@@ -43,7 +43,7 @@ namespace pdxpartyparrot.Core.Actors
 
             float dt = Time.fixedDeltaTime;
 
-            //Controller.Turn(LastMoveAxes, dt);
+            Controller.Turn(LastMoveAxes, dt);
             Controller.Move(LastMoveAxes, dt);
         }
 #endregion

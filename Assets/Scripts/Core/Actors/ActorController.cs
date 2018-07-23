@@ -77,7 +77,11 @@ namespace pdxpartyparrot.Core.Actors
             Rigidbody.position = position;
         }
 
-        public abstract void RotateModel(Vector3 axes, float dt);
+        // TODO: this should be an animation thing, so we should just kill it
+        // and trigger the animation in Turn()
+        public virtual void RotateModel(Vector3 axes, float dt)
+        {
+        }
 
         public abstract void Turn(Vector3 axes, float dt);
 

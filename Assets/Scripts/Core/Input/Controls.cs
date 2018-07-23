@@ -14,6 +14,8 @@ namespace pdxpartyparrot.Core.Input
             m_game_look = m_game.GetAction("look");
             m_game_jump = m_game.GetAction("jump");
             m_game_pause = m_game.GetAction("pause");
+            m_game_grab = m_game.GetAction("grab");
+            m_game_drop = m_game.GetAction("drop");
             m_Initialized = true;
         }
         // game
@@ -22,6 +24,8 @@ namespace pdxpartyparrot.Core.Input
         private UnityEngine.Experimental.Input.InputAction m_game_look;
         private UnityEngine.Experimental.Input.InputAction m_game_jump;
         private UnityEngine.Experimental.Input.InputAction m_game_pause;
+        private UnityEngine.Experimental.Input.InputAction m_game_grab;
+        private UnityEngine.Experimental.Input.InputAction m_game_drop;
         public struct GameActions
         {
             private Controls m_Wrapper;
@@ -30,6 +34,8 @@ namespace pdxpartyparrot.Core.Input
             public UnityEngine.Experimental.Input.InputAction @look { get { return m_Wrapper.m_game_look; } }
             public UnityEngine.Experimental.Input.InputAction @jump { get { return m_Wrapper.m_game_jump; } }
             public UnityEngine.Experimental.Input.InputAction @pause { get { return m_Wrapper.m_game_pause; } }
+            public UnityEngine.Experimental.Input.InputAction @grab { get { return m_Wrapper.m_game_grab; } }
+            public UnityEngine.Experimental.Input.InputAction @drop { get { return m_Wrapper.m_game_drop; } }
             public UnityEngine.Experimental.Input.InputActionMap Get() { return m_Wrapper.m_game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }

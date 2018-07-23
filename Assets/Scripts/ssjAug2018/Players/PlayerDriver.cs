@@ -21,6 +21,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             InputManager.Instance.Controls.game.move.performed += OnMove;
             InputManager.Instance.Controls.game.look.performed += OnLook;
             InputManager.Instance.Controls.game.jump.performed += OnJump;
+            InputManager.Instance.Controls.game.grab.performed += OnGrab;
+            InputManager.Instance.Controls.game.drop.performed += OnDrop;
         }
 
         private void OnDestroy()
@@ -30,6 +32,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.move.performed -= OnMove;
                 InputManager.Instance.Controls.game.look.performed -= OnLook;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
+                InputManager.Instance.Controls.game.grab.performed -= OnGrab;
+                InputManager.Instance.Controls.game.drop.performed -= OnDrop;
             }
         }
 #endregion
@@ -70,6 +74,24 @@ Debug.Log("look");
             }
 
             Player.PlayerController.Jump();
+        }
+
+        private void OnGrab(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.Grab();
+        }
+
+        private void OnDrop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.Drop();
         }
 #endregion
     }

@@ -32,6 +32,11 @@ namespace pdxpartyparrot.Game.Data
         private float _terminalVelocity = 50.0f;
 
         public float TerminalVelocity => _terminalVelocity;
+
+        [SerializeField]
+        private float _groundedCheckEpsilon = 0.1f;
+
+        public float GroundedCheckEpsilon => _groundedCheckEpsilon;
 #endregion
 
         [SerializeField]
