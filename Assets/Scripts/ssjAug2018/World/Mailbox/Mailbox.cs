@@ -15,21 +15,24 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Space(10)]
 
         [SerializeField]
-        private int _mailRequired =1;
+        private int _mailRequired = 1;
 
-        #region Unity Lifecycle
+        private bool isObjective = false;
+
+#region Unity Lifecycle
         private void Awake()
         {
-
-
+            MailboxManager.Instance.RegisterMailbox(this);
         }
 
         private void OnDestroy()
         {
-
+            if (MailboxManager.HasInstance)
+            {
+                MailboxManager.Instance.UnregisterMailbox(this);
+            }
         }
-
-        #endregion
+#endregion
 
         // TODO: Add projectile onCollisonEnter logic, include playing audio and SFX (If present)
         // Also decrement the required deliveries
