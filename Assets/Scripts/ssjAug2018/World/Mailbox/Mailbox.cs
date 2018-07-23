@@ -15,9 +15,11 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Space(10)]
 
         [SerializeField]
-        private int _mailRequired = 1;
+        private int _mailRequired = 0;
 
-        private bool isObjective = false;
+        private bool _isObjective = false;
+
+        private int _timesActive = 0;
 
 #region Unity Lifecycle
         private void Awake()
@@ -38,5 +40,12 @@ namespace pdxpartyparrot.ssjAug2018.World
         // Also decrement the required deliveries
         // At 0, change to 'done' state (VFX applies)
         // Add UI for remaining delivers/total required
+
+        public void ActivateObjective(int requiredMail)
+        {
+            _isObjective = true;
+            _mailRequired = requiredMail;
+            _timesActive++;
+        }
     }
 }
