@@ -12,13 +12,9 @@ namespace pdxpartyparrot.ssjAug2018.World
         private Animator _animator;
 #endregion
         
-        [Space(10)]
-
-        [SerializeField]
         private int _mailRequired = 0;
-
         private bool _isObjective = false;
-
+        public bool isObjective => _isObjective;
         private int _timesActive = 0;
 
 #region Unity Lifecycle
@@ -36,16 +32,31 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
-        // TODO: Add projectile onCollisonEnter logic, include playing audio and SFX (If present)
+        // TODO: Add projectile onTriggernEnter logic, include playing audio and SFX (If present)
         // Also decrement the required deliveries
         // At 0, change to 'done' state (VFX applies)
         // Add UI for remaining delivers/total required
 
-        public void ActivateObjective(int requiredMail)
+        public void ActivateMailbox(int requiredMail)
         {
+            Debug.Log("HEY I ACTIVATED. I AM :" + this.name);
             _isObjective = true;
             _mailRequired = requiredMail;
             _timesActive++;
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            /* PLACEHOLDER FOR WHEN MAIL EXISTS
+            if (other.GetComponent<Mail>().isActiveAndEnabled)
+            {
+                _mailRequired =- 1;
+                if(_mailRequired == 0)
+                {
+                    _isObjective = false;
+                } 
+            }
+            */
         }
     }
 }
