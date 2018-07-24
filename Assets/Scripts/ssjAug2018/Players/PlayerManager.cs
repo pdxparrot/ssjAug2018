@@ -6,13 +6,12 @@ using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerManager : NetworkActorManager
     {
-         public new static PlayerManager Instance => (PlayerManager)NetworkActorManager.Instance;
+        public new static PlayerManager Instance => (PlayerManager)NetworkActorManager.Instance;
 
 #region Data
         [SerializeField]
@@ -41,6 +40,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Destroy(_playerContainer);
             _playerContainer = null;
 
+            if(isServer) {
+                Debug.Log("Unregistering player spawn function");
+                NetworkManager.Instance.SetPlayerSpawnFunc(null);
+            }
+
             base.OnDestroy();
         }
 #endregion
@@ -49,9 +53,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             if(isServer) {
                 Debug.Log("Registering player spawn function");
-                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
-            } else if(isClient) {
-                Debug.Log("Registering spawnables");
+                NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
             }
         }
 

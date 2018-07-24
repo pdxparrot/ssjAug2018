@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.Core.Util.ObjectPool
 {
@@ -14,6 +15,8 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             public int Size { get; private set; }
 
             public string Tag { get; private set; }
+
+            public bool IsNetwork { get; set; }
 
             public bool AllowExpand { get; set; } = true;
 
@@ -75,6 +78,10 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             {
                 for(int i=0; i<Size; ++i) {
                     PooledObject pooledObject = Instantiate(_prefab);
+                    if(IsNetwork) {
+                        NetworkServer.Spawn(pooledObject.gameObject);
+                    }
+
                     pooledObject.Tag = Tag;
                     Recycle(pooledObject);
                 }
@@ -97,16 +104,48 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
 
         public void InitializePool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
         {
-            // TODO: this could do something better I think
-            if(_objectPools.ContainsKey(poolTag)) {
-                return;
+            InitializePoolInternal(poolTag, prefab, size, allowExpand);
+        }
+
+        public void InitializeNetworkPool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
+        {
+            ObjectPool objectPool = InitializePoolInternal(poolTag, prefab, size, allowExpand);
+            if(null != objectPool) {
+                objectPool.IsNetwork = true;
+            }
+        }
+
+        [CanBeNull]
+        private ObjectPool InitializePoolInternal(string poolTag, PooledObject prefab, int size, bool allowExpand)
+        {
+            if(null == prefab) {
+                Debug.LogError("Attempt to pool non-PooledObject!");
+                return null;
             }
 
-            ObjectPool objectPool = new ObjectPool(this, poolTag, prefab, size)
+            ObjectPool objectPool = _objectPools.GetOrDefault(poolTag);
+            if(null != objectPool) {
+                return objectPool;
+            }
+
+            objectPool = new ObjectPool(this, poolTag, prefab, size)
             {
                 AllowExpand = allowExpand
             };
             _objectPools.Add(poolTag, objectPool);
+
+            return objectPool;
+        }
+
+        public void DestroyPool(string poolTag)
+        {
+            ObjectPool objectPool = _objectPools.GetOrDefault(poolTag);
+            if(null == objectPool) {
+                return;
+            }
+
+            _objectPools.Remove(poolTag);
+            objectPool.Destroy();
         }
 
         [CanBeNull]

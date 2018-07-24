@@ -1,12 +1,9 @@
-﻿using System;
-
-using pdxpartyparrot.Game.Loading;
+﻿using pdxpartyparrot.Game.Loading;
 using pdxpartyparrot.Game.World;
-using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Loading
 {
@@ -14,44 +11,23 @@ namespace pdxpartyparrot.ssjAug2018.Loading
     {
 #region Manager Prefabs
         [SerializeField]
+        private GameManager _gameManagerPrefab;
+
+        [SerializeField]
         private UIManager _uiManagerPrefab;
 
         [SerializeField]
-        private PlayerManager _playerManagerPrefab;
-
-        private PlayerManager _playerManager;
+        private ItemManager _itemManagerPrefab;
 #endregion
 
         protected override void CreateManagers()
         {
             base.CreateManagers();
 
-            Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
-            Core.Network.NetworkManager.Instance.ServerDisconnectEvent += ServerDisconnectEventHandler;
-
+            GameManager.CreateFromPrefab(_gameManagerPrefab, ManagersContainer);
             UIManager.CreateFromPrefab(_uiManagerPrefab, ManagersContainer);
             SpawnManager.Create(ManagersContainer);
+            ItemManager.CreateFromPrefab(_itemManagerPrefab, ManagersContainer);
         }
-
-#region Event Handlers
-        private void ServerConnectEventHandler(object sender, EventArgs args)
-        {
-            Debug.Log("Spawning network managers");
-
-            // NOTE: these manager prefabs must already be registered on the NetworkManager prefab for this to work
-
-            _playerManager = Instantiate(_playerManagerPrefab, ManagersContainer.transform);
-            NetworkServer.Spawn(_playerManager.gameObject);
-            _playerManager.Initialize();
-        }
-
-        private void ServerDisconnectEventHandler(object sender, EventArgs args)
-        {
-            Debug.Log("Destroying network managers");
-
-            Destroy(_playerManager.gameObject);
-            _playerManager = null;
-        }
-#endregion
     }
 }

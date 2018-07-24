@@ -52,11 +52,11 @@ namespace pdxpartyparrot.Core.Network
             HUD.showGUI = false;
         }
 
-        public void StartLANHost()
+        public NetworkClient StartLANHost()
         {
             Debug.Log($"Starting LAN host on {networkAddress}:{networkPort}...");
 
-            StartHost();
+            return StartHost();
         }
 
         public void Stop()
@@ -104,6 +104,27 @@ namespace pdxpartyparrot.Core.Network
             player.OnSpawn();
         }
 
+        public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+        {
+            CallbackLog($"OnServerRemovePlayer({conn}, {player})");
+
+            base.OnServerRemovePlayer(conn, player);
+        }
+
+        public override void OnServerReady(NetworkConnection conn)
+        {
+            CallbackLog($"OnServerReady({conn})");
+
+            base.OnServerReady(conn);
+        }
+
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            CallbackLog($"OnServerSceneChanged({sceneName})");
+
+            base.OnServerSceneChanged(sceneName);
+        }
+
 // TODO: more callbacks
 #endregion
 
@@ -124,6 +145,13 @@ namespace pdxpartyparrot.Core.Network
             base.OnClientDisconnect(conn);
 
             ClientDisconnectEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public override void OnClientSceneChanged(NetworkConnection conn)
+        {
+            CallbackLog($"OnClientSceneChanged({conn})");
+
+            base.OnClientSceneChanged(conn);
         }
 
 // TODO: more callbacks

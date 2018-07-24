@@ -13,7 +13,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             InitializeManagers();
 
-            NetworkManager.Instance.StartLANHost();
+            GameManager.Instance.NetworkClient = NetworkManager.Instance.StartLANHost();
         }
 
         public override void OnExit()
@@ -24,6 +24,10 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             if(NetworkManager.HasInstance) {
                 NetworkManager.Instance.Stop();
+            }
+
+            if(GameManager.HasInstance) {
+                GameManager.Instance.NetworkClient = null;
             }
 
             base.OnExit();
