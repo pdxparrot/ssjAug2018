@@ -53,10 +53,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Player player = Instantiate(_playerPrefab, _playerContainer.transform);
-            if(!player.Initialize()) {
-                return null;
-            }
-
             spawnPoint.Spawn(player);
             return player;
         }

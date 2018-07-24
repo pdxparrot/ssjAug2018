@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Actors;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 
@@ -28,6 +30,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private AudioSource _audioSource;
 
+        [CanBeNull]
         private Camera.Viewer _viewer;
 
 #region Unity Lifecycle
@@ -65,13 +68,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
-        public bool Initialize()
+        private bool Initialize()
         {
-            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
-            if(null == _viewer) {
-                return false;
+            if(isLocalPlayer) {
+                _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
+                if(null == _viewer) {
+                    return false;
+                }
+                _viewer.SetFocus(transform);
             }
-            _viewer.SetFocus(transform);
+            _viewer?.Initialize(this);
 
             PlayerController.Initialize(this, PlayerManager.Instance.PlayerData, PlayerManager.Instance.PlayerData.ControllerData);
 
@@ -86,7 +92,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Callbacks
         public override void OnSpawn()
         {
-            _viewer.Initialize(this);
+            Debug.Log($"Spawning player (isLocalPlayer={isLocalPlayer})");
+
+            Initialize();
         }
 #endregion
     }

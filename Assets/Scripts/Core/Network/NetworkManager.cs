@@ -78,7 +78,10 @@ namespace pdxpartyparrot.Core.Network
                 Debug.LogError("Failed to spawn player!");
                 return;
             }
+
             NetworkServer.AddPlayerForConnection(conn, player.gameObject, playerControllerId);
+
+            player.OnSpawn();
         }
 
 // TODO: more callbacks
