@@ -20,11 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4210891235129990}
   - component: {fileID: 114654468024192066}
-<<<<<<< HEAD
   - component: {fileID: 114919465055412158}
-=======
   - component: {fileID: 114295321953145330}
->>>>>>> master
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
