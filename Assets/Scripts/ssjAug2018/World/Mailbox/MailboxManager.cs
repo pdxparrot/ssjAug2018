@@ -42,6 +42,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             
             // TODO: This should be called when all active objectives have been met, but more are needed to satisfy game win state
+            // Find seed mailbox, get aplicable number in range, distrubute mail total between them?
         }
     }
 }

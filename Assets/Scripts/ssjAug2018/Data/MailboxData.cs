@@ -46,5 +46,15 @@ namespace pdxpartyparrot.ssjAug2018.Data
         
         public int SetCountMax => _setCountMax;
 #endregion
+
+        [Space(10)]
+
+#region Box Properties
+        [Header("Mailbox Properties")]
+        [SerializeField]
+        private int _maxLettersPerBox = 3;
+
+        public int MaxLettersPerBox => _maxLettersPerBox;
+#endregion
     }
 }
