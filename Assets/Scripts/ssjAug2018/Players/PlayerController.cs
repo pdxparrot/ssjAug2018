@@ -116,17 +116,17 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void Turn(Vector3 axes, float dt)
         {
-            if(!IsClimbing && !IsSwinging) {
+            if(!IsGrabbing) {
                 base.Turn(axes, dt);
                 return;
             }
 
-// TODO
+            // dont't turn
         }
 
         public override void Move(Vector3 axes, float dt)
         {
-            if(!IsClimbing && !IsSwinging) {
+            if(!IsGrabbing) {
                 base.Move(axes, dt);
                 return;
             }
