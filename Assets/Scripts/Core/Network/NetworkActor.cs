@@ -1,9 +1,10 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace pdxpartyparrot.Core.Actors
+namespace pdxpartyparrot.Core.Network
 {
     [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(NetworkTransform))]
