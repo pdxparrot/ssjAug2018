@@ -6,12 +6,13 @@ using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    public sealed class PlayerManager : ActorManager<Player>
+    public sealed class PlayerManager : NetworkActorManager
     {
-         public new static PlayerManager Instance => (PlayerManager)ActorManager<Player>.Instance;
+         public new static PlayerManager Instance => (PlayerManager)NetworkActorManager.Instance;
 
 #region Data
         [SerializeField]
@@ -28,11 +29,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private GameObject _playerContainer;
 
 #region Unity Lifecycle
-        private void Awake()
+        protected override void Awake()
         {
-            _playerContainer = new GameObject("Players");
+            base.Awake();
 
-            NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
+            _playerContainer = new GameObject("Players");
         }
 
         protected override void OnDestroy()
@@ -44,6 +45,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+        public void Initialize()
+        {
+            if(isServer) {
+                Debug.Log("Registering player spawn function");
+                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
+            } else if(isClient) {
+                Debug.Log("Registering spawnables");
+            }
+        }
+
         [CanBeNull]
         private NetworkActor PlayerSpawnFunc()
         {
@@ -53,10 +64,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Player player = Instantiate(_playerPrefab, _playerContainer.transform);
-            if(!player.Initialize()) {
-                return null;
-            }
-
             spawnPoint.Spawn(player);
             return player;
         }

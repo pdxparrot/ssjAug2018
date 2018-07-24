@@ -8,9 +8,18 @@ using UnityEngine.Networking;
 namespace pdxpartyparrot.Core.Network
 {
     // https://bitbucket.org/Unity-Technologies/networking
+    // https://docs.unity3d.com/Manual/UNetGameObjects.html
     [RequireComponent(typeof(NetworkManagerHUD))]
     public sealed class NetworkManager : UnityEngine.Networking.NetworkManager
     {
+#region Events
+        public event EventHandler<EventArgs> ServerConnectEvent;
+        public event EventHandler<EventArgs> ServerDisconnectEvent;
+
+        public event EventHandler<EventArgs> ClientConnectEvent;
+        public event EventHandler<EventArgs> ClientDisconnectEvent;
+#endregion
+
         public static NetworkManager Instance => (NetworkManager)singleton;
 
         public static bool HasInstance => null != Instance;
@@ -67,6 +76,17 @@ namespace pdxpartyparrot.Core.Network
             CallbackLog($"OnServerConnect({conn})");
 
             base.OnServerConnect(conn);
+
+            ServerConnectEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public override void OnServerDisconnect(NetworkConnection conn)
+        {
+            CallbackLog($"OnServerDisconnect({conn})");
+
+            base.OnServerDisconnect(conn);
+
+            ServerDisconnectEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -78,7 +98,10 @@ namespace pdxpartyparrot.Core.Network
                 Debug.LogError("Failed to spawn player!");
                 return;
             }
+
             NetworkServer.AddPlayerForConnection(conn, player.gameObject, playerControllerId);
+
+            player.OnSpawn();
         }
 
 // TODO: more callbacks
@@ -90,6 +113,17 @@ namespace pdxpartyparrot.Core.Network
             CallbackLog($"OnClientConnect({conn})");
 
             base.OnClientConnect(conn);
+
+            ClientConnectEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            CallbackLog($"OnClientDisconnect({conn})");
+
+            base.OnClientDisconnect(conn);
+
+            ClientDisconnectEvent?.Invoke(this, EventArgs.Empty);
         }
 
 // TODO: more callbacks

@@ -1,7 +1,8 @@
-﻿using pdxpartyparrot.Core.Actors;
+﻿using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
-
+using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.ssjAug2018.Camera;
 
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace pdxpartyparrot.ssjAug2018.Players
 {
     [RequireComponent(typeof(FollowTarget))]
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(AudioSource))]
     public sealed class Player : NetworkActor
     {
@@ -24,8 +25,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public PlayerController PlayerController => (PlayerController)Controller;
 
+        public CapsuleCollider CapsuleCollider => (CapsuleCollider)Collider;
+
         private AudioSource _audioSource;
 
+        [CanBeNull]
         private Camera.Viewer _viewer;
 
 #region Unity Lifecycle
@@ -63,13 +67,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
-        public bool Initialize()
+        private bool Initialize()
         {
-            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
-            if(null == _viewer) {
-                return false;
+            if(isLocalPlayer) {
+                _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
+                if(null == _viewer) {
+                    return false;
+                }
+                _viewer.SetFocus(transform);
             }
-            _viewer.SetFocus(transform);
+            _viewer?.Initialize(this);
 
             PlayerController.Initialize(this, PlayerManager.Instance.PlayerData, PlayerManager.Instance.PlayerData.ControllerData);
 
@@ -84,7 +91,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Callbacks
         public override void OnSpawn()
         {
-            _viewer.Initialize(this);
+            Debug.Log($"Spawning player (isLocalPlayer={isLocalPlayer})");
+
+            Initialize();
         }
 #endregion
     }

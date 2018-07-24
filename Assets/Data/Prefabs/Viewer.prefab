@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4824260423029340}
   - component: {fileID: 114578935368077958}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: PostProcessVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114329018497396868}
   - component: {fileID: 114103858660162602}
   - component: {fileID: 114041300471411300}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,9 +57,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4892340076082514}
+  - component: {fileID: 135156105752404496}
   - component: {fileID: 114084330026138302}
   - component: {fileID: 114567109661045988}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Viewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +77,7 @@ GameObject:
   - component: {fileID: 4503272541017322}
   - component: {fileID: 20623282611448672}
   - component: {fileID: 114735959022082876}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: UI Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,3 +444,15 @@ MonoBehaviour:
   _kernelSize: 1
   _visualize: 0
   _shader: {fileID: 4800000, guid: b99c58356816f7b46818fe7e788b2fa1, type: 3}
+--- !u!135 &135156105752404496
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614754266016784}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

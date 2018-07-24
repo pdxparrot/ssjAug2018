@@ -16,12 +16,12 @@ namespace pdxpartyparrot.Game.Actors
 
         public bool HasGamepad => null != _gamepad;
 
-#region Unity Lifecycle
-        protected virtual void Awake()
+        public override void Initialize(IActor owner, ActorController controller)
         {
+            base.Initialize(owner, controller);
+
             InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
-#endregion
 
         protected bool IsOurGamepad(InputAction.CallbackContext ctx)
         {

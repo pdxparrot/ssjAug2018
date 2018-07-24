@@ -19,16 +19,10 @@ namespace pdxpartyparrot.Game.Actors
         [Header("Ground Check")]
 
         [SerializeField]
-        [ReadOnly]
-        private Vector3 _groundCheckStart;
+        private Transform _groundCheckTransform;
 
         [SerializeField]
-        [ReadOnly]
-        private Vector3 _groundCheckEnd;
-
-        [SerializeField]
-        [ReadOnly]
-        private float _groundCheckRadius;
+        private float _groundCheckRadius = 1;
 
         [SerializeField]
         [ReadOnly]
@@ -37,6 +31,7 @@ namespace pdxpartyparrot.Game.Actors
         public bool IsGrounded => _isGrounded;
 
         [SerializeField]
+        [ReadOnly]
         private bool _isFalling;
 
         public bool IsFalling => _isFalling;
@@ -57,23 +52,12 @@ namespace pdxpartyparrot.Game.Actors
 
         protected virtual void FixedUpdate()
         {
-            CheckGrounded();
+            UpdateIsGrounded();
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
 
-            Vector3 adjustedVelocity = Rigidbody.velocity;
-
-            // do some fudging to jumping/falling so it feels better
-            if(!IsGrounded) {
-                adjustedVelocity.y -= ControllerData.FallSpeedAdjustment;
-            }
-
-            // apply terminal velocity
-            if(adjustedVelocity.y < -ControllerData.TerminalVelocity) {
-                adjustedVelocity.y = -ControllerData.TerminalVelocity;
-            }
-
-            Rigidbody.velocity = adjustedVelocity;
+            // fudge our velocity a little so movememnt feels better
+            FudgeVelocity();
         }
 
         protected virtual void OnDrawGizmos()
@@ -84,11 +68,8 @@ namespace pdxpartyparrot.Game.Actors
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(transform.position, transform.position + Rigidbody.velocity);
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(_groundCheckStart, _groundCheckRadius);
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(_groundCheckEnd, _groundCheckRadius);
+            Gizmos.color = IsGrounded ? Color.red : Color.yellow;
+            Gizmos.DrawWireSphere(GetGroundCheckCenter(), _groundCheckRadius);
         }
 #endregion
 
@@ -111,19 +92,7 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
-        private void CheckGrounded()
-        {
-            Vector3 center = Owner.Collider.bounds.center;
-            Vector3 min = Owner.Collider.bounds.min;
-            Vector3 extents = Owner.Collider.bounds.extents;
-
-            _groundCheckRadius = extents.x - 0.1f;
-            _groundCheckStart = new Vector3(center.x, min.y + _groundCheckRadius + 0.1f, center.z);
-            _groundCheckEnd   = new Vector3(center.x, min.y + _groundCheckRadius - ControllerData.GroundedCheckEpsilon, center.z);
-
-            _isGrounded = Physics.CheckCapsule(_groundCheckStart, _groundCheckEnd, _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-        }
-
+#region Actions
         public override void Turn(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
@@ -143,26 +112,59 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            Vector3 velocity = axes * ControllerData.MoveSpeed;
-            velocity.y = Rigidbody.velocity.y;
-
-            Rigidbody.velocity = velocity;
+            Rigidbody.velocity = transform.localRotation * new Vector3(axes.x * ControllerData.MoveSpeed, Rigidbody.velocity.y, axes.y * ControllerData.MoveSpeed);
         }
 
-        public virtual void Jump()
+        public virtual void Jump(bool force=false)
         {
             if(!Owner.CanMove) {
                 return;
             }
 
-            if(!IsGrounded) {
+            if(!force && !IsGrounded) {
                 return;
             }
 
             // TODO: so this is mathmatically correct, but it doesn't actually hit the height if we sqrt it...
-            //Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y);
-            Vector3 velocity = Vector3.up * ControllerData.JumpHeight * -2.0f * Physics.gravity.y;
+            //Vector3 velocity = Vector3.up * (Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y));
+            Vector3 velocity = Vector3.up * (ControllerData.JumpHeight * -2.0f * Physics.gravity.y);
             Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
+        }
+#endregion
+
+#region Grounded Check
+        protected Vector3 GetGroundCheckCenter()
+        {
+            Vector3 center = _groundCheckTransform != null ? _groundCheckTransform.position : transform.position;
+            return new Vector3(center.x, center.y + _groundCheckRadius - 0.1f, center.z);
+        }
+
+        protected bool CheckIsGrounded(Vector3 center)
+        {
+            return Physics.CheckSphere(center, _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);;
+        }
+
+        private void UpdateIsGrounded()
+        {
+            _isGrounded = CheckIsGrounded(GetGroundCheckCenter());
+        }
+#endregion
+
+        private void FudgeVelocity()
+        {
+            Vector3 adjustedVelocity = Rigidbody.velocity;
+
+            // do some fudging to jumping/falling so it feels better
+            if(!IsGrounded) {
+                adjustedVelocity.y -= ControllerData.FallSpeedAdjustment;
+            }
+
+            // apply terminal velocity
+            if(adjustedVelocity.y < -ControllerData.TerminalVelocity) {
+                adjustedVelocity.y = -ControllerData.TerminalVelocity;
+            }
+
+            Rigidbody.velocity = adjustedVelocity;
         }
     }
 }

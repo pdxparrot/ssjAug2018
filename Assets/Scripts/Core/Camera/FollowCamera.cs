@@ -8,6 +8,7 @@ using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Core.Camera
 {
+    [RequireComponent(typeof(Collider))]
     public sealed class FollowCamera : MonoBehaviour
     {
 #region Orbit Config
@@ -163,6 +164,11 @@ namespace pdxpartyparrot.Core.Camera
             float dt = Time.fixedDeltaTime;
 
             FollowTarget(dt);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("TODO: FollowCamera collision!");
         }
 #endregion
 

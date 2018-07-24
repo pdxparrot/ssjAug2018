@@ -40,9 +40,10 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public float AngularDrag => _angularDrag;
 
         [SerializeField]
-        private float _climbCheckEpsilon = 1.0f;
+        [Range(0, 50)]
+        private float _climbSpeed = 1.0f;
 
-        public float ClimbCheckEpsilon => _climbCheckEpsilon;
+        public float ClimbSpeed => _climbSpeed;
 #endregion
     }
 }

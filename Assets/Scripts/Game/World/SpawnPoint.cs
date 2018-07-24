@@ -26,7 +26,6 @@ namespace pdxpartyparrot.Game.World
             actor.GameObject.transform.rotation = transform.rotation;
 
             actor.GameObject.SetActive(true);
-            actor.OnSpawn();
         }
     }
 }

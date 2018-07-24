@@ -48,7 +48,7 @@ namespace pdxpartyparrot.Core.Actors
         }
 #endregion
 
-        public void Initialize(IActor owner, ActorController controller)
+        public virtual void Initialize(IActor owner, ActorController controller)
         {
             Owner = owner;
             Controller = controller;
