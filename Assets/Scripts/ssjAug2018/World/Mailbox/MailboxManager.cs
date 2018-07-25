@@ -10,7 +10,7 @@ namespace pdxpartyparrot.ssjAug2018.World
     public class MailboxManager : SingletonBehavior<MailboxManager>
     {
         private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
-        protected static readonly System.Random Random = new System.Random();
+        protected System.Random Random;
 
         private int _maxMailboxes;
         private int _activeMailboxes;
@@ -27,6 +27,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
+            Random = new System.Random(_mailboxData.RandomizationSeed);
 
             // TODO: Update this allocation size when we have a better idea of how many mailboxes are going in the game
             hits = new Collider[50];
