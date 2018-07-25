@@ -13,7 +13,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         protected static readonly System.Random Random = new System.Random();
 
         // TODO: Fix this. Everything's coming up null when I try to find the player.
-        private Player _player;
         private PlayerData _playerData = PlayerManager.Instance.PlayerData;
 
         private int _maxMailboxes;
@@ -27,10 +26,8 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*_playerData.MailHoldCount*/ 10;
-            _player = (Player)FindObjectOfType(typeof(Player));
 
             // TODO: Determine if we just want objectives spawned at the start of game or delayed
-            ActivateMailboxGroup();
         }
 
 #endregion
@@ -50,12 +47,12 @@ namespace pdxpartyparrot.ssjAug2018.World
         
         // TODO: Add weight for seed box based on previous activation count
             
-        public void ActivateMailboxGroup()
+        public void ActivateMailboxGroup(Player player)
         {
             // Find list of valid seed boxes          
             HashSet<Mailbox> validSeeds = new HashSet<Mailbox>();
-            Collider[] allSeeds = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreSeeds = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] allSeeds = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] ignoreSeeds = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
             foreach(Collider box in allSeeds)
             {
                 validSeeds.Add(box.gameObject.GetComponent<Mailbox>());
@@ -73,8 +70,8 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             // Get valid boxes for the set
             HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] allBoxes = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] ignoreBoxes = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
             foreach(Collider box in allBoxes)
             {
                 validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
