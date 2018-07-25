@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.Actors
 {
-// TODO: this has nothing to do with ThirdPerson or whatever, just merge it all into ActorController and kill this class
+// TODO: a lot of this is commong with FPS controllers, so probably a good place to do a subclass
     public class ThirdPersonController : ActorController
     {
         [SerializeField]

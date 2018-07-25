@@ -7,7 +7,7 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Actors
 {
-    public class GamepadDriver : ActorDriver
+    public abstract class GamepadDriver : ActorDriver
     {
         private int _gamepadId;
 
@@ -19,7 +19,7 @@ namespace pdxpartyparrot.Game.Actors
         public bool HasGamepad => null != _gamepad;
 
 #region Unity Lifecycle
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if(InputManager.HasInstance) {
                 InputManager.Instance.ReleaseGamepad(_gamepadId);

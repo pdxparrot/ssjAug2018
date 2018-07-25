@@ -11,7 +11,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerManager : NetworkActorManager
     {
-        public new static PlayerManager Instance => (PlayerManager)NetworkActorManager.Instance;
+        public static PlayerManager Instance { get; private set; }
+
+        public static bool HasInstance => null != Instance;
 
 #region Data
         [SerializeField]
@@ -28,14 +30,19 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private GameObject _playerContainer;
 
 #region Unity Lifecycle
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
+            if(HasInstance) {
+                Debug.LogError($"[NetworkSingleton] Instance already created: {Instance.gameObject.name}");
+                return;
+            }
+
+            Instance = this;
 
             _playerContainer = new GameObject("Players");
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             Destroy(_playerContainer);
             _playerContainer = null;
@@ -45,7 +52,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 NetworkManager.Instance.SetPlayerSpawnFunc(null);
             }
 
-            base.OnDestroy();
+            Instance = null;
         }
 #endregion
 

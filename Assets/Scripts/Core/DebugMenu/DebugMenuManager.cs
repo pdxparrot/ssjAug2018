@@ -91,6 +91,11 @@ namespace pdxpartyparrot.Core.DebugMenu
             return node;
         }
 
+        public void RemoveNode(DebugMenuNode node)
+        {
+            _nodes.Remove(node);
+        }
+
         public void SetCurrentNode(DebugMenuNode node)
         {
             _currentNode = node;
