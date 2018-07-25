@@ -52,17 +52,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         public void ActivateMailboxGroup(Player player)
         {
             // Find list of valid seed boxes          
-            HashSet<Mailbox> validSeeds = new HashSet<Mailbox>();
-            Collider[] allSeeds = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreSeeds = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allSeeds)
-            {
-                validSeeds.Add(box.gameObject.GetComponent<Mailbox>());
-            }
-            foreach(Collider box in ignoreSeeds)
-            {
-                validSeeds.Remove(box.gameObject.GetComponent<Mailbox>());
-            }
+            List<Mailbox> validSeeds = GetMailboxesInRange(player.transform, _mailboxData.PlayerMinRange, _mailboxData.PlayerMaxRange);
             
 
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
@@ -85,17 +75,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             setSize =- seedLetterCount;
 
             // Get boxes in range of the seet for the set
-            HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMaximumRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMinRange, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allBoxes)
-            {
-                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
-            }
-            foreach(Collider box in ignoreBoxes)
-            {
-                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
-            }
+            List<Mailbox> validBoxes = GetMailboxesInRange(seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaximumRange);
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
@@ -112,6 +92,25 @@ namespace pdxpartyparrot.ssjAug2018.World
                 validBoxes.Remove(box);
                 setSize =- letterCount;
             }
+        }
+
+        private List<Mailbox> GetMailboxesInRange(Transform origin, float minimum, float maximum)
+        {
+            List<Mailbox> validBoxes = new List<Mailbox>();
+            Collider[] allBoxes = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
+            Collider[] ignoreBoxes = Physics.OverlapSphere(origin.position, minimum, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider box in allBoxes)
+            {
+                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
+            }
+            foreach(Collider box in ignoreBoxes)
+            {
+                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
+            }
+
+            // TODO: Weighted manipulation? Or maybe in activate mailboex
+
+            return validBoxes;
         }
 
         public void MailboxCompleted()
