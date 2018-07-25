@@ -38,6 +38,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public bool CanGrab => (_canGrabLeft || _canGrabRight) && !_isClimbing && !_isSwinging;
 
+        [SerializeField]
+        [ReadOnly]
+        private Collider[] _overlapResults = new Collider[1];
+
         private IGrabbable _leftGrabbedObject;
 
         private IGrabbable _rightGrabbedObject;
@@ -196,8 +200,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _canGrabLeft = false;
 
-            var hits = Physics.OverlapSphere(LeftGrabCheckCenter(), _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-            foreach(Collider hit in hits) {
+            int hitCount = Physics.OverlapSphereNonAlloc(LeftGrabCheckCenter(), _grabCheckRadius, _overlapResults, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+            for(int i=0; i<hitCount; ++i) {
+                Collider hit = _overlapResults[i];
+
                 IGrabbable grabbable = hit.GetComponent<IGrabbable>();
                 if(null != grabbable) {
                     _canGrabLeft = true;
@@ -211,8 +217,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _canGrabRight = false;
 
-            var hits = Physics.OverlapSphere(RightGrabCheckCenter(), _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-            foreach(Collider hit in hits) {
+            int hitCount = Physics.OverlapSphereNonAlloc(RightGrabCheckCenter(), _grabCheckRadius, _overlapResults, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+            for(int i=0; i<hitCount; ++i) {
+                Collider hit = _overlapResults[i];
+
                 IGrabbable grabbable = hit.GetComponent<IGrabbable>();
                 if(null != grabbable) {
                     _canGrabRight = true;

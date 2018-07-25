@@ -16,8 +16,14 @@ namespace pdxpartyparrot.Core.Input
 
     public sealed class InputManager : SingletonBehavior<InputManager>
     {
+        private static int _lastListenerId;
+
+        private static int NextListenerId => ++_lastListenerId;
+
         private class GamepadListener
         {
+            public int id;
+
             public Action<Gamepad> acquireCallback;
 
             public Action<Gamepad> disconnectCallback;
@@ -40,7 +46,7 @@ namespace pdxpartyparrot.Core.Input
 
         private readonly Dictionary<Gamepad, GamepadListener> _acquiredGamepads = new Dictionary<Gamepad, GamepadListener>();
 
-        private readonly Queue<GamepadListener> _gamepadListeners = new Queue<GamepadListener>();
+        private readonly List<GamepadListener> _gamepadListeners = new List<GamepadListener>();
 #endregion
 
 #region Unity Lifecycle
@@ -72,22 +78,45 @@ namespace pdxpartyparrot.Core.Input
 #endregion
 
 #region Gamepads
-        public void AcquireGamepad(Action<Gamepad> acquireCallback, Action<Gamepad> disconnectCallback)
+        public int AcquireGamepad(Action<Gamepad> acquireCallback, Action<Gamepad> disconnectCallback)
         {
             GamepadListener listener = new GamepadListener
             {
+                id = NextListenerId,
                 acquireCallback = acquireCallback,
                 disconnectCallback = disconnectCallback
             };
 
             if(_unacquiredGamepads.Count < 1) {
-                _gamepadListeners.Enqueue(listener);
-                return;
+                _gamepadListeners.Add(listener);
+                return listener.id;
             }
 
             Gamepad gamepad = _unacquiredGamepads.RemoveFront();
             listener.acquireCallback.Invoke(gamepad);
             _acquiredGamepads[gamepad] = listener;
+
+            return listener.id;
+        }
+
+        public void ReleaseGamepad(int listenerId)
+        {
+            if(listenerId < 1) {
+                return;
+            }
+
+            _gamepadListeners.RemoveAll(x => x.id == listenerId);
+
+            List<Gamepad> remove = new List<Gamepad>();
+            foreach(var kvp in _acquiredGamepads) {
+                if(kvp.Value.id == listenerId) {
+                    remove.Add(kvp.Key);
+                }
+            }
+
+            foreach(Gamepad gamepad in remove) {
+                _acquiredGamepads.Remove(gamepad);
+            }
         }
 
         private void InitGamepads()
@@ -125,7 +154,7 @@ namespace pdxpartyparrot.Core.Input
                 return false;
             }
 
-            GamepadListener listener = _gamepadListeners.Dequeue();
+            GamepadListener listener = _gamepadListeners.RemoveFront();
             listener.acquireCallback.Invoke(gamepad);
             _acquiredGamepads[gamepad] = listener;
             return true;
@@ -136,7 +165,7 @@ namespace pdxpartyparrot.Core.Input
             GamepadListener listener = _acquiredGamepads.GetOrDefault(gamepad);
             listener?.disconnectCallback.Invoke(gamepad);
             _acquiredGamepads.Remove(gamepad);
-            _gamepadListeners.Enqueue(listener);
+            _gamepadListeners.Add(listener);
         }
 #endregion
 

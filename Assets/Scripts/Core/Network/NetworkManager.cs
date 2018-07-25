@@ -36,6 +36,7 @@ namespace pdxpartyparrot.Core.Network
 
         private Func<NetworkActor> _playerSpawnFunc;
 
+#region Unity Lifecycle
         // TODO: whenever this becomes a thing...
 /*
         protected override void Awake()
@@ -48,9 +49,10 @@ namespace pdxpartyparrot.Core.Network
 
         private void Start()
         {
-            autoCreatePlayer = true;
+            autoCreatePlayer = false;
             HUD.showGUI = false;
         }
+#endregion
 
         public NetworkClient StartLANHost()
         {
@@ -70,7 +72,61 @@ namespace pdxpartyparrot.Core.Network
             _playerSpawnFunc = playerSpawnFunc;
         }
 
+        public void LocalClientReady(NetworkConnection conn, short playerControllerId)
+        {
+            if(null == conn) {
+                return;
+            }
+
+            ClientScene.Ready(conn);
+            ClientScene.AddPlayer(playerControllerId);
+        }
+
+        public void ServerChangeScene()
+        {
+            Debug.Log("Server changing scene...");
+
+            NetworkServer.SetAllClientsNotReady();
+        }
+
+        public void ServerChangedScene()
+        {
+            if(!NetworkServer.active) {
+                return;
+            }
+
+            NetworkServer.SpawnObjects();
+        }
+
 #region Server Callbacks
+        public override void OnStartHost()
+        {
+            CallbackLog("OnStartHost");
+
+            base.OnStartHost();
+        }
+
+        public override void OnStopHost()
+        {
+            CallbackLog("OnStopHost");
+
+            base.OnStopHost();
+        }
+
+        public override void OnStartServer()
+        {
+            CallbackLog("OnStartServer");
+
+            base.OnStartServer();
+        }
+
+        public override void OnStopServer()
+        {
+            CallbackLog("OnStopServer");
+
+            base.OnStopServer();
+        }
+
         public override void OnServerConnect(NetworkConnection conn)
         {
             CallbackLog($"OnServerConnect({conn})");
@@ -124,16 +180,26 @@ namespace pdxpartyparrot.Core.Network
 
             base.OnServerSceneChanged(sceneName);
         }
-
-// TODO: more callbacks
 #endregion
 
 #region Client Callbacks
+        public override void OnStartClient(NetworkClient client)
+        {
+            CallbackLog($"OnStartClient({client})");
+
+            base.OnStartClient(client);
+        }
+
+        public override void OnStopClient()
+        {
+            CallbackLog($"OnStopClient()");
+
+            base.OnStopClient();
+        }
+
         public override void OnClientConnect(NetworkConnection conn)
         {
             CallbackLog($"OnClientConnect({conn})");
-
-            base.OnClientConnect(conn);
 
             ClientConnectEvent?.Invoke(this, EventArgs.Empty);
         }
@@ -153,8 +219,6 @@ namespace pdxpartyparrot.Core.Network
 
             base.OnClientSceneChanged(conn);
         }
-
-// TODO: more callbacks
 #endregion
 
         private void CallbackLog(string message)

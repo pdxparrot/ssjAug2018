@@ -9,12 +9,25 @@ namespace pdxpartyparrot.Game.Actors
 {
     public class GamepadDriver : ActorDriver
     {
+        private int _gamepadId;
+
         [CanBeNull]
         private Gamepad _gamepad;
 
         protected Gamepad Gamepad => _gamepad;
 
         public bool HasGamepad => null != _gamepad;
+
+#region Unity Lifecycle
+        private void OnDestroy()
+        {
+            if(InputManager.HasInstance) {
+                InputManager.Instance.ReleaseGamepad(_gamepadId);
+                _gamepadId = 0;
+                _gamepad = null;
+            }
+        }
+#endregion
 
         public override void Initialize(IActor owner, ActorController controller)
         {

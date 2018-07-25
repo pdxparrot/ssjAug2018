@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Players;
 
@@ -15,6 +17,7 @@ namespace pdxpartyparrot.ssjAug2018
 
         private PlayerManager _playerManager;
 
+        [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
 
 #region Unity Lifecycle

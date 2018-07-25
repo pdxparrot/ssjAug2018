@@ -13,7 +13,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             InitializeManagers();
 
-            GameManager.Instance.NetworkClient = NetworkManager.Instance.StartLANHost();
+            NetworkManager.Instance.ServerChangedScene();
+            NetworkManager.Instance.LocalClientReady(GameManager.Instance.NetworkClient?.connection, 0);
         }
 
         public override void OnExit()

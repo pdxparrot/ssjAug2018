@@ -17,6 +17,11 @@ namespace pdxpartyparrot.Game.State
 
         public bool HasScene => !string.IsNullOrWhiteSpace(SceneName);
 
+        [SerializeField]
+        private bool _makeSceneActive;
+
+        public bool MakeSceneActive => _makeSceneActive;
+
         public void LoadScene(Action callback)
         {
             if(!HasScene) {
@@ -24,7 +29,7 @@ namespace pdxpartyparrot.Game.State
                 return;
             }
 
-            SceneManager.Instance.LoadScene(SceneName, callback, true);
+            SceneManager.Instance.LoadScene(SceneName, callback, MakeSceneActive);
         }
 
         public void UnloadScene(Action callback)

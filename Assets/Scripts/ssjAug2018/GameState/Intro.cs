@@ -1,7 +1,11 @@
-﻿using pdxpartyparrot.Core.Camera;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Game.State;
 
 using UnityEngine;
+using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
@@ -11,6 +15,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private MainMenu _mainMenuState;
 
         private Viewer _viewer;
+
+        private int _gamepadId;
+
+        [CanBeNull]
+        private Gamepad _gamepad;
 
         public override void OnEnter()
         {
@@ -22,7 +31,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _viewer?.Set2D();
             _viewer?.EnableCamera(false);
 
-            // TODO: acquire a gamepad
+            _gamepadId = InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
 
         public override void OnUpdate(float dt)
@@ -34,6 +43,12 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public override void OnExit()
         {
+            if(InputManager.HasInstance) {
+                InputManager.Instance.ReleaseGamepad(_gamepadId);
+                _gamepadId = 0;
+                _gamepad = null;
+            }
+
             if(ViewerManager.HasInstance) {
                 ViewerManager.Instance.ReleaseViewer(_viewer);
             }
@@ -47,5 +62,17 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             ViewerManager.Instance.FreeViewers();
             ViewerManager.Instance.AllocateViewers(1);
         }
+
+#region Event Handlers
+        private void OnAcquireGamepad(Gamepad gamepad)
+        {
+            _gamepad = gamepad;
+        }
+
+        private void OnGamepadDisconnect(Gamepad gamepad)
+        {
+            _gamepad = null;
+        }
+#endregion
     }
 }

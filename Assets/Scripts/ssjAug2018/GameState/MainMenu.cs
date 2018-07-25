@@ -11,11 +11,15 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         private Menu.MainMenu _menu;
 
+        [SerializeField]
+        private NetworkConnect _networkConnectStatePrefab;
+
         public override void OnEnter()
         {
             base.OnEnter();
 
             _menu = Instantiate(_menuPrefab, UIManager.Instance.UIContainer.transform);
+            _menu.NewGameState = _networkConnectStatePrefab;
         }
 
         public override void OnExit()

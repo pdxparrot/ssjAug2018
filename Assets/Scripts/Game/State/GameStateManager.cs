@@ -30,7 +30,7 @@ namespace pdxpartyparrot.Game.State
 
         public IGameState CurrentState => _currentGameState;
 
-        private readonly Queue<IGameState> _stateQueue = new Queue<IGameState>();
+        private readonly Stack<IGameState> _stateStack = new Stack<IGameState>();
 
 #region Unity Lifecycle
         private void Awake()
@@ -89,7 +89,7 @@ namespace pdxpartyparrot.Game.State
                 return;
             }
 
-            while(_stateQueue.Count > 0) {
+            while(_stateStack.Count > 0 && !(_currentGameState is GameState)) {
                 PopSubState();
             }
 
@@ -110,7 +110,7 @@ namespace pdxpartyparrot.Game.State
         {
             // enqueue the current state if we have one
             if(null != _currentGameState) {
-                _stateQueue.Enqueue(_currentGameState);
+                _stateStack.Push(_currentGameState);
             }
 
             // new state is now the current state
@@ -130,7 +130,7 @@ namespace pdxpartyparrot.Game.State
             previousState?.OnExit();
             Destroy(previousState?.gameObject);
 
-            _currentGameState = _stateQueue.Count > 0 ? _stateQueue.Dequeue() : null;
+            _currentGameState = _stateStack.Count > 0 ? _stateStack.Pop() : null;
         }
 
         private void ShowLoadingScreen(bool show)
