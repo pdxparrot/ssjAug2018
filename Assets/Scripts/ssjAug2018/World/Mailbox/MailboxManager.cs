@@ -16,6 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         private PlayerData _playerData = PlayerManager.Instance.PlayerData;
 
         private int _maxMailboxes;
+        private int _activeMailboxes;
 
         [SerializeField]
         private MailboxData _mailboxData;
@@ -90,9 +91,9 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             // Activate the seed box and decrement the required box count
             int seedLetterCount = Random.Next(_mailboxData.MaxLettersPerBox);
-
             seedLetterCount = (seedLetterCount > setSize) ? 1 : seedLetterCount;
             seedBox.ActivateMailbox(seedLetterCount);
+            _activeMailboxes = 1;
             setSize =- seedLetterCount;
 
             // Select & activate the rest of the required boxes
@@ -106,8 +107,18 @@ namespace pdxpartyparrot.ssjAug2018.World
                 letterCount = (letterCount > setSize) ? setSize : letterCount;
                 
                 box.ActivateMailbox(letterCount);
+                _activeMailboxes++;
                 validBoxes.Remove(box);
                 setSize =- letterCount;
+            }
+        }
+
+        public void MailboxCompleted()
+        {
+            _activeMailboxes--;
+            if(_activeMailboxes <= 0)
+            {
+                ActivateMailboxGroup(FindObjectOfType<Player>());
             }
         }
     }

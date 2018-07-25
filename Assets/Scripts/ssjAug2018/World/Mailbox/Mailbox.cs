@@ -45,6 +45,12 @@ namespace pdxpartyparrot.ssjAug2018.World
             _timesActive++;
         }
 
+        public void DeactivateMailbox()
+        {
+            _isObjective = false;
+            MailboxManager.Instance.MailboxCompleted();
+        }
+
         public void OnTriggerEnter(Collider other)
         {
             /* PLACEHOLDER FOR WHEN MAIL EXISTS
