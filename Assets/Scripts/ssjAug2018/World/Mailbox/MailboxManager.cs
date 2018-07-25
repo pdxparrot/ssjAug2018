@@ -24,8 +24,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
-
-            // TODO: Determine if we just want objectives spawned at the start of game or delayed
         }
 
 #endregion
@@ -113,7 +111,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             _activeMailboxes--;
             if(_activeMailboxes <= 0)
             {
-                ActivateMailboxGroup(FindObjectOfType<Player>());
+                //ActivateMailboxGroup();
             }
         }
     }
