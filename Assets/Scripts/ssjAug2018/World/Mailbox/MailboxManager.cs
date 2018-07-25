@@ -1,5 +1,4 @@
 ﻿using pdxpartyparrot.Core.Util;
-using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using System.Collections.Generic;
