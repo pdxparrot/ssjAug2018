@@ -30,7 +30,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             Random = new System.Random(_mailboxData.RandomizationSeed);
 
             // TODO: Update this allocation size when we have a better idea of how many mailboxes are going in the game
-            hits = new Collider[50];
+            hits = new Collider[10];
         }
 
 #endregion
@@ -98,16 +98,17 @@ namespace pdxpartyparrot.ssjAug2018.World
         private List<Mailbox> GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
             List<Mailbox> validBoxes = new List<Mailbox>();
-            Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in hits)
+            int totalHits;
+            totalHits = Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
+            for(int i = 0 ; i < totalHits ; i++)
             {
-                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
+                validBoxes.Add(hits[i].gameObject.GetComponent<Mailbox>());
             }
 
-            Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in hits)
+            totalHits = Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
+            for(int i = 0 ; i < totalHits ; i++)
             {
-                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
+                validBoxes.Remove(hits[i].gameObject.GetComponent<Mailbox>());
             }
             return validBoxes;
         }
