@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4824260423029340}
   - component: {fileID: 114578935368077958}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: PostProcessVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,6 @@ GameObject:
   - component: {fileID: 114761323837053658}
   - component: {fileID: 114875076233759402}
   - component: {fileID: 114329018497396868}
-  - component: {fileID: 114103858660162602}
   - component: {fileID: 114041300471411300}
   m_Layer: 10
   m_Name: Camera
@@ -271,38 +270,18 @@ MonoBehaviour:
   _smooth: 1
   _smoothTime: 0.05
   _velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114103858660162602
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1425345369902364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6ffff0e474954f3a926daf865cc2eaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lineColor: {r: 0, g: 0, b: 0, a: 1}
-  _backgroundColor: {r: 1, g: 1, b: 1, a: 0}
-  _lowerThreshold: 0.05
-  _upperThreshold: 0.8
-  _colorSensitivity: 0.5
-  _depthSensitivity: 0.6
-  _normalSensitivity: 0
-  _fallOffDepth: 50
-  _shader: {fileID: 4800000, guid: b8cb1cfbd02c146ccbe95b4baf27a54e, type: 3}
 --- !u!114 &114329018497396868
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1425345369902364}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee4ab9821096c489f84e50f35b7b9644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startDistance: 50
+  _startDistance: 300
   _useRadialDistance: 0
   _fadeToSkybox: 1
   _shader: {fileID: 4800000, guid: 3514cc2676a6c4db294c28459f22c359, type: 3}
@@ -437,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointOfFocus: {fileID: 0}
-  _focusDistance: 2
+  _focusDistance: 0.2
   _fNumber: 1
   _useCameraFov: 1
   _focalLength: 0.055
