@@ -11,31 +11,33 @@ namespace pdxpartyparrot.ssjAug2018.Data
 #region Spawn Ranges
         [Header("Spawn Ranges")]
 
+        [Header("Distance from previous set")]
         [SerializeField]
-        private float _playerMinRange = 10f;
+        private float _distanceMinRange = 10f;
 
-        public float PlayerMinRange => _playerMinRange;
+        public float DistanceMinRange => _distanceMinRange;
 
         [SerializeField]
-        private float _playerMaxRange = 500f;
+        private float _distanceMaxRange = 500f;
                 
-        public float PlayerMaxRange => _playerMaxRange;
+        public float DistanceMaxRange => _distanceMaxRange;
         
+        [Header("Distance between origin and other mailboxes")]
         [SerializeField]
-        private float _setMinRange = 3f;
+        private float _setSizeMinRange = 3f;
         
-        public float SetMinRange => _setMinRange;
+        public float SetMinRange => _setSizeMinRange;
 
         [SerializeField]
-        private float _setMaxRange = 30f;
+        private float _setSizeMaxRange = 30f;
 
-        public float SetMaximumRange => _setMaxRange;
+        public float SetMaxRange => _setSizeMaxRange;
 #endregion
 
         [Space(10)]
 
-#region Set size
-        [Header("Mailbox Set Size")]
+#region Set count
+        [Header("Mailbox Set Count")]
         [SerializeField]
         private int _setCountMin = 2;
 

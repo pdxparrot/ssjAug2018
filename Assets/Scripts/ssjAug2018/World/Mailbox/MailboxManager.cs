@@ -17,6 +17,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         
         // Used for finding valid mailboxes
         private Collider[] hits;
+        private Mailbox _seedBox;
 
         [SerializeField]
         private MailboxData _mailboxData;
@@ -51,15 +52,15 @@ namespace pdxpartyparrot.ssjAug2018.World
         
         // TODO: Add weight for seed box based on previous activation count
             
-        public void ActivateMailboxGroup(Player player)
+        public void ActivateMailboxGroup(Transform origin)
         {
             // Find list of valid seed boxes          
-            List<Mailbox> validSeeds = GetMailboxesInRange(player.transform, _mailboxData.PlayerMinRange, _mailboxData.PlayerMaxRange);
+            List<Mailbox> validSeeds = GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
             
             // Sort potential seeds by times activated
             validSeeds.Sort();
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
-            Mailbox seedBox = (validSeeds.Count == 0) 
+            _seedBox = (validSeeds.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
                 : Random.GetRandomEntry<Mailbox>(validSeeds);
 
@@ -71,12 +72,12 @@ namespace pdxpartyparrot.ssjAug2018.World
             // Activate the seed box and decrement the required box count
             int seedLetterCount = Random.Next(_mailboxData.MaxLettersPerBox);
             seedLetterCount = (seedLetterCount > setSize) ? 1 : seedLetterCount;
-            seedBox.ActivateMailbox(seedLetterCount);
+            _seedBox.ActivateMailbox(seedLetterCount);
             _activeMailboxes = 1;
             setSize =- seedLetterCount;
 
             // Get boxes in range of the seet for the set
-            List<Mailbox> validBoxes = GetMailboxesInRange(seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaximumRange);
+            List<Mailbox> validBoxes = GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
@@ -117,7 +118,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             _activeMailboxes--;
             if(_activeMailboxes <= 0)
             {
-                //ActivateMailboxGroup();
+                ActivateMailboxGroup(_seedBox.transform);
             }
         }
     }
