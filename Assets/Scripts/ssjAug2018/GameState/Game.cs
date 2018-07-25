@@ -13,8 +13,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             InitializeManagers();
 
-            NetworkManager.Instance.ServerChangedScene();
-            NetworkManager.Instance.LocalClientReady(GameManager.Instance.NetworkClient?.connection, 0);
+            GameManager.Instance.Ready();
         }
 
         public override void OnExit()

@@ -12,6 +12,10 @@ namespace pdxpartyparrot.ssjAug2018
 {
     public sealed class GameManager : SingletonBehavior<GameManager>
     {
+#region Events
+        public event EventHandler<EventArgs> GameReadyEvent;
+#endregion
+
         [SerializeField]
         private PlayerManager _playerManagerPrefab;
 
@@ -37,6 +41,14 @@ namespace pdxpartyparrot.ssjAug2018
             base.OnDestroy();
         }
 #endregion
+
+        public void Ready()
+        {
+            Core.Network.NetworkManager.Instance.ServerChangedScene();
+            Core.Network.NetworkManager.Instance.LocalClientReady(NetworkClient?.connection, 0);
+
+            GameReadyEvent?.Invoke(this, EventArgs.Empty);
+        }
 
 #region Event Handlers
         private void ServerConnectEventHandler(object sender, EventArgs args)
