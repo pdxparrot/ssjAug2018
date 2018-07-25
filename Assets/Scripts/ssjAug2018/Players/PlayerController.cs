@@ -110,27 +110,32 @@ namespace pdxpartyparrot.ssjAug2018.Players
 // TODO
         }
 
-        public override void Turn(Vector3 axes, float dt)
+        public override void AnimationMove(Vector3 axes, float dt)
         {
-            if(!IsGrabbing) {
-                base.Turn(axes, dt);
+            if(IsGrabbing) {
                 return;
             }
 
-            // dont't turn
+            // align the player with the camera
+            if(null != Player.Viewer) {
+                Vector3 viewerForward = Player.Viewer.transform.forward;
+                viewerForward.y = 0.0f;
+                transform.forward = viewerForward.normalized;
+            }
+
+            // align the model with the movement
+            Vector3 look = new Vector3(axes.x, 0.0f, axes.y);
+            if(look.sqrMagnitude >= float.Epsilon) {
+                Player.Model.transform.forward =  (transform.rotation * look).normalized;
+            }
+
+            base.AnimationMove(axes, dt);
         }
 
-        public override void Move(Vector3 axes, float dt)
+        public override void PhysicsMove(Vector3 axes, float dt)
         {
             if(!IsGrabbing) {
-                if(null != Player.Viewer) {
-                    // align the player with the camera
-                    Vector3 viewerForward = Player.Viewer.transform.forward;
-                    viewerForward.y = 0.0f;
-                    transform.forward = viewerForward.normalized;
-                }
-
-                base.Move(axes, dt);
+                base.PhysicsMove(axes, dt);
                 return;
             }
 

@@ -17,13 +17,15 @@ namespace pdxpartyparrot.Core.Actors
             protected set { _lastMoveAxes = value; }
         }
 
+        [SerializeField]
+        [ReadOnly]
+        private bool _isMoving;
+
         protected ActorController Controller { get; private set; }
 
         protected IActor Owner { get; private set; }
 
         protected virtual bool CanDrive => !PartyParrotManager.Instance.IsPaused;
-
-        private bool _moveStopped;
 
 #region Unity Lifecycle
         private void Update()
@@ -34,7 +36,13 @@ namespace pdxpartyparrot.Core.Actors
 
             float dt = Time.deltaTime;
 
-            Controller.RotateModel(LastMoveAxes, dt);
+            bool wasMoving = _isMoving;
+            _isMoving = LastMoveAxes.sqrMagnitude >= float.Epsilon;
+            if(!wasMoving && !_isMoving) {
+                return;
+            }
+
+            Controller.AnimationMove(LastMoveAxes, dt);
         }
 
         private void FixedUpdate()
@@ -45,18 +53,11 @@ namespace pdxpartyparrot.Core.Actors
 
             float dt = Time.fixedDeltaTime;
 
-            Vector3 axes = LastMoveAxes;
-            if(axes.sqrMagnitude < float.Epsilon) {
-                if(_moveStopped) {
-                    return;
-                }
-                _moveStopped = true;
-            } else {
-                _moveStopped = false;
+            if(!_isMoving) {
+                return;
             }
 
-            Controller.Turn(axes, dt);
-            Controller.Move(axes, dt);
+            Controller.PhysicsMove(LastMoveAxes, dt);
         }
 #endregion
 

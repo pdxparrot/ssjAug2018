@@ -144,17 +144,18 @@ namespace pdxpartyparrot.Game.Players
 #endif
 #endregion
 
-        public override void RotateModel(Vector3 axes, float dt)
+        public override void AnimationMove(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
                 return;
             }
 
             Quaternion rotation = Owner.Model.transform.localRotation;
-
-            Vector3 targetEuler = new Vector3();
-            targetEuler.z = axes.x * -MaxBankAngle;
-            targetEuler.x = axes.y * -MaxAttackAngle;
+            Vector3 targetEuler = new Vector3
+            {
+                z = axes.x * -MaxBankAngle,
+                x = axes.y * -MaxAttackAngle
+            };
 
             Quaternion targetRotation = Quaternion.Euler(targetEuler);
             rotation = Quaternion.Lerp(rotation, targetRotation, RotationAnimationSpeed * dt);
@@ -163,12 +164,8 @@ namespace pdxpartyparrot.Game.Players
         }
 
 #region Movement
-        public override void Turn(Vector3 axes, float dt)
+        private void Turn(Vector3 axes, float dt)
         {
-            if(!Owner.CanMove) {
-                return;
-            }
-
 #if true
             float turnSpeed = TurnSpeed * axes.x;
             Quaternion rotation = Quaternion.AngleAxis(turnSpeed * dt, Vector3.up);
@@ -186,11 +183,13 @@ namespace pdxpartyparrot.Game.Players
             Rigidbody.AddForce(_bankForce);
         }
 
-        public override void Move(Vector3 axes, float dt)
+        public override void PhysicsMove(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
                 return;
             }
+
+            Turn(axes, dt);
 
             float attackAngle = axes.y * -MaxAttackAngle;
             Vector3 attackVector = Quaternion.AngleAxis(attackAngle, Vector3.right) * Vector3.forward;

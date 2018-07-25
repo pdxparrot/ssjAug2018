@@ -99,16 +99,7 @@ namespace pdxpartyparrot.Game.Actors
         }
 
 #region Actions
-        public override void Turn(Vector3 axes, float dt)
-        {
-            if(!Owner.CanMove) {
-                return;
-            }
-
-            // nothing to do?
-        }
-
-        public override void Move(Vector3 axes, float dt)
+        public override void PhysicsMove(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
                 return;

@@ -157,7 +157,9 @@ namespace pdxpartyparrot.Core.Camera
         [ReadOnly]
         private Vector3 _lastTargetPosition;
 
-        private bool _lookStopped;
+        [SerializeField]
+        [ReadOnly]
+        private bool _isLooking;
 
 #region Unity Lifecycle
         private void Update()
@@ -209,19 +211,15 @@ namespace pdxpartyparrot.Core.Camera
 
             Profiler.BeginSample("FollowCamera.HandleInput");
             try {
-                Vector3 axes = Target.LastLookAxes;
-                if(axes.sqrMagnitude < float.Epsilon) {
-                    if(_lookStopped) {
-                        return;
-                    }
-                    _lookStopped = true;
-                } else {
-                    _lookStopped = false;
+                bool wasLooking = _isLooking;
+                _isLooking = Target.LastLookAxes.sqrMagnitude >= float.Epsilon;
+                if(!wasLooking && !_isLooking) {
+                    return;
                 }
 
-                Orbit(axes, dt);
-                Zoom(axes, dt);
-                Look(axes, dt);
+                Orbit(Target.LastLookAxes, dt);
+                Zoom(Target.LastLookAxes, dt);
+                Look(Target.LastLookAxes, dt);
             } finally {
                 Profiler.EndSample();
             }
