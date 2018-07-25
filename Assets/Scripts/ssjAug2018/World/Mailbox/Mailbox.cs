@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(Collider))]
-    public sealed class Mailbox : MonoBehaviour {
+    public sealed class Mailbox : MonoBehaviour, IComparable<Mailbox> {
 
 #region Animations
         [Header("Animations")]
@@ -63,6 +64,13 @@ namespace pdxpartyparrot.ssjAug2018.World
                 } 
             }
             */
+        }
+
+        public int CompareTo(Mailbox other)
+        {
+            if (other == null) return 1;
+            else
+                return this._timesActive.CompareTo(other._timesActive);
         }
     }
 }

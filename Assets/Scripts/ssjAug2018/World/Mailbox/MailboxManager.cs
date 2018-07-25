@@ -12,9 +12,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
         protected static readonly System.Random Random = new System.Random();
 
-        // TODO: Fix this. Everything's coming up null when I try to find the player.
-        private PlayerData _playerData = PlayerManager.Instance.PlayerData;
-
         private int _maxMailboxes;
         private int _activeMailboxes;
 
@@ -26,7 +23,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         private void Awake()
         {
             // TODO: Uncomment when mail holding value is added to player data
-            _maxMailboxes = /*_playerData.MailHoldCount*/ 10;
+            _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
 
             // TODO: Determine if we just want objectives spawned at the start of game or delayed
         }
@@ -54,18 +51,17 @@ namespace pdxpartyparrot.ssjAug2018.World
             // Find list of valid seed boxes          
             List<Mailbox> validSeeds = GetMailboxesInRange(player.transform, _mailboxData.PlayerMinRange, _mailboxData.PlayerMaxRange);
             
-
+            // Sort potential seeds by times activated
+            validSeeds.Sort();
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
             Mailbox seedBox = (validSeeds.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
                 : Random.GetRandomEntry<Mailbox>(validSeeds);
 
-            // Determine how many boxes we need for the set
+
+            // Determine how many boxes we need for the set but don't go over remaining
             int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
-            if(setSize > _maxMailboxes)
-            {
-                setSize = _maxMailboxes;
-            }
+            if(setSize > _maxMailboxes) setSize = _maxMailboxes;
 
             // Activate the seed box and decrement the required box count
             int seedLetterCount = Random.Next(_mailboxData.MaxLettersPerBox);
@@ -97,19 +93,18 @@ namespace pdxpartyparrot.ssjAug2018.World
         private List<Mailbox> GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
             List<Mailbox> validBoxes = new List<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(origin.position, minimum, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allBoxes)
+            Collider[] hits = new Collider[_mailboxes.Count];
+            Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider box in hits)
             {
                 validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
             }
-            foreach(Collider box in ignoreBoxes)
+
+            Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider box in hits)
             {
                 validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
             }
-
-            // TODO: Weighted manipulation? Or maybe in activate mailboex
-
             return validBoxes;
         }
 
