@@ -116,6 +116,7 @@ namespace pdxpartyparrot.Core.Input
 
             foreach(Gamepad gamepad in remove) {
                 _acquiredGamepads.Remove(gamepad);
+                _unacquiredGamepads.Add(gamepad);
             }
         }
 
