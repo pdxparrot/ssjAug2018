@@ -70,19 +70,6 @@ namespace pdxpartyparrot.ssjAug2018.World
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
                 : Random.GetRandomEntry<Mailbox>(validSeeds);
 
-            // Get valid boxes for the set
-            HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMaximumRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMinRange, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allBoxes)
-            {
-                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
-            }
-            foreach(Collider box in ignoreBoxes)
-            {
-                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
-            }
-
             // Determine how many boxes we need for the set
             int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
             if(setSize > _maxMailboxes)
@@ -96,6 +83,19 @@ namespace pdxpartyparrot.ssjAug2018.World
             seedBox.ActivateMailbox(seedLetterCount);
             _activeMailboxes = 1;
             setSize =- seedLetterCount;
+
+            // Get boxes in range of the seet for the set
+            HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
+            Collider[] allBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMaximumRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] ignoreBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMinRange, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider box in allBoxes)
+            {
+                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
+            }
+            foreach(Collider box in ignoreBoxes)
+            {
+                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
+            }
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
