@@ -37,6 +37,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         public virtual void RegisterMailbox(Mailbox mailbox)
         {
             _mailboxes.Add(mailbox);
+            Debug.Log("!!Mailbox added: " + mailbox.name);
         }
 
         public virtual void UnregisterMailbox(Mailbox mailbox)
@@ -71,8 +72,8 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             // Get valid boxes for the set
             HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] allBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMaximumRange, LayerMask.GetMask("Mailboxes"));
+            Collider[] ignoreBoxes = Physics.OverlapSphere(seedBox.transform.position, _mailboxData.SetMinRange, LayerMask.GetMask("Mailboxes"));
             foreach(Collider box in allBoxes)
             {
                 validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
