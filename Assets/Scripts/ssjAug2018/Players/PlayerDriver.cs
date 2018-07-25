@@ -1,7 +1,6 @@
 ﻿using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
-using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 
 using UnityEngine;
@@ -12,7 +11,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
     public sealed class PlayerDriver : GamepadDriver
     {
         [SerializeField]
-        [ReadOnly]
         private bool _invertLookY;
 
         public Player Player => (Player)Owner;
