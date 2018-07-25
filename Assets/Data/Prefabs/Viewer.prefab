@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 20970023169495906}
   - component: {fileID: 114718274646320594}
   - component: {fileID: 114761323837053658}
+  - component: {fileID: 114708816907328896}
   - component: {fileID: 114875076233759402}
   - component: {fileID: 114329018497396868}
   - component: {fileID: 114041300471411300}
@@ -273,6 +274,7 @@ MonoBehaviour:
   _smoothTime: 0.05
   _velocity: {x: 0, y: 0, z: 0}
   _lastTargetPosition: {x: 0, y: 0, z: 0}
+  _isLooking: 0
 --- !u!114 &114103858660162602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,6 +343,33 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!114 &114708816907328896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425345369902364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32dd050ae4586054b955e67e17777951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _distances:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &114718274646320594
 MonoBehaviour:
   m_ObjectHideFlags: 1
