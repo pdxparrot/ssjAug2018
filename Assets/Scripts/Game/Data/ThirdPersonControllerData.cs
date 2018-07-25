@@ -16,6 +16,14 @@ namespace pdxpartyparrot.Game.Data
         public float MoveSpeed => _moveSpeed;
 
         [SerializeField]
+        [Range(0, 1)]
+        private float _runThreshold = 1.0f;
+
+        public float RunThreshold => _runThreshold;
+
+        public float RunThresholdSquared => _runThreshold * _runThreshold;
+
+        [SerializeField]
         [Range(0, 50)]
         private float _jumpHeight = 1.0f;
 

@@ -37,6 +37,12 @@ namespace pdxpartyparrot.Game.Actors
         public bool IsFalling => _isFalling;
 #endregion
 
+        [SerializeField]
+        [ReadOnly]
+        private bool _isRunning;
+
+        public bool IsRunning => _isRunning;
+
         public ThirdPersonControllerData ControllerData { get; set; }
 
 #region Unity Lifecycle
@@ -99,7 +105,7 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-// TODO
+            // nothing to do?
         }
 
         public override void Move(Vector3 axes, float dt)
@@ -111,6 +117,8 @@ namespace pdxpartyparrot.Game.Actors
             if(!ControllerData.AllowAirControl && !IsGrounded) {
                 return;
             }
+
+            _isRunning = axes.sqrMagnitude >= ControllerData.RunThresholdSquared;
 
             Rigidbody.velocity = transform.localRotation * new Vector3(axes.x * ControllerData.MoveSpeed, Rigidbody.velocity.y, axes.y * ControllerData.MoveSpeed);
         }
@@ -126,8 +134,8 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             // TODO: so this is mathmatically correct, but it doesn't actually hit the height if we sqrt it...
-            //Vector3 velocity = Vector3.up * (Mathf.Sqrt(ControllerData.JumpHeight * -2.0f * Physics.gravity.y));
-            Vector3 velocity = Vector3.up * (ControllerData.JumpHeight * -2.0f * Physics.gravity.y);
+            //Vector3 velocity = Vector3.up * (Mathf.Sqrt(ControllerData.JumpHeight * 2.0f * -Physics.gravity.y));
+            Vector3 velocity = Vector3.up * (ControllerData.JumpHeight * /*2.0f **/ -Physics.gravity.y);
             Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
         }
 #endregion

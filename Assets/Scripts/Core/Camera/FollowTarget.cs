@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using pdxpartyparrot.Core.Util;
+
+using UnityEngine;
 
 namespace pdxpartyparrot.Core.Camera
 {
@@ -10,6 +12,20 @@ namespace pdxpartyparrot.Core.Camera
 
         public Collider Collider => _collider;
 
-        public Vector3 LookAxis { get; set; }
+        [SerializeField]
+        private Transform _targetTransform;
+
+        public Transform TargetTransform => null == _targetTransform ? transform : _targetTransform;
+
+        [SerializeField]
+        [ReadOnly]
+        private  Vector3 _lastLookAxes;
+
+        public Vector3 LastLookAxes
+        {
+            get { return _lastLookAxes; }
+
+            set { _lastLookAxes = value; }
+        }
     }
 }

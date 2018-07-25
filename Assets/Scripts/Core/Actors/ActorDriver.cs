@@ -23,6 +23,8 @@ namespace pdxpartyparrot.Core.Actors
 
         protected virtual bool CanDrive => !PartyParrotManager.Instance.IsPaused;
 
+        private bool _moveStopped;
+
 #region Unity Lifecycle
         private void Update()
         {
@@ -43,8 +45,18 @@ namespace pdxpartyparrot.Core.Actors
 
             float dt = Time.fixedDeltaTime;
 
-            Controller.Turn(LastMoveAxes, dt);
-            Controller.Move(LastMoveAxes, dt);
+            Vector3 axes = LastMoveAxes;
+            if(axes.sqrMagnitude < float.Epsilon) {
+                if(_moveStopped) {
+                    return;
+                }
+                _moveStopped = true;
+            } else {
+                _moveStopped = false;
+            }
+
+            Controller.Turn(axes, dt);
+            Controller.Move(axes, dt);
         }
 #endregion
 

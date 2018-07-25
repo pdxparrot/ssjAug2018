@@ -85,7 +85,7 @@ Debug.Log("pause");
             Vector2 axes = ctx.ReadValue<Vector2>();
             axes.y *= _invertLookY ? -1 : 1;
 
-            Player.FollowTarget.LookAxis = new Vector3(axes.x, axes.y, 0.0f);
+            Player.FollowTarget.LastLookAxes = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnJump(InputAction.CallbackContext ctx)

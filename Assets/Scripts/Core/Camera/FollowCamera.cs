@@ -15,6 +15,7 @@ namespace pdxpartyparrot.Core.Camera
         [Header("Orbit")]
 
         [SerializeField]
+        [Tooltip("Enable looking around the follow target")]
         private bool _enableOrbit = true;
 
         [SerializeField]
@@ -26,6 +27,7 @@ namespace pdxpartyparrot.Core.Camera
         private float _orbitSpeedY = 100.0f;
 
         [SerializeField]
+        [Tooltip("Return to the default orbit rotation when released")]
         private bool _returnToDefault;
 
         [SerializeField]
@@ -43,11 +45,20 @@ namespace pdxpartyparrot.Core.Camera
         [ReadOnly]
         private Vector2 _orbitRotation;
 
+        // TODO: use this
         [SerializeField]
         [Range(0, 50)]
-        private float _orbitRadius = 15.0f;
+        [Tooltip("The minimum distance the camera should be from the follow target")]
+        private float _orbitMinRadius = 15.0f;
 
-        public float OrbitRadius { get { return _orbitRadius; } set { _orbitRadius = value; } }
+        public float OrbitMinRadius { get { return _orbitMinRadius; } set { _orbitMinRadius = value; } }
+
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("The maximum distance the camera should be from the follow target")]
+        private float _orbitMaxRadius = 15.0f;
+
+        public float OrbitMaxRadius { get { return _orbitMaxRadius; } set { _orbitMaxRadius = value; } }
 #endregion
 
 #region Orbit Constraints
@@ -74,6 +85,7 @@ namespace pdxpartyparrot.Core.Camera
         [Header("Zoom")]
 
         [SerializeField]
+        [Tooltip("Enable zooming in and out relative to the follow target")]
         private bool _enableZoom = false;
 
         [SerializeField]
@@ -95,6 +107,7 @@ namespace pdxpartyparrot.Core.Camera
         [Header("Look")]
 
         [SerializeField]
+        [Tooltip("Enable rotating the camera around its local axes")]
         private bool _enableLook = false;
 
         [SerializeField]
@@ -116,6 +129,7 @@ namespace pdxpartyparrot.Core.Camera
         [Header("Target")]
 
         [SerializeField]
+        [Tooltip("The target to follow")]
         [CanBeNull]
         private FollowTarget _target;
 
@@ -125,7 +139,9 @@ namespace pdxpartyparrot.Core.Camera
 
         [Space(10)]
 
+#region Smooth
         [SerializeField]
+        [Tooltip("Smooth the camera movement as it follows the target")]
         private bool _smooth;
 
         [SerializeField]
@@ -135,6 +151,13 @@ namespace pdxpartyparrot.Core.Camera
         [SerializeField]
         [ReadOnly]
         private Vector3 _velocity;
+#endregion
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastTargetPosition;
+
+        private bool _lookStopped;
 
 #region Unity Lifecycle
         private void Update()
@@ -186,7 +209,15 @@ namespace pdxpartyparrot.Core.Camera
 
             Profiler.BeginSample("FollowCamera.HandleInput");
             try {
-                Vector3 axes = Target.LookAxis;
+                Vector3 axes = Target.LastLookAxes;
+                if(axes.sqrMagnitude < float.Epsilon) {
+                    if(_lookStopped) {
+                        return;
+                    }
+                    _lookStopped = true;
+                } else {
+                    _lookStopped = false;
+                }
 
                 Orbit(axes, dt);
                 Zoom(axes, dt);
@@ -224,14 +255,14 @@ namespace pdxpartyparrot.Core.Camera
             if(null != Target) {
                 // avoid zooming into the target
                 Vector3 closestBoundsPoint = Target.Collider.ClosestPointOnBounds(transform.position);
-                float distanceToPoint = (closestBoundsPoint - Target.transform.position).magnitude;
+                float distanceToPoint = (closestBoundsPoint - Target.TargetTransform.position).magnitude;
 
                 minDistance += distanceToPoint;
                 maxDistance += distanceToPoint;
 
-                _orbitRadius = Mathf.Clamp(_orbitRadius + zoomAmount, minDistance, maxDistance);
+                _orbitMaxRadius = Mathf.Clamp(_orbitMaxRadius + zoomAmount, minDistance, maxDistance);
             } else {
-                _orbitRadius += zoomAmount;
+                _orbitMaxRadius += zoomAmount;
             }
         }
 
@@ -256,19 +287,24 @@ namespace pdxpartyparrot.Core.Camera
                 Quaternion orbitRotation = Quaternion.Euler(_orbitRotation.y, _orbitRotation.x, 0.0f);
                 Quaternion lookRotation = Quaternion.Euler(_lookRotation.y, _lookRotation.x, 0.0f);
 
-                Quaternion targetRotation = Quaternion.Euler(0.0f, Target.transform.eulerAngles.y, 0.0f);
+                Quaternion finalOrbitRotation;
+                if(_returnToDefault) {
+                    Quaternion targetRotation = Quaternion.Euler(0.0f, Target.TargetTransform.eulerAngles.y, 0.0f);
+                    finalOrbitRotation = targetRotation * orbitRotation;
+                } else {
+                    finalOrbitRotation = orbitRotation;
+                }
 
-                Quaternion finalOrbitRotation = targetRotation * orbitRotation;
                 transform.rotation = finalOrbitRotation * lookRotation;
 
                 // TODO: this doens't work if we free-look and zoom
                 // because we're essentially moving the target position, not the camera position
-                Vector3 targetPosition = Target.transform.position;
-                targetPosition = _smooth
-                    ? Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, _smoothTime)
-                    : targetPosition;
+                _lastTargetPosition = Target.TargetTransform.position;
+                _lastTargetPosition = _smooth
+                    ? Vector3.SmoothDamp(transform.position, _lastTargetPosition, ref _velocity, _smoothTime)
+                    : _lastTargetPosition;
 
-                transform.position = targetPosition + finalOrbitRotation * new Vector3(0.0f, 0.0f, -_orbitRadius);
+                transform.position = _lastTargetPosition + finalOrbitRotation * new Vector3(0.0f, 0.0f, -_orbitMaxRadius);
             } finally {
                 Profiler.EndSample();
             }

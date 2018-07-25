@@ -8,12 +8,6 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-/*
- TODO: raycast from the "head" to see if we need to climb up
-
- "attach" to the grabbable when we grab it so that we have a consistent distance
- */
-
     public sealed class PlayerController : ThirdPersonController
     {
 #region Grab Check
@@ -38,8 +32,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public bool CanGrab => (_canGrabLeft || _canGrabRight) && !_isClimbing && !_isSwinging;
 
-        [SerializeField]
-        [ReadOnly]
         private Collider[] _overlapResults = new Collider[1];
 
         private IGrabbable _leftGrabbedObject;
@@ -131,6 +123,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public override void Move(Vector3 axes, float dt)
         {
             if(!IsGrabbing) {
+                if(null != Player.Viewer) {
+                    // align the player with the camera
+                    Vector3 viewerForward = Player.Viewer.transform.forward;
+                    viewerForward.y = 0.0f;
+                    transform.forward = viewerForward.normalized;
+                }
+
                 base.Move(axes, dt);
                 return;
             }

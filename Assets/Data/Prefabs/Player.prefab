@@ -147,6 +147,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1877922489305904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4553905968234728}
+  m_Layer: 9
+  m_Name: ViewerTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4021666756528148
 Transform:
   m_ObjectHideFlags: 1
@@ -158,6 +173,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4371529177874640}
+  - {fileID: 4553905968234728}
   - {fileID: 4594389412127694}
   - {fileID: 4350808608469060}
   - {fileID: 4805528540693168}
@@ -175,7 +191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4371529177874640
 Transform:
@@ -219,6 +235,19 @@ Transform:
   m_Father: {fileID: 4371529177874640}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4553905968234728
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1877922489305904}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4021666756528148}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4594389412127694
 Transform:
   m_ObjectHideFlags: 1
@@ -230,7 +259,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4805528540693168
 Transform:
@@ -243,7 +272,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4982372751520708
 Transform:
@@ -541,6 +570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lastMoveAxes: {x: 0, y: 0, z: 0}
+  _invertLookY: 0
 --- !u!114 &114450802372136796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -562,11 +592,14 @@ MonoBehaviour:
   _groundCheckRadius: 0.9
   _isGrounded: 0
   _isFalling: 0
+  _isRunning: 0
   _leftGrabCheckTransform: {fileID: 4350808608469060}
   _rightGrabCheckTransform: {fileID: 4805528540693168}
   _grabCheckRadius: 0.5
   _canGrabLeft: 0
   _canGrabRight: 0
+  _overlapResults:
+  - {fileID: 0}
   _isClimbing: 0
   _isSwinging: 0
 --- !u!114 &114748589338881858
@@ -602,6 +635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 136952311265174156}
+  _targetTransform: {fileID: 4553905968234728}
 --- !u!114 &114985267475367800
 MonoBehaviour:
   m_ObjectHideFlags: 1

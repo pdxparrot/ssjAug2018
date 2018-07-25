@@ -35,7 +35,9 @@ namespace pdxpartyparrot.Core.Terrain
 
         private void OnDestroy()
         {
-            TerrainManager.Instance.UnregisterTerrain(this);
+            if(TerrainManager.HasInstance) {
+                TerrainManager.Instance.UnregisterTerrain(this);
+            }
         }
 #endregion
     }

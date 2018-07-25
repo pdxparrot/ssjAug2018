@@ -18,9 +18,14 @@ namespace pdxpartyparrot.Core.Camera
         }
 #endregion
 
-        public void SetOrbitRadius(float orbitRadius)
+        public void SetMinOrbitRadius(float orbitMinRadius)
         {
-            _followCamera.OrbitRadius = orbitRadius;
+            _followCamera.OrbitMinRadius = orbitMinRadius;
+        }
+
+        public void SetMaxOrbitRadius(float orbitMaxRadius)
+        {
+            _followCamera.OrbitMaxRadius = orbitMaxRadius;
         }
     }
 }
