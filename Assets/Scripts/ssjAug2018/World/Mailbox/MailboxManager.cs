@@ -14,6 +14,9 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         private int _maxMailboxes;
         private int _activeMailboxes;
+        
+        // Used for finding valid mailboxes
+        private Collider[] hits;
 
         [SerializeField]
         private MailboxData _mailboxData;
@@ -24,6 +27,9 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
+
+            // TODO: Update this allocation size when we have a better idea of how many mailboxes are going in the game
+            hits = new Collider[50];
         }
 
 #endregion
@@ -91,7 +97,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         private List<Mailbox> GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
             List<Mailbox> validBoxes = new List<Mailbox>();
-            Collider[] hits = new Collider[_mailboxes.Count];
             Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
             foreach(Collider box in hits)
             {
