@@ -24,12 +24,12 @@ namespace pdxpartyparrot.ssjAug2018.Data
         
         [Header("Distance between origin and other mailboxes")]
         [SerializeField]
-        private float _setSizeMinRange = 3f;
+        private float _setSizeMinRange = 15f;
         
         public float SetMinRange => _setSizeMinRange;
 
         [SerializeField]
-        private float _setSizeMaxRange = 30f;
+        private float _setSizeMaxRange = 75f;
 
         public float SetMaxRange => _setSizeMaxRange;
 #endregion
