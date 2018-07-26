@@ -17,6 +17,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         
         // Used for finding valid mailboxes
         private Collider[] hits;
+        private List<Mailbox> _foundBoxes = new List<Mailbox>();
         private Mailbox _seedBox;
 
         [SerializeField]
@@ -39,7 +40,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
- #region Registration
+#region Registration
         public virtual void RegisterMailbox(Mailbox mailbox)
         {
             _mailboxes.Add(mailbox);
@@ -62,15 +63,14 @@ namespace pdxpartyparrot.ssjAug2018.World
             
         public void ActivateMailboxGroup(Transform origin)
         {
-            // Find list of valid seed boxes          
-            List<Mailbox> validSeeds = GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
             
-            // Sort potential seeds by times activated
-            validSeeds.Sort();
+            // Find list of valid seed boxes          
+            GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
+            
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
-            _seedBox = (validSeeds.Count == 0) 
+            _seedBox = (_foundBoxes.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
-                : Random.GetRandomEntry<Mailbox>(validSeeds);
+                : Random.GetRandomEntry<Mailbox>(_foundBoxes);
 
 
             // Determine how many boxes we need for the set but don't go over remaining
@@ -85,41 +85,40 @@ namespace pdxpartyparrot.ssjAug2018.World
             setSize -= letterCount;
 
             // Get boxes in range of the seet for the set
-            List<Mailbox> validBoxes = GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
+            GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
             {
                 // TODO: Update this quick and dirty NPE check. Should probably either shove all remaining letters into the last box or choose a new box at random from all boxes
-                if(validBoxes.Count == 0) { break; }
+                if(_foundBoxes.Count == 0) { break; }
 
-                Mailbox box = Random.GetRandomEntry<Mailbox>(validBoxes);
+                Mailbox box = Random.GetRandomEntry<Mailbox>(_foundBoxes);
                 letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
                 letterCount = (letterCount > setSize) ? setSize : letterCount;
                 
                 box.ActivateMailbox(letterCount);
                 _activeMailboxes++;
-                validBoxes.Remove(box);
+                _foundBoxes.Remove(box);
                 setSize -= letterCount;
             }
         }
 
-        private List<Mailbox> GetMailboxesInRange(Transform origin, float minimum, float maximum)
+        private void GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
-            List<Mailbox> validBoxes = new List<Mailbox>();
+            _foundBoxes.Clear();
             int totalHits;
             totalHits = Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
             for(int i = 0 ; i < totalHits ; i++)
             {
-                validBoxes.Add(hits[i].gameObject.GetComponent<Mailbox>());
+                _foundBoxes.Add(hits[i].gameObject.GetComponent<Mailbox>());
             }
 
             totalHits = Physics.OverlapSphereNonAlloc(origin.position, minimum, hits, LayerMask.GetMask("Mailboxes"));
             for(int i = 0 ; i < totalHits ; i++)
             {
-                validBoxes.Remove(hits[i].gameObject.GetComponent<Mailbox>());
+                _foundBoxes.Remove(hits[i].gameObject.GetComponent<Mailbox>());
             }
-            return validBoxes;
         }
 
         public void MailboxCompleted()
