@@ -34,7 +34,10 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         protected override void OnDestroy()
         {
-            GameManager.Instance.GameReadyEvent -= InitilizeGameReady;
+            if(GameManager.HasInstance) 
+            {
+                GameManager.Instance.GameReadyEvent -= InitilizeGameReady;
+            }
 
             base.OnDestroy();
         }
