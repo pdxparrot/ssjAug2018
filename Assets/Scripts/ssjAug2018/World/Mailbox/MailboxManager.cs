@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using System;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using System.Collections.Generic;
@@ -22,21 +23,26 @@ namespace pdxpartyparrot.ssjAug2018.World
         private MailboxData _mailboxData;
 
 #region Unity Lifecycle
-
         private void Awake()
         {
+             GameManager.Instance.GameReadyEvent += InitilizeGameReady;
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
             Random = new System.Random(_mailboxData.RandomizationSeed);
         }
 
+        protected override void OnDestroy()
+        {
+            GameManager.Instance.GameReadyEvent -= InitilizeGameReady;
+
+            base.OnDestroy();
+        }
 #endregion
 
-#region Registration
+ #region Registration
         public virtual void RegisterMailbox(Mailbox mailbox)
         {
             _mailboxes.Add(mailbox);
-            Debug.Log("!!Mailbox added: " + mailbox.name);
         }
 
         public virtual void UnregisterMailbox(Mailbox mailbox)
@@ -45,10 +51,10 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
-        // This must be called before calling ActivateMailboxGroup (And at the start of a level)
-        public void AllocateSize()
+        public void InitilizeGameReady(object sender, EventArgs e)
         {
             hits = new Collider[_mailboxes.Count];
+            ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
         }
 
 
@@ -56,7 +62,6 @@ namespace pdxpartyparrot.ssjAug2018.World
             
         public void ActivateMailboxGroup(Transform origin)
         {
-            if(hits.Length == 0) { Debug.Log("ERROR: Size allocation did not occur for hits array! Call MailboxManager.AllocateSize before use"); return;}
             // Find list of valid seed boxes          
             List<Mailbox> validSeeds = GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
             
