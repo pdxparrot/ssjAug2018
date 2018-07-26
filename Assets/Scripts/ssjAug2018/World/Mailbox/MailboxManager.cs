@@ -77,7 +77,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             letterCount = (letterCount > setSize) ? 1 : letterCount;
             _seedBox.ActivateMailbox(letterCount);
             _activeMailboxes = 1;
-            setSize = setSize - letterCount;
+            setSize -= letterCount;
 
             // Get boxes in range of the seet for the set
             List<Mailbox> validBoxes = GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
@@ -95,7 +95,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 box.ActivateMailbox(letterCount);
                 _activeMailboxes++;
                 validBoxes.Remove(box);
-                setSize = setSize - letterCount;
+                setSize -= letterCount;
             }
         }
 
