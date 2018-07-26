@@ -4,7 +4,7 @@ using UnityEngine;
 namespace pdxpartyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(Collider))]
-    public sealed class Mailbox : MonoBehaviour, IComparable<Mailbox> {
+    public sealed class Mailbox : MonoBehaviour {
 
 #region Animations
         [Header("Animations")]
@@ -16,7 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         private int _mailRequired = 0;
         private bool _isObjective = false;
         public bool isObjective => _isObjective;
-        private int _timesActive = 0;
+        private bool _hasActivated = false;
 
 #region Unity Lifecycle
         private void Awake()
@@ -42,7 +42,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             _isObjective = true;
             _mailRequired = requiredMail;
-            _timesActive++;
+            _hasActivated = true;
         }
 
         public void DeactivateMailbox()
@@ -65,11 +65,9 @@ namespace pdxpartyparrot.ssjAug2018.World
             */
         }
 
-        public int CompareTo(Mailbox other)
+        public static bool PreviouslyActivated(Mailbox box)
         {
-            if (other == null) return 1;
-            else
-                return this._timesActive.CompareTo(other._timesActive);
+            return box._hasActivated;
         }
     }
 }
