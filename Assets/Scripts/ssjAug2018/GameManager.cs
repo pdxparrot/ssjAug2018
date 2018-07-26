@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Players;
-using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -48,9 +47,6 @@ namespace pdxpartyparrot.ssjAug2018
             Core.Network.NetworkManager.Instance.ServerChangedScene();
             Core.Network.NetworkManager.Instance.LocalClientReady(NetworkClient?.connection, 0);
 
-            MailboxManager.Instance.AllocateSize();
-            MailboxManager.Instance.ActivateMailboxGroup(_playerManager.transform);
-            
             GameReadyEvent?.Invoke(this, EventArgs.Empty);
         }
 
