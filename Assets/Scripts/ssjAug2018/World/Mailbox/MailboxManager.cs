@@ -17,7 +17,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         
         // Used for finding valid mailboxes
         private Collider[] hits;
-        private List<Mailbox> _foundBoxes = new List<Mailbox>();
+        private List<Mailbox> _foundBoxes;
         private Mailbox _seedBox;
 
         [SerializeField]
@@ -58,6 +58,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         public void InitilizeGameReady(object sender, EventArgs e)
         {
             hits = new Collider[_mailboxes.Count];
+            _foundBoxes = new List<Mailbox>(_mailboxes.Count);
             ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
         }
 
@@ -69,7 +70,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             
             // Find list of valid seed boxes          
             GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
-            
+
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
             _seedBox = (_foundBoxes.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
