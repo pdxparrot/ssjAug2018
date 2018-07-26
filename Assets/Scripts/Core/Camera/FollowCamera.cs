@@ -285,6 +285,7 @@ namespace pdxpartyparrot.Core.Camera
                 Quaternion orbitRotation = Quaternion.Euler(_orbitRotation.y, _orbitRotation.x, 0.0f);
                 Quaternion lookRotation = Quaternion.Euler(_lookRotation.y, _lookRotation.x, 0.0f);
 
+                // if we're going to try and return to default, including the target's rotation
                 Quaternion finalOrbitRotation;
                 if(_returnToDefault) {
                     Quaternion targetRotation = Quaternion.Euler(0.0f, Target.TargetTransform.eulerAngles.y, 0.0f);
@@ -297,6 +298,7 @@ namespace pdxpartyparrot.Core.Camera
 
                 // TODO: this doens't work if we free-look and zoom
                 // because we're essentially moving the target position, not the camera position
+                // TODO: also enabling/disabling this causes the camera to zoom in and out, not sure why
                 _lastTargetPosition = Target.TargetTransform.position;
                 _lastTargetPosition = _smooth
                     ? Vector3.SmoothDamp(transform.position, _lastTargetPosition, ref _velocity, _smoothTime)

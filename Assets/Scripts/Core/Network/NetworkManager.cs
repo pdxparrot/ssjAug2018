@@ -1,7 +1,5 @@
 ﻿using System;
 
-using pdxpartyparrot.Core.Actors;
-
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -24,6 +22,7 @@ namespace pdxpartyparrot.Core.Network
 
         public static bool HasInstance => null != Instance;
 
+        // TODO: implement the use of this
         [SerializeField]
         private int _maxNetworkPlayers = 16;
 
