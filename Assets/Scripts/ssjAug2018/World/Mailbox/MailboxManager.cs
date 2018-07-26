@@ -67,10 +67,10 @@ namespace pdxpartyparrot.ssjAug2018.World
             
         public void ActivateMailboxGroup(Transform origin)
         {
-            
             // Find list of valid seed boxes          
             GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
-
+            // Remove all that have been previously activated unless all found boxes have been previously activated
+            if(!_foundBoxes.TrueForAll(Mailbox.PreviouslyActivated)) _foundBoxes.RemoveAll(Mailbox.PreviouslyActivated);
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
             _seedBox = (_foundBoxes.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
@@ -94,9 +94,6 @@ namespace pdxpartyparrot.ssjAug2018.World
             // Select & activate the rest of the required boxes
             while(setSize > 0)
             {
-                // TODO: Update this quick and dirty NPE check. Should probably either shove all remaining letters into the last box or choose a new box at random from all boxes
-                if(_foundBoxes.Count == 0) { break; }
-
                 Mailbox box = Random.GetRandomEntry<Mailbox>(_foundBoxes);
                 letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
                 letterCount = (letterCount > setSize) ? setSize : letterCount;
@@ -105,6 +102,14 @@ namespace pdxpartyparrot.ssjAug2018.World
                 _activeMailboxes++;
                 _foundBoxes.Remove(box);
                 setSize -= letterCount;
+
+                // If this is the last box, but we still need letters, just shove them all onto that box.
+                if(_foundBoxes.Count == 0 && setSize > 0)
+                {
+                    letterCount += setSize;
+                    box.ActivateMailbox(letterCount);
+                    setSize = 0;
+                }
             }
         }
 
