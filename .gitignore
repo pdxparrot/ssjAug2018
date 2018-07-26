@@ -158,9 +158,11 @@ UpgradeLog*.htm
 /Assets/Plugins/AmplifyShaderEditor/
 Assets/Plugins/AmplifyShaderEditor.meta
 /Assets/Plugins/PanoramaToCubemap/
+Assets/Plugins/PanoramaToCubemap.meta
 /Assets/Plugins/WMSplatmapScript/
 Assets/Plugins/WMSplatmapScript.meta
-Assets/Plugins/PanoramaToCubemap.meta
+/Assets/Plugins/TerrainStitcher/
+/Assets/Plugins/TerrainStitcher.meta
 Assets/ProBuilder Data/ProBuilderPreferences.asset
 Assets/ProBuilder Data/ProBuilderPreferences.asset.meta
 
