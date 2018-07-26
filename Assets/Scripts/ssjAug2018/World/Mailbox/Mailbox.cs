@@ -40,7 +40,6 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void ActivateMailbox(int requiredMail)
         {
-            Debug.Log("HEY I ACTIVATED. I AM :" + this.name);
             _isObjective = true;
             _mailRequired = requiredMail;
             _timesActive++;
