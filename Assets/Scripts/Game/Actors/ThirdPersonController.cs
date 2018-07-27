@@ -69,6 +69,13 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private int _doubleJumpCount;
 
+        protected int DoubleJumpCount
+        {
+            get { return _doubleJumpCount; }
+
+            set { _doubleJumpCount = value < 0 ? 0 : value; }
+        }
+
         private bool CanDoubleJump => !IsGrounded && (ControllerData.DoubleJumpCount < 0 || _doubleJumpCount < ControllerData.DoubleJumpCount);
 
 #region Unity Lifecycle
@@ -155,29 +162,14 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = rotation * new Vector3(speed.x, Rigidbody.velocity.y, speed.y);
         }
 
-        public virtual void Jump(bool force=false)
+        public virtual void Jump()
         {
-            if(!Owner.CanMove) {
-                return;
-            }
-
-            if(force || IsGrounded) {
+            if(IsGrounded) {
                 DoJump(ControllerData.JumpHeight);
             } else if(CanDoubleJump) {
-                _doubleJumpCount++;
+                DoubleJumpCount++;
                 DoJump(ControllerData.DoubleJumpHeight);
             }
-        }
-
-        private void DoJump(float height)
-        {
-            // factor in fall speed adjust
-            float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
-
-            // v = sqrt(2gh)
-            Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
-
-            Rigidbody.velocity = velocity;
         }
 #endregion
 
@@ -203,7 +195,7 @@ namespace pdxpartyparrot.Game.Actors
             try {
                 _isGrounded = CheckIsGrounded(GroundCheckCenter);
                 if(IsGrounded) {
-                    _doubleJumpCount = 0;
+                    DoubleJumpCount = 0;
                 }
             } finally {
                 Profiler.EndSample();
@@ -227,6 +219,21 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             Rigidbody.velocity = adjustedVelocity;
+        }
+
+        protected void DoJump(float height)
+        {
+            if(!Owner.CanMove) {
+                return;
+            }
+
+            // factor in fall speed adjust
+            float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
+
+            // v = sqrt(2gh)
+            Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
+
+            Rigidbody.velocity = velocity;
         }
     }
 }

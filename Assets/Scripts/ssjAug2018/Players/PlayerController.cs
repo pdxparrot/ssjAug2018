@@ -46,7 +46,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private RaycastHit? _leftHandHitResult;
 
-        public bool CanGrabLeft => null != _leftHandHitResult;
+        private bool CanGrabLeft => null != _leftHandHitResult;
 
         [SerializeField]
         [FormerlySerializedAs("_rightGrabCheckTransform")]
@@ -54,7 +54,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private RaycastHit? _rightHandHitResult;
 
-        public bool CanGrabRight => null != _rightHandHitResult;
+        private bool CanGrabRight => null != _rightHandHitResult;
 #endregion
 
         [Space(10)]
@@ -79,7 +79,17 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private RaycastHit? _chestHitResult;
 #endregion
 
-        public bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
+        private bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
+
+        [Space(10)]
+
+        [SerializeField]
+        [ReadOnly]
+        private long _longJumpTriggerTime;
+
+        private bool CanLongJump => (IsGrounded || IsGrabbing) && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
+
+        private bool CanHover => (!IsGrounded && !IsGrabbing) && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
 
         public Player Player => (Player)Owner;
 
@@ -197,7 +207,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public void Drop()
         {
             if(IsGrabbing) {
-                EnableGrabbing(false);
+                DisableGrabbing();
             } else {
                 CheckDropDown();
             }
@@ -208,25 +218,44 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Log("TODO: throw!");
         }
 
-        public override void Jump(bool force=false)
+        public void JumpStart()
         {
-            bool wasGrabbing = IsGrabbing;
+            _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
+        }
 
-            EnableGrabbing(false);
+        public override void Jump()
+        {
+            if(CanLongJump) {
+                DisableGrabbing();
+                DoJump(_playerControllerData.LongJumpHeight);
+            } else if(CanHover) {
+                // shouldn't be grabbing
+            } else if(IsGrabbing) {
+                DisableGrabbing();
 
-            base.Jump(wasGrabbing);
+                // TODO: would be cool if this pushed off the wall if not moving
+                DoJump(ControllerData.JumpHeight);
+            } else {
+                base.Jump();
+            }
+
+            _longJumpTriggerTime = 0;
         }
 #endregion
 
-        private void EnableGrabbing(bool enable)
+        private void DisableGrabbing()
         {
-            EnableClimbing(enable);
+            EnableClimbing(false);
         }
 
         private void EnableClimbing(bool enable)
         {
             _movementState = enable ? MovementState.Climbing : MovementState.Platforming;
             Rigidbody.isKinematic = enable;
+
+            if(enable) {
+                DoubleJumpCount = 0;
+            }
         }
 
         private IEnumerator RaycastRoutine()
@@ -374,7 +403,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                     CheckClimbUp();
                 } else {
                     Debug.LogWarning("Unexpectedly fell off!");
-                    EnableGrabbing(false);
+                    DisableGrabbing();
                     Debug.Break();
                 }
             }
@@ -486,7 +515,7 @@ Debug.Log("TODO: check drop down");
             Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
             Rigidbody.position += p + offset;
 
-            EnableGrabbing(false);
+            DisableGrabbing();
         }
 
         private void DropDown()

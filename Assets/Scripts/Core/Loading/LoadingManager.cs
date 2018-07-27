@@ -112,6 +112,7 @@ namespace pdxpartyparrot.Core.Loading
         public void ShowLoadingScreen(bool show)
         {
             _loadingScreen.gameObject.SetActive(show);
+            UpdateLoadingScreen(0.0f, "Loading...");
         }
 
         public void UpdateLoadingScreen(float percent, string text)

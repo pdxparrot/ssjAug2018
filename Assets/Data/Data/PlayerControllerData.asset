@@ -20,3 +20,5 @@ MonoBehaviour:
   _chestRayLength: 2
   _footRayLength: 2
   _footRayAngle: 30
+  _longJumpHoldSeconds: 0.5
+  _longJumpHeight: 24

@@ -50,6 +50,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.pause.performed -= OnPause;
                 //InputManager.Instance.Controls.game.move.performed -= OnMove;
                 //InputManager.Instance.Controls.game.look.performed -= OnLook;
+                InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
                 InputManager.Instance.Controls.game.grab.performed -= OnGrab;
                 InputManager.Instance.Controls.game.drop.performed -= OnDrop;
@@ -67,6 +68,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.pause.performed += OnPause;
                 //InputManager.Instance.Controls.game.move.performed += OnMove;
                 //InputManager.Instance.Controls.game.look.performed += OnLook;
+                InputManager.Instance.Controls.game.jump.started += OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed += OnJump;
                 InputManager.Instance.Controls.game.grab.performed += OnGrab;
                 InputManager.Instance.Controls.game.drop.performed += OnDrop;
@@ -104,6 +106,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Player.FollowTarget.LastLookAxes = new Vector3(axes.x, axes.y, 0.0f);
         }*/
+
+        private void OnJumpStart(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.JumpStart();
+        }
 
         private void OnJump(InputAction.CallbackContext ctx)
         {

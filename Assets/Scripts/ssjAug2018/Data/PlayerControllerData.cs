@@ -64,5 +64,18 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public float FootRayAngle => _footRayAngle;
 #endregion
+
+        [SerializeField]
+        [Range(0, 10)]
+        private float _longJumpHoldSeconds = 1.0f;
+
+        public int LongJumpHoldMs => (int)(_longJumpHoldSeconds * 1000.0f);
+
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("How high does the character jump when long jumping")]
+        private float _longJumpHeight = 5.0f;
+
+        public float LongJumpHeight => _longJumpHeight;
     }
 }

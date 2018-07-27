@@ -66,7 +66,6 @@ namespace pdxpartyparrot.Game.State
         public void TransitionState(GameState gameStatePrefab, Action<GameState> initializeState=null)
         {
             ShowLoadingScreen(true);
-            UpdateLoadingScreen(0.0f, "Transitioning...");
 
             ExitCurrentState(() => {
                 // TODO: this should enable the state from the set rather than allocating
