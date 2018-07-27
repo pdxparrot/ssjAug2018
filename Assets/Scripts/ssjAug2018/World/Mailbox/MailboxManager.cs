@@ -1,5 +1,5 @@
-﻿using pdxpartyparrot.Core.Util;
-using pdxpartyparrot.ssjAug2018.Players;
+﻿using System;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using System.Collections.Generic;
@@ -10,29 +10,36 @@ namespace pdxpartyparrot.ssjAug2018.World
     public class MailboxManager : SingletonBehavior<MailboxManager>
     {
         private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
-        protected static readonly System.Random Random = new System.Random();
-
-        // TODO: Fix this. Everything's coming up null when I try to find the player.
-        private Player _player;
-        private PlayerData _playerData = PlayerManager.Instance.PlayerData;
+        protected System.Random Random;
 
         private int _maxMailboxes;
+        private int _activeMailboxes;
+        
+        // Used for finding valid mailboxes
+        private List<Mailbox> _foundBoxes = new List<Mailbox>();
+        private Mailbox _seedBox;
 
         [SerializeField]
         private MailboxData _mailboxData;
 
 #region Unity Lifecycle
-
         private void Awake()
         {
+             GameManager.Instance.GameReadyEvent += InitilizeGameReady;
             // TODO: Uncomment when mail holding value is added to player data
-            _maxMailboxes = /*_playerData.MailHoldCount*/ 10;
-            _player = (Player)FindObjectOfType(typeof(Player));
-
-            // TODO: Determine if we just want objectives spawned at the start of game or delayed
-            ActivateMailboxGroup();
+            _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
+            Random = new System.Random(_mailboxData.RandomizationSeed);
         }
 
+        protected override void OnDestroy()
+        {
+            if(GameManager.HasInstance) 
+            {
+                GameManager.Instance.GameReadyEvent -= InitilizeGameReady;
+            }
+
+            base.OnDestroy();
+        }
 #endregion
 
 #region Registration
@@ -47,70 +54,82 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
-        
+        public void InitilizeGameReady(object sender, EventArgs e)
+        {
+            ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
+        }
+
+
         // TODO: Add weight for seed box based on previous activation count
             
-        public void ActivateMailboxGroup()
+        public void ActivateMailboxGroup(Transform origin)
         {
             // Find list of valid seed boxes          
-            HashSet<Mailbox> validSeeds = new HashSet<Mailbox>();
-            Collider[] allSeeds = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreSeeds = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allSeeds)
-            {
-                validSeeds.Add(box.gameObject.GetComponent<Mailbox>());
-            }
-            foreach(Collider box in ignoreSeeds)
-            {
-                validSeeds.Remove(box.gameObject.GetComponent<Mailbox>());
-            }
-            
-
+            GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
+            // Remove all that have been previously activated unless all found boxes have been previously activated
+            if(!_foundBoxes.TrueForAll(Mailbox.PreviouslyActivated)) _foundBoxes.RemoveAll(Mailbox.PreviouslyActivated);
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
-            Mailbox seedBox = (validSeeds.Count == 0) 
+            _seedBox = (_foundBoxes.Count == 0) 
                 ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
-                : Random.GetRandomEntry<Mailbox>(validSeeds);
+                : Random.GetRandomEntry<Mailbox>(_foundBoxes);
 
-            // Get valid boxes for the set
-            HashSet<Mailbox> validBoxes = new HashSet<Mailbox>();
-            Collider[] allBoxes = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMaxRange, LayerMask.GetMask("Mailboxes"));
-            Collider[] ignoreBoxes = Physics.OverlapSphere(_player.transform.position, _mailboxData.PlayerMinRange, LayerMask.GetMask("Mailboxes"));
-            foreach(Collider box in allBoxes)
-            {
-                validBoxes.Add(box.gameObject.GetComponent<Mailbox>());
-            }
-            foreach(Collider box in ignoreBoxes)
-            {
-                validBoxes.Remove(box.gameObject.GetComponent<Mailbox>());
-            }
 
-            // Determine how many boxes we need for the set
+            // Determine how many boxes we need for the set but don't go over remaining
             int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
-            if(setSize > _maxMailboxes)
-            {
-                setSize = _maxMailboxes;
-            }
+            if(setSize > _maxMailboxes) setSize = _maxMailboxes;
 
             // Activate the seed box and decrement the required box count
-            int seedLetterCount = Random.Next(_mailboxData.MaxLettersPerBox);
+            int letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
+            letterCount = (letterCount > setSize) ? 1 : letterCount;
+            _seedBox.ActivateMailbox(letterCount);
+            _activeMailboxes = 1;
+            setSize -= letterCount;
 
-            seedLetterCount = (seedLetterCount > setSize) ? 1 : seedLetterCount;
-            seedBox.ActivateMailbox(seedLetterCount);
-            setSize =- seedLetterCount;
+            // Get boxes in range of the seet for the set
+            GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
             {
-                // TODO: Update this quick and dirty NPE check. Should probably either shove all remaining letters into the last box or choose a new box at random from all boxes
-                if(validBoxes.Count == 0) { break; }
-
-                Mailbox box = Random.GetRandomEntry<Mailbox>(validBoxes);
-                int letterCount = Random.Next(_mailboxData.MaxLettersPerBox);
+                Mailbox box = Random.GetRandomEntry<Mailbox>(_foundBoxes);
+                letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
                 letterCount = (letterCount > setSize) ? setSize : letterCount;
                 
                 box.ActivateMailbox(letterCount);
-                validBoxes.Remove(box);
-                setSize =- letterCount;
+                _activeMailboxes++;
+                _foundBoxes.Remove(box);
+                setSize -= letterCount;
+
+                // If this is the last box, but we still need letters, just shove them all onto that box.
+                if(_foundBoxes.Count == 0 && setSize > 0)
+                {
+                    letterCount += setSize;
+                    box.ActivateMailbox(letterCount);
+                    setSize = 0;
+                }
+            }
+        }
+
+        private void GetMailboxesInRange(Transform origin, float minimum, float maximum)
+        {
+            _foundBoxes.Clear();
+            Collider[] hits = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider hit in hits)
+            {
+                Mailbox box = hit.gameObject.GetComponent<Mailbox>();
+                if((box.transform.position - origin.position).sqrMagnitude > minimum * minimum) 
+                    { 
+                    _foundBoxes.Add(box); 
+                    }
+            }
+        }
+
+        public void MailboxCompleted()
+        {
+            _activeMailboxes--;
+            if(_activeMailboxes <= 0)
+            {
+                ActivateMailboxGroup(_seedBox.transform);
             }
         }
     }

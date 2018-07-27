@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
@@ -15,7 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         private int _mailRequired = 0;
         private bool _isObjective = false;
         public bool isObjective => _isObjective;
-        private int _timesActive = 0;
+        private bool _hasActivated = false;
 
 #region Unity Lifecycle
         private void Awake()
@@ -39,10 +40,15 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void ActivateMailbox(int requiredMail)
         {
-            Debug.Log("HEY I ACTIVATED. I AM :" + this.name);
             _isObjective = true;
             _mailRequired = requiredMail;
-            _timesActive++;
+            _hasActivated = true;
+        }
+
+        public void DeactivateMailbox()
+        {
+            _isObjective = false;
+            MailboxManager.Instance.MailboxCompleted();
         }
 
         public void OnTriggerEnter(Collider other)
@@ -57,6 +63,11 @@ namespace pdxpartyparrot.ssjAug2018.World
                 } 
             }
             */
+        }
+
+        public static bool PreviouslyActivated(Mailbox box)
+        {
+            return box._hasActivated;
         }
     }
 }
