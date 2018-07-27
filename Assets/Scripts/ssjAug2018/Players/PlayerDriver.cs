@@ -126,7 +126,9 @@ Debug.Log("pause");
 
         private void DestroyDebugMenu()
         {
-            DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            if(DebugMenuManager.HasInstance) {
+                DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            }
             _debugMenuNode = null;
         }
     }

@@ -33,6 +33,8 @@ namespace pdxpartyparrot.Core.DebugMenu
         [CanBeNull]
         private DebugMenuNode _currentNode;
 
+        private float _lastFPS;
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -67,6 +69,8 @@ namespace pdxpartyparrot.Core.DebugMenu
             } finally {
                 Profiler.EndSample();
             }
+
+            _lastFPS = 1.0f / Time.unscaledDeltaTime;
         }
 
         private void OnGUI()
@@ -105,6 +109,8 @@ namespace pdxpartyparrot.Core.DebugMenu
         private void RenderWindowContents()
         {
             if(null == _currentNode) {
+                GUILayout.Label($"FPS: {(int)_lastFPS}");
+
                 _windowScrollPos = GUILayout.BeginScrollView(_windowScrollPos);
                     foreach(DebugMenuNode node in _nodes) {
                         node.RenderNode();

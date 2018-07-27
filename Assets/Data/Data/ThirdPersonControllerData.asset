@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: ThirdPersonControllerData
   m_EditorClassIdentifier: 
   _moveSpeed: 20
+  _runThreshold: 0.75
   _jumpHeight: 5
-  _fallSpeedAdjustment: 3
-  _terminalVelocity: 50
+  _fallSpeedAdjustment: 250
+  _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
   _allowAirControl: 1

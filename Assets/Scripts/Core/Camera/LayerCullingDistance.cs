@@ -7,12 +7,12 @@ namespace pdxpartyparrot.Core.Camera
     {
         // TODO: better to do a layer => distance mapping
         [SerializeField]
-        private float[] _distances = new float[15];
+        private float[] _distances = new float[32];
 
 #region Unity Lifecycle
         private void Start()
         {
-            float[] actualDistances = new float[15];
+            float[] actualDistances = new float[32];
 
             int minLength = System.Math.Min(actualDistances.Length, _distances.Length);
             for(int i=0; i<minLength; ++i) {

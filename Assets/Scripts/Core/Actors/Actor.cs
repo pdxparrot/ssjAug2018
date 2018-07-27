@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Camera;
+
+using UnityEngine;
 
 namespace pdxpartyparrot.Core.Actors
 {
@@ -13,6 +17,9 @@ namespace pdxpartyparrot.Core.Actors
         Collider Collider { get; }
 
         ActorController Controller { get; }
+
+        [CanBeNull]
+        Viewer Viewer { get; }
 
         bool CanMove { get; }
 

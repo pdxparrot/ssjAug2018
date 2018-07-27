@@ -255,8 +255,8 @@ MonoBehaviour:
   _defaultOrbitReturnTime: 0.5
   _orbitReturnVelocity: {x: 0, y: 0}
   _orbitRotation: {x: 0, y: 0}
-  _orbitMinRadius: 5
-  _orbitMaxRadius: 12
+  _orbitMinRadius: 3
+  _orbitMaxRadius: 7
   _orbitXMin: -360
   _orbitXMax: 360
   _orbitYMin: -90
@@ -355,6 +355,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distances:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   - 0
   - 0
   - 0

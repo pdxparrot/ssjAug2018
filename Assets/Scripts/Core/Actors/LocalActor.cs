@@ -1,4 +1,7 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
@@ -29,6 +32,9 @@ namespace pdxpartyparrot.Core.Actors
         private ActorController _controller;
 
         public ActorController Controller => _controller;
+
+        [CanBeNull]
+        public abstract Viewer Viewer { get; }
 
         [SerializeField]
         [ReadOnly]

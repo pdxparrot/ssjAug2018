@@ -1,8 +1,11 @@
-﻿using pdxpartyparrot.Core.Actors;
+﻿using System.Collections;
+
+using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Data;
 
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Game.Actors
 {
@@ -10,10 +13,16 @@ namespace pdxpartyparrot.Game.Actors
     public class ThirdPersonController : ActorController
     {
         [SerializeField]
-        [ReadOnly]
-        private LayerMask _collisionCheckIgnoreLayerMask;
+        private LayerMask _collisionCheckLayerMask;
 
-        protected LayerMask CollisionCheckIgnoreLayerMask => _collisionCheckIgnoreLayerMask;
+        protected LayerMask CollisionCheckLayerMask => _collisionCheckLayerMask;
+
+        [SerializeField]
+        [Range(0, 1)]
+        [Tooltip("How often to run raycast checks, in seconds")]
+        private float _raycastRoutineRate = 0.1f;
+
+        protected float RaycastRoutineRate => _raycastRoutineRate;
 
 #region Ground Check
         [Header("Ground Check")]
@@ -22,7 +31,7 @@ namespace pdxpartyparrot.Game.Actors
         private Transform _groundCheckTransform;
 
         [SerializeField]
-        private float _groundCheckRadius = 1;
+        private float _groundCheckRadius = 1.0f;
 
         [SerializeField]
         [ReadOnly]
@@ -35,6 +44,15 @@ namespace pdxpartyparrot.Game.Actors
         private bool _isFalling;
 
         public bool IsFalling => _isFalling;
+
+        protected Vector3 GroundCheckCenter
+        {
+            get
+            {
+                Vector3 center = _groundCheckTransform.position;
+                return new Vector3(center.x, center.y + _groundCheckRadius - 0.1f, center.z);
+            }
+        }
 #endregion
 
         [SerializeField]
@@ -51,31 +69,27 @@ namespace pdxpartyparrot.Game.Actors
             base.Awake();
 
             InitRigidbody();
-
-            // prevent self-collision when doing cast checks
-            _collisionCheckIgnoreLayerMask = ~(1 << gameObject.layer);
         }
 
         protected virtual void FixedUpdate()
         {
-            UpdateIsGrounded();
+            float dt = Time.fixedDeltaTime;
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
 
-            // fudge our velocity a little so movememnt feels better
-            FudgeVelocity();
+            FudgeVelocity(dt);
         }
 
         protected virtual void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + Rigidbody.angularVelocity);
+            Gizmos.DrawLine(Rigidbody.position, transform.position + Rigidbody.angularVelocity);
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position, transform.position + Rigidbody.velocity);
+            Gizmos.DrawLine(Rigidbody.position, transform.position + Rigidbody.velocity);
 
             Gizmos.color = IsGrounded ? Color.red : Color.yellow;
-            Gizmos.DrawWireSphere(GetGroundCheckCenter(), _groundCheckRadius);
+            Gizmos.DrawWireSphere(GroundCheckCenter, _groundCheckRadius);
         }
 #endregion
 
@@ -84,6 +98,8 @@ namespace pdxpartyparrot.Game.Actors
             base.Initialize(actor);
 
             ControllerData = data;
+
+            StartCoroutine(RaycastRoutine());
         }
 
         private void InitRigidbody()
@@ -99,6 +115,23 @@ namespace pdxpartyparrot.Game.Actors
         }
 
 #region Actions
+        public override void AnimationMove(Vector3 axes, float dt)
+        {
+            Vector3 forward = new Vector3(axes.x, 0.0f, axes.y);
+
+            // align the movement with the camera
+            if(null != Owner.Viewer) {
+                forward = (Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) * forward).normalized;
+            }
+
+            // align the player with the movement
+            if(axes.sqrMagnitude >= float.Epsilon) {
+                transform.forward = forward;
+            }
+
+            base.AnimationMove(axes, dt);
+        }
+
         public override void PhysicsMove(Vector3 axes, float dt)
         {
             if(!Owner.CanMove) {
@@ -111,7 +144,9 @@ namespace pdxpartyparrot.Game.Actors
 
             _isRunning = axes.sqrMagnitude >= ControllerData.RunThresholdSquared;
 
-            Rigidbody.velocity = transform.localRotation * new Vector3(axes.x * ControllerData.MoveSpeed, Rigidbody.velocity.y, axes.y * ControllerData.MoveSpeed);
+            Vector3 speed = axes * ControllerData.MoveSpeed;
+            Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : transform.localRotation;
+            Rigidbody.velocity = rotation * new Vector3(speed.x, Rigidbody.velocity.y, speed.y);
         }
 
         public virtual void Jump(bool force=false)
@@ -124,38 +159,47 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            // TODO: so this is mathmatically correct, but it doesn't actually hit the height if we sqrt it...
-            //Vector3 velocity = Vector3.up * (Mathf.Sqrt(ControllerData.JumpHeight * 2.0f * -Physics.gravity.y));
-            Vector3 velocity = Vector3.up * (ControllerData.JumpHeight * /*2.0f **/ -Physics.gravity.y);
+            float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
+            Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * 2.0f * gravity);
             Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
         }
 #endregion
 
-#region Grounded Check
-        protected Vector3 GetGroundCheckCenter()
+        private IEnumerator RaycastRoutine()
         {
-            Vector3 center = _groundCheckTransform != null ? _groundCheckTransform.position : transform.position;
-            return new Vector3(center.x, center.y + _groundCheckRadius - 0.1f, center.z);
+            WaitForSeconds wait = new WaitForSeconds(RaycastRoutineRate);
+            while(true) {
+                UpdateIsGrounded();
+
+                yield return wait;
+            }
         }
 
+#region Grounded Check
         protected bool CheckIsGrounded(Vector3 center)
         {
-            return Physics.CheckSphere(center, _groundCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);;
+            return Physics.CheckSphere(center, _groundCheckRadius, CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
         }
 
         private void UpdateIsGrounded()
         {
-            _isGrounded = CheckIsGrounded(GetGroundCheckCenter());
+            Profiler.BeginSample("ThirdPersonController.UpdateIsGrounded");
+            try {
+                _isGrounded = CheckIsGrounded(GroundCheckCenter);
+            } finally {
+                Profiler.EndSample();
+            }
         }
 #endregion
 
-        private void FudgeVelocity()
+        private void FudgeVelocity(float dt)
         {
             Vector3 adjustedVelocity = Rigidbody.velocity;
 
             // do some fudging to jumping/falling so it feels better
             if(!IsGrounded) {
-                adjustedVelocity.y -= ControllerData.FallSpeedAdjustment;
+                float adjustment = ControllerData.FallSpeedAdjustment * dt;
+                adjustedVelocity.y -= adjustment;
             }
 
             // apply terminal velocity

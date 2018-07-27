@@ -33,7 +33,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private Camera.Viewer _viewer;
 
         [CanBeNull]
-        public Camera.Viewer Viewer => _viewer;
+        public override Core.Camera.Viewer Viewer => _viewer;
 
 #region Unity Lifecycle
         protected override void Awake()
