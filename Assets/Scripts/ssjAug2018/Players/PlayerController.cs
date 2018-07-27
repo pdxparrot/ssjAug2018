@@ -94,6 +94,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool CanDropDown => !IsClimbing && (null == _footHitResults[0] || null == _footHitResults[1] || null == _footHitResults[2] || null == _footHitResults[3]);
 #endregion
 
+        [Space(10)]
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _hasDoubleJumped;
+
+        private bool CanDoubleJump => !IsGrounded && !_hasDoubleJumped;
+
+
         public Player Player => (Player)Owner;
 
 #region Unity Lifecycle
@@ -225,7 +234,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             EnableGrabbing(false);
 
-            base.Jump(wasGrabbing);
+            bool doubleJump = !wasGrabbing && !IsGrounded;
+            if(doubleJump) {
+                _hasDoubleJumped = true;
+            }
+
+            base.Jump(wasGrabbing || doubleJump);
         }
 #endregion
 

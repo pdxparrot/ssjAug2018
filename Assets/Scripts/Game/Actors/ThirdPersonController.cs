@@ -161,7 +161,7 @@ namespace pdxpartyparrot.Game.Actors
 
             float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
             Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * 2.0f * gravity);
-            Rigidbody.AddForce(velocity, ForceMode.VelocityChange);
+            Rigidbody.velocity = velocity;
         }
 #endregion
 
