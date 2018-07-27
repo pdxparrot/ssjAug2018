@@ -77,7 +77,6 @@ namespace pdxpartyparrot.ssjAug2018.World
                 return;
             }
 
-
             // Determine how many boxes we need for the set but don't go over remaining
             int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
             if(setSize > _maxMailboxes) setSize = _maxMailboxes;
