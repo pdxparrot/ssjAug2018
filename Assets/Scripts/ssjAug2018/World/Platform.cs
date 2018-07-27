@@ -6,7 +6,6 @@ using UnityEngine;
 namespace pdxparyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(LayerMask))]
     public class Platform : MonoBehaviour, IGrabbable {
 
         [SerializeField]
@@ -31,10 +30,10 @@ namespace pdxparyparrot.ssjAug2018.World
 
         private void FixedUpdate()
         {
-            float step = _speed * Time.deltaTime;
-            if(transform.position == _targetWayponit.position)
+            float step = _speed * Time.fixedDeltaTime;
+            if((transform.position -_targetWayponit.position).sqrMagnitude < Mathf.Pow(float.Epsilon, 2))
             {
-                _waypointIterator = (_waypointIterator == _waypoints.Count - 1) ? 0 : _waypointIterator + 1;
+                _waypointIterator = (_waypointIterator + 1) % _waypoints.Count;
                 _targetWayponit = _waypoints[_waypointIterator];
                 this.transform.LookAt(_targetWayponit);
             }

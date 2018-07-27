@@ -56,7 +56,7 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void InitilizeGameReady(object sender, EventArgs e)
         {
-            ActivateMailboxGroup(Game.World.SpawnManager.Instance.GetSpawnPoint().transform);
+            ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
         }
             
         public void ActivateMailboxGroup(Transform origin)
