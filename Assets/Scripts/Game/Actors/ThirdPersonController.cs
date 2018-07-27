@@ -65,6 +65,12 @@ namespace pdxpartyparrot.Game.Actors
 
         public bool IsRunning => _isRunning;
 
+        [SerializeField]
+        [ReadOnly]
+        private int _doubleJumpCount;
+
+        private bool CanDoubleJump => !IsGrounded && (ControllerData.DoubleJumpCount < 0 || _doubleJumpCount < ControllerData.DoubleJumpCount);
+
 #region Unity Lifecycle
         protected override void Awake()
         {
@@ -155,12 +161,22 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            if(!force && !IsGrounded) {
-                return;
+            if(force || IsGrounded) {
+                DoJump(ControllerData.JumpHeight);
+            } else if(CanDoubleJump) {
+                _doubleJumpCount++;
+                DoJump(ControllerData.DoubleJumpHeight);
             }
+        }
 
+        private void DoJump(float height)
+        {
+            // factor in fall speed adjust
             float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
-            Vector3 velocity = Vector3.up * Mathf.Sqrt(ControllerData.JumpHeight * 2.0f * gravity);
+
+            // v = sqrt(2gh)
+            Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
+
             Rigidbody.velocity = velocity;
         }
 #endregion
@@ -186,6 +202,9 @@ namespace pdxpartyparrot.Game.Actors
             Profiler.BeginSample("ThirdPersonController.UpdateIsGrounded");
             try {
                 _isGrounded = CheckIsGrounded(GroundCheckCenter);
+                if(IsGrounded) {
+                    _doubleJumpCount = 0;
+                }
             } finally {
                 Profiler.EndSample();
             }

@@ -70,7 +70,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
-#region Head
+#region Chest
         [Header("Chest")]
 
         [SerializeField]
@@ -80,15 +80,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #endregion
 
         public bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
-
-        [Space(10)]
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _hasDoubleJumped;
-
-        private bool CanDoubleJump => !IsGrounded && !_hasDoubleJumped;
-
 
         public Player Player => (Player)Owner;
 
@@ -223,12 +214,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             EnableGrabbing(false);
 
-            bool doubleJump = !wasGrabbing && !IsGrounded;
-            if(doubleJump) {
-                _hasDoubleJumped = true;
-            }
-
-            base.Jump(wasGrabbing || doubleJump);
+            base.Jump(wasGrabbing);
         }
 #endregion
 

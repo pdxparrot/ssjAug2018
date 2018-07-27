@@ -38,6 +38,13 @@ namespace pdxpartyparrot.Game.Data
         public float JumpHeight => _jumpHeight;
 
         [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("How high does the character jump when double jumping")]
+        private float _doubleJumpHeight = 1.0f;
+
+        public float DoubleJumpHeight => _doubleJumpHeight;
+
+        [SerializeField]
         [Range(0, 500)]
         [Tooltip("Add this many m/s to the player's fall speed, to make movement feel better without changing actual gravity")]
         private float _fallSpeedAdjustment = 0.0f;
@@ -63,5 +70,11 @@ namespace pdxpartyparrot.Game.Data
         private bool _allowAirControl;
 
         public bool AllowAirControl => _allowAirControl;
+
+        [SerializeField]
+        [Tooltip("How many times is the player able to double jump (-1 is infinite)")]
+        private int _doubleJumpCount = 0;
+
+        public int DoubleJumpCount => _doubleJumpCount;
     }
 }
