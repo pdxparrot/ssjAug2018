@@ -113,16 +113,15 @@ namespace pdxpartyparrot.ssjAug2018.World
         private void GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
             _foundBoxes.Clear();
-            Collider[] hits;
-            hits = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
+            Collider[] hits = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
             foreach(Collider hit in hits)
             {
                 Mailbox box = hit.gameObject.GetComponent<Mailbox>();
                 if((box.transform.position - origin.position).sqrMagnitude < minimum * minimum) 
-                    { } else
-                    {
-                    _foundBoxes.Add(box); 
-                    }
+                { } else
+                {
+                _foundBoxes.Add(box); 
+                }
             }
         }
 
