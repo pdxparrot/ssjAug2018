@@ -83,19 +83,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
-#region Feet
-        [Header("Feet")]
-
-        [SerializeField]
-        private Transform _footTransform;
-
-        private RaycastHit?[] _footHitResults = new RaycastHit?[4];     // (top-down) N, E, S, W
-
-        public bool CanDropDown => !IsClimbing && (null == _footHitResults[0] || null == _footHitResults[1] || null == _footHitResults[2] || null == _footHitResults[3]);
-#endregion
-
-        [Space(10)]
-
         [SerializeField]
         [ReadOnly]
         private bool _hasDoubleJumped;
@@ -155,6 +142,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             // feet
+/*
             if(!IsGrabbing && IsGrounded) {
                 Gizmos.color = null != _footHitResults[0] ? Color.red : Color.yellow;
                 Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(0.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
@@ -165,6 +153,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 Gizmos.color = null != _footHitResults[3] ? Color.red : Color.yellow;
                 Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(270.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
             }
+*/
         }
 #endregion
 
@@ -216,11 +205,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Drop()
         {
-            if(!IsGrabbing) {
-                return;
+            if(IsGrabbing) {
+                EnableGrabbing(false);
+            } else {
+                CheckDropDown();
             }
-
-            EnableGrabbing(false);
         }
 
         public void Throw()
@@ -351,6 +340,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+/*
 #region Foot Raycasts
         private void UpdateFootRaycasts()
         {
@@ -374,6 +364,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 #endregion
+*/
 
         private void HandleRaycasts()
         {
@@ -479,6 +470,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             return true;
         }
+
+        private bool CheckDropDown()
+        {
+Debug.Log("TODO: check drop down");
+            return false;
+        }
 #endregion
 
 // TODO: smooth/animate these things
@@ -505,6 +502,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Rigidbody.position += p + offset;
 
             EnableGrabbing(false);
+        }
+
+        private void DropDown()
+        {
+Debug.Log("TODO: drop down");
         }
     }
 }
