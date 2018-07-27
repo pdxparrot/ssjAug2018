@@ -49,10 +49,13 @@ namespace pdxpartyparrot.Core.Network
 
         protected NetworkIdentity NetworkIdentity { get; private set; }
 
+        protected NetworkTransform NetworkTransform { get; private set; }
+
 #region Unity Lifecycle
         protected virtual void Awake()
         {
             NetworkIdentity = GetComponent<NetworkIdentity>();
+            NetworkTransform = GetComponent<NetworkTransform>();
         }
 #endregion
 
