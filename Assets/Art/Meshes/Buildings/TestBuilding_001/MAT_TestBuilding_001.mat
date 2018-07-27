@@ -151,7 +151,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Keyword0: 0
-    - _Material1_TintStrength: 0.583
+    - _Material1_TintStrength: 0
     - _Material2_TintStrength: 1
     - _Material3_TintStrength: 0.423
     - _Metallic: 0
@@ -162,8 +162,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _Window_EmissiveStrength: 3.1
-    - _Window_Roughness: 1
+    - _Window_EmissiveStrength: 2
+    - _Window_Roughness: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
@@ -171,11 +171,11 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Material1_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Material1_Tiling: {r: 12, g: 12, b: 0, a: 0}
-    - _Material1_TintColor: {r: 0.5446778, g: 0.61550397, b: 0.754717, a: 1}
+    - _Material1_TintColor: {r: 1, g: 0.04036469, b: 0, a: 1}
     - _Material2_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Material2_Tiling: {r: 10, g: 10, b: 0, a: 0}
     - _Material2_TintColor: {r: 0.854902, g: 0.70980394, b: 0.43137258, a: 1}
     - _Material3_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Material3_Tiling: {r: 10, g: 10, b: 0, a: 0}
     - _Material3_TintColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Window_Color: {r: 0.8515217, g: 0.8773585, b: 0.39315593, a: 0}
+    - _Window_Color: {r: 11.984314, g: 11.984314, b: 5.3960786, a: 0}
