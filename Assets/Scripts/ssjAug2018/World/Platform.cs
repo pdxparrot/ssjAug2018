@@ -10,7 +10,7 @@ namespace pdxparyparrot.ssjAug2018.World
     public class Platform : MonoBehaviour, IGrabbable {
 
         [SerializeField]
-        private float _speed;
+        private float _speed = 5;
 
         [SerializeField]
         private List<Transform> _waypoints;
@@ -37,7 +37,6 @@ namespace pdxparyparrot.ssjAug2018.World
                 _waypointIterator = (_waypointIterator == _waypoints.Count) ? 0 : _waypointIterator + 1;
                 _targetWayponit = _waypoints[_waypointIterator];
                 this.transform.LookAt(_targetWayponit);
-                Debug.Log("My target is now " + _targetWayponit.name);
             }
             transform.position = Vector3.MoveTowards(transform.position, _targetWayponit.position, step);
         }
