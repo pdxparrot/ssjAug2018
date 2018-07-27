@@ -16,8 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         private int _activeMailboxes;
         
         // Used for finding valid mailboxes
-        private Collider[] hits;
-        private List<Mailbox> _foundBoxes;
+        private List<Mailbox> _foundBoxes = new List<Mailbox>();
         private Mailbox _seedBox;
 
         [SerializeField]
@@ -57,8 +56,6 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void InitilizeGameReady(object sender, EventArgs e)
         {
-            hits = new Collider[_mailboxes.Count];
-            _foundBoxes = new List<Mailbox>(_mailboxes.Count);
             ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
         }
 
@@ -116,17 +113,16 @@ namespace pdxpartyparrot.ssjAug2018.World
         private void GetMailboxesInRange(Transform origin, float minimum, float maximum)
         {
             _foundBoxes.Clear();
-            int totalHits;
-            totalHits = Physics.OverlapSphereNonAlloc(origin.position, maximum, hits, LayerMask.GetMask("Mailboxes"));
-            for(int i = 0 ; i < totalHits ; i++)
+            Collider[] hits;
+            hits = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
+            foreach(Collider hit in hits)
             {
-                _foundBoxes.Add(hits[i].gameObject.GetComponent<Mailbox>());
-            }
-
-            totalHits = Physics.OverlapSphereNonAlloc(origin.position, minimum, hits, LayerMask.GetMask("Mailboxes"));
-            for(int i = 0 ; i < totalHits ; i++)
-            {
-                _foundBoxes.Remove(hits[i].gameObject.GetComponent<Mailbox>());
+                Mailbox box = hit.gameObject.GetComponent<Mailbox>();
+                if((box.transform.position - origin.position).sqrMagnitude < minimum * minimum) 
+                    { } else
+                    {
+                    _foundBoxes.Add(box); 
+                    }
             }
         }
 
