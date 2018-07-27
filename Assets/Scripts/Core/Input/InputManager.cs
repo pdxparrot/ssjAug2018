@@ -208,7 +208,7 @@ namespace pdxpartyparrot.Core.Input
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "InputManager");
             debugMenuNode.RenderContentsAction = () => {
-                GUILayout.BeginVertical("Gamepads");
+                GUILayout.BeginVertical("Gamepads", GUI.skin.box);
                     GUILayout.Label($"Queued listeners: {_gamepadListeners.Count}");
 
                     GUILayout.BeginVertical("Unacquired:", GUI.skin.box);
@@ -219,7 +219,7 @@ namespace pdxpartyparrot.Core.Input
 
                     GUILayout.BeginVertical("Acquired:", GUI.skin.box);
                         foreach(var kvp in _acquiredGamepads) {
-                            GUILayout.Label(kvp.Key.name);
+                            GUILayout.Label($"{kvp.Key.name}:{kvp.Value.id}");
                         }
                     GUILayout.EndVertical();
                 GUILayout.EndVertical();
