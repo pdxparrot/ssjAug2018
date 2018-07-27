@@ -8,6 +8,11 @@ namespace pdxpartyparrot.Game.Data
     [Serializable]
     public sealed class ThirdPersonControllerData : ScriptableObject
     {
+        [SerializeField]
+        private LayerMask _collisionCheckLayerMask;
+
+        public LayerMask CollisionCheckLayerMask => _collisionCheckLayerMask;
+
 #region Physics
         [SerializeField]
         [Range(0, 50)]
@@ -23,7 +28,7 @@ namespace pdxpartyparrot.Game.Data
 
         public float RunThreshold => _runThreshold;
 
-        public float RunThresholdSquared => _runThreshold * _runThreshold;
+        public float RunThresholdSquared => RunThreshold * RunThreshold;
 
         [SerializeField]
         [Range(0, 50)]

@@ -81,7 +81,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
             _viewer?.Initialize(this);
 
-            PlayerController.Initialize(this, PlayerManager.Instance.PlayerData, PlayerManager.Instance.PlayerData.ControllerData);
+            PlayerController.Initialize(this);
 
             // TODO: encapsulate this somewhere better
             PlayerController.Rigidbody.mass = PlayerManager.Instance.PlayerData.Mass;

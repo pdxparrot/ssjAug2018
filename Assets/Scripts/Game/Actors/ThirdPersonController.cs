@@ -13,9 +13,9 @@ namespace pdxpartyparrot.Game.Actors
     public class ThirdPersonController : ActorController
     {
         [SerializeField]
-        private LayerMask _collisionCheckLayerMask;
+        private ThirdPersonControllerData _controllerData;
 
-        protected LayerMask CollisionCheckLayerMask => _collisionCheckLayerMask;
+        protected ThirdPersonControllerData ControllerData => _controllerData;
 
         [SerializeField]
         [Range(0, 1)]
@@ -23,6 +23,8 @@ namespace pdxpartyparrot.Game.Actors
         private float _raycastRoutineRate = 0.1f;
 
         protected float RaycastRoutineRate => _raycastRoutineRate;
+
+        [Space(10)]
 
 #region Ground Check
         [Header("Ground Check")]
@@ -50,18 +52,18 @@ namespace pdxpartyparrot.Game.Actors
             get
             {
                 Vector3 center = _groundCheckTransform.position;
-                return new Vector3(center.x, center.y + _groundCheckRadius - 0.1f, center.z);
+                return new Vector3(center.x, center.y + _groundCheckRadius - ControllerData.GroundedCheckEpsilon, center.z);
             }
         }
 #endregion
+
+        [Space(10)]
 
         [SerializeField]
         [ReadOnly]
         private bool _isRunning;
 
         public bool IsRunning => _isRunning;
-
-        public ThirdPersonControllerData ControllerData { get; set; }
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -93,11 +95,9 @@ namespace pdxpartyparrot.Game.Actors
         }
 #endregion
 
-        public void Initialize(IActor actor, ThirdPersonControllerData data)
+        public override void Initialize(IActor actor)
         {
             base.Initialize(actor);
-
-            ControllerData = data;
 
             StartCoroutine(RaycastRoutine());
         }
@@ -125,7 +125,7 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             // align the player with the movement
-            if(axes.sqrMagnitude >= float.Epsilon) {
+            if(forward.sqrMagnitude > float.Epsilon) {
                 transform.forward = forward;
             }
 
@@ -178,7 +178,7 @@ namespace pdxpartyparrot.Game.Actors
 #region Grounded Check
         protected bool CheckIsGrounded(Vector3 center)
         {
-            return Physics.CheckSphere(center, _groundCheckRadius, CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
+            return Physics.CheckSphere(center, _groundCheckRadius, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
         }
 
         private void UpdateIsGrounded()

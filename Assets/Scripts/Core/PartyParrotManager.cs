@@ -148,6 +148,7 @@ namespace pdxpartyparrot.Core
         public void TogglePause()
         {
             _isPaused = !_isPaused;
+            Debug.Log($"Pause: {_isPaused}");
 
             PauseEvent?.Invoke(this, EventArgs.Empty);
         }
