@@ -34,7 +34,7 @@ namespace pdxparyparrot.ssjAug2018.World
             float step = _speed * Time.deltaTime;
             if(transform.position == _targetWayponit.position)
             {
-                _waypointIterator = (_waypointIterator == _waypoints.Count) ? 0 : _waypointIterator + 1;
+                _waypointIterator = (_waypointIterator == _waypoints.Count - 1) ? 0 : _waypointIterator + 1;
                 _targetWayponit = _waypoints[_waypointIterator];
                 this.transform.LookAt(_targetWayponit);
             }
