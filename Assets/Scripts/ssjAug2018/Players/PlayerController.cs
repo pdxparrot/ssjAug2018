@@ -431,19 +431,10 @@ Debug.Log("rotate right");
             // align to the surface
             transform.forward = -hit.normal;
 
-/*
- we want our position to be (Player.CapsuleCollider.raidus + epsilon) away from hit.point along the normal of the surface
-
-float y = Rigidbody.position.y;
-Rigidbody.position = hit.point - ();
-*/
-
-            // attach to the surface
-            Vector3 translatedPoint = hit.point - Rigidbody.position;
-            float distance = translatedPoint.z - Player.CapsuleCollider.radius - 0.1f;
-Debug.Log($"{translatedPoint.z} - {distance} = {translatedPoint.z + distance}");
-            Rigidbody.position -= transform.forward * (translatedPoint.z + distance);
-            //Rigidbody.position = new Vector3(transform.position.x, transform.position.y, (translatedPoint.z - Player.CapsuleCollider.radius - 0.1f));
+            Vector3 x = hit.point + hit.normal * 0.1f;
+            Vector3 a = x - Rigidbody.position;
+            Vector3 p = Vector3.Project(a, hit.normal);
+            Rigidbody.position -= p - (Player.CapsuleCollider.radius * transform.forward);
         }
     }
 }
