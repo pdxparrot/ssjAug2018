@@ -22,8 +22,6 @@ namespace pdxpartyparrot.Core.Loading
         [SerializeField]
         private LoadingScreen _loadingScreen;
 
-        protected LoadingScreen LoadingScreen => _loadingScreen;
-
 #region Manager Prefabs
         [SerializeField]
         private PartyParrotManager _engineManagerPrefab;
@@ -63,26 +61,23 @@ namespace pdxpartyparrot.Core.Loading
 
         private IEnumerator Load()
         {
-            _loadingScreen.Progress.Percent = 0.0f;
-            _loadingScreen.ProgressText = "Creating managers...";
+            UpdateLoadingScreen(0.0f, "Creating managers...");
             yield return null;
 
             CreateManagers();
             yield return null;
 
-            _loadingScreen.Progress.Percent = 0.5f;
-            _loadingScreen.ProgressText = "Initializing managers...";
+            UpdateLoadingScreen(0.5f, "Initializing managers...");
             yield return null;
 
             InitializeManagers();
             yield return null;
 
-            _loadingScreen.Progress.Percent = 1.0f;
-            _loadingScreen.ProgressText = "Loading complete!";
+            UpdateLoadingScreen(1.0f, "Loading complete!");
 
             OnLoad();
 
-            Destroy();
+            ShowLoadingScreen(false);
         }
 
         protected virtual void CreateManagers()
@@ -113,12 +108,27 @@ namespace pdxpartyparrot.Core.Loading
         {
         }
 
-        private void Destroy()
+#region Loading Screen
+        public void ShowLoadingScreen(bool show)
         {
-            Destroy(_loadingScreen.gameObject);
-            _loadingScreen = null;
-
-            Destroy(gameObject);
+            _loadingScreen.gameObject.SetActive(show);
         }
+
+        public void UpdateLoadingScreen(float percent, string text)
+        {
+            SetLoadingScreenPercent(percent);
+            SetLoadingScreenText(text);
+        }
+
+        public void SetLoadingScreenText(string text)
+        {
+            _loadingScreen.ProgressText = text;
+        }
+
+        public void SetLoadingScreenPercent(float percent)
+        {
+            _loadingScreen.Progress.Percent = Mathf.Clamp01(percent);
+        }
+#endregion
     }
 }

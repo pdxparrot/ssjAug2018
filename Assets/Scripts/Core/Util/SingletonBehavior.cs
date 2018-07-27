@@ -47,7 +47,7 @@ namespace pdxpartyparrot.Core.Util
  
                     Debug.LogWarning($"[Singleton] An instance of {typeof(T)} is needed in the scene, so '{singleton}' was created with DontDestroyOnLoad.");
                 } else {
-                    Debug.LogWarning($"[Singleton] Using {typeof(T)} instance already created: {_instance.gameObject.name}");
+                    //Debug.LogWarning($"[Singleton] Using {typeof(T)} instance already created: {_instance.gameObject.name}");
                 }
 
                 return _instance;
