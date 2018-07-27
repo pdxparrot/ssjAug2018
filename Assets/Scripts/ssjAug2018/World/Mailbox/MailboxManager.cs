@@ -117,11 +117,10 @@ namespace pdxpartyparrot.ssjAug2018.World
             foreach(Collider hit in hits)
             {
                 Mailbox box = hit.gameObject.GetComponent<Mailbox>();
-                if((box.transform.position - origin.position).sqrMagnitude < minimum * minimum) 
-                { } else
-                {
-                _foundBoxes.Add(box); 
-                }
+                if((box.transform.position - origin.position).sqrMagnitude > minimum * minimum) 
+                    { 
+                    _foundBoxes.Add(box); 
+                    }
             }
         }
 
