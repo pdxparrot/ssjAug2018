@@ -262,7 +262,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 UpdateHandRaycasts();
                 UpdateHeadRaycasts();
                 UpdateChestRaycasts();
-                UpdateFootRaycasts();
             } finally {
                 Profiler.EndSample();
             }
