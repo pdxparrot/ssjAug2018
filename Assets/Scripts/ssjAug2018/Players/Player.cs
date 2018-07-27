@@ -33,7 +33,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private Camera.Viewer _viewer;
 
         [CanBeNull]
-        public Camera.Viewer Viewer => _viewer;
+        public override Core.Camera.Viewer Viewer => _viewer;
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -81,7 +81,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
             _viewer?.Initialize(this);
 
-            PlayerController.Initialize(this, PlayerManager.Instance.PlayerData, PlayerManager.Instance.PlayerData.ControllerData);
+            PlayerController.Initialize(this);
 
             // TODO: encapsulate this somewhere better
             PlayerController.Rigidbody.mass = PlayerManager.Instance.PlayerData.Mass;

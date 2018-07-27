@@ -8,11 +8,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e9307fdead9ca49b104adaac128495, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: 74d87e80ee0e1ab4fabec381ffa8538a, type: 3}
+  m_Name: PlayerControllerData
   m_EditorClassIdentifier: 
-  _controllerData: {fileID: 11400000, guid: b1063409d4080b544b23ec155a621d14, type: 2}
-  _mass: 275
-  _drag: 0
-  _angularDrag: 0
+  _attachDistance: 0.1
   _climbSpeed: 10
+  _armRayLength: 2
+  _wrapAroundAngle: 30
+  _headRayLength: 2
+  _headRayAngle: 30
+  _chestRayLength: 2
+  _footRayLength: 2
+  _footRayAngle: 30

@@ -1,99 +1,208 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using System;
+using System.Collections;
+
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
-using pdxpartyparrot.Game.Data;
 using pdxpartyparrot.ssjAug2018.Data;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.Serialization;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerController : ThirdPersonController
     {
-#region Grab Check
-        [Header("Grab Check")]
+        private enum MovementState
+        {
+            Platforming,
+            Climbing
+        }
 
         [SerializeField]
-        private Transform _leftGrabCheckTransform;
+        private PlayerControllerData _playerControllerData;
 
-        [SerializeField]
-        private Transform _rightGrabCheckTransform;
-
-        [SerializeField]
-        private float _grabCheckRadius = 1;
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canGrabLeft;
+#region Movement State
+        [Header("Movement State")]
 
         [SerializeField]
         [ReadOnly]
-        private bool _canGrabRight;
+        private MovementState _movementState = MovementState.Platforming;
 
-        public bool CanGrab => (_canGrabLeft || _canGrabRight) && !_isClimbing && !_isSwinging;
+        public bool IsClimbing => MovementState.Climbing == _movementState;
 
-        private Collider[] _overlapResults = new Collider[1];
-
-        private IGrabbable _leftGrabbedObject;
-
-        private IGrabbable _rightGrabbedObject;
+        public bool IsGrabbing => MovementState.Platforming != _movementState;
 #endregion
 
+        [Space(10)]
+
+#region Hands
+        [Header("Hands")]
+
         [SerializeField]
-        [ReadOnly]
-        private bool _isClimbing;
+        [FormerlySerializedAs("_leftGrabCheckTransform")]
+        private Transform _leftHandTransform;
 
-        public bool IsClimbing => _isClimbing;
+        private RaycastHit? _leftHandHitResult;
+
+        public bool CanGrabLeft => null != _leftHandHitResult;
 
         [SerializeField]
-        [ReadOnly]
-        private bool _isSwinging;
+        [FormerlySerializedAs("_rightGrabCheckTransform")]
+        private Transform _rightHandTransform;
 
-        public bool IsSwinging => _isSwinging;
+        private RaycastHit? _rightHandHitResult;
 
-        public bool IsGrabbing => IsClimbing || IsSwinging;
+        public bool CanGrabRight => null != _rightHandHitResult;
+#endregion
+
+        [Space(10)]
+
+#region Head
+        [Header("Head")]
+
+        [SerializeField]
+        private Transform _headTransform;
+
+        private RaycastHit? _headHitResult;
+#endregion
+
+        [Space(10)]
+
+#region Head
+        [Header("Chest")]
+
+        [SerializeField]
+        private Transform _chestTransform;
+
+        private RaycastHit? _chestHitResult;
+#endregion
+
+        public bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
+
+        [Space(10)]
+
+#region Feet
+        [Header("Feet")]
+
+        [SerializeField]
+        private Transform _footTransform;
+
+        private RaycastHit?[] _footHitResults = new RaycastHit?[4];     // (top-down) N, E, S, W
+
+        public bool CanDropDown => !IsClimbing && (null == _footHitResults[0] || null == _footHitResults[1] || null == _footHitResults[2] || null == _footHitResults[3]);
+#endregion
 
         public Player Player => (Player)Owner;
 
-        private PlayerData _playerData;
-
 #region Unity Lifecycle
-        protected override void FixedUpdate()
+        protected override void Awake()
         {
-            base.FixedUpdate();
+            base.Awake();
 
-            UpdateCanGrab();
-
-            CheckShouldRotateOrClimb();
+            Debug.Assert(Math.Abs(_leftHandTransform.position.y - _rightHandTransform.position.y) < float.Epsilon, "Player hands are at different heights!");
+            Debug.Assert(_headTransform.position.y > _leftHandTransform.position.y, "Player head should be above player hands!");
+            Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
         }
 
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
 
-            Gizmos.color = _canGrabLeft ? Color.red : Color.yellow;
-            Gizmos.DrawWireSphere(LeftGrabCheckCenter(), _grabCheckRadius);
+// TODO: encapsulate the math here so we a) don't duplicate it in the raycast methods and b) guarantee we always match the math done in the raycast methods
 
-            Gizmos.color = _canGrabRight ? Color.red : Color.yellow;
-            Gizmos.DrawWireSphere(RightGrabCheckCenter(), _grabCheckRadius);
+            // left hand
+            Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
+            Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * _playerControllerData.ArmRayLength);
+            if(IsClimbing && !CanGrabLeft && CanGrabRight) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+            }
+
+            // right hand
+            Gizmos.color = null != _rightHandHitResult ? Color.red : Color.yellow;
+            Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + transform.forward * _playerControllerData.ArmRayLength);
+            if(IsClimbing && CanGrabLeft && !CanGrabRight) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(-_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+            }
+
+            if(IsClimbing) {
+                // head
+                Gizmos.color = null != _headHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_headTransform.position, _headTransform.position + (Quaternion.AngleAxis(-_playerControllerData.HeadRayAngle, transform.right) * transform.forward) * _playerControllerData.HeadRayLength);
+
+                if(!CanGrabLeft && !CanGrabRight && CanClimbUp) {
+                    Gizmos.color = Color.white;
+                    Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-_playerControllerData.HeadRayAngle, transform.right) * transform.forward) * _playerControllerData.HeadRayLength;
+                    Vector3 end = start + Player.CapsuleCollider.height * -Vector3.up;
+                    Gizmos.DrawLine(start, end);
+                }
+
+                // chest
+                Gizmos.color = null != _chestHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_chestTransform.position, _chestTransform.position + transform.forward * _playerControllerData.ChestRayLength);
+            }
+
+            // feet
+            if(!IsGrabbing && IsGrounded) {
+                Gizmos.color = null != _footHitResults[0] ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(0.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
+                Gizmos.color = null != _footHitResults[1] ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(90.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
+                Gizmos.color = null != _footHitResults[2] ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(180.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
+                Gizmos.color = null != _footHitResults[3] ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(270.0f, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward) * _playerControllerData.FootRayLength);
+            }
         }
 #endregion
 
-        public void Initialize(Player player, PlayerData playerData, ThirdPersonControllerData controllerData)
+        public void Initialize(Player player)
         {
-            base.Initialize(player, controllerData);
+            base.Initialize(player);
 
-            _playerData = playerData;
+            StartCoroutine(RaycastRoutine());
+        }
+
+        public override void AnimationMove(Vector3 axes, float dt)
+        {
+            if(IsGrabbing) {
+                return;
+            }
+
+            base.AnimationMove(axes, dt);
+        }
+
+        public override void PhysicsMove(Vector3 axes, float dt)
+        {
+            if(!IsGrabbing) {
+                base.PhysicsMove(axes, dt);
+                return;
+            }
+
+            Vector3 velocity = transform.localRotation * (axes * _playerControllerData.ClimbSpeed);
+            if(IsGrounded && velocity.y < 0.0f) {
+                velocity.y = 0.0f;
+            }
+            Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
         }
 
 #region Actions
         public void Grab()
         {
-            if(!CanGrab) {
+            if(IsGrabbing || (!CanGrabLeft && !CanGrabRight)) {
                 return;
             }
 
             EnableClimbing(true);
+
+            if(null != _leftHandHitResult) {
+                AttachToSurface(_leftHandHitResult.Value);
+            } else if(null != _rightHandHitResult) {
+                AttachToSurface(_rightHandHitResult.Value);
+            }
         }
 
         public void Drop()
@@ -107,44 +216,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Throw()
         {
-// TODO
-        }
-
-        public override void AnimationMove(Vector3 axes, float dt)
-        {
-            if(IsGrabbing) {
-                return;
-            }
-
-            // align the player with the camera
-            if(null != Player.Viewer) {
-                Vector3 viewerForward = Player.Viewer.transform.forward;
-                viewerForward.y = 0.0f;
-                transform.forward = viewerForward.normalized;
-            }
-
-            // align the model with the movement
-            Vector3 look = new Vector3(axes.x, 0.0f, axes.y);
-            if(look.sqrMagnitude >= float.Epsilon) {
-                Player.Model.transform.forward =  (transform.rotation * look).normalized;
-            }
-
-            base.AnimationMove(axes, dt);
-        }
-
-        public override void PhysicsMove(Vector3 axes, float dt)
-        {
-            if(!IsGrabbing) {
-                base.PhysicsMove(axes, dt);
-                return;
-            }
-
-            Vector3 velocity = transform.localRotation * (axes * _playerData.ClimbSpeed);
-            if(IsGrounded && velocity.y < 0.0f) {
-                velocity.y = 0.0f;
-            }
-
-            Rigidbody.MovePosition(transform.position + velocity * dt);
+            Debug.Log("TODO: throw!");
         }
 
         public override void Jump(bool force=false)
@@ -160,146 +232,265 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void EnableGrabbing(bool enable)
         {
             EnableClimbing(enable);
-            EnableSwinging(enable);
         }
 
         private void EnableClimbing(bool enable)
         {
-            //Debug.Log($"Enable climbing: {enable}");
-
-            _isClimbing = enable;
+            _movementState = enable ? MovementState.Climbing : MovementState.Platforming;
             Rigidbody.isKinematic = enable;
         }
 
-        private void EnableSwinging(bool enable)
+        private IEnumerator RaycastRoutine()
         {
-            //Debug.Log($"Enable swinging: {enable}");
+            WaitForSeconds wait = new WaitForSeconds(RaycastRoutineRate);
+            while(true) {
+                UpdateRaycasts();
 
-            _isSwinging = enable;
-            Rigidbody.isKinematic = enable;
+                HandleRaycasts();
+
+                yield return wait;
+            }
         }
 
-#region Grab Check
-        private Vector3 LeftGrabCheckCenter()
+        private void UpdateRaycasts()
         {
-            Vector3 center = _leftGrabCheckTransform != null ? _leftGrabCheckTransform.position : transform.position;
-            return new Vector3(center.x, center.y + _grabCheckRadius - 0.1f, center.z);
+            Profiler.BeginSample("PlayerController.UpdateRaycasts");
+            try {
+                UpdateHandRaycasts();
+                UpdateHeadRaycasts();
+                UpdateChestRaycasts();
+                UpdateFootRaycasts();
+            } finally {
+                Profiler.EndSample();
+            }
         }
 
-        private Vector3 RightGrabCheckCenter()
+#region Hand Raycasts
+        private void UpdateHandRaycasts()
         {
-            Vector3 center = _rightGrabCheckTransform != null ? _rightGrabCheckTransform.position : transform.position;
-            return new Vector3(center.x, center.y + _grabCheckRadius - 0.1f, center.z);
+            UpdateLeftHandRaycasts();
+            UpdateRightHandRaycasts();
         }
 
-        private void UpdateCanGrab()
+        private void UpdateLeftHandRaycasts()
         {
-            // NOTE: right can overwrite whatever left would have grabbed
-            // that might be an issue at some point depending on how things work out design-wise
-            UpdateCanGrabLeft();
-            UpdateCanGrabRight();
-        }
+            _leftHandHitResult = null;
 
-        private void UpdateCanGrabLeft()
-        {
-            _canGrabLeft = false;
-
-            int hitCount = Physics.OverlapSphereNonAlloc(LeftGrabCheckCenter(), _grabCheckRadius, _overlapResults, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-            for(int i=0; i<hitCount; ++i) {
-                Collider hit = _overlapResults[i];
-
-                IGrabbable grabbable = hit.GetComponent<IGrabbable>();
+            RaycastHit hit;
+            if(Physics.Raycast(_leftHandTransform.position, transform.forward, out hit, _playerControllerData.ArmRayLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
                 if(null != grabbable) {
-                    _canGrabLeft = true;
-                    _leftGrabbedObject = grabbable;
-                    break;
+                    _leftHandHitResult = hit;
                 }
             }
         }
 
-        private void UpdateCanGrabRight()
+        private void UpdateRightHandRaycasts()
         {
-            _canGrabRight = false;
+            _rightHandHitResult = null;
 
-            int hitCount = Physics.OverlapSphereNonAlloc(RightGrabCheckCenter(), _grabCheckRadius, _overlapResults, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
-            for(int i=0; i<hitCount; ++i) {
-                Collider hit = _overlapResults[i];
-
-                IGrabbable grabbable = hit.GetComponent<IGrabbable>();
+            RaycastHit hit;
+            if(Physics.Raycast(_rightHandTransform.position, transform.forward, out hit, _playerControllerData.ArmRayLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
                 if(null != grabbable) {
-                    _canGrabRight = true;
-                    _rightGrabbedObject = grabbable;
-                    break;
+                    _rightHandHitResult = hit;
                 }
             }
         }
 #endregion
 
-#region Auto-Rotate/Climb
-        private void CheckShouldRotateOrClimb()
+#region Head Raycasts
+        private void UpdateHeadRaycasts()
         {
-            if(!IsGrabbing) {
+            if(!IsClimbing) {
                 return;
             }
 
-            float radius = Player.CapsuleCollider.radius;
-            float armheight = _rightGrabCheckTransform.localPosition.y - _grabCheckRadius;
+            _headHitResult = null;
 
-// TODO: smooth/animate these things
-            if(!_canGrabLeft && _canGrabRight) {
-                if(CheckRotateLeft()) {
-                    transform.Rotate(Vector3.up, 90.0f);
-                    transform.position += transform.localRotation * new Vector3(-radius - 0.1f, 0.0f, -radius);
+            RaycastHit hit;
+            if(Physics.Raycast(_headTransform.position, Quaternion.AngleAxis(-_playerControllerData.HeadRayAngle, transform.right) * transform.forward, out hit, _playerControllerData.HeadRayLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+                if(null != grabbable) {
+                    _headHitResult = hit;
                 }
-            } else if(_canGrabLeft && !_canGrabRight) {
-                if(CheckRotateRight()) {
-                    transform.Rotate(Vector3.up, -90.0f);
-                    transform.position += transform.localRotation * new Vector3(radius + 0.1f, 0.0f, -radius);
+            }
+        }
+#endregion
+
+#region Chest Raycasts
+        private void UpdateChestRaycasts()
+        {
+            if(!IsClimbing) {
+                return;
+            }
+
+            _chestHitResult = null;
+
+            RaycastHit hit;
+            if(Physics.Raycast(_chestTransform.position, transform.forward, out hit, _playerControllerData.ChestRayLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+                if(null != grabbable) {
+                    _chestHitResult = hit;
                 }
-            } else if(!_canGrabLeft && !_canGrabRight) {
-                if(CheckClimbUp()) {
-                    transform.position += transform.localRotation * new Vector3(0.0f, armheight, radius);
+            }
+        }
+#endregion
+
+#region Foot Raycasts
+        private void UpdateFootRaycasts()
+        {
+            if(IsGrabbing || !IsGrounded) {
+                return;
+            }
+
+            UpdateFootRaycast(0, 0.0f);
+            UpdateFootRaycast(1, 90.0f);
+            UpdateFootRaycast(2, 180.0f);
+            UpdateFootRaycast(3, 270.0f);
+        }
+
+        private void UpdateFootRaycast(int idx, float angle)
+        {
+            _footHitResults[idx] = null;
+
+            RaycastHit hit;
+            if(Physics.Raycast(_footTransform.position, Quaternion.AngleAxis(angle, transform.up) * Quaternion.AngleAxis(_playerControllerData.FootRayAngle, transform.right) * transform.forward, out hit, _playerControllerData.FootRayLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                _footHitResults[idx] = hit;
+            }
+        }
+#endregion
+
+        private void HandleRaycasts()
+        {
+            Profiler.BeginSample("PlayerController.HandleRaycasts");
+            try {
+                if(IsClimbing) {
+                    HandleClimbingRaycasts();
+                }
+            } finally {
+                Profiler.EndSample();
+            }
+        }
+
+        private void HandleClimbingRaycasts()
+        {
+            if(!CanGrabLeft && CanGrabRight) {
+                CheckRotateLeft();
+            } else if(CanGrabLeft && !CanGrabRight) {
+                CheckRotateRight();
+            } else if(!CanGrabLeft && !CanGrabRight) {
+                if(CanClimbUp) {
+                    CheckClimbUp();
                 } else {
-                    //Debug.Log("fell off");
+                    Debug.LogWarning("Unexpectedly fell off!");
                     EnableGrabbing(false);
+                    Debug.Break();
                 }
             }
         }
 
-// TODO: these could probably pass back the predicted position/rotation to so we don't have to re-do the math in CheckShouldRotateOrClimb()
-
+#region Auto-Rotate/Climb
         private bool CheckRotateLeft()
         {
-            // TODO: 0.5 necessary?
-            float radius = Player.CapsuleCollider.radius * 0.5f;
+            if(null == _rightHandHitResult) {
+                return false;
+            }
 
-            Vector3 movement = transform.localRotation * new Vector3(radius, 0.0f, radius);
-            Vector3 position = LeftGrabCheckCenter() + movement;
+            RaycastHit hit;
+            if(!Physics.Raycast(_leftHandTransform.position, Quaternion.AngleAxis(_playerControllerData.WrapAroundAngle, transform.up) * transform.forward, out hit, _playerControllerData.ArmRayLength * 2.0f, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                return false;
+            }
 
-            return Physics.CheckSphere(position, _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+            IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+            if(null == grabbable) {
+                return false;
+            }
+
+            if(hit.normal == _rightHandHitResult.Value.normal) {
+                return false;
+            }
+
+            AttachToSurface(hit);
+            _leftHandHitResult = hit;
+
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * -transform.right;
+            Rigidbody.position += offset;
+
+            return true;
         }
 
         private bool CheckRotateRight()
         {
-            // TODO: 0.5 necessary?
-            float radius = Player.CapsuleCollider.radius * 0.5f;
+            if(null == _leftHandHitResult) {
+                return false;
+            }
 
-            Vector3 movement = transform.localRotation * new Vector3(-radius, 0.0f, radius);
-            Vector3 position = RightGrabCheckCenter() + movement;
+            RaycastHit hit;
+            if(!Physics.Raycast(_rightHandTransform.position, Quaternion.AngleAxis(-_playerControllerData.WrapAroundAngle, transform.up) * transform.forward, out hit, _playerControllerData.ArmRayLength * 2.0f, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                return false;
+            }
 
-            return Physics.CheckSphere(position, _grabCheckRadius, CollisionCheckIgnoreLayerMask, QueryTriggerInteraction.Ignore);
+            IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+            if(null == grabbable) {
+                return false;
+            }
+
+            if(hit.normal == _leftHandHitResult.Value.normal) {
+                return false;
+            }
+
+            AttachToSurface(hit);
+            _rightHandHitResult = hit;
+
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.right;
+            Rigidbody.position += offset;
+
+            return true;
+
         }
 
         private bool CheckClimbUp()
         {
-            float radius = Player.CapsuleCollider.radius;
-            float armheight = _rightGrabCheckTransform.localPosition.y - _grabCheckRadius;
+            // cast a ray from the end of our rotated head check straight down to see if we can stand here
+            Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-_playerControllerData.HeadRayAngle, transform.right) * transform.forward) * _playerControllerData.HeadRayLength;
+            float length = Player.CapsuleCollider.height;
 
-            Vector3 groundCheckCenter = GetGroundCheckCenter();
-            Vector3 movement = transform.localRotation * new Vector3(0.0f, armheight, radius);
+            RaycastHit hit;
+            if(!Physics.Raycast(start, -Vector3.up, out hit, length, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                return false;
+            }
 
-            return CheckIsGrounded(groundCheckCenter + movement);
+            ClimbUp(hit);
+
+            return true;
         }
 #endregion
+
+// TODO: smooth/animate these things
+
+        private void AttachToSurface(RaycastHit hit)
+        {
+            // align to the surface
+            transform.forward = -hit.normal;
+
+            // keep a set distance away from the surface
+            Vector3 targetPoint = hit.point + (hit.normal * _playerControllerData.AttachDistance);
+            Vector3 a = targetPoint - Rigidbody.position;
+            Vector3 p = Vector3.Project(a, hit.normal);
+            Vector3 offset = Player.CapsuleCollider.radius * hit.normal;
+            Rigidbody.position += p + offset;
+        }
+
+        private void ClimbUp(RaycastHit hit)
+        {
+            Vector3 targetPoint = hit.point + (hit.normal * _playerControllerData.AttachDistance);
+            Vector3 a = targetPoint - Rigidbody.position;
+            Vector3 p = Vector3.Project(a, hit.normal);
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
+            Rigidbody.position += p + offset;
+
+            EnableGrabbing(false);
+        }
     }
 }

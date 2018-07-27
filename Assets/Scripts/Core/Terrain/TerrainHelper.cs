@@ -22,13 +22,13 @@ namespace pdxpartyparrot.Core.Terrain
         private UnityEngine.Terrain _bottom;
 #endregion
 
-        private UnityEngine.Terrain _terrain;
+        public UnityEngine.Terrain Terrain { get; private set; }
 
 #region Unity Lifecycle
-        private void Awake()
+        private void Start()
         {
-            _terrain = GetComponent<UnityEngine.Terrain>();
-            _terrain.SetNeighbors(_left, _top, _right, _bottom);
+            Terrain = GetComponent<UnityEngine.Terrain>();
+            Terrain.SetNeighbors(_left, _top, _right, _bottom);
 
             TerrainManager.Instance.RegisterTerrain(this);
         }

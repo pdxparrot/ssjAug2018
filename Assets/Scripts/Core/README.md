@@ -191,3 +191,7 @@
 * **TODO:** Create the PlayerManager script/prefab
   * This must be a prefab due to the abstract base class
 * **TODO:** Create the Player script/prefab
+
+# Performance Notes
+
+* Mark all static objects as Static in their prefab editor

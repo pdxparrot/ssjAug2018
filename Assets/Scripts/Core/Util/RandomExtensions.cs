@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 namespace pdxpartyparrot.Core.Util
 {
     public static class RandomExtensions
     {
 #region Random Collection Entries
+        [CanBeNull]
         public static T GetRandomEntry<T>(this Random random, IReadOnlyCollection<T> collection)
         {
             if(collection.Count < 1) {
@@ -17,6 +20,7 @@ namespace pdxpartyparrot.Core.Util
             return collection.ElementAt(idx);
         }
 
+        [CanBeNull]
         public static T RemoveRandomEntry<T>(this Random random, IList<T> collection)
         {
             if(collection.Count < 1) {

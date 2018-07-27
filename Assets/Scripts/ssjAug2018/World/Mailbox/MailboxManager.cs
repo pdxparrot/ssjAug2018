@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
-    public class MailboxManager : SingletonBehavior<MailboxManager>
+    public sealed class MailboxManager : SingletonBehavior<MailboxManager>
     {
         private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
-        protected System.Random Random;
+        private System.Random Random;
 
         private int _maxMailboxes;
         private int _activeMailboxes;
@@ -43,12 +43,12 @@ namespace pdxpartyparrot.ssjAug2018.World
 #endregion
 
 #region Registration
-        public virtual void RegisterMailbox(Mailbox mailbox)
+        public void RegisterMailbox(Mailbox mailbox)
         {
             _mailboxes.Add(mailbox);
         }
 
-        public virtual void UnregisterMailbox(Mailbox mailbox)
+        public void UnregisterMailbox(Mailbox mailbox)
         {
             _mailboxes.Remove(mailbox);
         }
@@ -70,9 +70,12 @@ namespace pdxpartyparrot.ssjAug2018.World
             if(!_foundBoxes.TrueForAll(Mailbox.PreviouslyActivated)) _foundBoxes.RemoveAll(Mailbox.PreviouslyActivated);
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
             _seedBox = (_foundBoxes.Count == 0) 
-                ? Random.GetRandomEntry<Mailbox>(_mailboxes) 
-                : Random.GetRandomEntry<Mailbox>(_foundBoxes);
-
+                ? Random.GetRandomEntry(_mailboxes) 
+                : Random.GetRandomEntry(_foundBoxes);
+            if(null == _seedBox) {
+                Debug.LogWarning("No seed mailbox found!");
+                return;
+            }
 
             // Determine how many boxes we need for the set but don't go over remaining
             int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);

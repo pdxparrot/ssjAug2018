@@ -161,6 +161,8 @@ namespace pdxpartyparrot.Core.Camera
         [ReadOnly]
         private bool _isLooking;
 
+        public bool IsLooking => _isLooking;
+
 #region Unity Lifecycle
         private void Update()
         {
@@ -211,11 +213,7 @@ namespace pdxpartyparrot.Core.Camera
 
             Profiler.BeginSample("FollowCamera.HandleInput");
             try {
-                bool wasLooking = _isLooking;
-                _isLooking = Target.LastLookAxes.sqrMagnitude >= float.Epsilon;
-                if(!wasLooking && !_isLooking) {
-                    return;
-                }
+                _isLooking = Target.LastLookAxes.sqrMagnitude > float.Epsilon;
 
                 Orbit(Target.LastLookAxes, dt);
                 Zoom(Target.LastLookAxes, dt);

@@ -51,5 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35ae99a29c70e334fb4725e34080be7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneName: test_terrain04
+  _sceneName: test_terrain02
   _makeSceneActive: 1

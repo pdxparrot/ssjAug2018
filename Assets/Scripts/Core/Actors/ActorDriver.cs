@@ -21,6 +21,8 @@ namespace pdxpartyparrot.Core.Actors
         [ReadOnly]
         private bool _isMoving;
 
+        public bool IsMoving => _isMoving;
+
         protected ActorController Controller { get; private set; }
 
         protected IActor Owner { get; private set; }
@@ -28,34 +30,26 @@ namespace pdxpartyparrot.Core.Actors
         protected virtual bool CanDrive => !PartyParrotManager.Instance.IsPaused;
 
 #region Unity Lifecycle
-        private void Update()
+        protected virtual void Update()
         {
             if(!CanDrive) {
                 return;
             }
 
-            float dt = Time.deltaTime;
+            _isMoving = LastMoveAxes.sqrMagnitude > float.Epsilon;
 
-            bool wasMoving = _isMoving;
-            _isMoving = LastMoveAxes.sqrMagnitude >= float.Epsilon;
-            if(!wasMoving && !_isMoving) {
-                return;
-            }
+            float dt = Time.deltaTime;
 
             Controller.AnimationMove(LastMoveAxes, dt);
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if(!CanDrive) {
                 return;
             }
 
             float dt = Time.fixedDeltaTime;
-
-            if(!_isMoving) {
-                return;
-            }
 
             Controller.PhysicsMove(LastMoveAxes, dt);
         }
