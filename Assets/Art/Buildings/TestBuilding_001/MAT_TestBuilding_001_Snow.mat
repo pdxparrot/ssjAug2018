@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MAT_TestBuilding_001
-  m_Shader: {fileID: 4800000, guid: c892c6c5e649b8c4b85352fea5996aab, type: 3}
+  m_Name: MAT_TestBuilding_001_Snow
+  m_Shader: {fileID: 4800000, guid: 49f0474793180f141933b266ef6e8c5b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -74,10 +74,6 @@ Material:
         m_Texture: {fileID: 2800000, guid: edbb0beb9a3527e4eae339eeb800d69a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Material1_MR:
-        m_Texture: {fileID: 2800000, guid: a921aa2d185600f4c852883f35b3bdfa, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Material1_Metallic:
         m_Texture: {fileID: 2800000, guid: 3200d2d67727a1f48a0c6d2041779c27, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -98,10 +94,6 @@ Material:
         m_Texture: {fileID: 18700000, guid: 9e68fd9253d6b5f49a538eb963199c94, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Material2_MR:
-        m_Texture: {fileID: 2800000, guid: c76244eb879ebf94592070eded589cb9, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Material2_Metallic:
         m_Texture: {fileID: 2800000, guid: c00965e6271057242b59eaf34bcd3177, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -120,10 +112,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Material3_Array:
         m_Texture: {fileID: 18700000, guid: 126ad50cba129524e82f6ec7fe0fa046, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Material3_MR:
-        m_Texture: {fileID: 2800000, guid: a61162f2f44f480479b198094eabd04b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Material3_Metallic:
@@ -166,6 +154,18 @@ Material:
         m_Texture: {fileID: 18700000, guid: ad280c83e3b496f4293f616530e6d565, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureArray0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureArray10:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TextureArray8:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -196,15 +196,15 @@ Material:
     - _Material2_NormalScale: 1
     - _Material2_TintStrength: 1
     - _Material3_NormalScale: 1
-    - _Material3_TintStrength: 0.423
+    - _Material3_TintStrength: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _Snow_Amount: 0.13
+    - _Snow_Amount: 2
     - _Snow_Metallic: 0
-    - _Snow_NormalScale: 0
+    - _Snow_NormalScale: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
@@ -217,13 +217,13 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Material1_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Material1_Tiling: {r: 12, g: 12, b: 0, a: 0}
-    - _Material1_TintColor: {r: 1, g: 0.04036469, b: 0, a: 1}
+    - _Material1_TintColor: {r: 1, g: 0, b: 0, a: 1}
     - _Material2_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Material2_Tiling: {r: 10, g: 10, b: 0, a: 0}
-    - _Material2_TintColor: {r: 0.854902, g: 0.70980394, b: 0.43137258, a: 1}
+    - _Material2_Tiling: {r: 20, g: 20, b: 0, a: 0}
+    - _Material2_TintColor: {r: 0.72363824, g: 0.7254902, b: 0.21568628, a: 1}
     - _Material3_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Material3_Tiling: {r: 10, g: 10, b: 0, a: 0}
     - _Material3_TintColor: {r: 0, g: 0, b: 0, a: 1}
     - _Snow_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Snow_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Snow_Tiling: {r: 15, g: 30, b: 0, a: 0}
     - _Window_Color: {r: 11.984314, g: 11.984314, b: 5.3960786, a: 0}
