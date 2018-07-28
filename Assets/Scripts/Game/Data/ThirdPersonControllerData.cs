@@ -14,6 +14,8 @@ namespace pdxpartyparrot.Game.Data
         public LayerMask CollisionCheckLayerMask => _collisionCheckLayerMask;
 
 #region Physics
+        [Header("Physics")]
+
         [SerializeField]
         [Range(0, 50)]
         [Tooltip("Move speed in m/s")]
@@ -29,20 +31,6 @@ namespace pdxpartyparrot.Game.Data
         public float RunThreshold => _runThreshold;
 
         public float RunThresholdSquared => RunThreshold * RunThreshold;
-
-        [SerializeField]
-        [Range(0, 50)]
-        [Tooltip("How high does the character jump")]
-        private float _jumpHeight = 1.0f;
-
-        public float JumpHeight => _jumpHeight;
-
-        [SerializeField]
-        [Range(0, 50)]
-        [Tooltip("How high does the character jump when double jumping")]
-        private float _doubleJumpHeight = 1.0f;
-
-        public float DoubleJumpHeight => _doubleJumpHeight;
 
         [SerializeField]
         [Range(0, 500)]
@@ -65,16 +53,38 @@ namespace pdxpartyparrot.Game.Data
         public float GroundedCheckEpsilon => _groundedCheckEpsilon;
 #endregion
 
-        [SerializeField]
-        [Tooltip("Allow movement while not grounded")]
-        private bool _allowAirControl;
+        [Space(10)]
 
-        public bool AllowAirControl => _allowAirControl;
+#region Jumping
+        [Header("Jumping")]
+
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("How high does the character jump")]
+        private float _jumpHeight = 1.0f;
+
+        public float JumpHeight => _jumpHeight;
+
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("How high does the character jump when double jumping")]
+        private float _doubleJumpHeight = 1.0f;
+
+        public float DoubleJumpHeight => _doubleJumpHeight;
 
         [SerializeField]
         [Tooltip("How many times is the player able to double jump (-1 is infinite)")]
         private int _doubleJumpCount = 0;
 
         public int DoubleJumpCount => _doubleJumpCount;
+#endregion
+
+        [Space(10)]
+
+        [SerializeField]
+        [Tooltip("Allow movement while not grounded")]
+        private bool _allowAirControl;
+
+        public bool AllowAirControl => _allowAirControl;
     }
 }

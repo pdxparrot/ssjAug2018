@@ -17,7 +17,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private enum MovementState
         {
             Platforming,
-            Climbing
+            Climbing,
+            Hovering
         }
 
         [SerializeField]
@@ -32,7 +33,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public bool IsClimbing => MovementState.Climbing == _movementState;
 
-        public bool IsGrabbing => MovementState.Platforming != _movementState;
+        public bool IsGrabbing => IsClimbing;
+
+        public bool IsHovering => MovementState.Hovering == _movementState;
 #endregion
 
         [Space(10)]
@@ -83,13 +86,39 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
+#region Jumping
+        [Header("Jumping")]
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _canJump;
+
         [SerializeField]
         [ReadOnly]
         private long _longJumpTriggerTime;
 
-        private bool CanLongJump => (IsGrounded || IsGrabbing) && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
+        private bool CanLongJump => _longJumpTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
+#endregion
 
-        private bool CanHover => (!IsGrounded && !IsGrabbing) && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
+#region Hover
+        [Header("Hover")]
+
+        [SerializeField]
+        [ReadOnly]
+        private long _hoverTriggerTime;
+
+        [SerializeField]
+        [ReadOnly]
+        private int _hoverTimeMs;
+
+        [SerializeField]
+        [ReadOnly]
+        private long _hoverCooldownEndTime;
+
+        private bool IsHoverCooldown => TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
+
+        private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;
+#endregion
 
         public Player Player => (Player)Owner;
 
@@ -101,6 +130,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Assert(Math.Abs(_leftHandTransform.position.y - _rightHandTransform.position.y) < float.Epsilon, "Player hands are at different heights!");
             Debug.Assert(_headTransform.position.y > _leftHandTransform.position.y, "Player head should be above player hands!");
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
+        }
+
+        private void Update()
+        {
+            float dt = Time.deltaTime;
+
+            UpdateHovering(dt);
         }
 
         protected override void OnDrawGizmos()
@@ -176,16 +212,20 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
-            if(!IsGrabbing) {
-                base.PhysicsMove(axes, dt);
-                return;
-            }
+            if(IsGrabbing) {
+                Vector3 velocity = transform.localRotation * (axes * _playerControllerData.ClimbSpeed);
+                if(IsGrounded && velocity.y < 0.0f) {
+                    velocity.y = 0.0f;
+                }
+                Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
+            } else if(IsHovering) {
+                Vector3 acceleration = (_playerControllerData.HoverAcceleration + ControllerData.FallSpeedAdjustment) * Vector3.up;
+                Rigidbody.AddForce(acceleration, ForceMode.Acceleration);
 
-            Vector3 velocity = transform.localRotation * (axes * _playerControllerData.ClimbSpeed);
-            if(IsGrounded && velocity.y < 0.0f) {
-                velocity.y = 0.0f;
+                base.PhysicsMove(axes, dt);
+            } else {
+                base.PhysicsMove(axes, dt);
             }
-            Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
         }
 
 #region Actions
@@ -220,7 +260,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void JumpStart()
         {
-            _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
+            _canJump = true;
+            _longJumpTriggerTime = 0;
+            _hoverTriggerTime = 0;
+
+            if(IsGrounded || IsGrabbing) {
+                _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
+            } else if(!IsGrounded && !IsGrabbing) {
+                _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
+            }
         }
 
         public override void Jump()
@@ -228,18 +276,20 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(CanLongJump) {
                 DisableGrabbing();
                 DoJump(_playerControllerData.LongJumpHeight);
-            } else if(CanHover) {
-                // shouldn't be grabbing
             } else if(IsGrabbing) {
                 DisableGrabbing();
 
                 // TODO: would be cool if this pushed off the wall if not moving
                 DoJump(ControllerData.JumpHeight);
-            } else {
+            } else if(IsHovering) {
+                EnableHovering(false);
+            } else if(_canJump) {
                 base.Jump();
             }
 
             _longJumpTriggerTime = 0;
+            _hoverTriggerTime = 0;
+            _canJump = true;
         }
 #endregion
 
@@ -255,6 +305,45 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(enable) {
                 DoubleJumpCount = 0;
+            }
+        }
+
+        private void EnableHovering(bool enable)
+        {
+            _movementState = enable ? MovementState.Hovering : MovementState.Platforming;
+
+            if(enable) {
+                _hoverTriggerTime = 0;
+                Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, 0.0f, Rigidbody.velocity.z);
+            } else {
+                _hoverCooldownEndTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverCooldownMs;
+            }
+        }
+
+        private void UpdateHovering(float dt)
+        {
+            int dtms = (int)(dt * 1000.0f);
+
+            if(IsHovering) {
+                if(_hoverTimeMs >= _playerControllerData.HoverTimeMs) {
+                    _hoverTimeMs = _playerControllerData.HoverTimeMs;
+                    EnableHovering(false);
+                } else {
+                    _hoverTimeMs += dtms;
+                }
+                _canJump = false;
+            } else if(!IsHoverCooldown) {
+                _hoverCooldownEndTime = 0;
+                if(_hoverTimeMs > 0) {
+                    _hoverTimeMs -= dtms;
+                    if(_hoverTimeMs < 0) {
+                        _hoverTimeMs = 0;
+                    }
+                }
+
+                if(CanHover) {
+                    EnableHovering(true);
+                }
             }
         }
 

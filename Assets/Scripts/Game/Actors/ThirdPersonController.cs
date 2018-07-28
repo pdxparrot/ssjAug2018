@@ -159,7 +159,10 @@ namespace pdxpartyparrot.Game.Actors
 
             Vector3 speed = axes * ControllerData.MoveSpeed;
             Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : transform.localRotation;
-            Rigidbody.velocity = rotation * new Vector3(speed.x, Rigidbody.velocity.y, speed.y);
+            Vector3 velocity = rotation * new Vector3(speed.x, 0.0f, speed.y);
+            velocity.y = Rigidbody.velocity.y;
+
+            Rigidbody.velocity = velocity;
         }
 
         public virtual void Jump()
