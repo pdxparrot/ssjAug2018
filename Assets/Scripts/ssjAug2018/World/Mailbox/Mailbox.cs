@@ -43,26 +43,22 @@ namespace pdxpartyparrot.ssjAug2018.World
             _isObjective = true;
             _mailRequired = requiredMail;
             _hasActivated = true;
+Debug.Log("Mailbox " + name + " activated requreing " + _mailRequired + " mail");
         }
 
         public void DeactivateMailbox()
         {
             _isObjective = false;
             MailboxManager.Instance.MailboxCompleted();
+Debug.Log("Mailbox " + name + " Deactivated");
         }
 
-        public void OnTriggerEnter(Collider other)
+        public void MailHit()
         {
-            /* PLACEHOLDER FOR WHEN MAIL EXISTS
-            if (other.GetComponent<Mail>().isActiveAndEnabled)
-            {
-                _mailRequired =- 1;
-                if(_mailRequired == 0)
-                {
-                    _isObjective = false;
-                } 
-            }
-            */
+            if(!_isObjective) return;                
+Debug.Log("Hit by mail");
+            _mailRequired--;
+            if(_mailRequired == 0) DeactivateMailbox();
         }
 
         public static bool PreviouslyActivated(Mailbox box)
