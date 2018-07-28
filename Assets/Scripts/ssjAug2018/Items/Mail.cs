@@ -1,5 +1,6 @@
 ﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
+using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -43,6 +44,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
         private void OnTriggerEnter(Collider other)
         {
             RpcHit();
+            other.GetComponent<Mailbox>().MailHit();
         }
 #endregion
 

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4055567972665090}
   - component: {fileID: 33696590784941788}
   - component: {fileID: 23881550991937030}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 54223518626530330}
   - component: {fileID: 65523438493439766}
   - component: {fileID: 114507564963906284}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Mail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4265805418674312}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,3 +249,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c0ab49b4a19a14d811c9b59cde65e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _despawnTime: 0
