@@ -55,7 +55,8 @@ namespace pdxpartyparrot.ssjAug2018.Items
 
         private void OnTriggerEnter(Collider other)
         {
-            RpcHit(other.gameObject.GetComponent<Mailbox>());
+            if(null == other.GetComponent<NetworkIdentity>()) return;
+            RpcHit(other.gameObject);
         }
 #endregion
 
@@ -79,9 +80,10 @@ namespace pdxpartyparrot.ssjAug2018.Items
         }
 
         [ClientRpc]
-        private void RpcHit(Mailbox b)
+        private void RpcHit(GameObject go)
         {
 Debug.Log("hit!");
+            Mailbox b = go.GetComponent<Mailbox>();
             if(b != null) b.MailHit();
             _pooledObject.Recycle();
         }

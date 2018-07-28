@@ -6,6 +6,7 @@ using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
@@ -49,7 +50,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(isServer) {
                 Debug.Log("Unregistering player spawn function");
-                NetworkManager.Instance.SetPlayerSpawnFunc(null);
+                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(null);
             }
 
             Instance = null;
@@ -60,11 +61,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             if(isServer) {
                 Debug.Log("Registering player spawn function");
-                NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
+                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
             }
         }
 
         [CanBeNull]
+        [Server]
         private NetworkActor PlayerSpawnFunc()
         {
             SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();

@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
+    [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(Collider))]
     public sealed class Mailbox : MonoBehaviour {
 
