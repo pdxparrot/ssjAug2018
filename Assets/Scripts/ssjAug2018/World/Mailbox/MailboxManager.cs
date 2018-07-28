@@ -58,9 +58,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
         }
-
-
-        // TODO: Add weight for seed box based on previous activation count
             
         public void ActivateMailboxGroup(Transform origin)
         {
