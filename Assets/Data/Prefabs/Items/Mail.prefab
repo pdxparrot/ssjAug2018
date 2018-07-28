@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4055567972665090}
   - component: {fileID: 33696590784941788}
   - component: {fileID: 23881550991937030}
-  - component: {fileID: 65436933564584086}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -37,8 +36,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4029654216921678}
-  - component: {fileID: 114705363182323612}
-  - component: {fileID: 114892923561384388}
+  - component: {fileID: 114151638378702008}
+  - component: {fileID: 114353463858726766}
+  - component: {fileID: 114428317135913306}
+  - component: {fileID: 54223518626530330}
+  - component: {fileID: 65523438493439766}
+  - component: {fileID: 114507564963906284}
   m_Layer: 0
   m_Name: Mail
   m_TagString: Untagged
@@ -144,19 +147,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1363176112493840}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65436933564584086
+--- !u!54 &54223518626530330
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435623353758846}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &65523438493439766
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1363176112493840}
+  m_GameObject: {fileID: 1435623353758846}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.5, y: 0.25, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114705363182323612
+--- !u!114 &114151638378702008
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,7 +185,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d48239f532b46429ad1d3385d9d4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114892923561384388
+--- !u!114 &114353463858726766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435623353758846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 203
+    i1: 147
+    i2: 20
+    i3: 9
+    i4: 169
+    i5: 136
+    i6: 113
+    i7: 212
+    i8: 233
+    i9: 209
+    i10: 101
+    i11: 224
+    i12: 30
+    i13: 152
+    i14: 155
+    i15: 144
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114428317135913306
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435623353758846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114507564963906284
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}

@@ -9,6 +9,7 @@ ScriptedImporter:
     11400008: game/jump
     11400010: game/drop
     11400012: game/grab
+    11400016: game/throw
   externalObjects: {}
   userData: 
   assetBundleName: 

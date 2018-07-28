@@ -62,6 +62,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.grab.performed -= OnGrab;
                 InputManager.Instance.Controls.game.drop.performed -= OnDrop;
+
+                InputManager.Instance.Controls.game.@throw.started -= OnThrowStart;
+                InputManager.Instance.Controls.game.@throw.performed -= OnThrow;
             }
 
             base.OnDestroy();
@@ -88,6 +91,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.grab.performed += OnGrab;
                 InputManager.Instance.Controls.game.drop.performed += OnDrop;
+
+                InputManager.Instance.Controls.game.@throw.started += OnThrowStart;
+                InputManager.Instance.Controls.game.@throw.performed += OnThrow;
             }
         }
 
@@ -175,6 +181,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Player.PlayerController.Drop();
+        }
+
+        private void OnThrowStart(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.StartThrow();
+        }
+
+        private void OnThrow(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.Throw();
         }
 #endregion
 

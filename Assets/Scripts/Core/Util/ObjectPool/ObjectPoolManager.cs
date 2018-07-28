@@ -26,7 +26,7 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
 
             private GameObject _container;
 
-            public ObjectPool(ObjectPoolManager parent, string tag, PooledObject prefab, int size)
+            public ObjectPool(GameObject parent, string tag, PooledObject prefab, int size)
             {
                 Tag = tag;
                 _prefab = prefab;
@@ -62,11 +62,19 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
                 pooledObject.transform.SetParent(parent);
                 pooledObject.gameObject.SetActive(activate);
 
+                if(IsNetwork) {
+                    NetworkServer.Spawn(pooledObject.gameObject);
+                }
+
                 return pooledObject;
             }
 
             public void Recycle(PooledObject pooledObject)
             {
+                if(IsNetwork) {
+                    NetworkServer.UnSpawn(pooledObject.gameObject);
+                }
+
                 // NOTE: de-activate and then repart to avoid hierarchy rebuild
                 pooledObject.gameObject.SetActive(false);
                 pooledObject.transform.SetParent(_container.transform);
@@ -78,10 +86,6 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             {
                 for(int i=0; i<Size; ++i) {
                     PooledObject pooledObject = Instantiate(_prefab);
-                    if(IsNetwork) {
-                        NetworkServer.Spawn(pooledObject.gameObject);
-                    }
-
                     pooledObject.Tag = Tag;
                     Recycle(pooledObject);
                 }
@@ -90,7 +94,14 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
 
         private readonly Dictionary<string, ObjectPool> _objectPools = new Dictionary<string, ObjectPool>();
 
+        private GameObject _poolContainer;
+
 #region Unity Lifecycle
+        private void Awake()
+        {
+            _poolContainer = new GameObject("Object Pools");
+        }
+
         protected override void OnDestroy()
         {
             foreach(var kvp in _objectPools) {
@@ -98,17 +109,22 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             }
             _objectPools.Clear();
 
+            Destroy(_poolContainer);
+            _poolContainer = null;
+
             base.OnDestroy();
         }
 #endregion
 
         public void InitializePool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
         {
+            Debug.Log($"Initializing object pool of size {size} for {poolTag} (allowExpand={allowExpand})");
             InitializePoolInternal(poolTag, prefab, size, allowExpand);
         }
 
         public void InitializeNetworkPool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
         {
+            Debug.Log($"Initializing network object pool of size {size} for {poolTag} (allowExpand={allowExpand})");
             ObjectPool objectPool = InitializePoolInternal(poolTag, prefab, size, allowExpand);
             if(null != objectPool) {
                 objectPool.IsNetwork = true;
@@ -128,7 +144,7 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
                 return objectPool;
             }
 
-            objectPool = new ObjectPool(this, poolTag, prefab, size)
+            objectPool = new ObjectPool(_poolContainer, poolTag, prefab, size)
             {
                 AllowExpand = allowExpand
             };
@@ -152,7 +168,18 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
         public PooledObject GetPooledObject(string poolTag, Transform parent=null, bool activate=true)
         {
             ObjectPool pool = _objectPools.GetOrDefault(poolTag);
-            return pool?.GetPooledObject(parent, activate);
+            if(null == pool) {
+                Debug.Log($"No pool for tag {poolTag}!");
+                return null;
+            }
+            return pool.GetPooledObject(parent, activate);
+        }
+
+        [CanBeNull]
+        public T GetPooledObject<T>(string poolTag, Transform parent=null, bool activate=true) where T: Component
+        {
+            PooledObject po = GetPooledObject(poolTag, parent, activate);
+            return po?.GetComponent<T>();
         }
 
         public void Recycle(PooledObject pooledObject)

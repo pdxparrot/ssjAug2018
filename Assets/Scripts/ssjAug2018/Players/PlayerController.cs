@@ -4,9 +4,11 @@ using System.Collections;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.ssjAug2018.Data;
+using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Profiling;
 using UnityEngine.Serialization;
 
@@ -120,6 +122,17 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;
 #endregion
 
+#region Throwing
+        [SerializeField]
+        [ReadOnly]
+        private bool _canThrow;
+
+        [SerializeField]
+        private long _autoThrowTriggerTime;
+
+        private bool ShouldAutoThrow => _autoThrowTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _autoThrowTriggerTime;
+#endregion
+
         public Player Player => (Player)Owner;
 
 #region Unity Lifecycle
@@ -137,6 +150,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             float dt = Time.deltaTime;
 
             UpdateHovering(dt);
+            UpdateThrowing(dt);
         }
 
         protected override void OnDrawGizmos()
@@ -253,9 +267,32 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
+        public void StartThrow()
+        {
+            _canThrow = true;
+
+            _autoThrowTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.AutoThrowMs;
+        }
+
         public void Throw()
         {
-            Debug.Log("TODO: throw!");
+            if(_canThrow) {
+                DoThrow();
+            }
+
+            _canThrow = true;
+        }
+
+        private void DoThrow()
+        {
+            _autoThrowTriggerTime = 0;
+
+            if(null == Player.Viewer) {
+                Debug.LogWarning("Non-local player doing a throw!");
+                return;
+            }
+
+            Player.CmdThrow(_rightHandTransform.position, Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
         }
 
         public void JumpStart()
@@ -344,6 +381,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 if(CanHover) {
                     EnableHovering(true);
                 }
+            }
+        }
+
+        private void UpdateThrowing(float dt)
+        {
+            if(ShouldAutoThrow) {
+                DoThrow();
+                _canThrow = false;
             }
         }
 

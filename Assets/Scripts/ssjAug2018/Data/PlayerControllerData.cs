@@ -132,5 +132,23 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public float HoverAcceleration => _hoverAcceleration;
 #endregion
+
+        [Space(10)]
+
+#region Throwing
+        [Header("Throwing")]
+
+        [SerializeField]
+        [Range(0, 10)]
+        [Tooltip("Player will auto throw after this many seconds")]
+        private float _autoThrowSeconds = 1.0f;
+
+        public int AutoThrowMs => (int)(_autoThrowSeconds * 1000.0f);
+
+        [SerializeField]
+        private float _throwSpeed = 5.0f;
+
+        public float ThrowSpeed => _throwSpeed;
+#endregion
     }
 }
