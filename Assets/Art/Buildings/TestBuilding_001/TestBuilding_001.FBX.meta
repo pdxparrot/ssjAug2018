@@ -6,10 +6,22 @@ ModelImporter:
     100000: //RootNode
     400000: //RootNode
     2100000: 'Material #13'
+    2100002: 04 - Default
+    2100004: 05 - Default
     2300000: //RootNode
     3300000: //RootNode
     4300000: TestBuilding_001
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 04 - Default
+    second: {fileID: 2100000, guid: 1c2bc2f660411e74cb6e04b193839578, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 05 - Default
+    second: {fileID: 2100000, guid: c8b1cd3e62cb2e441b80a1148d1a1602, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

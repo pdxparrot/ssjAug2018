@@ -119,7 +119,7 @@ Shader "Yeti/VFX/MaskedParticle"
 }
 /*ASEBEGIN
 Version=15401
-1560.8;96;1192;725;1233.342;504.2091;1.593007;True;True
+1976.8;96;776;725;1168.028;544.0345;1.593007;True;False
 Node;AmplifyShaderEditor.TexturePropertyNode;1;-907.9849,297.2349;Float;True;Property;_ParticleMask;Particle Mask;0;0;Create;True;0;0;False;0;None;None;False;white;Auto;Texture2D;0;1;SAMPLER2D;0
 Node;AmplifyShaderEditor.SamplerNode;2;-657.2787,294.8425;Float;True;Property;_TextureSample0;Texture Sample 0;1;0;Create;True;0;0;False;0;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.VertexColorNode;3;-713.7285,58.07937;Float;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -141,4 +141,4 @@ WireConnection;18;1;13;0
 WireConnection;0;2;3;0
 WireConnection;0;9;4;0
 ASEEND*/
-//CHKSM=9F47CEA6F99BBE19C30A0E1AE005AC48ADC0298B
+//CHKSM=8CC7F57D9188698E55AF286F7FD5BC8673E0584A
