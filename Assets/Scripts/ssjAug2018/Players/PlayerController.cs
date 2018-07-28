@@ -299,12 +299,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _canJump = true;
             _longJumpTriggerTime = 0;
-            _hoverTriggerTime = 0;
 
             if(IsGrounded || IsGrabbing) {
                 _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
-            } else if(!IsGrounded && !IsGrabbing) {
-                _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
             }
         }
 
@@ -318,13 +315,27 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 // TODO: would be cool if this pushed off the wall if not moving
                 DoJump(ControllerData.JumpHeight);
-            } else if(IsHovering) {
-                EnableHovering(false);
             } else if(_canJump) {
                 base.Jump();
             }
 
             _longJumpTriggerTime = 0;
+            _canJump = true;
+        }
+
+        public void HoverStart()
+        {
+            _hoverTriggerTime = 0;
+
+            if(!IsGrounded && !IsGrabbing) {
+                _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
+            }
+        }
+
+        public void Hover()
+        {
+            EnableHovering(false);
+
             _hoverTriggerTime = 0;
             _canJump = true;
         }

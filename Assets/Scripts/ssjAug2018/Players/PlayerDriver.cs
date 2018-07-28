@@ -60,6 +60,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
 
+                InputManager.Instance.Controls.game.hover.started -= OnHoverStart;
+                InputManager.Instance.Controls.game.hover.performed -= OnHover;
+
                 InputManager.Instance.Controls.game.grab.performed -= OnGrab;
                 InputManager.Instance.Controls.game.drop.performed -= OnDrop;
 
@@ -88,6 +91,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.jump.started += OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed += OnJump;
+
+                InputManager.Instance.Controls.game.hover.started += OnHoverStart;
+                InputManager.Instance.Controls.game.hover.performed += OnHover;
 
                 InputManager.Instance.Controls.game.grab.performed += OnGrab;
                 InputManager.Instance.Controls.game.drop.performed += OnDrop;
@@ -163,6 +169,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Player.PlayerController.Jump();
+        }
+
+        private void OnHoverStart(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.HoverStart();
+        }
+
+        private void OnHover(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.Hover();
         }
 
         private void OnGrab(InputAction.CallbackContext ctx)
