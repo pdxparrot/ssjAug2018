@@ -24,6 +24,6 @@ MonoBehaviour:
   _longJumpHeight: 24
   _hoverHoldSeconds: 0.25
   _hoverTimeSeconds: 5
-  _hoverCooldownSeconds: 0.1
+  _hoverCooldownSeconds: 0
   _hoverRechargeRate: 1
   _hoverAcceleration: 20
