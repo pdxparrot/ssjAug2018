@@ -1,0 +1,250 @@
+fileFormatVersion: 2
+guid: 4f0f56a61bca4dd45b9e19fd063aadc4
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: chest
+    100002: head
+    100004: hips
+    100006: l_ankle
+    100008: l_ball
+    100010: l_clav
+    100012: l_elbow
+    100014: l_eye
+    100016: l_forearm
+    100018: l_hip
+    100020: l_index_01
+    100022: l_index_02
+    100024: l_index_03
+    100026: l_knee
+    100028: l_lid_dwn
+    100030: l_lid_up
+    100032: l_middle_01
+    100034: l_middle_02
+    100036: l_middle_03
+    100038: l_pinky_01
+    100040: l_pinky_02
+    100042: l_pinky_03
+    100044: l_rocket
+    100046: l_rocket_socket
+    100048: l_rocketFans
+    100050: l_shoulder
+    100052: l_shoulderDist
+    100054: l_thumb_01
+    100056: l_thumb_02
+    100058: l_thumb_03
+    100060: l_wrist
+    100062: neck
+    100064: r_ankle
+    100066: r_ball
+    100068: r_clav
+    100070: r_elbow
+    100072: r_eye
+    100074: r_forearm
+    100076: r_hip
+    100078: r_index_01
+    100080: r_index_02
+    100082: r_index_03
+    100084: r_knee
+    100086: r_lid_dwn
+    100088: r_lid_up
+    100090: r_middle_01
+    100092: r_middle_02
+    100094: r_middle_03
+    100096: r_pinky_01
+    100098: r_pinky_02
+    100100: r_pinky_03
+    100102: r_rocket
+    100104: r_rocket_socket
+    100106: r_rocketFans
+    100108: r_shoulder
+    100110: r_shoulderDist
+    100112: r_thumb_01
+    100114: r_thumb_02
+    100116: r_thumb_03
+    100118: r_wrist
+    100120: rocketPack
+    100122: root
+    100124: spine_01
+    100126: spine_02
+    100128: //RootNode
+    400000: chest
+    400002: head
+    400004: hips
+    400006: l_ankle
+    400008: l_ball
+    400010: l_clav
+    400012: l_elbow
+    400014: l_eye
+    400016: l_forearm
+    400018: l_hip
+    400020: l_index_01
+    400022: l_index_02
+    400024: l_index_03
+    400026: l_knee
+    400028: l_lid_dwn
+    400030: l_lid_up
+    400032: l_middle_01
+    400034: l_middle_02
+    400036: l_middle_03
+    400038: l_pinky_01
+    400040: l_pinky_02
+    400042: l_pinky_03
+    400044: l_rocket
+    400046: l_rocket_socket
+    400048: l_rocketFans
+    400050: l_shoulder
+    400052: l_shoulderDist
+    400054: l_thumb_01
+    400056: l_thumb_02
+    400058: l_thumb_03
+    400060: l_wrist
+    400062: neck
+    400064: r_ankle
+    400066: r_ball
+    400068: r_clav
+    400070: r_elbow
+    400072: r_eye
+    400074: r_forearm
+    400076: r_hip
+    400078: r_index_01
+    400080: r_index_02
+    400082: r_index_03
+    400084: r_knee
+    400086: r_lid_dwn
+    400088: r_lid_up
+    400090: r_middle_01
+    400092: r_middle_02
+    400094: r_middle_03
+    400096: r_pinky_01
+    400098: r_pinky_02
+    400100: r_pinky_03
+    400102: r_rocket
+    400104: r_rocket_socket
+    400106: r_rocketFans
+    400108: r_shoulder
+    400110: r_shoulderDist
+    400112: r_thumb_01
+    400114: r_thumb_02
+    400116: r_thumb_03
+    400118: r_wrist
+    400120: rocketPack
+    400122: root
+    400124: spine_01
+    400126: spine_02
+    400128: //RootNode
+    7400000: Take 001
+    9500000: //RootNode
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 0
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 90
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: root
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: e7c75e290ca3f074b85002abe5877bfe,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
