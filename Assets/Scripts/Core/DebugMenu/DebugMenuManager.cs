@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using JetBrains.Annotations;
 
@@ -33,7 +34,15 @@ namespace pdxpartyparrot.Core.DebugMenu
         [CanBeNull]
         private DebugMenuNode _currentNode;
 
+        [SerializeField]
+        [Range(0, 1000)]
+        private int _fpsAccumulatorSize = 100;
+
         private float _lastFPS;
+
+        private readonly Queue<float> _fpsAccumulator = new Queue<float>();
+
+        private float AverageFPS => _fpsAccumulator.Average();
 
 #region Unity Lifecycle
         private void Awake()
@@ -71,6 +80,10 @@ namespace pdxpartyparrot.Core.DebugMenu
             }
 
             _lastFPS = 1.0f / Time.unscaledDeltaTime;
+            _fpsAccumulator.Enqueue(_lastFPS);
+            if(_fpsAccumulator.Count > _fpsAccumulatorSize) {
+                _fpsAccumulator.Dequeue();
+            }
         }
 
         private void OnGUI()
@@ -110,6 +123,7 @@ namespace pdxpartyparrot.Core.DebugMenu
         {
             if(null == _currentNode) {
                 GUILayout.Label($"FPS: {(int)_lastFPS}");
+                GUILayout.Label($"Average FPS: {(int)AverageFPS}");
 
                 _windowScrollPos = GUILayout.BeginScrollView(_windowScrollPos);
                     foreach(DebugMenuNode node in _nodes) {

@@ -100,7 +100,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public void CmdThrow(Vector3 origin, Vector3 direction, float speed)
         {
             Mail mail = ItemManager.Instance.GetMail();
-            mail?.Throw(origin, direction, speed);
+            mail?.Throw(this, origin, direction, speed);
         }
 #endregion
 

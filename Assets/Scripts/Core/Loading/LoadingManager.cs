@@ -27,6 +27,9 @@ namespace pdxpartyparrot.Core.Loading
         private PartyParrotManager _engineManagerPrefab;
 
         [SerializeField]
+        private DebugMenuManager _debugMenuManagerPrefab;
+
+        [SerializeField]
         private AudioManager _audioManagerPrefab;
 
         [SerializeField]
@@ -86,7 +89,7 @@ namespace pdxpartyparrot.Core.Loading
             DOTween.Init();
 
             // these managers must come first, in this order
-            DebugMenuManager.Create(ManagersContainer);
+            DebugMenuManager.CreateFromPrefab(_debugMenuManagerPrefab, ManagersContainer);
             PartyParrotManager.CreateFromPrefab(_engineManagerPrefab, ManagersContainer);
 
             TimeManager.Create(ManagersContainer);

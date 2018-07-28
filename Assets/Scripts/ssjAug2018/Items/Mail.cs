@@ -1,5 +1,8 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using System;
+
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
+using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
@@ -21,6 +24,8 @@ namespace pdxpartyparrot.ssjAug2018.Items
         private Rigidbody _rigidbody;
         private PooledObject _pooledObject;
 
+        private Player _owner;
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -32,6 +37,8 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _pooledObject = GetComponent<PooledObject>();
 
             InitRigidbody();
+
+            _pooledObject.RecycleEvent += RecycleEventHandler;
         }
 
         private void Update()
@@ -39,6 +46,11 @@ namespace pdxpartyparrot.ssjAug2018.Items
             if(_despawnTime > 0 && TimeManager.Instance.CurrentUnixMs >= _despawnTime) {
                 RpcMiss();
             }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            RpcMiss();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -58,8 +70,10 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
-        public void Throw(Vector3 origin, Vector3 direction, float speed)
+        public void Throw(Player owner, Vector3 origin, Vector3 direction, float speed)
         {
+            _owner = owner;
+
             _rigidbody.position = origin;
             _rigidbody.velocity = direction * speed;
             _despawnTime = TimeManager.Instance.CurrentUnixMs + ItemManager.Instance.ItemData.MailDespawnMs;
@@ -78,5 +92,12 @@ Debug.Log("hit!");
 Debug.Log("miss!");
             _pooledObject.Recycle();
         }
+
+#region Event Handlers
+        private void RecycleEventHandler(object sender, EventArgs args)
+        {
+            _owner = null;
+        }
+#endregion
     }
 }

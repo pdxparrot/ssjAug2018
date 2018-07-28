@@ -803,6 +803,8 @@ MonoBehaviour:
   _loadingScreen: {fileID: 2071533184}
   _engineManagerPrefab: {fileID: 114340577485018566, guid: a00ad1bef88a8a54cb3906da267d8ecd,
     type: 2}
+  _debugMenuManagerPrefab: {fileID: 114287126362577626, guid: c3bab4b4eb75f044e92b7e04dd365346,
+    type: 2}
   _audioManagerPrefab: {fileID: 114613378201534370, guid: 9d8241b9e13ea0043824eab3e428f323,
     type: 2}
   _viewerManagerPrefab: {fileID: 114850475420769504, guid: 0a474e145cda9784aba993491256d42f,
