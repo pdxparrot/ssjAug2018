@@ -31,7 +31,7 @@ namespace pdxparyparrot.ssjAug2018.World
         private void FixedUpdate()
         {
             float step = _speed * Time.fixedDeltaTime;
-            if((_targetWayponit.transform.position - transform.position).sqrMagnitude < Mathf.Pow(float.Epsilon, 2))
+            if((_targetWayponit.transform.position - transform.position).sqrMagnitude < float.Epsilon)
             {
                 _waypointIterator = (_waypointIterator + 1) % _waypoints.Count;
                 _targetWayponit = _waypoints[_waypointIterator];
