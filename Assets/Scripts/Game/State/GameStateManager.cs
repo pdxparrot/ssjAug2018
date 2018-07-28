@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.State
 {
-    public sealed class GameStateManager : SingletonBehavior<GameStateManager>
+    public abstract class GameStateManager : SingletonBehavior<GameStateManager>
     {
         public interface IGameState
         {
@@ -72,6 +72,7 @@ namespace pdxpartyparrot.Game.State
                 GameState gameState = Instantiate(gameStatePrefab, transform);
                 initializeState?.Invoke(gameState);
 
+                UpdateLoadingScreen(0.5f, "Loading scene...");
                 gameState.LoadScene(() => {
                     _currentGameState = gameState;
                     _currentGameState.OnEnter();
@@ -133,11 +134,6 @@ namespace pdxpartyparrot.Game.State
             _currentGameState = _stateStack.Count > 0 ? _stateStack.Pop() : null;
         }
 
-        private void ShowLoadingScreen(bool show)
-        {
-Debug.Log($"TODO: show loading screen: {show}");
-        }
-
         private void InitDebugMenu()
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "GameStateManager");
@@ -145,5 +141,9 @@ Debug.Log($"TODO: show loading screen: {show}");
                 GUILayout.Label($"Current Game State: {CurrentState.Name}");
             };
         }
+
+        protected abstract void ShowLoadingScreen(bool show);
+
+        protected abstract void UpdateLoadingScreen(float percent, string text);
     }
 }

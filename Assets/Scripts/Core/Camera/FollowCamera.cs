@@ -8,7 +8,6 @@ using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Core.Camera
 {
-    [RequireComponent(typeof(Collider))]
     public sealed class FollowCamera : MonoBehaviour
     {
 #region Orbit Config
@@ -161,6 +160,8 @@ namespace pdxpartyparrot.Core.Camera
         [ReadOnly]
         private bool _isLooking;
 
+        public bool IsLooking => _isLooking;
+
 #region Unity Lifecycle
         private void Update()
         {
@@ -190,11 +191,6 @@ namespace pdxpartyparrot.Core.Camera
 
             FollowTarget(dt);
         }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            Debug.Log("TODO: FollowCamera collision!");
-        }
 #endregion
 
         public void SetTarget(FollowTarget target)
@@ -211,11 +207,7 @@ namespace pdxpartyparrot.Core.Camera
 
             Profiler.BeginSample("FollowCamera.HandleInput");
             try {
-                bool wasLooking = _isLooking;
-                _isLooking = Target.LastLookAxes.sqrMagnitude >= float.Epsilon;
-                if(!wasLooking && !_isLooking) {
-                    return;
-                }
+                _isLooking = Target.LastLookAxes.sqrMagnitude > float.Epsilon;
 
                 Orbit(Target.LastLookAxes, dt);
                 Zoom(Target.LastLookAxes, dt);

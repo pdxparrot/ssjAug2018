@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4620413766668778}
-  - component: {fileID: 114906633514924052}
+  - component: {fileID: 114279629126510442}
   m_Layer: 0
   m_Name: GameStateManager
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114906633514924052
+--- !u!114 &114279629126510442
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,9 +48,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1338278319493980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0345d99125129748b5e19fe534cb20c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b2c943bf2a588e4b8725afe69c1db2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _initialGameStatePrefab: {fileID: 114464068976828966, guid: 1bf18f674102a1b4ca7af8dffe2f5aea,
     type: 2}
-  _currentGameState: {fileID: 0}

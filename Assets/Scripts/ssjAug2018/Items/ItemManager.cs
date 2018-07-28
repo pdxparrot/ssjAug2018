@@ -1,8 +1,10 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
-using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
 
@@ -11,14 +13,11 @@ namespace pdxpartyparrot.ssjAug2018.Items
     public sealed class ItemManager : SingletonBehavior<ItemManager>
     {
         private const string MailItemPool = "mail";
-        private const string SnowballItemPool = "snowballs";
-
-#region Items
-        [Header("Items")]
 
         [SerializeField]
-        private Mail _mailPrefab;
-#endregion
+        private ItemData _itemData;
+
+        public ItemData ItemData => _itemData;
 
 #region Unity Lifecycle
         private void Awake()
@@ -40,10 +39,16 @@ namespace pdxpartyparrot.ssjAug2018.Items
         }
 #endregion
 
+        [CanBeNull]
+        public Mail GetMail()
+        {
+            return ObjectPoolManager.Instance.GetPooledObject<Mail>(MailItemPool);
+        }
+
 #region Event Handlers
         private void ClientConnectEventHandler(object sender, EventArgs args)
         {
-            ObjectPoolManager.Instance.InitializePool(MailItemPool, _mailPrefab.GetComponent<PooledObject>(), 5);
+            ObjectPoolManager.Instance.InitializeNetworkPool(MailItemPool, ItemData.MailPrefab.GetComponent<PooledObject>(), 5);
         }
 
         private void ClientDisconnectEventHandler(object sender, EventArgs args)

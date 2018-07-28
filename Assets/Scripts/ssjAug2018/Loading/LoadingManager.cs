@@ -1,5 +1,6 @@
 ﻿using pdxpartyparrot.Game.Loading;
 using pdxpartyparrot.Game.World;
+using pdxpartyparrot.ssjAug2018.Actors;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;
@@ -33,6 +34,7 @@ namespace pdxpartyparrot.ssjAug2018.Loading
             SpawnManager.Create(ManagersContainer);
             ItemManager.CreateFromPrefab(_itemManagerPrefab, ManagersContainer);
             MailboxManager.CreateFromPrefab(_mailboxManagerPrefab, ManagersContainer);
+            DroneManager.Create(ManagersContainer);
         }
     }
 }

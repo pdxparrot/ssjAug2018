@@ -4,8 +4,10 @@ using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.ssjAug2018.Camera;
+using pdxpartyparrot.ssjAug2018.Items;
 
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
@@ -33,7 +35,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private Camera.Viewer _viewer;
 
         [CanBeNull]
-        public Camera.Viewer Viewer => _viewer;
+        public override Core.Camera.Viewer Viewer => _viewer;
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -41,6 +43,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             base.Awake();
 
             NetworkIdentity.localPlayerAuthority = true;
+            NetworkTransform.transformSyncMode = NetworkTransform.TransformSyncMode.SyncRigidbody3D;
+            NetworkTransform.syncRotationAxis = NetworkTransform.AxisSyncMode.AxisY;
 
 #if UNITY_EDITOR
             if(!(Controller is PlayerController)) {
@@ -81,7 +85,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
             _viewer?.Initialize(this);
 
-            PlayerController.Initialize(this, PlayerManager.Instance.PlayerData, PlayerManager.Instance.PlayerData.ControllerData);
+            PlayerController.Initialize(this);
 
             // TODO: encapsulate this somewhere better
             PlayerController.Rigidbody.mass = PlayerManager.Instance.PlayerData.Mass;
@@ -90,6 +94,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             return true;
         }
+
+#region Commands
+        [Command]
+        public void CmdThrow(Vector3 origin, Vector3 direction, float speed)
+        {
+            Mail mail = ItemManager.Instance.GetMail();
+            mail?.Throw(origin, direction, speed);
+        }
+#endregion
 
 #region Callbacks
         public override void OnSpawn()

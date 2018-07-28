@@ -1,4 +1,7 @@
-﻿using pdxpartyparrot.Core.Actors;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
@@ -34,6 +37,9 @@ namespace pdxpartyparrot.Core.Network
 
         public ActorController Controller => _controller;
 
+        [CanBeNull]
+        public abstract Viewer Viewer { get; }
+
         [SerializeField]
         [ReadOnly]
         private bool _canMove = true;
@@ -43,10 +49,13 @@ namespace pdxpartyparrot.Core.Network
 
         protected NetworkIdentity NetworkIdentity { get; private set; }
 
+        protected NetworkTransform NetworkTransform { get; private set; }
+
 #region Unity Lifecycle
         protected virtual void Awake()
         {
             NetworkIdentity = GetComponent<NetworkIdentity>();
+            NetworkTransform = GetComponent<NetworkTransform>();
         }
 #endregion
 
