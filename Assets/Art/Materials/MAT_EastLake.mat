@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MAT_SouthLake
+  m_Name: MAT_EastLake
   m_Shader: {fileID: 4800000, guid: a3eee0dd38194f44f889867ce0e9ed0d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -39,8 +39,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Foam:
-        m_Texture: {fileID: 2800000, guid: 124150a8964a92b449735ca04b9e6d44, type: 3}
-        m_Scale: {x: 100, y: 120}
+        m_Texture: {fileID: 2800000, guid: a00c89f9df018604586755a8164ec33e, type: 3}
+        m_Scale: {x: 50, y: 50}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
@@ -60,7 +60,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _WaterNormal:
         m_Texture: {fileID: 2800000, guid: 27e0b5d90e0fe934b8e56f38ca3cd8b3, type: 3}
-        m_Scale: {x: 50, y: 60}
+        m_Scale: {x: 30, y: 10}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
@@ -100,5 +100,5 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Foam_Speed: {r: -0.01, g: 0.01, b: 0, a: 0}
     - _ShalowColor: {r: 0, g: 0.8078432, b: 0.8078432, a: 0}
-    - _Water_Speed1: {r: 0.06, g: -0.02, b: 0, a: 0}
-    - _Water_Speed2: {r: 0.02, g: 0.02, b: 0, a: 0}
+    - _Water_Speed1: {r: 0.04, g: 0.04, b: 0, a: 0}
+    - _Water_Speed2: {r: -0.03, g: -0.01, b: 0, a: 0}
