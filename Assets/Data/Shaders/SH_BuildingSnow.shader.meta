@@ -7,7 +7,6 @@ ShaderImporter:
   - _Material1_Array: {fileID: 18700000, guid: c90d7a96c0a623441b73da001e669a4e, type: 2}
   - _Material2_Array: {fileID: 18700000, guid: 9e68fd9253d6b5f49a538eb963199c94, type: 2}
   - _Material3_Array: {fileID: 18700000, guid: 126ad50cba129524e82f6ec7fe0fa046, type: 2}
-  - _Snow_Array: {fileID: 18700000, guid: ad280c83e3b496f4293f616530e6d565, type: 2}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 
