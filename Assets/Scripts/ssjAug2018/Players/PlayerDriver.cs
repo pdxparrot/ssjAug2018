@@ -31,13 +31,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
             // TODO: until we have a way to know when the player stops pushing on the stick
             // through the InputSystem, this is the best we can do here
             // https://forum.unity.com/threads/gamepad-joystick-movement-question.542629/
+            if(null != Gamepad) {
+                Vector2 moveAxes = ApplyDeadZone(Gamepad.leftStick.ReadValue());
+                LastMoveAxes = new Vector3(moveAxes.x, moveAxes.y, 0.0f);
 
-            Vector2 moveAxes = ApplyDeadZone(Gamepad.leftStick.ReadValue());
-            LastMoveAxes = new Vector3(moveAxes.x, moveAxes.y, 0.0f);
-
-            Vector2 lookAxes = ApplyDeadZone(Gamepad.rightStick.ReadValue());
-            lookAxes.y *= _invertLookY ? -1 : 1;
-            Player.FollowTarget.LastLookAxes = new Vector3(lookAxes.x, lookAxes.y, 0.0f);
+                Vector2 lookAxes = ApplyDeadZone(Gamepad.rightStick.ReadValue());
+                lookAxes.y *= _invertLookY ? -1 : 1;
+                Player.FollowTarget.LastLookAxes = new Vector3(lookAxes.x, lookAxes.y, 0.0f);
+            }
 
             base.Update();
         }
