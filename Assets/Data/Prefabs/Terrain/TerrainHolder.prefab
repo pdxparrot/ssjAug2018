@@ -91,7 +91,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4595115943498326}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TerrainHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4433908336645874}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TerrainMover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
