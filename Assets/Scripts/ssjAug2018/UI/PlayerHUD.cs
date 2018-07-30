@@ -25,6 +25,12 @@ namespace pdxpartyparrot.ssjAug2018.UI
         private GameObject _aimer;
 
         [SerializeField]
+        private GameObject _hitMarker;
+
+        [SerializeField]
+        private float _hitMarkerDisplaySeconds = 2.0f;
+
+        [SerializeField]
         private TextMeshProUGUI _timer;
 
         [SerializeField]
@@ -50,6 +56,7 @@ namespace pdxpartyparrot.ssjAug2018.UI
 
         private Player _owner;
 
+        private Coroutine _hideHitMarkerCoroutine;
         private Coroutine _hideInfoTextCoroutine;
         private Coroutine _hideTimeAddedCoroutine;
 
@@ -75,9 +82,11 @@ namespace pdxpartyparrot.ssjAug2018.UI
             _infoText.gameObject.SetActive(false);
             _gameOverText.gameObject.SetActive(false);
             _aimer.SetActive(false);
+            _hitMarker.SetActive(false);
             _timeAddedPanel.SetActive(false);
         }
 
+#region Info Text
         public void ShowInfoText()
         {
             StopHideInfoTextCoroutine();
@@ -85,26 +94,6 @@ namespace pdxpartyparrot.ssjAug2018.UI
             _infoText.gameObject.SetActive(true);
 
             _hideInfoTextCoroutine = StartCoroutine(HideInfoText());
-        }
-
-        public void ShowGameOverText()
-        {
-            _gameOverText.gameObject.SetActive(true);
-        }
-
-        public void ShowAimer(bool show)
-        {
-            _aimer.gameObject.SetActive(show);
-        }
-
-        public void ShowTimeAdded(int secondsAdded)
-        {
-            StopHideTimeAddedCoroutine();
-
-            _timeAddedText.text = $"+{secondsAdded} Seconds";
-            _timeAddedPanel.SetActive(true);
-
-            _hideTimeAddedCoroutine = StartCoroutine(HideTimeAddedText());
         }
 
         private void StopHideInfoTextCoroutine()
@@ -122,6 +111,55 @@ namespace pdxpartyparrot.ssjAug2018.UI
             yield return new WaitForSeconds(_infoTextDisplaySeconds);
             _infoText.gameObject.SetActive(false);
         }
+#endregion
+
+        public void ShowGameOverText()
+        {
+            _gameOverText.gameObject.SetActive(true);
+        }
+
+        public void ShowAimer(bool show)
+        {
+            _aimer.gameObject.SetActive(show);
+        }
+
+#region Hit Marker
+        public void ShowHitMarker()
+        {
+            StopHideHitMarkerCoroutine();
+
+            _hitMarker.gameObject.SetActive(true);
+
+            _hideHitMarkerCoroutine = StartCoroutine(HideHitMarker());
+        }
+
+        private void StopHideHitMarkerCoroutine()
+        {
+            if(null == _hideHitMarkerCoroutine) {
+                return;
+            }
+
+            StopCoroutine(_hideHitMarkerCoroutine);
+            _hideHitMarkerCoroutine = null;
+        }
+
+        private IEnumerator HideHitMarker()
+        {
+            yield return new WaitForSeconds(_hitMarkerDisplaySeconds);
+            _hitMarker.gameObject.SetActive(false);
+        }
+#endregion
+
+#region Time Added
+        public void ShowTimeAdded(int secondsAdded)
+        {
+            StopHideTimeAddedCoroutine();
+
+            _timeAddedText.text = $"+{secondsAdded} Seconds";
+            _timeAddedPanel.SetActive(true);
+
+            _hideTimeAddedCoroutine = StartCoroutine(HideTimeAddedText());
+        }
 
         private void StopHideTimeAddedCoroutine()
         {
@@ -138,5 +176,6 @@ namespace pdxpartyparrot.ssjAug2018.UI
             yield return new WaitForSeconds(_timeAddedTextDisplaySeconds);
             _timeAddedPanel.SetActive(false);
         }
+#endregion
     }
 }

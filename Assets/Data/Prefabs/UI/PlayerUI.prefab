@@ -1228,7 +1228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1625,7 +1625,9 @@ MonoBehaviour:
   _infoText: {fileID: 114075410384263062}
   _infoTextDisplaySeconds: 5
   _gameOverText: {fileID: 114541890072989538}
-  _aimer: {fileID: 1243146793933128}
+  _aimer: {fileID: 1067099449551278}
+  _hitMarker: {fileID: 1998569888589700}
+  _hitMarkerDisplaySeconds: 2
   _timer: {fileID: 114780959637320488}
   _timeAddedPanel: {fileID: 1793687301020446}
   _timeAddedText: {fileID: 114707891151075240}

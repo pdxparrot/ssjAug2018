@@ -29,6 +29,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public string LongJumpParam => _longJumpParam;
 
         [SerializeField]
+        private string _thurstJumpParam = "ThrustJump";
+
+        public string ThrustJumpParam => _thurstJumpParam;
+
+        [SerializeField]
         private string _throwingMailParam = "ReadyMail";
 
         public string ThrowingMailParam => _throwingMailParam;

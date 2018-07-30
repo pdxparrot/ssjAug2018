@@ -97,7 +97,7 @@ namespace pdxpartyparrot.Game.Actors
             float dt = Time.fixedDeltaTime;
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
-            //Owner.Animator.SetBool(ControllerData.FallingParam, _isFalling);
+            Owner.Animator.SetBool(ControllerData.FallingParam, _isFalling);
 
             FudgeVelocity(dt);
         }

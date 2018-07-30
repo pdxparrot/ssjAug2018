@@ -423,6 +423,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void DisableGrabbing()
         {
             EnableClimbing(false);
+
+            transform.up = Vector3.up;
         }
 
         private void EnableClimbing(bool enable)
@@ -450,6 +452,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void EnableHovering(bool enable)
         {
             _movementState = enable ? MovementState.Hovering : MovementState.Platforming;
+
+            Player.Animator.SetBool(_playerControllerData.ThrustJumpParam, enable);
 
             if(enable) {
                 _hoverTriggerTime = 0;

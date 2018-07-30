@@ -64,6 +64,14 @@ namespace pdxpartyparrot.ssjAug2018
         }
 
         [Server]
+        public void ScoreHit(Player player)
+        {
+            Score(player);
+
+            RpcHit();
+        }
+
+        [Server]
         public void Score(Player player)
         {
             player.IncreaseScore(ItemManager.Instance.ItemData.MailScoreAmount);
@@ -76,6 +84,12 @@ namespace pdxpartyparrot.ssjAug2018
         private void RpcGameTimeUpdated(int amount)
         {
             UIManager.Instance.PlayerUI.PlayerHUD.ShowTimeAdded(amount);
+        }
+
+        [ClientRpc]
+        private void RpcHit()
+        {
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowHitMarker();
         }
     }
 }

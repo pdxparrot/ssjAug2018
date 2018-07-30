@@ -91,7 +91,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 DeactivateMailbox();
             }
 
-            GameManager.Instance.Score(owner);
+            GameManager.Instance.ScoreHit(owner);
         }
 
         [Server]

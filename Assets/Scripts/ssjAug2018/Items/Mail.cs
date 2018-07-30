@@ -86,9 +86,11 @@ namespace pdxpartyparrot.ssjAug2018.Items
         private void Hit(GameObject go)
         {
             Mailbox b = go.GetComponent<Mailbox>();
-            b?.MailHit(_owner);
+            if(null != b) {
+                b.MailHit(_owner);
 
-            _pooledObject.Recycle();
+                _pooledObject.Recycle();
+            }
         }
 
         [Server]

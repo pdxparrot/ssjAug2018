@@ -14,6 +14,12 @@ MonoBehaviour:
   _collisionCheckLayerMask:
     serializedVersion: 2
     m_Bits: 2048
+  _moveXAxisParam: InputX
+  _moveZAxisParam: InputZ
+  _groundedParam: Landed
+  _fallingParam: InAir
+  _jumpParam: Jump
+  _doubleJumpParam: DoubleJump
   _moveSpeed: 20
   _runThreshold: 0.75
   _fallSpeedAdjustment: 250
