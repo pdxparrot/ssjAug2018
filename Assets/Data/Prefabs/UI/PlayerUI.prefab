@@ -1632,6 +1632,7 @@ MonoBehaviour:
   _timeAddedTextDisplaySeconds: 2
   _letterCounter: {fileID: 114880467838030518}
   _mailboxCounter: {fileID: 114526457903822776}
+  _scoreText: {fileID: 114002372490066870}
   _thrusterFill: {fileID: 114743549926213742}
 --- !u!114 &114589833470212052
 MonoBehaviour:

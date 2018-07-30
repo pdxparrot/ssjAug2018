@@ -43,6 +43,9 @@ namespace pdxpartyparrot.ssjAug2018.UI
         private TextMeshProUGUI _mailboxCounter;
 
         [SerializeField]
+        private TextMeshProUGUI _scoreText;
+
+        [SerializeField]
         private Image _thrusterFill;
 
         private Player _owner;
@@ -59,6 +62,8 @@ namespace pdxpartyparrot.ssjAug2018.UI
 
             _letterCounter.text = $"{_owner.CurrentLetterCount} / {PlayerManager.Instance.PlayerData.MaxLetters}";
             _mailboxCounter.text = $"{MailboxManager.Instance.CompletedMailboxes} / {MailboxManager.Instance.CurrentSetSize}";
+            _scoreText.text = $"{_owner.Score:000}";
+
             _thrusterFill.fillAmount = 1.0f - _owner.PlayerController.HoverRemainingPercent;
         }
 #endregion
