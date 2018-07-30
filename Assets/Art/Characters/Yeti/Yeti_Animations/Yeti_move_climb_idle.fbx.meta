@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3edd6a29633a0e74181e543df899cbd0
+guid: f0c339c6f6347db4086b495a5006cd76
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -167,7 +167,7 @@ ModelImporter:
       name: Take 001
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 0
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
