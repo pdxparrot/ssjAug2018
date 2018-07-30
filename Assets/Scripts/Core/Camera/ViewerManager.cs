@@ -18,9 +18,6 @@ namespace pdxpartyparrot.Core.Camera
         public float ViewportEpsilon => _viewportEpsilon;
 
 #region Viewers
-        [SerializeField]
-        private Viewer _viewerPrefab;
-
         private readonly List<Viewer> _viewers = new List<Viewer>();
 
         private readonly List<Viewer> _assignedViewers = new List<Viewer>();
@@ -48,7 +45,7 @@ namespace pdxpartyparrot.Core.Camera
 #endregion
 
 #region Allocate
-        public void AllocateViewers(int count)
+        public void AllocateViewers(int count, Viewer viewerPrefab)
         {
             int actualCount = count - _viewers.Count;
             if(actualCount <= 0) {
@@ -58,7 +55,7 @@ namespace pdxpartyparrot.Core.Camera
             Debug.Log($"Allocating {actualCount} viewers...");
 
             for(int i=0; i<actualCount; ++i) {
-                Viewer viewer = Instantiate(_viewerPrefab, _viewerContainer.transform);
+                Viewer viewer = Instantiate(viewerPrefab, _viewerContainer.transform);
                 viewer.Initialize(i);
                 viewer.gameObject.SetActive(false);
 

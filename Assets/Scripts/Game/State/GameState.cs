@@ -6,7 +6,18 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.State
 {
-    public abstract class GameState : MonoBehaviour, GameStateManager.IGameState
+    public interface IGameState
+    {
+        string Name { get; }
+
+        void OnEnter();
+
+        void OnUpdate(float dt);
+
+        void OnExit();
+    }
+
+    public abstract class GameState : MonoBehaviour, IGameState
     {
         public string Name => name;
 

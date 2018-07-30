@@ -3,7 +3,8 @@
     "references": [
         "com.pdxpartyparrot.Core",
         "com.pdxpartyparrot.Game",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

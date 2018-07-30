@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 
-using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Game.State;
 
@@ -14,8 +13,6 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         [SerializeField]
         private MainMenu _mainMenuState;
 
-        private Viewer _viewer;
-
         private int _gamepadId;
 
         [CanBeNull]
@@ -24,12 +21,6 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public override void OnEnter()
         {
             base.OnEnter();
-
-            InitializeManagers();
-
-            _viewer = ViewerManager.Instance.AcquireViewer();
-            _viewer?.Set2D();
-            _viewer?.EnableCamera(false);
 
             _gamepadId = InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
@@ -49,18 +40,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
                 _gamepad = null;
             }
 
-            if(ViewerManager.HasInstance) {
-                ViewerManager.Instance.ReleaseViewer(_viewer);
-            }
-            _viewer = null;
-
             base.OnExit();
-        }
-
-        private void InitializeManagers()
-        {
-            ViewerManager.Instance.FreeViewers();
-            ViewerManager.Instance.AllocateViewers(1);
         }
 
 #region Event Handlers

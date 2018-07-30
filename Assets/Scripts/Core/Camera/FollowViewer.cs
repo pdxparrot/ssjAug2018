@@ -5,7 +5,7 @@ namespace pdxpartyparrot.Core.Camera
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(FollowCamera))]
-    public abstract class FollowViewer : Viewer
+    public class FollowViewer : Viewer
     {
         private Rigidbody _rigidbody;
 

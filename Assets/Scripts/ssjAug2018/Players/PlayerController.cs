@@ -4,11 +4,9 @@ using System.Collections;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.ssjAug2018.Data;
-using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Profiling;
 using UnityEngine.Serialization;
 
@@ -117,6 +115,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [ReadOnly]
         private long _hoverCooldownEndTime;
 
+        public float HoverRemainingPercent => _hoverTimeMs / (float)_playerControllerData.HoverTimeMs;
+
         private bool IsHoverCooldown => TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
 
         private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;
@@ -131,6 +131,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private long _autoThrowTriggerTime;
 
         private bool ShouldAutoThrow => _autoThrowTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _autoThrowTriggerTime;
+#endregion
+
+#region Aiming
+        [SerializeField]
+        [ReadOnly]
+        private bool _isAiming;
+
+        public bool IsAiming => _isAiming;
 #endregion
 
         public Player Player => (Player)Owner;
@@ -149,6 +157,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             float dt = Time.deltaTime;
 
+            UpdateJumping(dt);
             UpdateHovering(dt);
             UpdateThrowing(dt);
         }
@@ -269,6 +278,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void StartThrow()
         {
+            if(!Player.CanThrowMail) {
+                return;
+            }
+
             _canThrow = true;
 
             _autoThrowTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.AutoThrowMs;
@@ -307,15 +320,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void Jump()
         {
-            if(CanLongJump) {
-                DisableGrabbing();
-                DoJump(_playerControllerData.LongJumpHeight);
-            } else if(IsGrabbing) {
+            if(_canJump) {
                 DisableGrabbing();
 
-                // TODO: would be cool if this pushed off the wall if not moving
-                DoJump(ControllerData.JumpHeight);
-            } else if(_canJump) {
                 base.Jump();
             }
 
@@ -327,7 +334,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _hoverTriggerTime = 0;
 
-            if(!IsGrounded && !IsGrabbing) {
+            if(!IsGrabbing) {
                 _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
             }
         }
@@ -353,6 +360,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(enable) {
                 DoubleJumpCount = 0;
+            }
+        }
+
+        public void UpdateJumping(float dt)
+        {
+            if(_canJump && CanLongJump) {
+                DisableGrabbing();
+                DoJump(_playerControllerData.LongJumpHeight);
+
+                _canJump = false;
             }
         }
 

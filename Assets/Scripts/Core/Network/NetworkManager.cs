@@ -11,8 +11,11 @@ namespace pdxpartyparrot.Core.Network
     public sealed class NetworkManager : UnityEngine.Networking.NetworkManager
     {
 #region Events
+        public event EventHandler<EventArgs> ServerStartEvent;
+        public event EventHandler<EventArgs> ServerStopEvent;
         public event EventHandler<EventArgs> ServerConnectEvent;
         public event EventHandler<EventArgs> ServerDisconnectEvent;
+        public event EventHandler<ServerAddPlayerEventArgs> ServerAddPlayerEvent;
 
         public event EventHandler<EventArgs> ClientConnectEvent;
         public event EventHandler<EventArgs> ClientDisconnectEvent;
@@ -32,8 +35,6 @@ namespace pdxpartyparrot.Core.Network
         private bool _enableCallbackLogging = true;
 
         public NetworkManagerHUD HUD => GetComponent<NetworkManagerHUD>();
-
-        private Func<NetworkActor> _playerSpawnFunc;
 
 #region Unity Lifecycle
         // TODO: whenever this becomes a thing...
@@ -62,13 +63,10 @@ namespace pdxpartyparrot.Core.Network
 
         public void Stop()
         {
+            Debug.Log("Stopping host...");
+
             // TODO: don't assume this
             StopHost();
-        }
-
-        public void SetPlayerSpawnFunc(Func<NetworkActor> playerSpawnFunc)
-        {
-            _playerSpawnFunc = playerSpawnFunc;
         }
 
         public void LocalClientReady(NetworkConnection conn, short playerControllerId)
@@ -117,11 +115,15 @@ namespace pdxpartyparrot.Core.Network
             CallbackLog("OnStartServer");
 
             base.OnStartServer();
+
+            ServerStartEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public override void OnStopServer()
         {
             CallbackLog("OnStopServer");
+
+            ServerStopEvent?.Invoke(this, EventArgs.Empty);
 
             base.OnStopServer();
         }
@@ -139,24 +141,18 @@ namespace pdxpartyparrot.Core.Network
         {
             CallbackLog($"OnServerDisconnect({conn})");
 
-            base.OnServerDisconnect(conn);
-
             ServerDisconnectEvent?.Invoke(this, EventArgs.Empty);
+
+            base.OnServerDisconnect(conn);
         }
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             CallbackLog($"OnServerAddPlayer({conn}, {playerControllerId})");
 
-            NetworkActor player = _playerSpawnFunc?.Invoke();
-            if(null == player) {
-                Debug.LogError("Failed to spawn player!");
-                return;
-            }
+            ServerAddPlayerEvent?.Invoke(this, new ServerAddPlayerEventArgs(conn, playerControllerId));
 
-            NetworkServer.AddPlayerForConnection(conn, player.gameObject, playerControllerId);
-
-            player.OnSpawn();
+            // NOTE: do not call the base method
         }
 
         public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
@@ -201,6 +197,8 @@ namespace pdxpartyparrot.Core.Network
             CallbackLog($"OnClientConnect({conn})");
 
             ClientConnectEvent?.Invoke(this, EventArgs.Empty);
+
+            // NOTE: do not call the base method
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)

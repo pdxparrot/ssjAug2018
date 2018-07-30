@@ -8,19 +8,8 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.State
 {
-    public abstract class GameStateManager : SingletonBehavior<GameStateManager>
+    public abstract class GameStateManager<T> : SingletonBehavior<T> where T: GameStateManager<T>
     {
-        public interface IGameState
-        {
-            string Name { get; }
-
-            void OnEnter();
-
-            void OnUpdate(float dt);
-
-            void OnExit();
-        }
-
         [SerializeField]
         private GameState _initialGameStatePrefab;
 

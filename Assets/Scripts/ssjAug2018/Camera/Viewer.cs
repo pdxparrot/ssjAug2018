@@ -12,9 +12,7 @@ namespace pdxpartyparrot.ssjAug2018.Camera
             Set3D();
 
             FollowCamera.SetTarget(owner.FollowTarget);
-            //SetOrbitRadius(...);
-
-            //SetGlobalPostProcessProfile(...);
+            SetFocus(owner.transform);
         }
     }
 }

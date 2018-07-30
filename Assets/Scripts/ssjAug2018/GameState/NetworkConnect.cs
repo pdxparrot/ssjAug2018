@@ -20,7 +20,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
 // TODO: handle connection errors
-            GameManager.Instance.NetworkClient = NetworkManager.Instance.StartLANHost();
+            GameStateManager.Instance.NetworkClient = NetworkManager.Instance.StartLANHost();
         }
 
         public override void OnUpdate(float dt)
@@ -33,7 +33,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public override void OnExit()
         {
             if(NetworkManager.HasInstance) {
-                NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
+                NetworkManager.Instance.ClientConnectEvent -= ClientConnectEventHandler;
+
+                NetworkManager.Instance.ServerChangeScene();
             }
 
             base.OnExit();

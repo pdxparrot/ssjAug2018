@@ -38,7 +38,9 @@ namespace pdxpartyparrot.Core.DebugMenu
         [Range(0, 1000)]
         private int _fpsAccumulatorSize = 100;
 
-        private float _lastFPS;
+        private float _lastFrameTime;
+        private float _maxFrameTime;
+        private float _minFrameTime;
 
         private readonly Queue<float> _fpsAccumulator = new Queue<float>();
 
@@ -47,6 +49,8 @@ namespace pdxpartyparrot.Core.DebugMenu
 #region Unity Lifecycle
         private void Awake()
         {
+            ResetFrameStats();
+
             _window = new DebugWindow(new Rect(10, 10, 800, 600), RenderWindowContents)
             {
                 Title = () => {
@@ -79,11 +83,7 @@ namespace pdxpartyparrot.Core.DebugMenu
                 Profiler.EndSample();
             }
 
-            _lastFPS = 1.0f / Time.unscaledDeltaTime;
-            _fpsAccumulator.Enqueue(_lastFPS);
-            if(_fpsAccumulator.Count > _fpsAccumulatorSize) {
-                _fpsAccumulator.Dequeue();
-            }
+            UpdateFrameStats(Time.unscaledDeltaTime);
         }
 
         private void OnGUI()
@@ -119,10 +119,39 @@ namespace pdxpartyparrot.Core.DebugMenu
             _windowScrollPos = Vector2.zero;
         }
 
+        public void ResetFrameStats()
+        {
+            _lastFrameTime = 0;
+            _minFrameTime = float.MaxValue;
+            _maxFrameTime = float.MinValue;
+
+            _fpsAccumulator.Clear();
+        }
+
+        private void UpdateFrameStats(float dt)
+        {
+            _lastFrameTime = dt;
+
+            if(_lastFrameTime < _minFrameTime) {
+                _minFrameTime = _lastFrameTime;
+            }
+
+            if(_lastFrameTime > _maxFrameTime) {
+                _maxFrameTime = _lastFrameTime;
+            }
+
+            _fpsAccumulator.Enqueue(1.0f / _lastFrameTime);
+            if(_fpsAccumulator.Count > _fpsAccumulatorSize) {
+                _fpsAccumulator.Dequeue();
+            }
+        }
+
         private void RenderWindowContents()
         {
             if(null == _currentNode) {
-                GUILayout.Label($"FPS: {(int)_lastFPS}");
+                GUILayout.Label($"Frame Time: {(int)(_lastFrameTime * 1000.0f)} ms");
+                GUILayout.Label($"Min Frame Time: {(int)(_minFrameTime * 1000.0f)} ms");
+                GUILayout.Label($"Max Frame Time: {(int)(_maxFrameTime * 1000.0f)} ms");
                 GUILayout.Label($"Average FPS: {(int)AverageFPS}");
 
                 _windowScrollPos = GUILayout.BeginScrollView(_windowScrollPos);

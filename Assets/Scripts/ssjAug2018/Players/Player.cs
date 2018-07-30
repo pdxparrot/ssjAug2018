@@ -1,10 +1,13 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections;
+using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Network;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Camera;
 using pdxpartyparrot.ssjAug2018.Items;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -21,6 +24,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [SerializeField]
         private Animator _animator;
+#endregion
+
+#region Inventory
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private int _currentLetterCount;
+
+        public int CurrentLetterCount => _currentLetterCount;
+
+        public bool CanThrowMail => CurrentLetterCount > 0;
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private long _reloadCompleteTime;
+
+        public bool IsReloading => _reloadCompleteTime > 0 && TimeManager.Instance.CurrentUnixMs <= _reloadCompleteTime;
 #endregion
 
         public FollowTarget FollowTarget { get; private set; }
@@ -76,15 +97,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool Initialize()
         {
-            if(isLocalPlayer) {
-                _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
-                if(null == _viewer) {
-                    return false;
-                }
-                _viewer.SetFocus(transform);
-            }
-            _viewer?.Initialize(this);
-
+            InitializeLocalPlayer();
             PlayerController.Initialize(this);
 
             // TODO: encapsulate this somewhere better
@@ -92,15 +105,53 @@ namespace pdxpartyparrot.ssjAug2018.Players
             PlayerController.Rigidbody.drag = PlayerManager.Instance.PlayerData.Drag;
             PlayerController.Rigidbody.angularDrag = PlayerManager.Instance.PlayerData.AngularDrag;
 
+            _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+
             return true;
+        }
+
+        [Client]
+        private void InitializeLocalPlayer()
+        {
+            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
+            if(null != _viewer) {
+                _viewer.Initialize(this);
+            }
+
+            UIManager.Instance.InitializePlayerUI(this);
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowInfoText();
+        }
+
+        [Server]
+        public void Reload()
+        {
+            _reloadCompleteTime = TimeManager.Instance.CurrentUnixMs + PlayerManager.Instance.PlayerData.ReloadTimeMs;
+            StartCoroutine(ReloadRoutine());
+        }
+
+        private IEnumerator ReloadRoutine()
+        {
+            yield return new WaitForSeconds(PlayerManager.Instance.PlayerData.ReloadTimeSeconds);
+
+            _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
         }
 
 #region Commands
         [Command]
         public void CmdThrow(Vector3 origin, Vector3 direction, float speed)
         {
+            if(!CanThrowMail) {
+                return;
+            }
+
             Mail mail = ItemManager.Instance.GetMail();
             mail?.Throw(this, origin, direction, speed);
+
+            _currentLetterCount--;
+            if(_currentLetterCount <= 0) {
+                _currentLetterCount = 0;
+                Reload();
+            }
         }
 #endregion
 

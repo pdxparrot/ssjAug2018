@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using pdxpartyparrot.Core.Actors;
+﻿using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
@@ -41,6 +39,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Instance = this;
 
             _playerContainer = new GameObject("Players");
+
+            Core.Network.NetworkManager.Instance.ServerAddPlayerEvent += ServerAddPlayerEventHandler;
         }
 
         private void OnDestroy()
@@ -48,35 +48,37 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Destroy(_playerContainer);
             _playerContainer = null;
 
-            if(isServer) {
-                Debug.Log("Unregistering player spawn function");
-                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(null);
-            }
+            Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
 
             Instance = null;
         }
 #endregion
 
-        public void Initialize()
-        {
-            if(isServer) {
-                Debug.Log("Registering player spawn function");
-                Core.Network.NetworkManager.Instance.SetPlayerSpawnFunc(PlayerSpawnFunc);
-            }
-        }
-
-        [CanBeNull]
         [Server]
-        private NetworkActor PlayerSpawnFunc()
+        private void SpawnPlayer(NetworkConnection conn, short controllerId)
         {
             SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();
             if(null == spawnPoint) {
-                return null;
+                return;
             }
 
             Player player = Instantiate(_playerPrefab, _playerContainer.transform);
+            if(null == player) {
+                Debug.LogError("Failed to spawn player!");
+                return;
+            }
             spawnPoint.Spawn(player);
-            return player;
+
+            NetworkServer.AddPlayerForConnection(conn, player.gameObject, controllerId);
+
+            player.OnSpawn();
         }
+
+#region Event Handlers
+        private void ServerAddPlayerEventHandler(object sender, ServerAddPlayerEventArgs args)
+        {
+            SpawnPlayer(args.NetworkConnection, args.PlayerControllerId);
+        }
+#endregion
     }
 }
