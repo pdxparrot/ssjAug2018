@@ -214,7 +214,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 1
@@ -247,9 +247,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70081bef98ab8dd459e38072395393ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _threshold: 0.78
+  _threshold: 1.05
   _stretch: 0.8
-  _intensity: 0.7
+  _intensity: 0.4
   _tint: {r: 0.7960785, g: 0.9490197, b: 1, a: 1}
   _shader: {fileID: 4800000, guid: 10949a53e15fb4a4589953320ecc54b6, type: 3}
 --- !u!114 &114084330026138302
@@ -371,38 +371,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distances:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 5000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
+  - 1000
 --- !u!114 &114718274646320594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -501,8 +501,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointOfFocus: {fileID: 0}
-  _focusDistance: 0.2
-  _fNumber: 1
+  _focusDistance: 1
+  _fNumber: 0.5
   _useCameraFov: 1
   _focalLength: 0.055
   _kernelSize: 1
