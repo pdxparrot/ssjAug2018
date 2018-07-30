@@ -86,9 +86,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
         private void Hit(GameObject go)
         {
             Mailbox b = go.GetComponent<Mailbox>();
-            b?.MailHit();
-
-            GameManager.Instance.Score(_owner);
+            b?.MailHit(_owner);
 
             _pooledObject.Recycle();
         }

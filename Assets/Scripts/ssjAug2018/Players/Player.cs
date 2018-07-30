@@ -9,6 +9,7 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Camera;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
+using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -94,6 +95,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 PlayerManager.Instance.Unregister(this);
             }
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            CheckMailboxTrigger(other.gameObject);
+        }
 #endregion
 
         private bool Initialize()
@@ -124,7 +130,35 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 
         [Server]
-        public void Reload()
+        private void CheckMailboxTrigger(GameObject go)
+        {
+            Mailbox mailbox = go.GetComponent<Mailbox>();
+            if(null == mailbox) {
+                return;
+            }
+
+            int consumed = mailbox.PlayerCollide(this);
+            if(consumed < 1) {
+                return;
+            }
+
+            _currentLetterCount -= consumed;
+            CheckReload();
+        }
+
+        [Server]
+        private void CheckReload()
+        {
+            if(_currentLetterCount > 0) {
+                return;
+            }
+
+            _currentLetterCount = 0;
+            Reload();
+        }
+
+        [Server]
+        private void Reload()
         {
             _reloadCompleteTime = TimeManager.Instance.CurrentUnixMs + PlayerManager.Instance.PlayerData.ReloadTimeMs;
             StartCoroutine(ReloadRoutine());
@@ -155,10 +189,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             mail?.Throw(this, origin, direction, speed);
 
             _currentLetterCount--;
-            if(_currentLetterCount <= 0) {
-                _currentLetterCount = 0;
-                Reload();
-            }
+            CheckReload();
         }
 #endregion
 

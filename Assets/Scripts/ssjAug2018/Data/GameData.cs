@@ -19,5 +19,10 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public int ScoreGameTimeSeconds => _scoreGameTimeSeconds;
 
         public int ScoreGameTimeMs => _scoreGameTimeSeconds * 1000;
+
+        [SerializeField]
+        private bool _playerCollidesMailboxes;
+
+        public bool PlayerCollidesMailboxes => _playerCollidesMailboxes;
     }
 }

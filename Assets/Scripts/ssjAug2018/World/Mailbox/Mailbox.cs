@@ -1,5 +1,5 @@
 ﻿using pdxpartyparrot.Core.Util;
-
+using pdxpartyparrot.ssjAug2018.Players;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -78,7 +78,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 
         [Server]
-        public void MailHit()
+        public void MailHit(Player owner)
         {
             if(!_model.activeInHierarchy) {
                 return;
@@ -87,9 +87,32 @@ namespace pdxpartyparrot.ssjAug2018.World
             Debug.Log($"Mailbox {name} hit by mail");
 
             _mailRequired--;
-            if(_mailRequired == 0) {
+            if(_mailRequired <= 0) {
                 DeactivateMailbox();
             }
+
+            GameManager.Instance.Score(owner);
+        }
+
+        [Server]
+        public int PlayerCollide(Player player)
+        {
+            if(!_model.activeInHierarchy || !GameManager.Instance.GameData.PlayerCollidesMailboxes) {
+                return -1;
+            }
+
+            Debug.Log($"Mailbox {name} hit by player");
+
+            int consumed = player.CurrentLetterCount < _mailRequired ? player.CurrentLetterCount : _mailRequired;
+
+            _mailRequired -= consumed;
+            if(_mailRequired <= 0) {
+                DeactivateMailbox();
+            }
+
+            GameManager.Instance.Score(player);
+
+            return consumed;
         }
     }
 }

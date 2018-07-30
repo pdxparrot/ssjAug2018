@@ -128,8 +128,11 @@ namespace pdxpartyparrot.ssjAug2018.World
                 List<Mailbox> foundBoxes = GetValidMailboxesInRange(_seedBox.transform.position, _mailboxData.SetMinRange, _mailboxData.SetMaxRange, _mailboxLayer);
 
                 // Select & activate the rest of the required boxes
-                foreach(Mailbox box in foundBoxes) {
+                int setSize = _random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);     // NOTE: not SetCountMax - 1 because we spawend the seed already
+                while(setSize > 0 && foundBoxes.Count > 0) {
+                    Mailbox box = _random.RemoveRandomEntry(foundBoxes);
                     SpawnMailbox(box);
+                    setSize--;
                 }
 
                 _previousActiveMailboxes.AddRange(_activeMailboxes);
