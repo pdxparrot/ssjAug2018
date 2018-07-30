@@ -92,6 +92,11 @@ namespace pdxpartyparrot.ssjAug2018.UI
             _gameOverText.gameObject.SetActive(true);
         }
 
+        public void ShowAimer(bool show)
+        {
+            _aimer.gameObject.SetActive(show);
+        }
+
         public void ShowTimeAdded(int secondsAdded)
         {
             StopHideTimeAddedCoroutine();

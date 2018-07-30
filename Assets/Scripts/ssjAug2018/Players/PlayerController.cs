@@ -5,6 +5,7 @@ using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.ssjAug2018.Data;
+using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
@@ -126,12 +127,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Throwing
         [SerializeField]
         [ReadOnly]
-        private bool _canThrow;
+        private bool _canThrowMail;
 
         [SerializeField]
-        private long _autoThrowTriggerTime;
+        private long _autoThrowMailTriggerTime;
 
-        private bool ShouldAutoThrow => _autoThrowTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _autoThrowTriggerTime;
+        private bool ShouldAutoThrowMail => _autoThrowMailTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _autoThrowMailTriggerTime;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _canThrowSnowball;
 #endregion
 
 #region Aiming
@@ -291,42 +296,88 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
-        public void StartThrow()
+        public void StartAim()
+        {
+            _isAiming = true;
+
+            Debug.Log("TODO: zoom and aim!");
+
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(true);
+        }
+
+        public void Aim()
+        {
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(false);
+
+            _isAiming = false;
+        }
+
+        public void StartThrowMail()
         {
             if(!Player.CanThrowMail) {
                 return;
             }
 
-            _canThrow = true;
+            _canThrowMail = true;
 
-            _autoThrowTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.AutoThrowMs;
+            _autoThrowMailTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.AutoThrowMs;
 
             Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, true);
         }
 
-        public void Throw()
+        public void ThrowMail()
         {
-            if(_canThrow) {
-                DoThrow();
+            if(_canThrowMail) {
+                DoThrowMail();
             }
 
             Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, false);
 
-            _canThrow = true;
+            _canThrowMail = true;
         }
 
-        private void DoThrow()
+        private void DoThrowMail()
         {
-            _autoThrowTriggerTime = 0;
+            _autoThrowMailTriggerTime = 0;
 
             if(null == Player.Viewer) {
                 Debug.LogWarning("Non-local player doing a throw!");
                 return;
             }
 
-            Player.CmdThrow(_rightHandTransform.position, Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
+            Player.CmdThrowMail(_rightHandTransform.position, /*!IsAiming ? Player.transform.forward :*/ Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
 
             Player.Animator.SetTrigger(_playerControllerData.ThrowMailParam);
+        }
+
+        public void StartThrowSnowball()
+        {
+            _canThrowSnowball = true;
+
+            //Player.Animator.SetBool(_playerControllerData.ThrowingSnowballParam, true);
+        }
+
+        public void ThrowSnowball()
+        {
+            if(_canThrowSnowball) {
+                DoThrowSnowball();
+            }
+
+            //Player.Animator.SetBool(_playerControllerData.ThrowingSnowballParam, false);
+
+            _canThrowSnowball = true;
+        }
+
+        private void DoThrowSnowball()
+        {
+            if(null == Player.Viewer) {
+                Debug.LogWarning("Non-local player doing a throw!");
+                return;
+            }
+
+            Player.CmdThrowSnowball(_leftHandTransform.position, /*!IsAiming ? Player.transform.forward :*/ Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
+
+            //Player.Animator.SetTrigger(_playerControllerData.ThrowSnowballParam);
         }
 
         public void JumpStart()
@@ -437,9 +488,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void UpdateThrowing(float dt)
         {
-            if(ShouldAutoThrow) {
-                DoThrow();
-                _canThrow = false;
+            if(ShouldAutoThrowMail) {
+                DoThrowMail();
+                _canThrowMail = false;
             }
         }
 

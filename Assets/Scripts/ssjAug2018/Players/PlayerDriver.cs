@@ -60,15 +60,18 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
-
                 InputManager.Instance.Controls.game.hover.started -= OnHoverStart;
                 InputManager.Instance.Controls.game.hover.performed -= OnHover;
 
                 InputManager.Instance.Controls.game.grab.performed -= OnGrab;
                 InputManager.Instance.Controls.game.drop.performed -= OnDrop;
 
-                InputManager.Instance.Controls.game.@throw.started -= OnThrowStart;
-                InputManager.Instance.Controls.game.@throw.performed -= OnThrow;
+                InputManager.Instance.Controls.game.aim.started -= OnAimStart;
+                InputManager.Instance.Controls.game.aim.performed -= OnAim;
+                InputManager.Instance.Controls.game.throwmail.started -= OnThrowMailStart;
+                InputManager.Instance.Controls.game.throwmail.performed -= OnThrowMail;
+                InputManager.Instance.Controls.game.throwsnowball.started -= OnThrowSnowballStart;
+                InputManager.Instance.Controls.game.throwsnowball.performed -= OnThrowSnowball;
             }
 
             base.OnDestroy();
@@ -92,15 +95,18 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.jump.started += OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed += OnJump;
-
                 InputManager.Instance.Controls.game.hover.started += OnHoverStart;
                 InputManager.Instance.Controls.game.hover.performed += OnHover;
 
                 InputManager.Instance.Controls.game.grab.performed += OnGrab;
                 InputManager.Instance.Controls.game.drop.performed += OnDrop;
 
-                InputManager.Instance.Controls.game.@throw.started += OnThrowStart;
-                InputManager.Instance.Controls.game.@throw.performed += OnThrow;
+                InputManager.Instance.Controls.game.aim.started += OnAimStart;
+                InputManager.Instance.Controls.game.aim.performed += OnAim;
+                InputManager.Instance.Controls.game.throwmail.started += OnThrowMailStart;
+                InputManager.Instance.Controls.game.throwmail.performed += OnThrowMail;
+                InputManager.Instance.Controls.game.throwsnowball.started += OnThrowSnowballStart;
+                InputManager.Instance.Controls.game.throwsnowball.performed += OnThrowSnowball;
             }
         }
 
@@ -208,22 +214,58 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Player.PlayerController.Drop();
         }
 
-        private void OnThrowStart(InputAction.CallbackContext ctx)
+        private void OnAimStart(InputAction.CallbackContext ctx)
         {
             if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.StartThrow();
+            Player.PlayerController.StartAim();
         }
 
-        private void OnThrow(InputAction.CallbackContext ctx)
+        private void OnAim(InputAction.CallbackContext ctx)
         {
             if(!IsOurGamepad(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.Throw();
+            Player.PlayerController.Aim();
+        }
+
+        private void OnThrowMailStart(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.StartThrowMail();
+        }
+
+        private void OnThrowMail(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.ThrowMail();
+        }
+
+        private void OnThrowSnowballStart(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.StartThrowSnowball();
+        }
+
+        private void OnThrowSnowball(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurGamepad(ctx) || !CanDrive) {
+                return;
+            }
+
+            Player.PlayerController.ThrowSnowball();
         }
 #endregion
 

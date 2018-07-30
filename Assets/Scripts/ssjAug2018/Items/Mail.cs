@@ -73,12 +73,12 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
-        public void Throw(Player owner, Vector3 origin, Vector3 direction, float speed)
+        public void Throw(Player owner, Vector3 origin, Vector3 velocity)
         {
             _owner = owner;
 
             _rigidbody.position = origin;
-            _rigidbody.velocity = direction * speed;
+            _rigidbody.velocity = velocity;
             _despawnTime = TimeManager.Instance.CurrentUnixMs + ItemManager.Instance.ItemData.MailDespawnMs;
         }
 

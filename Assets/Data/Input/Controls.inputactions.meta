@@ -10,7 +10,9 @@ ScriptedImporter:
     11400010: game/drop
     11400012: game/grab
     11400014: game/hover
-    11400016: game/throw
+    11400016: game/aim
+    11400018: game/throw mail
+    11400020: game/throw snowball
   externalObjects: {}
   userData: 
   assetBundleName: 

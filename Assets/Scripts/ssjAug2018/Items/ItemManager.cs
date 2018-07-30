@@ -12,6 +12,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
     public sealed class ItemManager : SingletonBehavior<ItemManager>
     {
         private const string MailItemPool = "mail";
+        private const string SnowballItemPool = "snowballs";
 
         [SerializeField]
         private ItemData _itemData;

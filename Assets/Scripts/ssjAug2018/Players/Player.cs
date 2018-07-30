@@ -179,17 +179,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
 #region Commands
         [Command]
-        public void CmdThrow(Vector3 origin, Vector3 direction, float speed)
+        public void CmdThrowMail(Vector3 origin, Vector3 direction, float speed)
         {
             if(!CanThrowMail) {
                 return;
             }
 
             Mail mail = ItemManager.Instance.GetMail();
-            mail?.Throw(this, origin, direction, speed);
+            Vector3 velocity = direction * speed;
+            mail?.Throw(this, origin, velocity);
 
             _currentLetterCount--;
             CheckReload();
+        }
+
+        [Command]
+        public void CmdThrowSnowball(Vector3 origin, Vector3 direction, float speed)
+        {
+            Debug.Log("TODO: throw a snowball!");
         }
 #endregion
 
