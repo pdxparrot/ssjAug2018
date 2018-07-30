@@ -12,6 +12,8 @@ namespace pdxpartyparrot.ssjAug2018.UI
 
         private PlayerUI _playerUI;
 
+        public PlayerUI PlayerUI => _playerUI;
+
         public void InitializePlayerUI(Player player)
         {
             _playerUI = Instantiate(_playerUIPrefab, UIContainer.transform);

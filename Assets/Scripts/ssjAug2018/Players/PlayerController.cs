@@ -115,6 +115,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [ReadOnly]
         private long _hoverCooldownEndTime;
 
+        public float HoverRemainingPercent => _hoverTimeMs / (float)_playerControllerData.HoverTimeMs;
+
         private bool IsHoverCooldown => TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
 
         private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;

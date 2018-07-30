@@ -109,6 +109,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             UIManager.Instance.InitializePlayerUI(this);
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowInfoText();
         }
 
 #region Commands

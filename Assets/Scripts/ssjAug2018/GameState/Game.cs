@@ -1,7 +1,7 @@
 ﻿using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Network;
-using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.UI;
 
@@ -22,6 +22,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             base.OnEnter();
 
             InitializeManagers();
+
+            DebugMenuManager.Instance.ResetFrameStats();
         }
 
         public override void OnUpdate(float dt)

@@ -1,4 +1,5 @@
 ﻿using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 
@@ -15,7 +16,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public override void OnEnter()
         {
-            Debug.Log("Game over!");
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowGameOverText();
+
             _completeTime = TimeManager.Instance.CurrentUnixMs + (int)(_completeWaitTimeSeconds * 1000.0f);
         }
 
