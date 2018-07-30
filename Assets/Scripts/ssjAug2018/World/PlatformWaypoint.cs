@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class PlatformWaypoint : MonoBehaviour {
-
+public class PlatformWaypoint : MonoBehaviour
+{
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

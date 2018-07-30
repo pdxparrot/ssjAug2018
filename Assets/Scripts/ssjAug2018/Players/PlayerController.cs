@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 
+using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.ssjAug2018.Data;
@@ -141,16 +142,28 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsAiming => _isAiming;
 #endregion
 
+        [SerializeField]
+        private bool _breakOnFall;
+
         public Player Player => (Player)Owner;
+
+        private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
         protected override void Awake()
         {
             base.Awake();
 
+            InitDebugMenu();
+
             Debug.Assert(Math.Abs(_leftHandTransform.position.y - _rightHandTransform.position.y) < float.Epsilon, "Player hands are at different heights!");
             Debug.Assert(_headTransform.position.y > _leftHandTransform.position.y, "Player head should be above player hands!");
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
+        }
+
+        private void OnDestroy()
+        {
+            DestroyDebugMenu();
         }
 
         protected override void Update()
@@ -576,7 +589,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 } else {
                     Debug.LogWarning("Unexpectedly fell off!");
                     DisableGrabbing();
-                    Debug.Break();
+
+                    if(_breakOnFall) {
+                        Debug.Break();
+                    }
                 }
             }
         }
@@ -693,6 +709,22 @@ Debug.Log("TODO: check drop down");
         private void DropDown()
         {
 Debug.Log("TODO: drop down");
+        }
+
+        private void InitDebugMenu()
+        {
+            _debugMenuNode = DebugMenuManager.Instance.AddNode(() => $"Player {Player.name} Controller");
+            _debugMenuNode.RenderContentsAction = () => {
+                _breakOnFall = GUILayout.Toggle(_breakOnFall, "Break on fall");
+            };
+        }
+
+        private void DestroyDebugMenu()
+        {
+            if(DebugMenuManager.HasInstance) {
+                DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            }
+            _debugMenuNode = null;
         }
     }
 }

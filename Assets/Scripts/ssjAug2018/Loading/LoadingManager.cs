@@ -4,7 +4,6 @@ using pdxpartyparrot.ssjAug2018.Actors;
 using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
-using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 
@@ -21,9 +20,6 @@ namespace pdxpartyparrot.ssjAug2018.Loading
 
         [SerializeField]
         private ItemManager _itemManagerPrefab;
-
-        [SerializeField]
-        private MailboxManager _mailboxManagerPrefab;
 #endregion
 
         protected override void CreateManagers()
@@ -34,7 +30,6 @@ namespace pdxpartyparrot.ssjAug2018.Loading
             UIManager.CreateFromPrefab(_uiManagerPrefab, ManagersContainer);
             SpawnManager.Create(ManagersContainer);
             ItemManager.CreateFromPrefab(_itemManagerPrefab, ManagersContainer);
-            MailboxManager.CreateFromPrefab(_mailboxManagerPrefab, ManagersContainer);
             DroneManager.Create(ManagersContainer);
         }
 

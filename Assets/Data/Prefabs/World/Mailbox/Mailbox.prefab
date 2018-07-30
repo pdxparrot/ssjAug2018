@@ -186,7 +186,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba389254ca3aeb0408664a1867f05f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _model: {fileID: 1857627256744940}
   _animator: {fileID: 95451696309214956}
+  _isObjective: 0
+  _mailRequired: 0
+  _hasActivated: 0
 --- !u!114 &114452634713672820
 MonoBehaviour:
   m_ObjectHideFlags: 1

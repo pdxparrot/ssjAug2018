@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pdxpartyparrot.Core.Util;
+
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -6,66 +7,87 @@ namespace pdxpartyparrot.ssjAug2018.World
 {
     [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(Collider))]
-    public sealed class Mailbox : MonoBehaviour {
-
-#region Animations
-        [Header("Animations")]
+    public sealed class Mailbox : NetworkBehaviour
+    {
+        [SerializeField]
+        private GameObject _model;
 
         [SerializeField]
         private Animator _animator;
-#endregion
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private bool _isObjective;
         
-        private int _mailRequired = 0;
-        private bool _isObjective = false;
-        public bool isObjective => _isObjective;
-        private bool _hasActivated = false;
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private int _mailRequired;
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private bool _hasActivated;
+
+        public bool HasActivated => _hasActivated;
+
+        private Collider _collider;
 
 #region Unity Lifecycle
         private void Awake()
         {
+            _collider = GetComponent<Collider>();
+
             MailboxManager.Instance.RegisterMailbox(this);
+
+            DeactivateMailbox(false);
         }
 
         private void OnDestroy()
         {
-            if (MailboxManager.HasInstance)
-            {
+            if(MailboxManager.HasInstance) {
                 MailboxManager.Instance.UnregisterMailbox(this);
             }
         }
 #endregion
-
-        // TODO: Add projectile onTriggernEnter logic, include playing audio and SFX (If present)
-        // Also decrement the required deliveries
-        // At 0, change to 'done' state (VFX applies)
-        // Add UI for remaining delivers/total required
 
         public void ActivateMailbox(int requiredMail)
         {
             _isObjective = true;
             _mailRequired = requiredMail;
             _hasActivated = true;
-Debug.Log("Mailbox " + name + " activated requreing " + _mailRequired + " mail");
+
+            _model.SetActive(true);
+            _collider.enabled = true;
+
+            Debug.Log($"Mailbox {name} activated requiring {_mailRequired} mail");
         }
 
-        public void DeactivateMailbox()
+        public void DeactivateMailbox(bool complete=true)
         {
             _isObjective = false;
-            MailboxManager.Instance.MailboxCompleted();
-Debug.Log("Mailbox " + name + " Deactivated");
+            if(complete) {
+                Debug.Log($"Mailbox {name} completed");
+                MailboxManager.Instance.MailboxCompleted(this);
+            }
+
+            _model.SetActive(false);
+            _collider.enabled = false;
+        }
+
+        public void AddLetters(int count)
+        {
+            _mailRequired += count;
         }
 
         public void MailHit()
         {
             if(!_isObjective) return;                
-Debug.Log("Hit by mail");
+            Debug.Log($"Mailbox {name} hit by mail");
+
             _mailRequired--;
             if(_mailRequired == 0) DeactivateMailbox();
-        }
-
-        public static bool PreviouslyActivated(Mailbox box)
-        {
-            return box._hasActivated;
         }
     }
 }

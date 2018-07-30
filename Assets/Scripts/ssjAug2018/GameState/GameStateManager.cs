@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.Loading;
 using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,14 +15,19 @@ namespace pdxpartyparrot.ssjAug2018.GameState
     public sealed class GameStateManager : pdxpartyparrot.Game.State.GameStateManager<GameStateManager>
     {
         [SerializeField]
+        private GameManager _gameManagerPrefab;
+
+        private GameManager _gameManager;
+
+        [SerializeField]
         private PlayerManager _playerManagerPrefab;
 
         private PlayerManager _playerManager;
 
         [SerializeField]
-        private GameManager _gameManagerPrefab;
+        private MailboxManager _mailboxManagerPrefab;
 
-        private GameManager _gameManager;
+        private MailboxManager _mailboxManager;
 
         [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
@@ -65,11 +71,15 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             _gameManager = Instantiate(_gameManagerPrefab, transform);
             _playerManager = Instantiate(_playerManagerPrefab, transform);
+            _mailboxManager = Instantiate(_mailboxManagerPrefab, transform);
         }
 
         private void ServerStopEventHandler(object sender, EventArgs args)
         {
             Debug.Log("Destroying network managers");
+
+            NetworkServer.Destroy(_mailboxManager.gameObject);
+            _mailboxManager = null;
 
             NetworkServer.Destroy(_playerManager.gameObject);
             _playerManager = null;

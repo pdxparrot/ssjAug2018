@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
-using pdxpartyparrot.ssjAug2018.World;
-using UnityEngine;
 
+using pdxpartyparrot.ssjAug2018.World;
+
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxparyparrot.ssjAug2018.World
 {
+    [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(Collider))]
-    public class Platform : MonoBehaviour, IGrabbable {
-
+    public class Platform : MonoBehaviour, IGrabbable
+    {
         [SerializeField]
         private float _speed = 5;
 
@@ -17,16 +21,17 @@ namespace pdxparyparrot.ssjAug2018.World
         private PlatformWaypoint _targetWayponit;
         private int _waypointIterator = 0;
 
-        private Collider _collider;
+        public Collider Collider { get; private set; }
 
-        public Collider Collider => _collider;
-
+#region Unity Lifecycle
         private void Awake()
         {
-            _collider = GetComponent<Collider>();
+            Collider = GetComponent<Collider>();
+
             _targetWayponit = _waypoints[0];
             transform.LookAt(_targetWayponit.transform);
         }
+#endregion
 
         private void FixedUpdate()
         {
@@ -35,7 +40,7 @@ namespace pdxparyparrot.ssjAug2018.World
             {
                 _waypointIterator = (_waypointIterator + 1) % _waypoints.Count;
                 _targetWayponit = _waypoints[_waypointIterator];
-                this.transform.LookAt(_targetWayponit.transform.position);
+                transform.LookAt(_targetWayponit.transform.position);
             }
             transform.position = Vector3.MoveTowards(transform.position, _targetWayponit.transform.position, step);
         }

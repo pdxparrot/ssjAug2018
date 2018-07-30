@@ -10,9 +10,11 @@ namespace pdxpartyparrot.ssjAug2018
     [RequireComponent(typeof(NetworkIdentity))]
     public sealed class GameManager : NetworkSingletonBehavior
     {
+#region NetworkSingleton
         public static GameManager Instance { get; private set; }
 
         public static bool HasInstance => null != Instance;
+#endregion
 
         [SerializeField]
         private GameData _gameData;
@@ -55,7 +57,7 @@ namespace pdxpartyparrot.ssjAug2018
         public void StartGame()
         {
             // TODO: pick a better starting origin
-            MailboxManager.Instance.Initialize(transform.position, (int)TimeManager.Instance.CurrentUnixMs);
+            MailboxManager.Instance.Initialize(transform.position);
             _gameOverTime = TimeManager.Instance.CurrentUnixMs + GameData.GameTimeMs;
         }
     }

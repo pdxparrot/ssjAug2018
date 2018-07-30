@@ -10,9 +10,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerManager : NetworkActorManager
     {
+#region NetworkSingleton
         public static PlayerManager Instance { get; private set; }
 
         public static bool HasInstance => null != Instance;
+#endregion
 
 #region Data
         [SerializeField]
