@@ -9,7 +9,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace pdxpartyparrot.Core.Camera
 {
-    public abstract class Viewer : MonoBehaviour
+    public class Viewer : MonoBehaviour
     {
         [SerializeField]
         [ReadOnly]
@@ -59,7 +59,7 @@ namespace pdxpartyparrot.Core.Camera
             _uiCamera.clearFlags = CameraClearFlags.Nothing;
             _uiCamera.backgroundColor = Color.black;
             _uiCamera.orthographic = true;
-            _uiCamera.cullingMask = UIManager.Instance.UILayer;
+            _uiCamera.cullingMask = PartyParrotManager.Instance.UILayer;
             _uiCamera.useOcclusionCulling = false;
 
             _globalPostProcessVolume.isGlobal = true;

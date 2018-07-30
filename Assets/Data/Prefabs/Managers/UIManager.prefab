@@ -51,6 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c69933ecada11c45b622e06e56d43cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiLayer:
-    serializedVersion: 2
-    m_Bits: 32
+  _playerUIPrefab: {fileID: 114690114540402272, guid: 815e9fd79aed665419081abd7a873757,
+    type: 2}

@@ -3,6 +3,7 @@ using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.State;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 
@@ -10,6 +11,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public sealed class Game : pdxpartyparrot.Game.State.GameState
     {
+        [SerializeField]
+        private Viewer _viewerPrefab;
+
         [SerializeField]
         private GameOver _gameOverState;
 
@@ -22,13 +26,17 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public override void OnUpdate(float dt)
         {
-            if(TimeManager.Instance.CurrentUnixMs >= GameManager.Instance.GameOverTime) {
+            if(GameManager.Instance.IsGameOver) {
                 GameStateManager.Instance.PushSubState(_gameOverState);
             }
         }
 
         public override void OnExit()
         {
+            if(UIManager.HasInstance) {
+                UIManager.Instance.Shutdown();
+            }
+
             if(InputManager.HasInstance) {
                 InputManager.Instance.Controls.game.Disable();
             }
@@ -46,8 +54,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         private void InitializeManagers()
         {
-            ViewerManager.Instance.FreeViewers();
-            ViewerManager.Instance.AllocateViewers(1);
+            ViewerManager.Instance.AllocateViewers(1, _viewerPrefab);
 
             InputManager.Instance.Controls.game.Enable();
 

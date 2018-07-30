@@ -37,6 +37,7 @@ namespace pdxpartyparrot.Core
 
         [Space(10)]
 
+// TODO: this should be network sync'd and server-authoritative
 #region Game State
         [Header("Game State")]
 
@@ -45,6 +46,15 @@ namespace pdxpartyparrot.Core
         private bool _isPaused;
 
         public bool IsPaused => _isPaused;
+#endregion
+
+        [Space(10)]
+
+#region UI
+        [SerializeField]
+        private LayerMask _uiLayer;
+
+        public LayerMask UILayer => _uiLayer;
 #endregion
 
 #region Unity Lifecycle

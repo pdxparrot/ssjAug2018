@@ -26,5 +26,12 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public float AngularDrag => _angularDrag;
 #endregion
+
+#region Inventory
+        [SerializeField]
+        private int _maxLetters = 1;
+
+        public int MaxLetters => _maxLetters;
+#endregion
     }
 }
