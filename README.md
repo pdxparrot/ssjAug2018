@@ -2,3 +2,4 @@
 
 * http://pigsquad.com/summerslowjams
 * https://itch.io/jam/ssjlocationbased
+* https://luminoth.itch.io/air-yeti
