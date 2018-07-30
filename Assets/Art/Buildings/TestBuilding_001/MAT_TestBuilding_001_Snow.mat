@@ -207,20 +207,31 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Keyword0: 0
+    - _Material1_AOLift: 0.5
+    - _Material1_AOMult: 0.43
     - _Material1_NormalScale: 1
+    - _Material1_RoughnessMult: 0.5
     - _Material1_TintStrength: 0.419
+    - _Material2_AOLift: 0.5
+    - _Material2_AOMult: 0.95
     - _Material2_NormalScale: 1
+    - _Material2_RoughnessMult: 0.5
     - _Material2_TintStrength: 0.914
+    - _Material3_AOLift: 0.5
+    - _Material3_AOMult: 0.65
     - _Material3_NormalScale: 1
+    - _Material3_RoughnessMult: 0.5
     - _Material3_TintStrength: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
+    - _Snow_AOLift: 0.5
     - _Snow_Amount: 1.41
     - _Snow_Metallic: 0
     - _Snow_NormalScale: 0.842
+    - _Snow_RoughnessMult: 0.5
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
