@@ -27,6 +27,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _mailDespawnSeconds = 5.0f;
 
         public int MailDespawnMs => (int)(_mailDespawnSeconds * 1000.0f);
+
+        [SerializeField]
+        private int _mailScoreAmount = 1;
+
+        public int MailScoreAmount => _mailScoreAmount;
 #endregion
     }
 }

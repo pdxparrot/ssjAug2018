@@ -44,19 +44,22 @@ namespace pdxpartyparrot.ssjAug2018.Items
         private void Update()
         {
             if(_despawnTime > 0 && TimeManager.Instance.CurrentUnixMs >= _despawnTime) {
-                RpcMiss();
+                Miss();
             }
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            RpcMiss();
+            Miss();
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if(null == other.GetComponent<NetworkIdentity>()) return;
-            RpcHit(other.gameObject);
+            if(null == other.GetComponent<NetworkIdentity>()) {
+                return;
+            }
+
+            Hit(other.gameObject);
         }
 #endregion
 
@@ -79,19 +82,22 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _despawnTime = TimeManager.Instance.CurrentUnixMs + ItemManager.Instance.ItemData.MailDespawnMs;
         }
 
-        [ClientRpc]
-        private void RpcHit(GameObject go)
+        [Server]
+        private void Hit(GameObject go)
         {
-Debug.Log("hit!");
             Mailbox b = go.GetComponent<Mailbox>();
-            if(b != null) b.MailHit();
+            b?.MailHit();
+
+            GameManager.Instance.Score(_owner);
+
             _pooledObject.Recycle();
         }
 
-        [ClientRpc]
-        private void RpcMiss()
+        [Server]
+        private void Miss()
         {
-Debug.Log("miss!");
+            Debug.Log("Mailed missed!");
+
             _pooledObject.Recycle();
         }
 

@@ -38,6 +38,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsReloading => _reloadCompleteTime > 0 && TimeManager.Instance.CurrentUnixMs <= _reloadCompleteTime;
 #endregion
 
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private int _score;
+
+        public int Score => _score;
+
         public FollowTarget FollowTarget { get; private set; }
 
         public PlayerController PlayerController => (PlayerController)Controller;
@@ -128,6 +135,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
             yield return new WaitForSeconds(PlayerManager.Instance.PlayerData.ReloadTimeSeconds);
 
             _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+        }
+
+        [Server]
+        public void IncreaseScore(int amount)
+        {
+            _score += amount;
         }
 
 #region Commands

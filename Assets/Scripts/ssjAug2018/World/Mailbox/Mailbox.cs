@@ -47,11 +47,13 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
+        [Server]
         public void Reset()
         {
             _hasActivated = false;
         }
 
+        [Server]
         public void ActivateMailbox(int requiredMail)
         {
             _mailRequired = requiredMail;
@@ -63,6 +65,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             Debug.Log($"Mailbox {name} activated requiring {_mailRequired} mail");
         }
 
+        [Server]
         public void DeactivateMailbox(bool complete=true)
         {
             if(complete) {
@@ -74,11 +77,13 @@ namespace pdxpartyparrot.ssjAug2018.World
             _collider.enabled = false;
         }
 
+        [Server]
         public void AddLetters(int count)
         {
             _mailRequired += count;
         }
 
+        [Server]
         public void MailHit()
         {
             Debug.Log($"Mailbox {name} hit by mail");

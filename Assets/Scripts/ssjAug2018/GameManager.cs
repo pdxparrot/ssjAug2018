@@ -1,5 +1,8 @@
 ﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
+using pdxpartyparrot.ssjAug2018.Items;
+using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
@@ -59,6 +62,21 @@ namespace pdxpartyparrot.ssjAug2018
             // TODO: pick a better starting origin
             MailboxManager.Instance.Initialize(transform.position);
             _gameOverTime = TimeManager.Instance.CurrentUnixMs + GameData.GameTimeMs;
+        }
+
+        [Server]
+        public void Score(Player player)
+        {
+            player.IncreaseScore(ItemManager.Instance.ItemData.MailScoreAmount);
+            _gameOverTime += GameData.ScoreGameTimeMs;
+
+            RpcGameTimeUpdated(GameData.ScoreGameTimeSeconds);
+        }
+
+        [ClientRpc]
+        private void RpcGameTimeUpdated(int amount)
+        {
+            UIManager.Instance.PlayerUI.PlayerHUD.ShowTimeAdded(amount);
         }
     }
 }
