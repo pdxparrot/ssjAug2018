@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1338278319493980}
+  m_RootGameObject: {fileID: 1829291340504648}
   m_IsPrefabAsset: 1
---- !u!1 &1338278319493980
+--- !u!1 &1829291340504648
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4620413766668778}
-  - component: {fileID: 114279629126510442}
+  - component: {fileID: 4527200922106784}
+  - component: {fileID: 114295936013911180}
   m_Layer: 0
-  m_Name: GameStateManager
+  m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4620413766668778
+--- !u!4 &4527200922106784
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1338278319493980}
+  m_GameObject: {fileID: 1829291340504648}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,20 +40,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114279629126510442
+--- !u!114 &114295936013911180
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1338278319493980}
+  m_GameObject: {fileID: 1829291340504648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b2c943bf2a588e4b8725afe69c1db2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f40f38c88b897544aee880f56d0352c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialGameStatePrefab: {fileID: 114464068976828966, guid: 1bf18f674102a1b4ca7af8dffe2f5aea,
-    type: 2}
-  _playerManagerPrefab: {fileID: 114654468024192066, guid: b64b73bd6105322458c84b1d2ab2c62c,
-    type: 2}
-  _gameManagerPrefab: {fileID: 114275746360012258, guid: 579f77f5b4ea73a40b6562e42d599e19,
-    type: 2}
+  _completeWaitTimeSeconds: 5
+  _completeTime: 0

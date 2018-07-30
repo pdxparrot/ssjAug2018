@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4873974780317356}
+  - component: {fileID: 114288389114462094}
   - component: {fileID: 114275746360012258}
   m_Layer: 0
   m_Name: GameManager
@@ -51,5 +52,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6b2bc035df99549855609e2985650e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerManagerPrefab: {fileID: 114654468024192066, guid: b64b73bd6105322458c84b1d2ab2c62c,
-    type: 2}
+  _gameData: {fileID: 11400000, guid: afec78e04b6c94041bf868f1d573cf95, type: 2}
+  _gameTimer: 0
+--- !u!114 &114288389114462094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1476537916745582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 87
+    i1: 159
+    i2: 119
+    i3: 245
+    i4: 180
+    i5: 234
+    i6: 115
+    i7: 164
+    i8: 11
+    i9: 101
+    i10: 98
+    i11: 228
+    i12: 45
+    i13: 89
+    i14: 158
+    i15: 25
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

@@ -819,8 +819,6 @@ MonoBehaviour:
     type: 2}
   _gameStateManagerPrefab: {fileID: 114279629126510442, guid: a40a8ff02efcb0b4b99b6533e327fe14,
     type: 2}
-  _gameManagerPrefab: {fileID: 114275746360012258, guid: 579f77f5b4ea73a40b6562e42d599e19,
-    type: 2}
   _uiManagerPrefab: {fileID: 114116840764165926, guid: 9c45accca2596d840afe99206844ed68,
     type: 2}
   _itemManagerPrefab: {fileID: 114018978608229330, guid: 639ddd9d6d0a158439d33473f75893d2,

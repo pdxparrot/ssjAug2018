@@ -53,3 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneName: test_terrain04
   _makeSceneActive: 1
+  _gameOverState: {fileID: 114295936013911180, guid: 69d9e25074cfada4f9bd693cfd5d0aef,
+    type: 2}
