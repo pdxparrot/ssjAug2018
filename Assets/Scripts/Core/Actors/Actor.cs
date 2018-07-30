@@ -16,6 +16,8 @@ namespace pdxpartyparrot.Core.Actors
 
         Collider Collider { get; }
 
+        Animator Animator { get; }
+
         ActorController Controller { get; }
 
         [CanBeNull]

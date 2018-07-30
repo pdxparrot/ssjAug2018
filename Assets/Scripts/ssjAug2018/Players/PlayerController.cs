@@ -153,8 +153,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             float dt = Time.deltaTime;
 
             UpdateJumping(dt);
@@ -285,6 +287,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _canThrow = true;
 
             _autoThrowTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.AutoThrowMs;
+
+            Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, true);
         }
 
         public void Throw()
@@ -292,6 +296,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(_canThrow) {
                 DoThrow();
             }
+
+            Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, false);
 
             _canThrow = true;
         }
@@ -306,6 +312,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Player.CmdThrow(_rightHandTransform.position, Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
+
+            Player.Animator.SetTrigger(_playerControllerData.ThrowMailParam);
         }
 
         public void JumpStart()
@@ -358,6 +366,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _movementState = enable ? MovementState.Climbing : MovementState.Platforming;
             Rigidbody.isKinematic = enable;
 
+            Player.Animator.SetBool(_playerControllerData.ClimbingParam, enable);
+
             if(enable) {
                 DoubleJumpCount = 0;
             }
@@ -367,7 +377,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             if(_canJump && CanLongJump) {
                 DisableGrabbing();
-                DoJump(_playerControllerData.LongJumpHeight);
+                DoJump(_playerControllerData.LongJumpHeight, _playerControllerData.LongJumpParam);
 
                 _canJump = false;
             }

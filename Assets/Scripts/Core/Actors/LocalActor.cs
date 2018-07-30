@@ -33,6 +33,11 @@ namespace pdxpartyparrot.Core.Actors
 
         public ActorController Controller => _controller;
 
+        [SerializeField]
+        private Animator _animator;
+
+        public Animator Animator => _animator;
+
         [CanBeNull]
         public abstract Viewer Viewer { get; }
 

@@ -87,16 +87,28 @@ namespace pdxpartyparrot.Core.Input
                 disconnectCallback = disconnectCallback
             };
 
+            AcquireGamepad(listener);
+
+            return listener.id;
+        }
+
+        private void AcquireGamepad(GamepadListener listener)
+        {
             if(_unacquiredGamepads.Count < 1) {
                 _gamepadListeners.Add(listener);
-                return listener.id;
+                return;
             }
 
             Gamepad gamepad = _unacquiredGamepads.RemoveFront();
+            AcquireGamepad(listener, gamepad);
+        }
+
+        private void AcquireGamepad(GamepadListener listener, Gamepad gamepad)
+        {
+            Debug.Log($"Gamepad listener {listener.id} acquiring gamepad {gamepad.name}");
+
             listener.acquireCallback.Invoke(gamepad);
             _acquiredGamepads[gamepad] = listener;
-
-            return listener.id;
         }
 
         public void ReleaseGamepad(int listenerId)
@@ -115,6 +127,8 @@ namespace pdxpartyparrot.Core.Input
             }
 
             foreach(Gamepad gamepad in remove) {
+                Debug.Log($"Gamepad listener {listenerId} releasing gamepad {gamepad.name}");
+
                 _acquiredGamepads.Remove(gamepad);
                 _unacquiredGamepads.Add(gamepad);
             }
@@ -156,13 +170,15 @@ namespace pdxpartyparrot.Core.Input
             }
 
             GamepadListener listener = _gamepadListeners.RemoveFront();
-            listener.acquireCallback.Invoke(gamepad);
-            _acquiredGamepads[gamepad] = listener;
+            AcquireGamepad(listener, gamepad);
+
             return true;
         }
 
         private void NotifyRemoveGamepad(Gamepad gamepad)
         {
+            Debug.Log($"Gamepad {gamepad.name} is offline");
+
             GamepadListener listener = _acquiredGamepads.GetOrDefault(gamepad);
             listener?.disconnectCallback.Invoke(gamepad);
             _acquiredGamepads.Remove(gamepad);

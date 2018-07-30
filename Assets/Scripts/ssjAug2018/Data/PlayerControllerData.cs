@@ -15,6 +15,32 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         [Space(10)]
 
+#region Animations
+        [Header("Animations")]
+
+        [SerializeField]
+        private string _climbingParam = "Climbing";
+
+        public string ClimbingParam => _climbingParam;
+
+        [SerializeField]
+        private string _longJumpParam = "LongJump";
+
+        public string LongJumpParam => _longJumpParam;
+
+        [SerializeField]
+        private string _throwingMailParam = "ReadyMail";
+
+        public string ThrowingMailParam => _throwingMailParam;
+
+        [SerializeField]
+        private string _throwMailParam = "ThrowMail";
+
+        public string ThrowMailParam => _throwMailParam;
+#endregion
+
+        [Space(10)]
+
 #region Physics
         [Header("Physics")]
 

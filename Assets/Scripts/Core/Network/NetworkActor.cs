@@ -11,6 +11,7 @@ namespace pdxpartyparrot.Core.Network
 {
     [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(NetworkAnimator))]
     public abstract class NetworkActor : NetworkBehaviour, IActor
     {
 #region IActor
@@ -37,6 +38,11 @@ namespace pdxpartyparrot.Core.Network
 
         public ActorController Controller => _controller;
 
+        [SerializeField]
+        private Animator _animator;
+
+        public Animator Animator => _animator;
+
         [CanBeNull]
         public abstract Viewer Viewer { get; }
 
@@ -56,6 +62,9 @@ namespace pdxpartyparrot.Core.Network
         {
             NetworkIdentity = GetComponent<NetworkIdentity>();
             NetworkTransform = GetComponent<NetworkTransform>();
+
+            NetworkAnimator networkAnimator = GetComponent<NetworkAnimator>();
+            networkAnimator.animator = Animator;
         }
 #endregion
 

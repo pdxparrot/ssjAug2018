@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Name: PlayerControllerData
   m_EditorClassIdentifier: 
   _attachDistance: 0.1
+  _climbingParam: Climbing
+  _longJumpParam: LongJump
+  _throwingMailParam: ReadyToThrow
+  _throwMailParam: ThrowMail
   _climbSpeed: 10
   _armRayLength: 2
   _wrapAroundAngle: 30

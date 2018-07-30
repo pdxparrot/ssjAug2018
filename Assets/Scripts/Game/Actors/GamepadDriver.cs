@@ -46,7 +46,7 @@ namespace pdxpartyparrot.Game.Actors
         {
             base.Initialize(owner, controller);
 
-            InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
+            _gamepadId = InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
 
         protected bool IsOurGamepad(InputAction.CallbackContext ctx)

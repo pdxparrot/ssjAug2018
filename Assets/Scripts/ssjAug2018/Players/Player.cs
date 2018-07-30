@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+
 using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Audio;
@@ -19,13 +20,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
     [RequireComponent(typeof(AudioSource))]
     public sealed class Player : NetworkActor
     {
-#region Animations
-        [Header("Animations")]
-
-        [SerializeField]
-        private Animator _animator;
-#endregion
-
 #region Inventory
         [SerializeField]
         [ReadOnly]

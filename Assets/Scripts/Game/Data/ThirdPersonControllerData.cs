@@ -13,6 +13,42 @@ namespace pdxpartyparrot.Game.Data
 
         public LayerMask CollisionCheckLayerMask => _collisionCheckLayerMask;
 
+#region Animations
+        [Header("Animations")]
+
+        [SerializeField]
+        private string _moveXAxisParam = "InputX";
+
+        public string MoveXAxisParam => _moveXAxisParam;
+
+        [SerializeField]
+        private string _moveZAxisParam = "InputZ";
+
+        public string MoveZAxisParam => _moveZAxisParam;
+
+        [SerializeField]
+        private string _groundedParam = "Landed";
+
+        public string GroundedParam => _groundedParam;
+
+        [SerializeField]
+        private string _fallingParam = "Falling";
+
+        public string FallingParam => _fallingParam;
+
+        [SerializeField]
+        private string _jumpParam = "Jump";
+
+        public string JumpParam => _jumpParam;
+
+        [SerializeField]
+        private string _doubleJumpParam = "DoubleJump";
+
+        public string DoubleJumpParam => _doubleJumpParam;
+#endregion
+
+        [Space(10)]
+
 #region Physics
         [Header("Physics")]
 

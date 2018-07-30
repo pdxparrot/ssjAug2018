@@ -86,11 +86,18 @@ namespace pdxpartyparrot.Game.Actors
             InitRigidbody();
         }
 
+        protected virtual void Update()
+        {
+            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, Driver.LastMoveAxes.x);
+            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, Driver.LastMoveAxes.y);
+        }
+
         protected virtual void FixedUpdate()
         {
             float dt = Time.fixedDeltaTime;
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
+            //Owner.Animator.SetBool(ControllerData.FallingParam, _isFalling);
 
             FudgeVelocity(dt);
         }
@@ -168,10 +175,10 @@ namespace pdxpartyparrot.Game.Actors
         public virtual void Jump()
         {
             if(IsGrounded) {
-                DoJump(ControllerData.JumpHeight);
+                DoJump(ControllerData.JumpHeight, ControllerData.JumpParam);
             } else if(CanDoubleJump) {
                 DoubleJumpCount++;
-                DoJump(ControllerData.DoubleJumpHeight);
+                DoJump(ControllerData.DoubleJumpHeight, ControllerData.DoubleJumpParam);
             }
         }
 #endregion
@@ -200,6 +207,7 @@ namespace pdxpartyparrot.Game.Actors
                 if(IsGrounded) {
                     DoubleJumpCount = 0;
                 }
+                Owner.Animator.SetBool(ControllerData.GroundedParam, _isGrounded);
             } finally {
                 Profiler.EndSample();
             }
@@ -224,7 +232,7 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = adjustedVelocity;
         }
 
-        protected void DoJump(float height)
+        protected void DoJump(float height, string animationParam)
         {
             if(!Owner.CanMove) {
                 return;
@@ -237,6 +245,8 @@ namespace pdxpartyparrot.Game.Actors
             Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
 
             Rigidbody.velocity = velocity;
+
+            Owner.Animator.SetTrigger(animationParam);
         }
     }
 }

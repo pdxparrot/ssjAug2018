@@ -57,7 +57,7 @@ namespace pdxpartyparrot.Core.Actors
             Rigidbody = GetComponent<Rigidbody>();
         }
 
-        private void LateUpdate()
+        protected virtual void LateUpdate()
         {
             _lastVelocity = Rigidbody.velocity;
             _lastAngularVelocity = Rigidbody.angularVelocity;

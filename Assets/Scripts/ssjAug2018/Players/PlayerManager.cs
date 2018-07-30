@@ -67,6 +67,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 Debug.LogError("Failed to spawn player!");
                 return;
             }
+            player.name = $"Player {controllerId}";
+
             spawnPoint.Spawn(player);
 
             NetworkServer.AddPlayerForConnection(conn, player.gameObject, controllerId);
