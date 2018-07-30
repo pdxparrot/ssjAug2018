@@ -118,7 +118,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1104154106400246
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
@@ -127,22 +127,6 @@ GameObject:
   - component: {fileID: 95998510925050532}
   m_Layer: 0
   m_Name: Yeti_skinnedMesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1105685780126670
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4083764999735212}
-  - component: {fileID: 95915295246172912}
-  m_Layer: 9
-  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1325,7 +1309,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4083764999735212}
+  - {fileID: 4615708396287308}
   - {fileID: 4637347275428174}
   - {fileID: 4553905968234728}
   - {fileID: 4594389412127694}
@@ -1402,20 +1386,6 @@ Transform:
   m_Children:
   - {fileID: 4226934891033176}
   m_Father: {fileID: 4968604044969064}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4083764999735212
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1105685780126670}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4615708396287308}
-  m_Father: {fileID: 4021666756528148}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4084496784841020
@@ -2007,13 +1977,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1104154106400246}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4327553417813292}
   - {fileID: 4503802892219098}
-  m_Father: {fileID: 4083764999735212}
+  m_Father: {fileID: 4021666756528148}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4619944357403576
@@ -2546,24 +2516,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &95915295246172912
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1105685780126670}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!95 &95998510925050532
 Animator:
   serializedVersion: 3
@@ -2595,10 +2547,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: -1
   _collider: {fileID: 136952311265174156}
-  _model: {fileID: 1105685780126670}
+  _model: {fileID: 1104154106400246}
   _controller: {fileID: 114450802372136796}
   _canMove: 1
-  _animator: {fileID: 95915295246172912}
+  _animator: {fileID: 95998510925050532}
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2729,7 +2681,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 39.3
+  m_Radius: 35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136952311265174156
 CapsuleCollider:
@@ -2740,10 +2692,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1
-  m_Height: 3
+  m_Radius: 0.5
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &137457876050978342
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -5776,7 +5728,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 0
+    enabled: 1
     strength:
       serializedVersion: 2
       minMaxState: 0
@@ -6708,7 +6660,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 3
     type: 1
     collisionMode: 0

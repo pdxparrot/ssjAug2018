@@ -58,15 +58,5 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public int MaxLettersPerBox => _maxLettersPerBox;
 #endregion
-
-
-#region Randomization
-        [Header("Randomization")]
-        [SerializeField]
-        private int _randomizationSeed = 0;
-        
-        public int RandomizationSeed => _randomizationSeed;
-#endregion
-
     }
 }

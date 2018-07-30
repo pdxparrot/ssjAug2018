@@ -22,15 +22,15 @@ namespace pdxpartyparrot.ssjAug2018.Items
 #region Unity Lifecycle
         private void Awake()
         {
-            Core.Network.NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
-            Core.Network.NetworkManager.Instance.ClientDisconnectEvent += ClientDisconnectEventHandler;
+            Core.Network.NetworkManager.Instance.ServerStartEvent += ServerStartEventHandler;
+            Core.Network.NetworkManager.Instance.ServerStopEvent += ServerStopEventHandler;
         }
 
         protected override void OnDestroy()
         {
             if(Core.Network.NetworkManager.HasInstance) {
-                Core.Network.NetworkManager.Instance.ClientConnectEvent -= ClientConnectEventHandler;
-                Core.Network.NetworkManager.Instance.ClientDisconnectEvent -= ClientDisconnectEventHandler;
+                Core.Network.NetworkManager.Instance.ServerStopEvent -= ServerStopEventHandler;
+                Core.Network.NetworkManager.Instance.ServerStartEvent -= ServerStartEventHandler;
             }
 
             if(ObjectPoolManager.HasInstance) {
@@ -46,12 +46,12 @@ namespace pdxpartyparrot.ssjAug2018.Items
         }
 
 #region Event Handlers
-        private void ClientConnectEventHandler(object sender, EventArgs args)
+        private void ServerStartEventHandler(object sender, EventArgs args)
         {
             ObjectPoolManager.Instance.InitializeNetworkPool(MailItemPool, ItemData.MailPrefab.GetComponent<PooledObject>(), 5);
         }
 
-        private void ClientDisconnectEventHandler(object sender, EventArgs args)
+        private void ServerStopEventHandler(object sender, EventArgs args)
         {
             ObjectPoolManager.Instance.DestroyPool(MailItemPool);
         }

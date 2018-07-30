@@ -1,6 +1,7 @@
 ﻿using pdxpartyparrot.Game.Loading;
 using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Actors;
+using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;
@@ -13,7 +14,7 @@ namespace pdxpartyparrot.ssjAug2018.Loading
     {
 #region Manager Prefabs
         [SerializeField]
-        private GameManager _gameManagerPrefab;
+        private GameStateManager _gameStateManagerPrefab;
 
         [SerializeField]
         private UIManager _uiManagerPrefab;
@@ -29,12 +30,19 @@ namespace pdxpartyparrot.ssjAug2018.Loading
         {
             base.CreateManagers();
 
-            GameManager.CreateFromPrefab(_gameManagerPrefab, ManagersContainer);
+            GameStateManager.CreateFromPrefab(_gameStateManagerPrefab, ManagersContainer);
             UIManager.CreateFromPrefab(_uiManagerPrefab, ManagersContainer);
             SpawnManager.Create(ManagersContainer);
             ItemManager.CreateFromPrefab(_itemManagerPrefab, ManagersContainer);
             MailboxManager.CreateFromPrefab(_mailboxManagerPrefab, ManagersContainer);
             DroneManager.Create(ManagersContainer);
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+
+            GameStateManager.Instance.TransitionToInitialState();
         }
     }
 }

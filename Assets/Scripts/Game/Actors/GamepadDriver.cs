@@ -26,6 +26,7 @@ namespace pdxpartyparrot.Game.Actors
         [CanBeNull]
         private Gamepad _gamepad;
 
+        [CanBeNull]
         protected Gamepad Gamepad => _gamepad;
 
         public bool HasGamepad => null != _gamepad;

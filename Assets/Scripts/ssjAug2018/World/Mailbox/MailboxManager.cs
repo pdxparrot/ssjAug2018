@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
+
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
 
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
@@ -10,7 +10,7 @@ namespace pdxpartyparrot.ssjAug2018.World
     public sealed class MailboxManager : SingletonBehavior<MailboxManager>
     {
         private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
-        private System.Random Random;
+        private System.Random _random;
 
         private int _maxMailboxes;
         private int _activeMailboxes;
@@ -25,20 +25,8 @@ namespace pdxpartyparrot.ssjAug2018.World
 #region Unity Lifecycle
         private void Awake()
         {
-             GameManager.Instance.GameReadyEvent += InitilizeGameReady;
             // TODO: Uncomment when mail holding value is added to player data
             _maxMailboxes = /*PlayerData.Instance.MailHoldCount*/ 10;
-            Random = new System.Random(_mailboxData.RandomizationSeed);
-        }
-
-        protected override void OnDestroy()
-        {
-            if(GameManager.HasInstance) 
-            {
-                GameManager.Instance.GameReadyEvent -= InitilizeGameReady;
-            }
-
-            base.OnDestroy();
         }
 #endregion
 
@@ -54,12 +42,13 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
-        public void InitilizeGameReady(object sender, EventArgs e)
+        public void Initialize(Vector3 origin, int seed)
         {
-            ActivateMailboxGroup(Players.PlayerManager.Instance.transform);
+            _random = new System.Random(seed);
+            ActivateMailboxGroup(origin);
         }
-            
-        public void ActivateMailboxGroup(Transform origin)
+
+        public void ActivateMailboxGroup(Vector3 origin)
         {
             // Find list of valid seed boxes          
             GetMailboxesInRange(origin, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
@@ -67,32 +56,32 @@ namespace pdxpartyparrot.ssjAug2018.World
             if(!_foundBoxes.TrueForAll(Mailbox.PreviouslyActivated)) _foundBoxes.RemoveAll(Mailbox.PreviouslyActivated);
             // Choose seed box and continue activation. If there are no seeds in range, use a random box
             _seedBox = (_foundBoxes.Count == 0) 
-                ? Random.GetRandomEntry(_mailboxes) 
-                : Random.GetRandomEntry(_foundBoxes);
+                ? _random.GetRandomEntry(_mailboxes) 
+                : _random.GetRandomEntry(_foundBoxes);
             if(null == _seedBox) {
                 Debug.LogWarning("No seed mailbox found!");
                 return;
             }
 
             // Determine how many boxes we need for the set but don't go over remaining
-            int setSize = Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
+            int setSize = _random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);
             if(setSize > _maxMailboxes) setSize = _maxMailboxes;
 
             // Activate the seed box and decrement the required box count
-            int letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
+            int letterCount = _random.Next(1, _mailboxData.MaxLettersPerBox);
             letterCount = (letterCount > setSize) ? 1 : letterCount;
             _seedBox.ActivateMailbox(letterCount);
             _activeMailboxes = 1;
             setSize -= letterCount;
 
             // Get boxes in range of the seet for the set
-            GetMailboxesInRange(_seedBox.transform, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
+            GetMailboxesInRange(_seedBox.transform.position, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
             // Select & activate the rest of the required boxes
             while(setSize > 0)
             {
-                Mailbox box = Random.GetRandomEntry<Mailbox>(_foundBoxes);
-                letterCount = Random.Next(1, _mailboxData.MaxLettersPerBox);
+                Mailbox box = _random.GetRandomEntry<Mailbox>(_foundBoxes);
+                letterCount = _random.Next(1, _mailboxData.MaxLettersPerBox);
                 letterCount = (letterCount > setSize) ? setSize : letterCount;
                 
                 box.ActivateMailbox(letterCount);
@@ -110,17 +99,17 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
         }
 
-        private void GetMailboxesInRange(Transform origin, float minimum, float maximum)
+        private void GetMailboxesInRange(Vector3 origin, float minimum, float maximum)
         {
             _foundBoxes.Clear();
-            Collider[] hits = Physics.OverlapSphere(origin.position, maximum, LayerMask.GetMask("Mailboxes"));
+            Collider[] hits = Physics.OverlapSphere(origin, maximum, LayerMask.GetMask("Mailboxes"));
             foreach(Collider hit in hits)
             {
                 Mailbox box = hit.gameObject.GetComponent<Mailbox>();
-                if((box.transform.position - origin.position).sqrMagnitude > minimum * minimum) 
-                    { 
+                if((box.transform.position - origin).sqrMagnitude > minimum * minimum) 
+                {
                     _foundBoxes.Add(box); 
-                    }
+                }
             }
         }
 
@@ -129,7 +118,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             _activeMailboxes--;
             if(_activeMailboxes <= 0)
             {
-                ActivateMailboxGroup(_seedBox.transform);
+                ActivateMailboxGroup(_seedBox.transform.position);
             }
         }
     }
