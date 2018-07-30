@@ -14,11 +14,6 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         [SerializeField]
         private Animator _animator;
-
-        [SerializeField]
-        [ReadOnly]
-        [SyncVar]
-        private bool _isObjective;
         
         [SerializeField]
         [ReadOnly]
@@ -52,9 +47,13 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 #endregion
 
+        public void Reset()
+        {
+            _hasActivated = false;
+        }
+
         public void ActivateMailbox(int requiredMail)
         {
-            _isObjective = true;
             _mailRequired = requiredMail;
             _hasActivated = true;
 
@@ -66,7 +65,6 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void DeactivateMailbox(bool complete=true)
         {
-            _isObjective = false;
             if(complete) {
                 Debug.Log($"Mailbox {name} completed");
                 MailboxManager.Instance.MailboxCompleted(this);
@@ -83,11 +81,12 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void MailHit()
         {
-            if(!_isObjective) return;                
             Debug.Log($"Mailbox {name} hit by mail");
 
             _mailRequired--;
-            if(_mailRequired == 0) DeactivateMailbox();
+            if(_mailRequired == 0) {
+                DeactivateMailbox();
+            }
         }
     }
 }

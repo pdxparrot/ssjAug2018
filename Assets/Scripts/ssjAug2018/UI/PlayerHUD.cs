@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 
 using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.World;
 
 using TMPro;
 
@@ -57,7 +58,7 @@ namespace pdxpartyparrot.ssjAug2018.UI
             _timer.text = $"{GameManager.Instance.RemainingMinutesPart:00}:{GameManager.Instance.RemainingSecondsPart:00}";
 
             _letterCounter.text = $"{_owner.CurrentLetterCount} / {PlayerManager.Instance.PlayerData.MaxLetters}";
-            _mailboxCounter.text = "X / Y";
+            _mailboxCounter.text = $"{MailboxManager.Instance.CompletedMailboxes} / {MailboxManager.Instance.CurrentSetSize}";
             _thrusterFill.fillAmount = 1.0f - _owner.PlayerController.HoverRemainingPercent;
         }
 #endregion
