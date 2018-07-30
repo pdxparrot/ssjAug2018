@@ -1,4 +1,4 @@
-﻿using pdxpartyparrot.Core.UI;
+﻿using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 

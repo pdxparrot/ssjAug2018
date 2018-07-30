@@ -26,6 +26,14 @@ namespace pdxpartyparrot.ssjAug2018
 
         public long GameOverTime => _gameOverTime;
 
+        public bool IsGameOver => _gameOverTime > 0 && TimeManager.Instance.CurrentUnixMs >= GameOverTime;
+
+        public int RemainingMs => IsGameOver ? 0 : (int)(_gameOverTime - TimeManager.Instance.CurrentUnixMs);
+
+        public int RemainingMinutesPart => RemainingMs / 1000 / 60;
+
+        public int RemainingSecondsPart => (RemainingMs / 1000) % 60;
+
 #region Unity Lifecycle
         private void Awake()
         {

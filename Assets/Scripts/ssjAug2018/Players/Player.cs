@@ -3,8 +3,10 @@
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Network;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Camera;
 using pdxpartyparrot.ssjAug2018.Items;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -21,6 +23,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [SerializeField]
         private Animator _animator;
+#endregion
+
+#region Inventory
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private int _currentLetterCount;
+
+        public int CurrentLetterCount => _currentLetterCount;
 #endregion
 
         public FollowTarget FollowTarget { get; private set; }
@@ -76,15 +87,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool Initialize()
         {
-            if(isLocalPlayer) {
-                _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
-                if(null == _viewer) {
-                    return false;
-                }
-                _viewer.SetFocus(transform);
-            }
-            _viewer?.Initialize(this);
-
+            InitializeLocalPlayer();
             PlayerController.Initialize(this);
 
             // TODO: encapsulate this somewhere better
@@ -92,7 +95,20 @@ namespace pdxpartyparrot.ssjAug2018.Players
             PlayerController.Rigidbody.drag = PlayerManager.Instance.PlayerData.Drag;
             PlayerController.Rigidbody.angularDrag = PlayerManager.Instance.PlayerData.AngularDrag;
 
+            _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+
             return true;
+        }
+
+        [Client]
+        private void InitializeLocalPlayer()
+        {
+            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
+            if(null != _viewer) {
+                _viewer.Initialize(this);
+            }
+
+            UIManager.Instance.InitializePlayerUI(this);
         }
 
 #region Commands

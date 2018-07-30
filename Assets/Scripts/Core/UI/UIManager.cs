@@ -4,13 +4,8 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Core.UI
 {
-    public abstract class UIManager : SingletonBehavior<UIManager>
+    public abstract class UIManager<T> : SingletonBehavior<T> where T: UIManager<T>
     {
-        [SerializeField]
-        private LayerMask _uiLayer;
-
-        public LayerMask UILayer => _uiLayer;
-
         private GameObject _uiContainer;
 
         public GameObject UIContainer => _uiContainer;
