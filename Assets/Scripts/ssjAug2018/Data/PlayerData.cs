@@ -32,6 +32,13 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private int _maxLetters = 1;
 
         public int MaxLetters => _maxLetters;
+
+        [SerializeField]
+        private float _reloadTimeSeconds = 5.0f;
+
+        public float ReloadTimeSeconds => _reloadTimeSeconds;
+
+        public int ReloadTimeMs => (int)(_reloadTimeSeconds * 1000.0f);
 #endregion
     }
 }

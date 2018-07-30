@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections;
+using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
@@ -32,6 +33,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private int _currentLetterCount;
 
         public int CurrentLetterCount => _currentLetterCount;
+
+        public bool CanThrowMail => CurrentLetterCount > 0;
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private long _reloadCompleteTime;
+
+        public bool IsReloading => _reloadCompleteTime > 0 && TimeManager.Instance.CurrentUnixMs <= _reloadCompleteTime;
 #endregion
 
         public FollowTarget FollowTarget { get; private set; }
@@ -112,12 +122,36 @@ namespace pdxpartyparrot.ssjAug2018.Players
             UIManager.Instance.PlayerUI.PlayerHUD.ShowInfoText();
         }
 
+        [Server]
+        public void Reload()
+        {
+            _reloadCompleteTime = TimeManager.Instance.CurrentUnixMs + PlayerManager.Instance.PlayerData.ReloadTimeMs;
+            StartCoroutine(ReloadRoutine());
+        }
+
+        private IEnumerator ReloadRoutine()
+        {
+            yield return new WaitForSeconds(PlayerManager.Instance.PlayerData.ReloadTimeSeconds);
+
+            _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+        }
+
 #region Commands
         [Command]
         public void CmdThrow(Vector3 origin, Vector3 direction, float speed)
         {
+            if(!CanThrowMail) {
+                return;
+            }
+
             Mail mail = ItemManager.Instance.GetMail();
             mail?.Throw(this, origin, direction, speed);
+
+            _currentLetterCount--;
+            if(_currentLetterCount <= 0) {
+                _currentLetterCount = 0;
+                Reload();
+            }
         }
 #endregion
 

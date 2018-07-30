@@ -3,6 +3,7 @@ using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.State;
+using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
@@ -35,6 +36,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public override void OnExit()
         {
+            ItemManager.Instance.FreeItemPools();
+
             if(UIManager.HasInstance) {
                 UIManager.Instance.Shutdown();
             }
@@ -66,6 +69,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             // is there a callback tho on the client that we can use as a "stop showing the loading screen" thing?
             NetworkManager.Instance.ServerChangedScene();
             GameManager.Instance.StartGame();
+
+            ItemManager.Instance.PopulateItemPools();
         }
     }
 }
