@@ -27,13 +27,9 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public bool HasActivated => _hasActivated;
 
-        private Collider _collider;
-
 #region Unity Lifecycle
         private void Awake()
         {
-            _collider = GetComponent<Collider>();
-
             MailboxManager.Instance.RegisterMailbox(this);
 
             DeactivateMailbox(false);
@@ -60,7 +56,6 @@ namespace pdxpartyparrot.ssjAug2018.World
             _hasActivated = true;
 
             _model.SetActive(true);
-            _collider.enabled = true;
 
             Debug.Log($"Mailbox {name} activated requiring {_mailRequired} mail");
         }
@@ -74,7 +69,6 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
 
             _model.SetActive(false);
-            _collider.enabled = false;
         }
 
         [Server]
@@ -86,6 +80,10 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Server]
         public void MailHit()
         {
+            if(!_model.activeInHierarchy) {
+                return;
+            }
+
             Debug.Log($"Mailbox {name} hit by mail");
 
             _mailRequired--;

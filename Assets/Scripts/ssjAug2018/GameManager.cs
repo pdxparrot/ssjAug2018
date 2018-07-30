@@ -59,8 +59,7 @@ namespace pdxpartyparrot.ssjAug2018
         [Server]
         public void StartGame()
         {
-            // TODO: pick a better starting origin
-            MailboxManager.Instance.Initialize(transform.position);
+            MailboxManager.Instance.Initialize();
             _gameOverTime = TimeManager.Instance.CurrentUnixMs + GameData.GameTimeMs;
         }
 

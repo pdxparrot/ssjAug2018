@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   _gameTimeMinutes: 5
+  _scoreGameTimeSeconds: 10

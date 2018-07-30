@@ -6,11 +6,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
 {
     [CreateAssetMenu(fileName="MailboxData", menuName="ssjAug2018/Data/Mailbox Data")]
     [Serializable]
-    public sealed class MailboxData : ScriptableObject {
-
+    public sealed class MailboxData : ScriptableObject
+    {
 #region Spawn Ranges
         [Header("Spawn Ranges")]
-
+/*
         [Header("Distance from previous set")]
         [SerializeField]
         private float _distanceMinRange = 10f;
@@ -21,7 +21,7 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _distanceMaxRange = 500f;
                 
         public float DistanceMaxRange => _distanceMaxRange;
-        
+*/
         [Header("Distance between origin and other mailboxes")]
         [SerializeField]
         private float _setSizeMinRange = 15f;
