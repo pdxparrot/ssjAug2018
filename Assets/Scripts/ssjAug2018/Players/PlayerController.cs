@@ -4,11 +4,9 @@ using System.Collections;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.ssjAug2018.Data;
-using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Profiling;
 using UnityEngine.Serialization;
 
@@ -131,6 +129,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private long _autoThrowTriggerTime;
 
         private bool ShouldAutoThrow => _autoThrowTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _autoThrowTriggerTime;
+#endregion
+
+#region Aiming
+        [SerializeField]
+        [ReadOnly]
+        private bool _isAiming;
+
+        public bool IsAiming => _isAiming;
 #endregion
 
         public Player Player => (Player)Owner;
