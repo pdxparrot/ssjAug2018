@@ -56,3 +56,6 @@ MonoBehaviour:
   _frictionlesssMaterial: {fileID: 13400000, guid: 2ea728195c008484b9672c4a8471b51a,
     type: 2}
   _isPaused: 0
+  _uiLayer:
+    serializedVersion: 2
+    m_Bits: 32

@@ -2551,6 +2551,7 @@ MonoBehaviour:
   _controller: {fileID: 114450802372136796}
   _canMove: 1
   _animator: {fileID: 95998510925050532}
+  _currentLetterCount: 0
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2604,6 +2605,7 @@ MonoBehaviour:
   _hoverCooldownEndTime: 0
   _canThrow: 0
   _autoThrowTriggerTime: 0
+  _isAiming: 0
 --- !u!114 &114748589338881858
 MonoBehaviour:
   m_ObjectHideFlags: 1
