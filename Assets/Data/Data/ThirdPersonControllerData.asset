@@ -25,7 +25,7 @@ MonoBehaviour:
   _fallSpeedAdjustment: 250
   _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
-  _jumpHeight: 12
-  _doubleJumpHeight: 24
+  _jumpHeight: 6
+  _doubleJumpHeight: 6
   _doubleJumpCount: 1
   _allowAirControl: 1
