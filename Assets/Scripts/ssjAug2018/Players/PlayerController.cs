@@ -406,7 +406,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _hoverTriggerTime = 0;
 
-            if(!IsGrabbing) {
+            if((!IsGrounded || _playerControllerData.HoverWhenGrounded) && !IsGrabbing) {
                 _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
             }
         }

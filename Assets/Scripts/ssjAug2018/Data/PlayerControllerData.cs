@@ -162,6 +162,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _hoverAcceleration = 20.0f;
 
         public float HoverAcceleration => _hoverAcceleration;
+
+        [SerializeField]
+        private bool _hoverWhenGrounded;
+
+        public bool HoverWhenGrounded => _hoverWhenGrounded;
 #endregion
 
         [Space(10)]

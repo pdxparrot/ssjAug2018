@@ -32,5 +32,6 @@ MonoBehaviour:
   _hoverCooldownSeconds: 0
   _hoverRechargeRate: 0.5
   _hoverAcceleration: 20
+  _hoverWhenGrounded: 0
   _autoThrowSeconds: 3
   _throwSpeed: 25
