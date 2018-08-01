@@ -22,7 +22,7 @@ MonoBehaviour:
   _doubleJumpParam: DoubleJump
   _moveSpeed: 20
   _runThreshold: 0.75
-  _fallSpeedAdjustment: 250
+  _fallSpeedAdjustment: 200
   _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
   _jumpHeight: 6
