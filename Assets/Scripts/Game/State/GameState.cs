@@ -24,7 +24,7 @@ namespace pdxpartyparrot.Game.State
         [SerializeField]
         private string _sceneName;
 
-        public string SceneName => _sceneName;
+        public string SceneName { get { return _sceneName; } protected set { _sceneName = value; } }
 
         public bool HasScene => !string.IsNullOrWhiteSpace(SceneName);
 

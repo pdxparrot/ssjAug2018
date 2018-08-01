@@ -59,5 +59,5 @@ MonoBehaviour:
     type: 2}
   _mailboxManagerPrefab: {fileID: 114516698971545230, guid: 9d4632f7b3304894b864c8b12ed2fa80,
     type: 2}
-  _climbingArena: {fileID: 114550715238777476, guid: 5ff59ba6041f08e4dab2e089dbd0f75e,
+  _sceneTester: {fileID: 114238898189173934, guid: e1edaf22f021f3c4c9520ce9798b26a7,
     type: 2}

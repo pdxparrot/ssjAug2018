@@ -55,13 +55,13 @@ namespace pdxpartyparrot.Game.State
             TransitionState(_initialGameStatePrefab, initializeState);
         }
 
-        public void TransitionState(GameState gameStatePrefab, Action<GameState> initializeState=null)
+        public void TransitionState<TV>(TV gameStatePrefab, Action<TV> initializeState=null) where TV: GameState
         {
             ShowLoadingScreen(true);
 
             ExitCurrentState(() => {
                 // TODO: this should enable the state from the set rather than allocating
-                GameState gameState = Instantiate(gameStatePrefab, transform);
+                TV gameState = Instantiate(gameStatePrefab, transform);
                 initializeState?.Invoke(gameState);
 
                 UpdateLoadingScreen(0.5f, "Loading scene...");
@@ -99,7 +99,7 @@ namespace pdxpartyparrot.Game.State
             });
         }
 
-        public void PushSubState(SubGameState gameStatePrefab, Action<SubGameState> initializeState=null)
+        public void PushSubState<TV>(TV gameStatePrefab, Action<TV> initializeState=null) where TV: SubGameState
         {
             // enqueue the current state if we have one
             if(null != _currentGameState) {
@@ -108,7 +108,7 @@ namespace pdxpartyparrot.Game.State
 
             // new state is now the current state
             // TODO: this should enable the state from the set rather than allocating
-            SubGameState gameState = Instantiate(gameStatePrefab, transform);
+            TV gameState = Instantiate(gameStatePrefab, transform);
             initializeState?.Invoke(gameState);
 
             _currentGameState = gameState;

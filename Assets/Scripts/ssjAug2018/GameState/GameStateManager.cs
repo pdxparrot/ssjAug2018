@@ -31,7 +31,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private MailboxManager _mailboxManager;
 
         [SerializeField]
-        private ClimbingArena _climbingArena;
+        private SceneTester _sceneTester;
 
         [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
@@ -124,8 +124,13 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
-                if(GUILayout.Button("Load Climbing Arena")) {
-                    TransitionState(_climbingArena);
+                foreach(string sceneName in _sceneTester.TestScenes) {
+                    if(GUILayout.Button($"Load Test Scene {sceneName}")) {
+                        TransitionState(_sceneTester, state => {
+                            state.SetScene(sceneName);
+                        });
+                        break;
+                    }
                 }
             };
         }
