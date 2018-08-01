@@ -106,8 +106,22 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         [Space(10)]
 
+#region Grabbing
+        [SerializeField]
+        private bool _enableGrabbing = true;
+
+        public bool EnableGrabbing => _enableGrabbing;
+#endregion
+
+        [Space(10)]
+
 #region Jumping
         [Header("Jumping")]
+
+        [SerializeField]
+        private bool _enableLongJump = true;
+
+        public bool EnableLongJump => _enableLongJump;
 
         [SerializeField]
         [Range(0, 10)]
@@ -128,6 +142,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
 #region Hover
         [Header("Hover")]
+
+        [SerializeField]
+        private bool _enableHover = true;
+
+        public bool EnableHover => _enableHover;
 
         [SerializeField]
         [Range(0, 10)]

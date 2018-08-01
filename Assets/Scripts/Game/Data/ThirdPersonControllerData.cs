@@ -95,6 +95,11 @@ namespace pdxpartyparrot.Game.Data
         [Header("Jumping")]
 
         [SerializeField]
+        private bool _enableJumping = true;
+
+        public bool EnableJumping => _enableJumping;
+
+        [SerializeField]
         [Range(0, 50)]
         [Tooltip("How high does the character jump")]
         private float _jumpHeight = 1.0f;
@@ -110,7 +115,7 @@ namespace pdxpartyparrot.Game.Data
 
         [SerializeField]
         [Tooltip("How many times is the player able to double jump (-1 is infinite)")]
-        private int _doubleJumpCount = 0;
+        private int _doubleJumpCount;
 
         public int DoubleJumpCount => _doubleJumpCount;
 #endregion

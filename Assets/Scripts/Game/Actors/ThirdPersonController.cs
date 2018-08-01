@@ -174,6 +174,10 @@ namespace pdxpartyparrot.Game.Actors
 
         public virtual void Jump()
         {
+            if(!ControllerData.EnableJumping) {
+                return;
+            }
+
             if(IsGrounded) {
                 DoJump(ControllerData.JumpHeight, ControllerData.JumpParam);
             } else if(CanDoubleJump) {

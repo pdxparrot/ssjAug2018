@@ -274,7 +274,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Actions
         public void Grab()
         {
-            if(IsGrabbing || (!CanGrabLeft && !CanGrabRight)) {
+            if(!_playerControllerData.EnableGrabbing || IsGrabbing || (!CanGrabLeft && !CanGrabRight)) {
                 return;
             }
 
@@ -289,12 +289,18 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Drop()
         {
+            if(!_playerControllerData.EnableGrabbing) {
+                return;
+            }
+
             if(IsGrabbing) {
                 DisableGrabbing();
             } else {
                 CheckDropDown();
             }
         }
+
+// TODO: enable/disable aim
 
         public void StartAim()
         {
@@ -311,6 +317,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             _isAiming = false;
         }
+
+// TODO: enable/disable throwing mail
 
         public void StartThrowMail()
         {
@@ -350,6 +358,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Player.Animator.SetTrigger(_playerControllerData.ThrowMailParam);
         }
 
+// TODO: enable/disable throwing snowballs
+
         public void StartThrowSnowball()
         {
             _canThrowSnowball = true;
@@ -385,14 +395,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _canJump = true;
             _longJumpTriggerTime = 0;
 
-            if(IsGrounded || IsGrabbing) {
+            if(_playerControllerData.EnableLongJump && (IsGrounded || IsGrabbing)) {
                 _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
             }
         }
 
         public override void Jump()
         {
-            if(_canJump) {
+            if(_canJump && ControllerData.EnableJumping) {
                 DisableGrabbing();
 
                 base.Jump();
@@ -406,7 +416,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _hoverTriggerTime = 0;
 
-            if((!IsGrounded || _playerControllerData.HoverWhenGrounded) && !IsGrabbing) {
+            if(_playerControllerData.EnableHover && (!IsGrounded || _playerControllerData.HoverWhenGrounded) && !IsGrabbing) {
                 _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
             }
         }
@@ -651,6 +661,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 }
             }
         }
+
+// TODO: these should NOT update the rigidbody directly... we're doing this in a coroutine
 
 #region Auto-Rotate/Climb
         private bool CheckRotateLeft()
