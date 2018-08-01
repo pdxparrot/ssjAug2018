@@ -2,6 +2,7 @@
 
 using JetBrains.Annotations;
 
+using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.Loading;
 using pdxpartyparrot.ssjAug2018.Players;
@@ -12,7 +13,7 @@ using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
-    public sealed class GameStateManager : pdxpartyparrot.Game.State.GameStateManager<GameStateManager>
+    public sealed class GameStateManager : GameStateManager<GameStateManager>
     {
         [SerializeField]
         private GameManager _gameManagerPrefab;
@@ -29,14 +30,21 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         private MailboxManager _mailboxManager;
 
+        [SerializeField]
+        private ClimbingArena _climbingArena;
+
         [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
 
 #region Unity Lifecycle
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             Core.Network.NetworkManager.Instance.ServerStartEvent += ServerStartEventHandler;
             Core.Network.NetworkManager.Instance.ServerStopEvent += ServerStopEventHandler;
+
+            InitDebugMenu();
         }
 
         protected override void OnDestroy()
@@ -55,15 +63,17 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             LoadingManager.Instance.ShowLoadingScreen(show);
         }
 
-        protected  override void UpdateLoadingScreen(float percent, string text)
+        protected override void UpdateLoadingScreen(float percent, string text)
         {
             LoadingManager.Instance.UpdateLoadingScreen(percent, text);
         }
 
-#region Event Handlers
-        private void ServerStartEventHandler(object sender, EventArgs args)
+        //[Server]
+        private void CreateNetworkManagers()
         {
             Debug.Log("Creating network managers");
+
+// TODO: make sure these don't already exist
 
             // NOTE: these manager prefabs must already be registered on the NetworkManager prefab for this to work
             // we don't need to call NetworkServer.Spawn here (I think) because the server will spawn them
@@ -74,7 +84,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _mailboxManager = Instantiate(_mailboxManagerPrefab, transform);
         }
 
-        private void ServerStopEventHandler(object sender, EventArgs args)
+        //[Server]
+        private void DestroyNetworkManagers()
         {
             Debug.Log("Destroying network managers");
 
@@ -87,6 +98,27 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             NetworkServer.Destroy(_gameManager.gameObject);
             _gameManager = null;
         }
+
+#region Event Handlers
+        private void ServerStartEventHandler(object sender, EventArgs args)
+        {
+            CreateNetworkManagers();
+        }
+
+        private void ServerStopEventHandler(object sender, EventArgs args)
+        {
+            DestroyNetworkManagers();
+        }
 #endregion
+
+        private void InitDebugMenu()
+        {
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
+            debugMenuNode.RenderContentsAction = () => {
+                if(GUILayout.Button("Load Climbing Arena")) {
+                    TransitionState(_climbingArena);
+                }
+            };
+        }
     }
 }

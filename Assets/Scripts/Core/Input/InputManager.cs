@@ -222,7 +222,7 @@ namespace pdxpartyparrot.Core.Input
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "InputManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.InputManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Gamepads", GUI.skin.box);
                     GUILayout.Label($"Queued listeners: {_gamepadListeners.Count}");

@@ -1,5 +1,8 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Players;
+
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -72,9 +75,10 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 
         [Server]
-        public void AddLetters(int count)
+        public void ForceComplete()
         {
-            _mailRequired += count;
+            _mailRequired = 0;
+            DeactivateMailbox();
         }
 
         [Server]
@@ -88,7 +92,7 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             _mailRequired--;
             if(_mailRequired <= 0) {
-                DeactivateMailbox();
+                DeactivateMailbox(owner);
             }
 
             GameManager.Instance.ScoreHit(owner);
@@ -107,7 +111,7 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             _mailRequired -= consumed;
             if(_mailRequired <= 0) {
-                DeactivateMailbox();
+                DeactivateMailbox(player);
             }
 
             GameManager.Instance.Score(player);

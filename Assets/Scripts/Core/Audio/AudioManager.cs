@@ -220,7 +220,7 @@ namespace pdxpartyparrot.Core.Audio
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "AudioManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.AudioManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Volume", GUI.skin.box);
                     GUILayout.Label($"Master Volume: {MasterVolume}");

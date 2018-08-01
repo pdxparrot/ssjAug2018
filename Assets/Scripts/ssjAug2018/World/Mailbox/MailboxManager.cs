@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
+using pdxpartyparrot.ssjAug2018.Players;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -18,21 +23,15 @@ namespace pdxpartyparrot.ssjAug2018.World
         public static bool HasInstance => null != Instance;
 #endregion
 
-        private static List<Mailbox> GetValidMailboxesInRange(Vector3 origin, float minimum, float maximum, LayerMask layer)
+        private struct MailboxSorter : IComparable<MailboxSorter>
         {
-            float minsquared = minimum * minimum;
+            public float distance;
+            public Mailbox mailbox;
 
-            List<Mailbox> found = new List<Mailbox>();
-
-            var hits = Physics.OverlapSphere(origin, maximum, layer);
-            foreach(Collider hit in hits) {
-                Mailbox box = hit.gameObject.GetComponent<Mailbox>();
-                if((box.transform.position - origin).sqrMagnitude >= minsquared && !box.HasActivated) {
-                    found.Add(box);
-                }
+            public int CompareTo(MailboxSorter other)
+            {
+                return distance < other.distance ? -1 : (other.distance < distance ? 1 : 0);
             }
-
-            return found;
         }
 
         [SerializeField]
@@ -48,17 +47,26 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public int CurrentSetSize => _currentSetSize;
 
-        private readonly HashSet<Mailbox> _mailboxes = new HashSet<Mailbox>();
+        private readonly List<Mailbox> _mailboxes = new List<Mailbox>();
 
         private readonly HashSet<Mailbox> _activeMailboxes = new HashSet<Mailbox>();
 
         private readonly List<Mailbox> _previousActiveMailboxes = new List<Mailbox>();
 
+        private readonly List<Mailbox> _suitableMailboxes = new List<Mailbox>();
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _seedPosition;
+
+        [CanBeNull]
         private Mailbox _seedBox;
 
         public int CompletedMailboxes => CurrentSetSize - _activeMailboxes.Count;
 
         private readonly System.Random _random = new System.Random();
+
+        private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
         private void Awake()
@@ -69,10 +77,14 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
 
             Instance = this;
+
+            InitDebugMenu();
         }
 
         private void OnDestroy()
         {
+            DestroyDebugMenu();
+
             Instance = null;
         }
 
@@ -85,6 +97,12 @@ namespace pdxpartyparrot.ssjAug2018.World
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(_seedBox.transform.position, _mailboxData.SetMaxRange);
             }
+
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(_seedPosition, _mailboxData.DistanceMinRange);
+
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireSphere(_seedPosition, _mailboxData.DistanceMaxRange);
         }
 #endregion
 
@@ -102,16 +120,15 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void Initialize()
         {
-            ActivateMailboxGroup();
+            Mailbox mailbox = _random.GetRandomEntry(_mailboxes);
+            ActivateMailboxGroup(mailbox?.transform.position ?? Vector3.zero);
         }
 
         [Server]
-        public void ActivateMailboxGroup()
+        public void ActivateMailboxGroup(Vector3 seedPosition)
         {
-            if(_mailboxes.Count < 1) {
-                Debug.LogWarning("No mailboxes found!");
-                return;
-            }
+            _seedPosition = seedPosition;
+            Debug.Log($"Seeding mailboxes at {_seedPosition}");
 
             Profiler.BeginSample("MailboxManager.ActivateMailboxGroup");
             try {
@@ -119,13 +136,17 @@ namespace pdxpartyparrot.ssjAug2018.World
                 _previousActiveMailboxes.Clear();
 
                 // pick a random seed if we don't have one yet
-                _seedBox = _random.GetRandomEntry(_mailboxes);
+                _seedBox = GetSeedMailbox(_seedPosition);
+                if(null == _seedBox) {
+                    Debug.LogWarning("No seed mailbox found!");
+                    return;
+                }
 
                 // Activate the seed box and decrement the required box count
                 SpawnMailbox(_seedBox);
 
                 // Get boxes in range of the seet for the set
-                List<Mailbox> foundBoxes = GetValidMailboxesInRange(_seedBox.transform.position, _mailboxData.SetMinRange, _mailboxData.SetMaxRange, _mailboxLayer);
+                List<Mailbox> foundBoxes = GetValidMailboxesInRange(_seedBox.transform.position, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
                 // Select & activate the rest of the required boxes
                 int setSize = _random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);     // NOTE: not SetCountMax - 1 because we spawend the seed already
@@ -140,6 +161,35 @@ namespace pdxpartyparrot.ssjAug2018.World
             } finally {
                 Profiler.EndSample();
             }
+        }
+
+        private Mailbox GetSeedMailbox(Vector3 seedPosition)
+        {
+            List<Mailbox> foundBoxes = GetValidMailboxesInRange(seedPosition, _mailboxData.DistanceMinRange, _mailboxData.DistanceMaxRange);
+
+            if(foundBoxes.Count < 1) {
+                Debug.LogWarning("Using random mailbox seed, consider resizing the seed range!");
+                return _random.GetRandomEntry(_mailboxes);
+            }
+            return _random.GetRandomEntry(foundBoxes);
+        }
+
+        private List<Mailbox> GetValidMailboxesInRange(Vector3 origin, float minimum, float maximum)
+        {
+            float minSquared = minimum * minimum;
+            float maxSquared = maximum * maximum;
+
+            _suitableMailboxes.Clear();
+
+            foreach(Mailbox mailbox in _mailboxes) {
+                float distanceSquared = (mailbox.transform.position - origin).sqrMagnitude;
+                if(distanceSquared < minSquared || distanceSquared > maxSquared) {
+                    continue;
+                }
+                _suitableMailboxes.Add(mailbox);
+            }
+
+            return _suitableMailboxes;
         }
 
         [Server]
@@ -161,8 +211,49 @@ namespace pdxpartyparrot.ssjAug2018.World
             _activeMailboxes.Remove(mailbox);
 
             if(_activeMailboxes.Count <= 0) {
-                ActivateMailboxGroup();
+                ActivateMailboxGroup(mailbox.transform.position);
             }
+        }
+
+        [Command]
+        private void CmdCompleteAllMailboxes()
+        {
+            List<Mailbox> temp = new List<Mailbox>();
+            temp.AddRange(_activeMailboxes);
+
+            foreach(Mailbox mailbox in temp) {
+                mailbox.ForceComplete();
+            }
+        }
+
+        private void InitDebugMenu()
+        {
+            _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.MailboxManager");
+            _debugMenuNode.RenderContentsAction = () => {
+                if(GUILayout.Button("Force Complete")) {
+                    CmdCompleteAllMailboxes();
+                }
+
+                GUILayout.Label($"Current seed position: {_seedPosition}");
+                if(null != _seedBox) {
+                    GUILayout.Label($"Current seed mailbox: {_seedBox.name} {_seedBox.transform.position}");
+                }
+                GUILayout.Label($"Current set size: {CurrentSetSize}");
+                GUILayout.BeginVertical("Active mailboxes", GUI.skin.box);
+                    foreach(Mailbox mailbox in _activeMailboxes) {
+                        GUILayout.Label($"{mailbox.name} {mailbox.transform.position}");
+                    }
+                GUILayout.EndVertical();
+                GUILayout.Label($"Completed mailboxes: {CompletedMailboxes}");
+            };
+        }
+
+        private void DestroyDebugMenu()
+        {
+            if(DebugMenuManager.HasInstance) {
+                DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            }
+            _debugMenuNode = null;
         }
     }
 }

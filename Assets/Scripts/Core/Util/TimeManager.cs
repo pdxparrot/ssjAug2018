@@ -10,15 +10,15 @@ namespace pdxpartyparrot.Core.Util
     {
         public readonly DateTime Epoch = new DateTime(1970, 1, 1);
 
-        public static long SecondsToMilliseconds(long seconds)
+        public static long SecondsToMilliseconds(float seconds)
         {
-            return seconds * 1000;
+            return (long)(seconds * 1000.0f);
         }
 
         [SerializeField]
-        private int _offsetSeconds = 0;
+        private float _offsetSeconds = 0;
 
-        public long CurrentUnixSeconds => (long)DateTime.UtcNow.Subtract(Epoch).TotalSeconds + _offsetSeconds;
+        public double CurrentUnixSeconds => DateTime.UtcNow.Subtract(Epoch).TotalSeconds + _offsetSeconds;
 
         public long CurrentUnixMs => (long)DateTime.UtcNow.Subtract(Epoch).TotalMilliseconds + SecondsToMilliseconds(_offsetSeconds);
 
@@ -31,7 +31,7 @@ namespace pdxpartyparrot.Core.Util
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "TimeManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.TimeManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.Label($"Current Unix Seconds: {CurrentUnixSeconds}");
                 GUILayout.Label($"Current Unix Milliseconds: {CurrentUnixMs}");

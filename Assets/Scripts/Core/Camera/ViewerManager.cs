@@ -164,7 +164,7 @@ namespace pdxpartyparrot.Core.Camera
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ViewerManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.ViewerManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Viewers", GUI.skin.box);
                     GUILayout.Label($"Total Viewers: {_viewers.Count}");

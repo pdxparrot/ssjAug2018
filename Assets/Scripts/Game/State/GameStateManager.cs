@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 
@@ -17,12 +19,13 @@ namespace pdxpartyparrot.Game.State
         [ReadOnly]
         private IGameState _currentGameState;
 
+        [CanBeNull]
         public IGameState CurrentState => _currentGameState;
 
         private readonly Stack<IGameState> _stateStack = new Stack<IGameState>();
 
 #region Unity Lifecycle
-        private void Awake()
+        protected virtual void Awake()
         {
 // TODO: allocate and disable *all* game states
 
@@ -125,9 +128,12 @@ namespace pdxpartyparrot.Game.State
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "GameStateManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Game.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
-                GUILayout.Label($"Current Game State: {CurrentState.Name}");
+                GUILayout.Label($"Current Game State: {CurrentState?.Name ?? null}");
+                if(GUILayout.Button("Reset")) {
+                    TransitionToInitialState();
+                }
             };
         }
 

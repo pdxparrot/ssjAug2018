@@ -1,7 +1,5 @@
 ﻿using pdxpartyparrot.Core.Camera;
-using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
-using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
@@ -10,28 +8,21 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
-    public sealed class Game : pdxpartyparrot.Game.State.GameState
+    public sealed class ClimbingArena : pdxpartyparrot.Game.State.GameState
     {
         [SerializeField]
         private Viewer _viewerPrefab;
-
-        [SerializeField]
-        private GameOver _gameOverState;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            InitializeManagers();
-
-            DebugMenuManager.Instance.ResetFrameStats();
-        }
-
-        public override void OnUpdate(float dt)
-        {
-            if(GameManager.Instance.IsGameOver) {
-                GameStateManager.Instance.PushSubState(_gameOverState);
+            if(null == GameStateManager.Instance.NetworkClient) {
+                GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartLANHost();
+                Core.Network.NetworkManager.Instance.ServerChangeScene();
             }
+
+            InitializeManagers();
         }
 
         public override void OnExit()
@@ -48,8 +39,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
                 InputManager.Instance.Controls.game.Disable();
             }
 
-            if(NetworkManager.HasInstance) {
-                NetworkManager.Instance.Stop();
+            if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.Stop();
             }
 
             if(GameStateManager.HasInstance) {
@@ -65,12 +56,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             InputManager.Instance.Controls.game.Enable();
 
-            NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
+            Core.Network.NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
 
-            // TODO: this probably should wait until all of the clients are ready
-            // is there a callback tho on the client that we can use as a "stop showing the loading screen" thing?
-            NetworkManager.Instance.ServerChangedScene();
-            GameManager.Instance.StartGame();
+            Core.Network.NetworkManager.Instance.ServerChangedScene();
 
             ItemManager.Instance.PopulateItemPools();
         }

@@ -1,4 +1,5 @@
 ﻿using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
@@ -30,6 +31,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private GameObject _playerContainer;
 
+        private DebugMenuNode _debugMenuNode;
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -43,6 +46,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _playerContainer = new GameObject("Players");
 
             Core.Network.NetworkManager.Instance.ServerAddPlayerEvent += ServerAddPlayerEventHandler;
+
+            InitDebugMenu();
         }
 
         private void OnDestroy()
@@ -51,6 +56,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _playerContainer = null;
 
             Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
+
+            DestroyDebugMenu();
 
             Instance = null;
         }
@@ -84,5 +91,26 @@ namespace pdxpartyparrot.ssjAug2018.Players
             SpawnPlayer(args.NetworkConnection, args.PlayerControllerId);
         }
 #endregion
+
+        private void InitDebugMenu()
+        {
+            DebugMenuNode _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018PlayerManager");
+            _debugMenuNode.RenderContentsAction = () => {
+                GUILayout.BeginVertical("Players", GUI.skin.box);
+                    foreach(IActor actor in Actors) {
+                        Player player = (Player)actor;
+                        GUILayout.Label($"{player.name} {player.transform.position}");
+                    }
+                GUILayout.EndVertical();
+            };
+        }
+
+        private void DestroyDebugMenu()
+        {
+            if(DebugMenuManager.HasInstance) {
+                DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            }
+            _debugMenuNode = null;
+        }
     }
 }

@@ -10,16 +10,16 @@ namespace pdxpartyparrot.Core.Actors
     [RequireComponent(typeof(NetworkIdentity))]
     public abstract class NetworkActorManager : NetworkSingletonBehavior
     {
-        private readonly HashSet<IActor> _actors = new HashSet<IActor>();
+        protected List<IActor> Actors { get; } = new List<IActor>();
 
-        public void Register<T>(T actor) where T: IActor
+        public void Register(IActor actor)
         {
-            _actors.Add(actor);
+            Actors.Add(actor);
         }
 
-        public void Unregister<T>(T actor) where T: IActor
+        public void Unregister(IActor actor)
         {
-            _actors.Remove(actor);
+            Actors.Remove(actor);
         }
     }
 }

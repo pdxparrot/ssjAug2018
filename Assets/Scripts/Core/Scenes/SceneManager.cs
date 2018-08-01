@@ -133,7 +133,7 @@ namespace pdxpartyparrot.Core.Scenes
 
         private void InitDebugMenu()
         {
-            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "SceneManager");
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.SceneManager");
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Loaded Scenes", GUI.skin.box);
                     foreach(string loadedScene in _loadedScenes) {

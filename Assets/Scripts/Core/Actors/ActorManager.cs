@@ -6,16 +6,16 @@ namespace pdxpartyparrot.Core.Actors
 {
     public abstract class ActorManager<T> : SingletonBehavior<ActorManager<T>> where T: IActor
     {
-        private readonly HashSet<T> _actors = new HashSet<T>();
+        protected List<T> Actors { get; } = new List<T>();
 
         public void Register(T actor)
         {
-            _actors.Add(actor);
+            Actors.Add(actor);
         }
 
         public void Unregister(T actor)
         {
-            _actors.Remove(actor);
+            Actors.Remove(actor);
         }
     }
 }

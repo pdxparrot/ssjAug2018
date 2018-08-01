@@ -11,8 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73cf4d443d15294993274feb15cf753, type: 3}
   m_Name: MailboxData
   m_EditorClassIdentifier: 
-  _setSizeMinRange: 15
-  _setSizeMaxRange: 50
+  _distanceMinRange: 100
+  _distanceMaxRange: 250
+  _setSizeMinRange: 25
+  _setSizeMaxRange: 100
   _setCountMin: 3
   _setCountMax: 6
   _maxLettersPerBox: 3
