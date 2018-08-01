@@ -21,8 +21,6 @@ GameObject:
   - component: {fileID: 4406218664691620}
   - component: {fileID: 33318460593536280}
   - component: {fileID: 23230362597001582}
-  - component: {fileID: 65759727219446338}
-  - component: {fileID: 65649436696138614}
   m_Layer: 11
   m_Name: Building_3s_01_Var1
   m_TagString: Untagged
@@ -86,27 +84,3 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1250319240450392}
   m_Mesh: {fileID: 4300000, guid: 7c90a87cc4ec64749a4fb07e212e71bb, type: 3}
---- !u!65 &65649436696138614
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1250319240450392}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 8.000002, y: 11.06, z: 16.032566}
-  m_Center: {x: 0, y: 5.5, z: 0.0000004768373}
---- !u!65 &65759727219446338
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1250319240450392}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5.01, y: 5.04, z: 9.2}
-  m_Center: {x: 0, y: 12.53, z: 1.8}
