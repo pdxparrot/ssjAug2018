@@ -57,3 +57,4 @@ MonoBehaviour:
     type: 2}
   _testScenes:
   - climbing_arena
+  - shooting_gallery

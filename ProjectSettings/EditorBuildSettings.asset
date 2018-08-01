@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/climbing_arena.unity
     guid: f4ddce612b6d8614495f62e14f4cf615
+  - enabled: 1
+    path: Assets/Scenes/shooting_gallery.unity
+    guid: f228bb32724ebbb4d8748b1c0bfb1ba2
   m_configObjects: {}
