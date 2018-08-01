@@ -88,8 +88,8 @@ namespace pdxpartyparrot.Game.Actors
 
         protected virtual void Update()
         {
-            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, Driver.LastMoveAxes.x);
-            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, Driver.LastMoveAxes.y);
+            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, Mathf.Abs(Driver.LastMoveAxes.x));
+            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, Mathf.Abs(Driver.LastMoveAxes.y));
         }
 
         protected virtual void FixedUpdate()
@@ -154,11 +154,7 @@ namespace pdxpartyparrot.Game.Actors
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
-            if(!Owner.CanMove) {
-                return;
-            }
-
-            if(!ControllerData.AllowAirControl && !IsGrounded) {
+            if(!Owner.CanMove || (!ControllerData.AllowAirControl && !IsGrounded)) {
                 return;
             }
 

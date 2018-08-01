@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+
+using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Util;
@@ -48,6 +50,18 @@ namespace pdxpartyparrot.Core.Actors
         public bool CanMove => _canMove;
 #endregion
 
+#region Unity Lifecycle
+        protected virtual void Awake()
+        {
+            PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
+        }
+#endregion
+
         public virtual void Initialize(int id)
         {
             _id = id;
@@ -56,5 +70,12 @@ namespace pdxpartyparrot.Core.Actors
         }
 
         public abstract void OnSpawn();
+
+#region Event Handlers
+        private void PauseEventHandler(object sender, EventArgs args)
+        {
+            Animator.enabled = !PartyParrotManager.Instance.IsPaused;
+        }
+#endregion
     }
 }

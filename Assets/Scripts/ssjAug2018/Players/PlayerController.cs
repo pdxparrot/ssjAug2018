@@ -166,9 +166,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             DestroyDebugMenu();
+
+            base.OnDestroy();
         }
 
         protected override void Update()

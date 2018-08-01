@@ -10,26 +10,32 @@ namespace pdxpartyparrot.Core.Actors
     public abstract class ActorController : MonoBehaviour
     {
         [Serializable]
-        protected struct PauseState
+        protected struct InternalPauseState
         {
-            private Vector3 _velocity;
+            public bool IsKinematic;
 
-            public Vector3 Velocity => _velocity;
+            public Vector3 Velocity;
 
             public void Save(Rigidbody rigidbody)
             {
-                _velocity = rigidbody.velocity;
+                IsKinematic = rigidbody.isKinematic;
+                rigidbody.isKinematic = true;
+
+                Velocity = rigidbody.velocity;
                 rigidbody.velocity = Vector3.zero;
             }
 
             public void Restore(Rigidbody rigidbody)
             {
-                rigidbody.velocity = _velocity;
+                rigidbody.isKinematic = IsKinematic;
+                rigidbody.velocity = Velocity;
             }
         }
 
         [SerializeField]
         private ActorDriver _driver;
+
+        public ActorDriver Driver => _driver;
 
         [Space(10)]
 
@@ -45,22 +51,35 @@ namespace pdxpartyparrot.Core.Actors
         private Vector3 _lastAngularVelocity;
 #endregion
 
-        public ActorDriver Driver => _driver;
-
         public Rigidbody Rigidbody { get; private set; }
 
         protected IActor Owner { get; private set; }
+
+        [SerializeField]
+        [ReadOnly]
+        private InternalPauseState _pauseState;
+
+        protected InternalPauseState PauseState => _pauseState;
 
 #region Unity Lifecycle
         protected virtual void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
+
+            PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
         }
 
         protected virtual void LateUpdate()
         {
             _lastVelocity = Rigidbody.velocity;
             _lastAngularVelocity = Rigidbody.angularVelocity;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if(PartyParrotManager.HasInstance) {
+                PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
+            }
         }
 #endregion
 
@@ -84,5 +103,16 @@ namespace pdxpartyparrot.Core.Actors
         public virtual void PhysicsMove(Vector3 axes, float dt)
         {
         }
+
+#region Event Handlers
+        private void PauseEventHandler(object sender, EventArgs args)
+        {
+            if(PartyParrotManager.Instance.IsPaused) {
+                _pauseState.Save(Rigidbody);
+            } else {
+                _pauseState.Restore(Rigidbody);
+            }
+        }
+#endregion
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using pdxpartyparrot.Core;
+﻿using pdxpartyparrot.Core;
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 
@@ -19,7 +17,7 @@ namespace pdxpartyparrot.Game.Players
 
         public Vector3 BankForce => _bankForce;
 
-        public float Speed => Owner.CanMove ? 0.0f : (PartyParrotManager.Instance.IsPaused ? _pauseState.Velocity.magnitude : Rigidbody.velocity.magnitude);
+        public float Speed => Owner.CanMove ? 0.0f : (PartyParrotManager.Instance.IsPaused ? PauseState.Velocity.magnitude : Rigidbody.velocity.magnitude);
 
         public float Altitude => Owner.GameObject.transform.position.y;
 #endregion
@@ -56,25 +54,12 @@ namespace pdxpartyparrot.Game.Players
         public float TerminalVelocity => _terminalVelocity;
 #endregion
 
-        [SerializeField]
-        [ReadOnly]
-        private PauseState _pauseState;
-
 #region Unity Lifecycle
         protected override void Awake()
         {
             base.Awake();
 
             InitRigidbody();
-
-            PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
-        }
-
-        private void OnDestroy()
-        {
-            if(PartyParrotManager.HasInstance) {
-                PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
-            }
         }
 
         private void Update()
@@ -204,18 +189,6 @@ namespace pdxpartyparrot.Game.Players
             if(Rigidbody.velocity.y < -TerminalVelocity) {
                 Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, -TerminalVelocity, Rigidbody.velocity.z);
             }
-        }
-#endregion
-
-#region Event Handlers
-        private void PauseEventHandler(object sender, EventArgs args)
-        {
-            if(PartyParrotManager.Instance.IsPaused) {
-                _pauseState.Save(Rigidbody);
-            } else {
-                _pauseState.Restore(Rigidbody);
-            }
-            Rigidbody.isKinematic = PartyParrotManager.Instance.IsPaused;
         }
 #endregion
     }

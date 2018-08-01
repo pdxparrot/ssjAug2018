@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+
+using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Camera;
@@ -64,7 +66,16 @@ namespace pdxpartyparrot.Core.Network
             NetworkTransform = GetComponent<NetworkTransform>();
 
             NetworkAnimator networkAnimator = GetComponent<NetworkAnimator>();
-            networkAnimator.animator = Animator;
+            if(null == networkAnimator.animator) {
+                networkAnimator.animator = Animator;
+            }
+
+            PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
         }
 #endregion
 
@@ -76,5 +87,12 @@ namespace pdxpartyparrot.Core.Network
         }
 
         public abstract void OnSpawn();
+
+#region Event Handlers
+        private void PauseEventHandler(object sender, EventArgs args)
+        {
+            Animator.enabled = !PartyParrotManager.Instance.IsPaused;
+        }
+#endregion
     }
 }
