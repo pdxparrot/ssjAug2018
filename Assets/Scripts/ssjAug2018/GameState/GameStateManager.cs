@@ -68,6 +68,15 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             LoadingManager.Instance.UpdateLoadingScreen(percent, text);
         }
 
+        public void ShutdownNetwork()
+        {
+            if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.Stop();
+            }
+
+            NetworkClient = null;
+        }
+
         //[Server]
         private void CreateNetworkManagers()
         {
