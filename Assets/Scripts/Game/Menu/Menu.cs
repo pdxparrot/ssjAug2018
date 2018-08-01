@@ -17,10 +17,24 @@ namespace pdxpartyparrot.Game.Menu
             GetComponent<Canvas>().sortingOrder = 100;
         }
 
+        private void Update()
+        {
+            if(null == InputManager.Instance.EventSystem.currentSelectedGameObject) {
+                _initialSelection.Select();
+            }
+        }
+
         private void Start()
         {
-            _initialSelection.Select();
+            Reset();
         }
 #endregion
+
+        public void Reset()
+        {
+            Debug.Log($"TODO: reset menu {name}");
+
+            _initialSelection.Select();
+        }
     }
 }
