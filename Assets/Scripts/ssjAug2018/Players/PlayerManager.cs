@@ -94,7 +94,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void InitDebugMenu()
         {
-            DebugMenuNode _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018PlayerManager");
+            _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.PlayerManager");
             _debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Players", GUI.skin.box);
                     foreach(IActor actor in Actors) {

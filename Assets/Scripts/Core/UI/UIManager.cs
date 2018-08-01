@@ -11,7 +11,7 @@ namespace pdxpartyparrot.Core.UI
         public GameObject UIContainer => _uiContainer;
 
 #region Unity Lifecycle
-        private void Awake()
+        protected virtual void Awake()
         {
             _uiContainer = new GameObject("UI");
         }

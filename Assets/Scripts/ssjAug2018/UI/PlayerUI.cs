@@ -23,13 +23,13 @@ namespace pdxpartyparrot.ssjAug2018.UI
 
         public void Initialize(Player player)
         {
-            _canvas.worldCamera = player.Viewer.UICamera;
+            _canvas.worldCamera = player.Viewer?.UICamera;
             _playerHUD.Initialize(player);
         }
 
-        public void Show(bool show)
+        public void ToggleHUD()
         {
-            _playerHUD.gameObject.SetActive(show);
+            _playerHUD.gameObject.SetActive(!_playerHUD.gameObject.activeInHierarchy);
         }
     }
 }
