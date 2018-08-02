@@ -262,8 +262,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enableOrbit: 1
-  _orbitSpeedX: 100
-  _orbitSpeedY: 100
+  _orbitSpeedX: 200
+  _orbitSpeedY: 200
   _returnToDefault: 0
   _defaultOrbitRotation: {x: 0, y: 20}
   _defaultOrbitReturnTime: 0.5

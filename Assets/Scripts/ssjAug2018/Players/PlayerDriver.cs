@@ -2,6 +2,7 @@
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 
@@ -16,8 +17,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool _invertLookY;
 
         [SerializeField]
+        private float _mouseSensitivity = 0.5f;
+
+        [SerializeField]
         [ReadOnly]
         private Vector3 _lastControllerMove;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastControllerLook;
 
         public Player Player => (Player)Owner;
 
@@ -36,6 +44,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             float dt = Time.deltaTime;
 
             LastMoveAxes = Vector3.Lerp(LastMoveAxes, _lastControllerMove, dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
+            Player.FollowTarget.LastLookAxes = Vector3.Lerp(Player.FollowTarget.LastLookAxes, _lastControllerLook, dt * PlayerManager.Instance.PlayerData.LookLerpSpeed);
 
             base.Update();
         }
@@ -165,7 +174,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            _lastControllerMove = new Vector3(0.0f, 0.0f, 0.0f);
+            _lastControllerMove = Vector3.zero;
             LastMoveAxes = _lastControllerMove;
         }
 
@@ -185,6 +194,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
+            LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveBackward(InputAction.CallbackContext ctx)
@@ -203,6 +213,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
+            LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveLeft(InputAction.CallbackContext ctx)
@@ -221,6 +232,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
+            LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveRight(InputAction.CallbackContext ctx)
@@ -239,18 +251,25 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
+            LastMoveAxes = _lastControllerMove;
         }
 
         private void OnLook(InputAction.CallbackContext ctx)
         {
-            if(!IsOurDevice(ctx) || !CanDrive) {
+            // TODO: mouse is disabled for now because it's annoying in the editor
+            bool isMouse = ctx.control.device is Mouse;
+            if(!IsOurDevice(ctx) || !CanDrive || isMouse) {
                 return;
             }
 
             Vector2 axes = ctx.ReadValue<Vector2>();
             axes.y *= _invertLookY ? -1 : 1;
 
-            Player.FollowTarget.LastLookAxes = new Vector3(axes.x, axes.y, 0.0f);
+            if(isMouse) {
+                axes *= _mouseSensitivity;
+            }
+
+            _lastControllerLook = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnLookStop(InputAction.CallbackContext ctx)
@@ -259,7 +278,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.FollowTarget.LastLookAxes = new Vector3(0.0f, 0.0f, 0.0f);
+            _lastControllerLook = Vector3.zero;
+            Player.FollowTarget.LastLookAxes = _lastControllerLook;
         }
 
         private void OnJumpStart(InputAction.CallbackContext ctx)
@@ -376,6 +396,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => $"Player {Player.name} Driver");
             _debugMenuNode.RenderContentsAction = () => {
                 _invertLookY = GUILayout.Toggle(_invertLookY, "Invert Look Y");
+                _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);
             };
         }
 

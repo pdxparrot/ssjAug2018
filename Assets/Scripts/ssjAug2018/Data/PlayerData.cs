@@ -29,13 +29,18 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         [Space(10)]
 
-#region Movement
-        [Header("Movement")]
+#region Controls
+        [Header("Controls")]
 
         [SerializeField]
         private float _movementLerpSpeed = 1.0f;
 
         public float MovementLerpSpeed => _movementLerpSpeed;
+
+        [SerializeField]
+        private float _lookLerpSpeed = 1.0f;
+
+        public float LookLerpSpeed => _lookLerpSpeed;
 #endregion
 
         [Space(10)]
