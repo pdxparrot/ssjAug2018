@@ -42,19 +42,42 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsReloading => _reloadCompleteTime > 0 && TimeManager.Instance.CurrentUnixMs <= _reloadCompleteTime;
 #endregion
 
+        [Space(10)]
+
+#region Score
+        [Header("Score")]
+
         [SerializeField]
         [ReadOnly]
         [SyncVar]
         private int _score;
 
         public int Score => _score;
+#endregion
 
+        [Space(10)]
+
+#region Stun
+        [Header("Stun")]
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private float _stunTimeSeconds;
+
+        public bool IsStunned => _stunTimeSeconds > 0.0f;
+#endregion
+
+        [Space(10)]
+
+#region Dead
         [SerializeField]
         [ReadOnly]
         [SyncVar]
         private bool _isDead;
 
         public bool IsDead => _isDead;
+#endregion
 
         public FollowTarget FollowTarget { get; private set; }
 
@@ -92,6 +115,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
             AudioManager.Instance.InitSFXAudioMixerGroup(_audioSource);
 
             PlayerManager.Instance.Register(this);
+        }
+
+        private void Update()
+        {
+            float dt = Time.deltaTime;
+
+            UpdateStun(dt);
         }
 
         protected override void OnDestroy()
@@ -192,13 +222,45 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 
         [Server]
+        public void Stun(float seconds)
+        {
+            if(IsStunned || IsDead) {
+                return;
+            }
+
+            Debug.Log($"Player {name} is stunned for {seconds} seconds!");
+
+            _stunTimeSeconds = seconds;
+            Controller.Rigidbody.velocity = new Vector3(0.0f, Controller.Rigidbody.velocity.y, 0.0f);
+
+            RpcStunned();
+        }
+
+        [Server]
+        private void UpdateStun(float dt)
+        {
+            if(!IsStunned) {
+                return;
+            }
+
+            _stunTimeSeconds -= dt;
+            if(_stunTimeSeconds <= 0.0f) {
+                _stunTimeSeconds = 0.0f;
+                //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, false);
+            }
+        }
+
+        [Server]
         public void Kill()
         {
             if(IsDead) {
                 return;
             }
 
+            Debug.Log($"Player {name} is dead!");
+
             _isDead = true;
+            Controller.Rigidbody.velocity = new Vector3(0.0f, Controller.Rigidbody.velocity.y, 0.0f);
 
             RpcDead();
 
@@ -208,7 +270,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Server]
         private IEnumerator RespawnRoutine()
         {
-            Debug.Log($"Player respawning in {GameStateManager.Instance.GameData.PlayerRespawnSeconds} seconds");
+            Debug.Log($"Player {name} respawning in {GameStateManager.Instance.GameData.PlayerRespawnSeconds} seconds");
             yield return new WaitForSeconds(GameStateManager.Instance.GameData.PlayerRespawnSeconds);
 
             PlayerManager.Instance.RespawnPlayer(this);
@@ -240,6 +302,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #endregion
 
 #region Callbacks
+        [ClientRpc]
+        private void RpcStunned()
+        {
+            //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, true);
+        }
+
         [ClientRpc]
         private void RpcDead()
         {

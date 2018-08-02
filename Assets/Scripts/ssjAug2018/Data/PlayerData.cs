@@ -24,6 +24,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         [Header("Animations")]
 
         [SerializeField]
+        private string _stunnedParam = "Stunned";
+
+        public string StunnedParam => _stunnedParam;
+
+        [SerializeField]
         private string _deadParam = "Dead";
 
         public string DeadParam => _deadParam;
