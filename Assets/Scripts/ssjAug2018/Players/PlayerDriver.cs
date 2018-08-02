@@ -396,7 +396,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => $"Player {Player.name} Driver");
             _debugMenuNode.RenderContentsAction = () => {
                 _invertLookY = GUILayout.Toggle(_invertLookY, "Invert Look Y");
-                _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);
+                GUILayout.BeginHorizontal();
+                    GUILayout.Label("Mouse Sensitivity:");
+                    _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);
+                GUILayout.EndHorizontal();
             };
         }
 

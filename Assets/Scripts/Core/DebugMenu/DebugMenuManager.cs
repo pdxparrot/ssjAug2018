@@ -13,10 +13,15 @@ using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Core.DebugMenu
 {
-// TODO: collect logs in a log window here also
-
+    // https://blogs.unity3d.com/2015/12/22/going-deep-with-imgui-and-editor-customization/
     public sealed class DebugMenuManager : SingletonBehavior<DebugMenuManager>
     {
+        private struct LogMessage
+        {
+            public string message;
+            public LogType type;
+        };
+
         [SerializeField]
         private Key _enableKey = Key.Backquote;
 
@@ -46,6 +51,11 @@ namespace pdxpartyparrot.Core.DebugMenu
 
         private float AverageFPS => _fpsAccumulator.Average();
 
+        private readonly Queue<LogMessage> _logMessages = new Queue<LogMessage>();
+
+        [SerializeField]
+        private int _maxLogMessages = 1000;
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -66,6 +76,17 @@ namespace pdxpartyparrot.Core.DebugMenu
                     return title;
                 }
             };
+
+            Application.logMessageReceived += OnLogMessageReceived;
+
+            InitLogMessageDebugNode();
+        }
+
+        protected override void OnDestroy()
+        {
+            Application.logMessageReceived -= OnLogMessageReceived;
+
+            base.OnDestroy();
         }
 
         private void Update()
@@ -177,5 +198,41 @@ namespace pdxpartyparrot.Core.DebugMenu
                 }
             }
         }
+
+        private void InitLogMessageDebugNode()
+        {
+            DebugMenuNode debugMenuNode = AddNode(() => "Logs");
+            debugMenuNode.RenderContentsAction = () => {
+                foreach(LogMessage message in _logMessages) {
+                    switch(message.type)
+                    {
+                    case LogType.Assert:
+                        GUI.color = Color.green;
+                        break;
+                    case LogType.Warning:
+                        GUI.color = Color.yellow;
+                        break;
+                    case LogType.Error:
+                    case LogType.Exception:
+                        GUI.color = Color.red;
+                        break;
+                    default:
+                        GUI.color = Color.white;
+                        break;
+                    }
+                    GUILayout.Label(message.message);
+                }
+            };
+        }
+
+#region Event Handlers
+        private void OnLogMessageReceived(string logString, string stackTrace, LogType type)
+        {
+            _logMessages.Enqueue(new LogMessage{ message = logString, type = type });
+            if(_logMessages.Count > _maxLogMessages) {
+                _logMessages.Dequeue();
+            }
+        }
+#endregion
     }
 }

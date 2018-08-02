@@ -10,7 +10,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public override void OnUpdate(float dt)
         {
             if(GameManager.Instance.IsGameOver) {
-                GameStateManager.Instance.PushSubState(_gameOverState);
+                GameStateManager.Instance.PushSubState(_gameOverState, state => {
+                    state.Initialize();
+                });
             }
         }
     }
