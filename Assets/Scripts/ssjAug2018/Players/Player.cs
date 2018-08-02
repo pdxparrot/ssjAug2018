@@ -22,6 +22,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
     public sealed class Player : NetworkActor
     {
 #region Inventory
+        [Header("Inventory")]
+
         [SerializeField]
         [ReadOnly]
         [SyncVar]
@@ -84,7 +86,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             PlayerManager.Instance.Register(this);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             if(ViewerManager.HasInstance) {
                 ViewerManager.Instance.ReleaseViewer(_viewer);
@@ -94,6 +96,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(PlayerManager.HasInstance) {
                 PlayerManager.Instance.Unregister(this);
             }
+
+            base.OnDestroy();
         }
 
         private void OnTriggerEnter(Collider other)

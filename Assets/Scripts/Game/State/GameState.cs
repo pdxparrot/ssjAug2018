@@ -12,9 +12,13 @@ namespace pdxpartyparrot.Game.State
 
         void OnEnter();
 
-        void OnUpdate(float dt);
-
         void OnExit();
+
+        void OnResume();
+
+        void OnPause();
+
+        void OnUpdate(float dt);
     }
 
     public abstract class GameState : MonoBehaviour, IGameState
@@ -60,13 +64,23 @@ namespace pdxpartyparrot.Game.State
             Debug.Log($"Enter State: {Name}");
         }
 
-        public virtual void OnUpdate(float dt)
-        {
-        }
-
         public virtual void OnExit()
         {
             Debug.Log($"Exit State: {Name}");
+        }
+
+        public virtual void OnResume()
+        {
+            Debug.Log($"Resume State: {Name}");
+        }
+
+        public virtual void OnPause()
+        {
+            Debug.Log($"Pause State: {Name}");
+        }
+
+        public virtual void OnUpdate(float dt)
+        {
         }
     }
 }

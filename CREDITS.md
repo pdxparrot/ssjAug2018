@@ -2,11 +2,12 @@
  * Shane Lillie
  * Travis Goodwin
  
-*Technical/VFX Artist
- *Jordan Kulm
+* Technical/VFX Artist
+ * Jordan Kulm
 
-*Rigging
- *Daryn Olson
+* Rigging
+ * Daryn Olson
 
-*Animation
- *Kayli Edwards
+* Animation
+ * Kayli Edwards
+ 

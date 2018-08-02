@@ -12,6 +12,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private Menu.MainMenu _menu;
 
         [SerializeField]
+        private Credits _creditsStatePrefab;
+
+        [SerializeField]
         private NetworkConnect _networkConnectStatePrefab;
 
         public override void OnEnter()
@@ -20,6 +23,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             _menu = Instantiate(_menuPrefab, UIManager.Instance.UIContainer.transform);
             _menu.NewGameState = _networkConnectStatePrefab;
+            _menu.CreditsGameState = _creditsStatePrefab;
         }
 
         public override void OnExit()
@@ -28,6 +32,20 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _menu = null;
 
             base.OnExit();
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+
+            _menu.gameObject.SetActive(true);
+        }
+
+        public override void OnPause()
+        {
+            _menu.gameObject.SetActive(false);
+
+            base.OnPause();
         }
     }
 }

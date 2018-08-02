@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1090362287434824}
+  m_RootGameObject: {fileID: 1763835108789512}
   m_IsPrefabAsset: 1
---- !u!1 &1090362287434824
+--- !u!1 &1763835108789512
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4076774062001356}
-  - component: {fileID: 114033414473887294}
+  - component: {fileID: 4091068277173444}
+  - component: {fileID: 114619618274238472}
   m_Layer: 0
-  m_Name: MainMenu
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4076774062001356
+--- !u!4 &4091068277173444
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1090362287434824}
+  m_GameObject: {fileID: 1763835108789512}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,20 +40,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114033414473887294
+--- !u!114 &114619618274238472
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1090362287434824}
+  m_GameObject: {fileID: 1763835108789512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82117a3f2140234cae3f7dcb4a608db, type: 3}
+  m_Script: {fileID: 11500000, guid: be432ab1f55c48b3afbdccd4b08ba82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _menuPrefab: {fileID: 114720694338620740, guid: b7d91440657cfd641b3a3cad0523e566,
-    type: 2}
-  _creditsStatePrefab: {fileID: 114619618274238472, guid: 0eac82967bd678c4e80893d0fee43a69,
-    type: 2}
-  _networkConnectStatePrefab: {fileID: 114969377140087770, guid: 8bcd7f9885c6731439549114c6039383,
+  _menuPrefab: {fileID: 114489695243785724, guid: e7acf1dc10d8ade4ea7a476372ace3ab,
     type: 2}

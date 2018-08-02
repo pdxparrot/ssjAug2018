@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Data
 {
-    [CreateAssetMenu(fileName="PlayerData", menuName="ssjAug2018/Data/Player Data")]
+    [CreateAssetMenu(fileName="PlayerData", menuName="pdxpartyparrot/ssjAug2018/Data/Player Data")]
     [Serializable]
     public sealed class PlayerData : ScriptableObject
     {

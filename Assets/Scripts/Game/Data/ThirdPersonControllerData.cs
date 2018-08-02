@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.Data
 {
-    [CreateAssetMenu(fileName="ThirdPersonControllerData", menuName="ssjAug2018/Data/ThirdPersonController Data")]
+    [CreateAssetMenu(fileName="ThirdPersonControllerData", menuName="pdxpartyparrot/Game/Data/ThirdPersonController Data")]
     [Serializable]
     public sealed class ThirdPersonControllerData : ScriptableObject
     {

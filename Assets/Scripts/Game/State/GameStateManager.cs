@@ -101,6 +101,8 @@ namespace pdxpartyparrot.Game.State
 
         public void PushSubState<TV>(TV gameStatePrefab, Action<TV> initializeState=null) where TV: SubGameState
         {
+            _currentGameState?.OnPause();
+
             // enqueue the current state if we have one
             if(null != _currentGameState) {
                 _stateStack.Push(_currentGameState);
@@ -124,6 +126,7 @@ namespace pdxpartyparrot.Game.State
             Destroy(previousState?.gameObject);
 
             _currentGameState = _stateStack.Count > 0 ? _stateStack.Pop() : null;
+            _currentGameState?.OnResume();
         }
 
         private void InitDebugMenu()
