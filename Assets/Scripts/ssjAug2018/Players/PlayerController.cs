@@ -167,10 +167,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Tooltip("Debug break when grabbing fails")]
         private bool _breakOnFall;
 
-        [SerializeField]
-        [ReadOnly]
-
-
         public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
