@@ -81,10 +81,10 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 
         [Server]
-        public void MailHit(Player owner)
+        public bool MailHit(Player owner)
         {
             if(!_model.activeInHierarchy) {
-                return;
+                return false;
             }
 
             Debug.Log($"Mailbox {name} hit by mail");
@@ -95,6 +95,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
 
             GameManager.Instance.ScoreHit(owner);
+            return true;
         }
 
         [Server]
