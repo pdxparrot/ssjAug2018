@@ -2,6 +2,7 @@
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 
 using UnityEngine;
@@ -13,6 +14,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
     {
         [SerializeField]
         private bool _invertLookY;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastControllerMove;
 
         public Player Player => (Player)Owner;
 
@@ -30,16 +35,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             float dt = Time.deltaTime;
 
-            // TODO: until we have a way to know when the player stops pushing on the stick
-            // through the InputSystem, this is the best we can do here
-            // https://forum.unity.com/threads/gamepad-joystick-movement-question.542629/
-            if(null != Gamepad && CanDrive) {
-                UpdateLastMoveAxes(ApplyDeadZone(Gamepad.leftStick.ReadValue()), dt);
-
-                Vector2 lookAxes = ApplyDeadZone(Gamepad.rightStick.ReadValue());
-                lookAxes.y *= _invertLookY ? -1 : 1;
-                Player.FollowTarget.LastLookAxes = new Vector3(lookAxes.x, lookAxes.y, 0.0f);
-            }
+            LastMoveAxes = Vector3.Lerp(LastMoveAxes, _lastControllerMove, dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
 
             base.Update();
         }
@@ -51,13 +47,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(InputManager.HasInstance) {
                 InputManager.Instance.Controls.game.pause.performed -= OnPause;
 
-                /*InputManager.Instance.Controls.game.move.started -= OnMove;
+                InputManager.Instance.Controls.game.move.started -= OnMove;
                 InputManager.Instance.Controls.game.move.performed -= OnMove;
                 InputManager.Instance.Controls.game.move.cancelled -= OnMoveStop;
 
                 InputManager.Instance.Controls.game.look.started -= OnLook;
                 InputManager.Instance.Controls.game.look.performed -= OnLook;
-                InputManager.Instance.Controls.game.look.cancelled -= OnLookStop;*/
+                InputManager.Instance.Controls.game.look.cancelled -= OnLookStop;
 
                 InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
@@ -86,13 +82,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(CanDrive) {
                 InputManager.Instance.Controls.game.pause.performed += OnPause;
 
-                /*InputManager.Instance.Controls.game.move.started += OnMove;
+                InputManager.Instance.Controls.game.move.started += OnMove;
                 InputManager.Instance.Controls.game.move.performed += OnMove;
                 InputManager.Instance.Controls.game.move.cancelled += OnMoveStop;
 
                 InputManager.Instance.Controls.game.look.started += OnLook;
                 InputManager.Instance.Controls.game.look.performed += OnLook;
-                InputManager.Instance.Controls.game.look.cancelled += OnLookStop;*/
+                InputManager.Instance.Controls.game.look.cancelled += OnLookStop;
 
                 InputManager.Instance.Controls.game.jump.started += OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed += OnJump;
@@ -111,15 +107,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
-        private void UpdateLastMoveAxes(Vector2 moveAxes, float dt)
+        private bool IsOurDevice(InputAction.CallbackContext ctx)
         {
-            LastMoveAxes = Vector3.Lerp(LastMoveAxes, new Vector3(moveAxes.x, moveAxes.y, 0.0f), dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
+            // TODO: this probably doesn't handle multiple keyboards/mice
+            return IsOurGamepad(ctx) || Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device;
         }
 
 #region Event Handlers
         private void OnPause(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx)) {
+            if(!IsOurDevice(ctx)) {
                 return;
             }
 
@@ -128,31 +125,31 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnMove(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Vector2 axes = ApplyDeadZone(ctx.ReadValue<Vector2>());
-            UpdateLastMoveAxes(axes, Time.deltaTime);
+            Vector2 axes = ctx.ReadValue<Vector2>();
+            _lastControllerMove = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnMoveStop(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Debug.Log("move stop");
-            LastMoveAxes = new Vector3(0.0f, 0.0f, 0.0f);
+            _lastControllerMove = new Vector3(0.0f, 0.0f, 0.0f);
+            LastMoveAxes = _lastControllerMove;
         }
 
         private void OnLook(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Vector2 axes = ApplyDeadZone(ctx.ReadValue<Vector2>());
+            Vector2 axes = ctx.ReadValue<Vector2>();
             axes.y *= _invertLookY ? -1 : 1;
 
             Player.FollowTarget.LastLookAxes = new Vector3(axes.x, axes.y, 0.0f);
@@ -160,17 +157,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnLookStop(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Debug.Log("look stop");
             Player.FollowTarget.LastLookAxes = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
         private void OnJumpStart(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -179,7 +175,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnJump(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -188,7 +184,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnHoverStart(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -197,7 +193,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnHover(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -206,7 +202,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnGrab(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -215,7 +211,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnDrop(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -224,7 +220,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnAimStart(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -233,7 +229,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnAim(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -242,7 +238,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnThrowMailStart(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -251,7 +247,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnThrowMail(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -260,7 +256,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnThrowSnowballStart(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
@@ -269,7 +265,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void OnThrowSnowball(InputAction.CallbackContext ctx)
         {
-            if(!IsOurGamepad(ctx) || !CanDrive) {
+            if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 

@@ -14,6 +14,6 @@ MonoBehaviour:
   _mass: 275
   _drag: 0
   _angularDrag: 0
-  _movementLerpSpeed: 10
+  _movementLerpSpeed: 5
   _maxLetters: 10
   _reloadTimeSeconds: 2

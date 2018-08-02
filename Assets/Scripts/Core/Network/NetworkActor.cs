@@ -69,7 +69,9 @@ namespace pdxpartyparrot.Core.Network
 
         protected virtual void OnDestroy()
         {
-            PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
+            if(PartyParrotManager.HasInstance) {
+                PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
+            }
         }
 #endregion
 

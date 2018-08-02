@@ -695,6 +695,57 @@ partial class CoreTests
         Assert.That(gamepad.leftTrigger, Is.TypeOf<MyButtonControl>());
     }
 
+    [Test]
+    [Category("Layouts")]
+    public void Layouts_RegisteringLayout_WithMatcher_RecreatesDevicesForWhichItIsABetterMatch()
+    {
+        const string oldLayout = @"
+            {
+                ""name"" : ""OldLayout"",
+                ""extend"" : ""Gamepad"",
+                ""device"" : {
+                    ""manufacturer"" : ""TestManufacturer""
+                }
+            }
+        ";
+
+        const string newLayout = @"
+            {
+                ""name"" : ""NewLayout"",
+                ""extend"" : ""Gamepad"",
+                ""device"" : {
+                    ""product"" : ""TestProduct"",
+                    ""manufacturer"" : ""TestManufacturer""
+                }
+            }
+        ";
+
+        InputSystem.RegisterControlLayout(oldLayout);
+
+        InputSystem.AddDevice<Mouse>(); // Noise.
+
+        var device = InputSystem.AddDevice(new InputDeviceDescription
+        {
+            product = "TestProduct",
+            manufacturer = "TestManufacturer",
+        });
+
+        InputSystem.AddDevice<Mouse>(); // Noise.
+
+        Assert.That(device.layout, Is.EqualTo("OldLayout"));
+
+        InputSystem.RegisterControlLayout(newLayout);
+
+        Assert.That(device.layout, Is.EqualTo("NewLayout"));
+    }
+
+    [Test]
+    [Category("Layouts")]
+    public void TODO_Layouts_RegisteringLayoutBuilder_MarksResultingLayoutAsGenerated()
+    {
+        Assert.Fail();
+    }
+
     private class TestLayoutType : Pointer
     {
     }
@@ -758,6 +809,47 @@ partial class CoreTests
         Assert.That(layout.deviceMatcher.patterns,
             Has.Exactly(1)
                 .Matches<KeyValuePair<string, object>>(x => x.Key == "interface" && x.Value.Equals("TestInterface")));
+    }
+
+    // We consider layouts built by layout builders as being auto-generated. We want them to
+    // be overridable by layouts built specifically for a device so we boost the score of
+    // of type and JSON layouts such that they will override auto-generated layouts even if
+    // they match less perfectly according to their InputDeviceMatcher.
+    [Test]
+    [Category("Layouts")]
+    public void Layouts_RegisteringLayoutBuilder_WithMatcher_StillGivesPrecedenceToTypeAndJSONLayouts()
+    {
+        var builder = new TestLayoutBuilder {layoutToLoad = "Mouse"};
+
+        InputSystem.RegisterControlLayoutBuilder(() => builder.DoIt(), name: "GeneratedLayout",
+            matches: new InputDeviceMatcher()
+                .WithInterface("TestInterface")
+                .WithProduct("TestProduct")
+                .WithManufacturer("TestManufacturer"));
+
+        const string json = @"
+            {
+                ""name"" : ""ManualLayout"",
+                ""extend"" : ""Gamepad"",
+                ""device"" : {
+                    ""product"" : ""TestProduct"",
+                    ""manufacturer"" : ""TestManufacturer""
+                }
+            }
+        ";
+
+        InputSystem.RegisterControlLayout(json);
+
+        // This should pick ManualLayout and not GeneratedLayout.
+        var device = InputSystem.AddDevice(new InputDeviceDescription
+        {
+            interfaceName = "TestInterface",
+            product = "TestProduct",
+            manufacturer = "TestManufacturer",
+        });
+
+        Assert.That(device, Is.TypeOf<Gamepad>());
+        Assert.That(device.layout, Is.EqualTo("ManualLayout"));
     }
 
     // Want to ensure that if a state struct declares an "int" field, for example, and then
@@ -1571,13 +1663,6 @@ partial class CoreTests
     public void TODO_Layouts_InputStateInDerivedClassMergesWithControlsOfInputStateFromBaseClass()
     {
         //axis should appear in DerivedInputDevice and should have been moved to offset 8 (from automatic assignment)
-        Assert.Fail();
-    }
-
-    [Test]
-    [Category("Layouts")]
-    public void TODO_Layouts_RegisteringLayout_RecreatesDevicesForWhichItIsABetterLayout()
-    {
         Assert.Fail();
     }
 }
