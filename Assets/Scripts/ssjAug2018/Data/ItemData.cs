@@ -24,6 +24,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public Mail MailPrefab => _mailPrefab;
 
         [SerializeField]
+        private LayerMask _mailLayer;
+
+        public LayerMask MailLayer => _mailLayer;
+
+        [SerializeField]
         private float _mailDespawnSeconds = 5.0f;
 
         public int MailDespawnMs => (int)(_mailDespawnSeconds * 1000.0f);

@@ -8,6 +8,29 @@ namespace pdxpartyparrot.ssjAug2018.Data
     [Serializable]
     public sealed class PlayerData : ScriptableObject
     {
+        [SerializeField]
+        private LayerMask _playerLayer;
+
+        public LayerMask PlayerLayer => _playerLayer;
+
+        [SerializeField]
+        private LayerMask _viewerLayer;
+
+        public LayerMask ViewerLayer => _viewerLayer;
+
+        [Space(10)]
+
+#region Animations
+        [Header("Animations")]
+
+        [SerializeField]
+        private string _deadParam = "Dead";
+
+        public string DeadParam => _deadParam;
+#endregion
+
+        [Space(10)]
+
 #region Physics
         [Header("Physics")]
 

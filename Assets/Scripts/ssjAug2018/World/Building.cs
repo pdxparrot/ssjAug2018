@@ -7,14 +7,12 @@ namespace pdxpartyparrot.ssjAug2018.World
     [RequireComponent(typeof(NavMeshObstacle))]
     public class Building : MonoBehaviour, IGrabbable
     {
-        private Collider _collider;
+        public Collider Collider { get; private set; }
 
-        public Collider Collider => _collider;
-
-#region Unity Lifecycle
+        #region Unity Lifecycle
         private void Awake()
         {
-            _collider = GetComponent<Collider>();
+            Collider = GetComponent<Collider>();
         }
 #endregion
     }

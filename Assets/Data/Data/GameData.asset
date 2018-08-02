@@ -11,6 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2014e469e7047394ebace2f8beaba0b1, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
+  _worldLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   _gameTimeMinutes: 2.5
   _scoreGameTimeSeconds: 3
+  _playerRespawnSeconds: 3
   _playerCollidesMailboxes: 1

@@ -85,6 +85,20 @@ namespace pdxpartyparrot.ssjAug2018.Players
             player.OnSpawn();
         }
 
+        [Server]
+        public void RespawnPlayer(Player player)
+        {
+            Debug.Log($"Respawning player {player.name}");
+
+            SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+            if(null == spawnPoint) {
+                return;
+            }
+
+            spawnPoint.Spawn(player);
+            player.OnRespawn();
+        }
+
 #region Event Handlers
         private void ServerAddPlayerEventHandler(object sender, ServerAddPlayerEventArgs args)
         {

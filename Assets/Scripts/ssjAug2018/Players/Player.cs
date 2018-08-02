@@ -7,6 +7,7 @@ using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Camera;
+using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;
@@ -47,6 +48,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private int _score;
 
         public int Score => _score;
+
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private bool _isDead;
+
+        public bool IsDead => _isDead;
 
         public FollowTarget FollowTarget { get; private set; }
 
@@ -130,7 +138,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             UIManager.Instance.InitializePlayerUI(this);
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowInfoText();
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowInfoText();
+            }
         }
 
         [Server]
@@ -181,6 +191,29 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _score += amount;
         }
 
+        [Server]
+        public void Kill()
+        {
+            if(IsDead) {
+                return;
+            }
+
+            _isDead = true;
+
+            RpcDead();
+
+            StartCoroutine(RespawnRoutine());
+        }
+
+        [Server]
+        private IEnumerator RespawnRoutine()
+        {
+            Debug.Log($"Player respawning in {GameStateManager.Instance.GameData.PlayerRespawnSeconds} seconds");
+            yield return new WaitForSeconds(GameStateManager.Instance.GameData.PlayerRespawnSeconds);
+
+            PlayerManager.Instance.RespawnPlayer(this);
+        }
+
 #region Commands
         [Command]
         public void CmdThrowMail(Vector3 origin, Vector3 direction, float speed)
@@ -191,7 +224,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Mail mail = ItemManager.Instance.GetMail();
             Vector3 velocity = direction * speed;
-            mail?.Throw(this, origin, velocity);
+            if(null != mail) {
+                mail.Throw(this, origin, velocity);
+            }
 
             _currentLetterCount--;
             CheckReload();
@@ -205,11 +240,30 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #endregion
 
 #region Callbacks
+        [ClientRpc]
+        private void RpcDead()
+        {
+            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, true);
+
+            Debug.Log("TODO: show player dead UI on client");
+        }
+
         public override void OnSpawn()
         {
             Debug.Log($"Spawning player (isLocalPlayer={isLocalPlayer})");
 
             Initialize();
+
+            _isDead = false;
+        }
+
+        public void OnRespawn()
+        {
+            Debug.Log($"Respawning player (isLocalPlayer={isLocalPlayer})");
+
+            _isDead = false;
+
+            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, false);
         }
 #endregion
     }

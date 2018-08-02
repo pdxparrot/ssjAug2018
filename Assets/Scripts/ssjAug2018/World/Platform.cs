@@ -3,6 +3,7 @@
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Networking;
 
 namespace pdxparyparrot.ssjAug2018.World
@@ -10,6 +11,7 @@ namespace pdxparyparrot.ssjAug2018.World
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(NavMeshObstacle))]
     public class Platform : MonoBehaviour, IGrabbable
     {
         [SerializeField]

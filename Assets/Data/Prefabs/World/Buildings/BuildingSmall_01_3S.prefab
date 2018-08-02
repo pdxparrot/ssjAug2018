@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4777455657503780}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BuildingSmall_01_3S
   m_TagString: Untagged
   m_Icon: {fileID: 0}

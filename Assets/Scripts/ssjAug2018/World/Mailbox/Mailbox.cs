@@ -1,6 +1,5 @@
-﻿using JetBrains.Annotations;
-
-using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Players;
 
 using UnityEngine;
@@ -101,7 +100,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Server]
         public int PlayerCollide(Player player)
         {
-            if(!_model.activeInHierarchy || !GameManager.Instance.GameData.PlayerCollidesMailboxes) {
+            if(!_model.activeInHierarchy || !GameStateManager.Instance.GameData.PlayerCollidesMailboxes) {
                 return -1;
             }
 

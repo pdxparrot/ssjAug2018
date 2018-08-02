@@ -11,6 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73cf4d443d15294993274feb15cf753, type: 3}
   m_Name: MailboxData
   m_EditorClassIdentifier: 
+  _mailboxLayer:
+    serializedVersion: 2
+    m_Bits: 4096
   _distanceMinRange: 100
   _distanceMaxRange: 250
   _setSizeMinRange: 25

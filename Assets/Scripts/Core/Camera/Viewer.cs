@@ -2,7 +2,6 @@
 
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Rendering;
-using pdxpartyparrot.Core.UI;
 
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;

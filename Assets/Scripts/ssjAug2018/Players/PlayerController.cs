@@ -179,7 +179,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Tooltip("Debug break when grabbing fails")]
         private bool _breakOnFall;
 
-        public override bool CanMove => base.CanMove && !IsStunned;
+        public override bool CanMove => base.CanMove && !IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
 
