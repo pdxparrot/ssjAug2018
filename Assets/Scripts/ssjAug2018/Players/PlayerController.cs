@@ -231,6 +231,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 }
                 _fallStartHeight = float.MinValue;
             }
+
+            Rigidbody.angularVelocity = Vector3.zero;
         }
 
         protected override void OnDrawGizmos()
@@ -564,10 +566,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void EnableHovering(bool enable)
         {
-            if(!enable && !IsHovering) {
-                return;
-            }
-
+            bool wasHovering = IsHovering;
             _movementState = enable ? MovementState.Hovering : MovementState.Platforming;
 
             Player.Animator.SetBool(_playerControllerData.ThrustJumpParam, enable);
@@ -575,7 +574,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(enable) {
                 _hoverTriggerTime = 0;
                 Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, 0.0f, Rigidbody.velocity.z);
-            } else {
+            } else if(wasHovering) {
                 _hoverCooldownEndTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverCooldownMs;
             }
         }
