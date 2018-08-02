@@ -27,7 +27,22 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public float AngularDrag => _angularDrag;
 #endregion
 
+        [Space(10)]
+
+#region Movement
+        [Header("Movement")]
+
+        [SerializeField]
+        private float _movementLerpSpeed = 1.0f;
+
+        public float MovementLerpSpeed => _movementLerpSpeed;
+#endregion
+
+        [Space(10)]
+
 #region Inventory
+        [Header("Inventory")]
+
         [SerializeField]
         private int _maxLetters = 1;
 

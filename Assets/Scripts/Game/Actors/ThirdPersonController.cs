@@ -45,7 +45,7 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private bool _isFalling;
 
-        public bool IsFalling => _isFalling;
+        public bool IsFalling { get { return _isFalling; } protected set { _isFalling = value; } }
 
         protected Vector3 GroundCheckCenter
         {
@@ -88,8 +88,8 @@ namespace pdxpartyparrot.Game.Actors
 
         protected virtual void Update()
         {
-            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, Mathf.Abs(Driver.LastMoveAxes.x));
-            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, Mathf.Abs(Driver.LastMoveAxes.y));
+            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.x) : 0.0f);
+            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.y) : 0.0f);
         }
 
         protected virtual void FixedUpdate()
@@ -134,7 +134,6 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
-#region Actions
         public override void AnimationMove(Vector3 axes, float dt)
         {
             Vector3 forward = new Vector3(axes.x, 0.0f, axes.y);
@@ -154,7 +153,7 @@ namespace pdxpartyparrot.Game.Actors
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
-            if(!Owner.CanMove || (!ControllerData.AllowAirControl && !IsGrounded)) {
+            if(!CanMove || (!ControllerData.AllowAirControl && !IsGrounded)) {
                 return;
             }
 
@@ -168,6 +167,7 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = velocity;
         }
 
+#region Actions
         public virtual void Jump()
         {
             if(!ControllerData.EnableJumping) {
@@ -234,7 +234,7 @@ namespace pdxpartyparrot.Game.Actors
 
         protected void DoJump(float height, string animationParam)
         {
-            if(!Owner.CanMove) {
+            if(!CanMove) {
                 return;
             }
 

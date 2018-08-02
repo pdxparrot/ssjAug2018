@@ -38,6 +38,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsGrabbing => IsClimbing;
 
         public bool IsHovering => MovementState.Hovering == _movementState;
+
+        [SerializeField]
+        [ReadOnly]
+        private float _fallStartHeight = float.MinValue;
 #endregion
 
         [Space(10)]
@@ -102,6 +106,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool CanLongJump => _longJumpTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
 #endregion
 
+        [Space(10)]
+
 #region Hover
         [Header("Hover")]
 
@@ -119,12 +125,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public float HoverRemainingPercent => _hoverTimeMs / (float)_playerControllerData.HoverTimeMs;
 
-        private bool IsHoverCooldown => TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
+        private bool IsHoverCooldown => _hoverCooldownEndTime > 0 && TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
 
         private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;
 #endregion
 
+        [Space(10)]
+
 #region Throwing
+        [Header("Throwing")]
+
         [SerializeField]
         [ReadOnly]
         private bool _canThrowMail;
@@ -139,7 +149,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool _canThrowSnowball;
 #endregion
 
+        [Space(10)]
+
 #region Aiming
+        [Header("Aiming")]
+
         [SerializeField]
         [ReadOnly]
         private bool _isAiming;
@@ -147,8 +161,25 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsAiming => _isAiming;
 #endregion
 
+        [Space(10)]
+
+#region Stun
+        [Header("Stun")]
+
         [SerializeField]
+        [ReadOnly]
+        private float _stunTimeSeconds;
+
+        public bool IsStunned => _stunTimeSeconds > 0.0f;
+#endregion
+
+        [Space(10)]
+
+        [SerializeField]
+        [Tooltip("Debug break when grabbing fails")]
         private bool _breakOnFall;
+
+        public override bool CanMove => base.CanMove && !IsStunned;
 
         public Player Player => (Player)Owner;
 
@@ -182,6 +213,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
             UpdateJumping(dt);
             UpdateHovering(dt);
             UpdateThrowing(dt);
+            UpdateStun(dt);
+        }
+
+        protected override void FixedUpdate()
+        {
+            bool wasFalling = IsFalling;
+
+            base.FixedUpdate();
+
+            if(!wasFalling && IsFalling) {
+                _fallStartHeight = Rigidbody.position.y;
+            } else if(wasFalling && !IsFalling && _playerControllerData.EnableFallStun) {
+                float distance = _fallStartHeight - Rigidbody.position.y;
+                if(distance >= _playerControllerData.FallStunDistance) {
+                    Stun();
+                }
+                _fallStartHeight = float.MinValue;
+            }
         }
 
         protected override void OnDrawGizmos()
@@ -248,7 +297,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void AnimationMove(Vector3 axes, float dt)
         {
-            if(IsGrabbing) {
+            if(!CanMove || IsGrabbing) {
                 return;
             }
 
@@ -257,6 +306,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(IsGrabbing) {
                 Vector3 velocity = transform.localRotation * (axes * _playerControllerData.ClimbSpeed);
                 if(IsGrounded && velocity.y < 0.0f) {
@@ -276,6 +329,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Actions
         public void Grab()
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(!_playerControllerData.EnableGrabbing || IsGrabbing || (!CanGrabLeft && !CanGrabRight)) {
                 return;
             }
@@ -291,6 +348,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Drop()
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(!_playerControllerData.EnableGrabbing) {
                 return;
             }
@@ -306,6 +367,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void StartAim()
         {
+            if(!CanMove) {
+                return;
+            }
+
             _isAiming = true;
 
             Debug.Log("TODO: zoom and aim!");
@@ -324,7 +389,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void StartThrowMail()
         {
-            if(!Player.CanThrowMail) {
+            if(!CanMove || !Player.CanThrowMail) {
                 return;
             }
 
@@ -337,6 +402,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void ThrowMail()
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(_canThrowMail) {
                 DoThrowMail();
             }
@@ -364,6 +433,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void StartThrowSnowball()
         {
+            if(!CanMove) {
+                return;
+            }
+
             _canThrowSnowball = true;
 
             //Player.Animator.SetBool(_playerControllerData.ThrowingSnowballParam, true);
@@ -371,6 +444,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void ThrowSnowball()
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(_canThrowSnowball) {
                 DoThrowSnowball();
             }
@@ -394,6 +471,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void JumpStart()
         {
+            if(!CanMove) {
+                return;
+            }
+
             _canJump = true;
             _longJumpTriggerTime = 0;
 
@@ -404,6 +485,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void Jump()
         {
+            if(!CanMove) {
+                return;
+            }
+
             if(_canJump && ControllerData.EnableJumping) {
                 DisableGrabbing();
 
@@ -416,6 +501,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void HoverStart()
         {
+            if(!CanMove) {
+                return;
+            }
+
             _hoverTriggerTime = 0;
 
             if(_playerControllerData.EnableHover && (!IsGrounded || _playerControllerData.HoverWhenGrounded) && !IsGrabbing) {
@@ -425,10 +514,22 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Hover()
         {
+            if(!CanMove) {
+                return;
+            }
+
             EnableHovering(false);
 
             _hoverTriggerTime = 0;
             _canJump = true;
+        }
+
+        public void Stun()
+        {
+            DisableGrabbing();
+            EnableHovering(false);
+
+            _stunTimeSeconds = _playerControllerData.FallStunTimeSeconds;
         }
 #endregion
 
@@ -463,6 +564,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void EnableHovering(bool enable)
         {
+            if(!enable && !IsHovering) {
+                return;
+            }
+
             _movementState = enable ? MovementState.Hovering : MovementState.Platforming;
 
             Player.Animator.SetBool(_playerControllerData.ThrustJumpParam, enable);
@@ -507,6 +612,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(ShouldAutoThrowMail) {
                 DoThrowMail();
                 _canThrowMail = false;
+            }
+        }
+
+        private void UpdateStun(float dt)
+        {
+            _stunTimeSeconds -= dt;
+            if(_stunTimeSeconds < 0.0f) {
+                _stunTimeSeconds = 0.0f;
             }
         }
 

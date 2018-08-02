@@ -47,12 +47,6 @@ namespace pdxpartyparrot.Core.Network
 
         [CanBeNull]
         public abstract Viewer Viewer { get; }
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canMove = true;
-
-        public bool CanMove => _canMove;
 #endregion
 
         protected NetworkIdentity NetworkIdentity { get; private set; }

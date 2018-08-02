@@ -28,12 +28,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         protected override void Update()
         {
+            float dt = Time.deltaTime;
+
             // TODO: until we have a way to know when the player stops pushing on the stick
             // through the InputSystem, this is the best we can do here
             // https://forum.unity.com/threads/gamepad-joystick-movement-question.542629/
             if(null != Gamepad && CanDrive) {
-                Vector2 moveAxes = ApplyDeadZone(Gamepad.leftStick.ReadValue());
-                LastMoveAxes = new Vector3(moveAxes.x, moveAxes.y, 0.0f);
+                UpdateLastMoveAxes(ApplyDeadZone(Gamepad.leftStick.ReadValue()), dt);
 
                 Vector2 lookAxes = ApplyDeadZone(Gamepad.rightStick.ReadValue());
                 lookAxes.y *= _invertLookY ? -1 : 1;
@@ -110,6 +111,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
+        private void UpdateLastMoveAxes(Vector2 moveAxes, float dt)
+        {
+            LastMoveAxes = Vector3.Lerp(LastMoveAxes, new Vector3(moveAxes.x, moveAxes.y, 0.0f), dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
+        }
+
 #region Event Handlers
         private void OnPause(InputAction.CallbackContext ctx)
         {
@@ -127,7 +133,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Vector2 axes = ApplyDeadZone(ctx.ReadValue<Vector2>());
-            LastMoveAxes = new Vector3(axes.x, axes.y, 0.0f);
+            UpdateLastMoveAxes(axes, Time.deltaTime);
         }
 
         private void OnMoveStop(InputAction.CallbackContext ctx)
@@ -136,6 +142,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
+            Debug.Log("move stop");
             LastMoveAxes = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
@@ -157,6 +164,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
+            Debug.Log("look stop");
             Player.FollowTarget.LastLookAxes = new Vector3(0.0f, 0.0f, 0.0f);
         }
 

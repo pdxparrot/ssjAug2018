@@ -51,6 +51,14 @@ namespace pdxpartyparrot.Core.Actors
         private Vector3 _lastAngularVelocity;
 #endregion
 
+        [Space(10)]
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _canMove = true;
+
+        public virtual bool CanMove { get { return _canMove; } protected set { _canMove = value; } }
+
         public Rigidbody Rigidbody { get; private set; }
 
         protected IActor Owner { get; private set; }

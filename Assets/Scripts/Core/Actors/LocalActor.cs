@@ -42,12 +42,6 @@ namespace pdxpartyparrot.Core.Actors
 
         [CanBeNull]
         public abstract Viewer Viewer { get; }
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canMove = true;
-
-        public bool CanMove => _canMove;
 #endregion
 
 #region Unity Lifecycle

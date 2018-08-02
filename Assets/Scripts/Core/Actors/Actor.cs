@@ -23,8 +23,6 @@ namespace pdxpartyparrot.Core.Actors
         [CanBeNull]
         Viewer Viewer { get; }
 
-        bool CanMove { get; }
-
         void Initialize(int id);
 
 #region Callbacks

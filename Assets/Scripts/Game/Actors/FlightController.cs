@@ -17,7 +17,7 @@ namespace pdxpartyparrot.Game.Players
 
         public Vector3 BankForce => _bankForce;
 
-        public float Speed => Owner.CanMove ? 0.0f : (PartyParrotManager.Instance.IsPaused ? PauseState.Velocity.magnitude : Rigidbody.velocity.magnitude);
+        public float Speed => CanMove ? 0.0f : (PartyParrotManager.Instance.IsPaused ? PauseState.Velocity.magnitude : Rigidbody.velocity.magnitude);
 
         public float Altitude => Owner.GameObject.transform.position.y;
 #endregion
@@ -131,7 +131,7 @@ namespace pdxpartyparrot.Game.Players
 
         public override void AnimationMove(Vector3 axes, float dt)
         {
-            if(!Owner.CanMove) {
+            if(!CanMove) {
                 return;
             }
 
@@ -148,7 +148,6 @@ namespace pdxpartyparrot.Game.Players
             Owner.Model.transform.localRotation = rotation;
         }
 
-#region Movement
         private void Turn(Vector3 axes, float dt)
         {
 #if true
@@ -170,7 +169,7 @@ namespace pdxpartyparrot.Game.Players
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
-            if(!Owner.CanMove) {
+            if(!CanMove) {
                 return;
             }
 
@@ -190,6 +189,5 @@ namespace pdxpartyparrot.Game.Players
                 Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, -TerminalVelocity, Rigidbody.velocity.z);
             }
         }
-#endregion
     }
 }

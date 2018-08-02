@@ -205,5 +205,29 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public float ThrowSpeed => _throwSpeed;
 #endregion
+
+        [Space(10)]
+
+#region Falling
+        [Header("Falling")]
+
+        [SerializeField]
+        [Tooltip("Enable to stun the player on large falls")]
+        private bool _enableFallStun;
+
+        public bool EnableFallStun => _enableFallStun;
+
+        [SerializeField]
+        [Range(1, 100)]
+        [Tooltip("How far can the player fall without getting stunned")]
+        private float _fallStunDistance = 5.0f;
+
+        public float FallStunDistance => _fallStunDistance;
+
+        [SerializeField]
+        private float _fallStunTimeSeconds;
+
+        public float FallStunTimeSeconds => _fallStunTimeSeconds;
+#endregion
     }
 }
