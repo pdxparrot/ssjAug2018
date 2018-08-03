@@ -231,17 +231,27 @@ namespace pdxpartyparrot.ssjAug2018.Players
             // left hand
             Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
             Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * _playerControllerData.ArmRayLength);
-            if(IsClimbing && !CanGrabLeft && CanGrabRight) {
+            if(IsClimbing) {
+                //if(!CanGrabLeft && CanGrabRight) {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+                //}
+
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(-90.0f, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 0.5f);
             }
 
             // right hand
             Gizmos.color = null != _rightHandHitResult ? Color.red : Color.yellow;
             Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + transform.forward * _playerControllerData.ArmRayLength);
-            if(IsClimbing && CanGrabLeft && !CanGrabRight) {
+            if(IsClimbing) {
+                //if(CanGrabLeft && !CanGrabRight) {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(-_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+                //}
+
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(-_playerControllerData.WrapAroundAngle, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 2.0f);
+                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(90.0f, transform.up) * transform.forward) * _playerControllerData.ArmRayLength * 0.5f);
             }
 
             if(IsClimbing) {
@@ -749,9 +759,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void HandleClimbingRaycasts()
         {
             if(!CanGrabLeft && CanGrabRight) {
-                CheckRotateLeft();
+                CheckWrapLeft();
             } else if(CanGrabLeft && !CanGrabRight) {
-                CheckRotateRight();
+                CheckWrapRight();
             } else if(!CanGrabLeft && !CanGrabRight) {
                 if(CanClimbUp) {
                     CheckClimbUp();
@@ -764,10 +774,17 @@ namespace pdxpartyparrot.ssjAug2018.Players
                     }
                 }
             }
+
+            // check for non-wrap rotations
+            if(!CheckRotateLeft()) {
+                CheckRotateRight();
+            }
         }
 
 #region Auto-Rotate/Climb
-        private bool CheckRotateLeft()
+// TODO: encapsulate the common code from these
+
+        private bool CheckWrapLeft()
         {
             if(null == _rightHandHitResult) {
                 return false;
@@ -795,7 +812,35 @@ namespace pdxpartyparrot.ssjAug2018.Players
             return true;
         }
 
-        private bool CheckRotateRight()
+        private bool CheckRotateLeft()
+        {
+            if(null == _rightHandHitResult) {
+                return false;
+            }
+
+            RaycastHit hit;
+            if(!Physics.Raycast(_leftHandTransform.position, Quaternion.AngleAxis(-90.0f, transform.up) * transform.forward, out hit, _playerControllerData.ArmRayLength * 0.5f, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                return false;
+            }
+
+            IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+            if(null == grabbable) {
+                return false;
+            }
+
+            if(hit.normal == _rightHandHitResult.Value.normal) {
+                return false;
+            }
+
+            _leftHandHitResult = hit;
+
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
+            StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal) - offset, Quaternion.LookRotation(-hit.normal), _playerControllerData.WrapTimeSeconds);
+
+            return true;
+        }
+
+        private bool CheckWrapRight()
         {
             if(null == _leftHandHitResult) {
                 return false;
@@ -819,6 +864,35 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
             StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal) + offset, Quaternion.LookRotation(-hit.normal), _playerControllerData.WrapTimeSeconds);
+
+            return true;
+
+        }
+
+        private bool CheckRotateRight()
+        {
+            if(null == _leftHandHitResult) {
+                return false;
+            }
+
+            RaycastHit hit;
+            if(!Physics.Raycast(_rightHandTransform.position, Quaternion.AngleAxis(90.0f, transform.up) * transform.forward, out hit, _playerControllerData.ArmRayLength * 0.5f, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                return false;
+            }
+
+            IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+            if(null == grabbable) {
+                return false;
+            }
+
+            if(hit.normal == _leftHandHitResult.Value.normal) {
+                return false;
+            }
+
+            _rightHandHitResult = hit;
+
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
+            StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal) - offset, Quaternion.LookRotation(-hit.normal), _playerControllerData.WrapTimeSeconds);
 
             return true;
 
