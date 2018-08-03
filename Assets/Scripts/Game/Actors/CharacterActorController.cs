@@ -9,13 +9,12 @@ using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Game.Actors
 {
-// TODO: a lot of this is commong with FPS controllers, so probably a good place to do a subclass
-    public class ThirdPersonController : ActorController
+    public class CharacterActorController : ActorController
     {
         [SerializeField]
-        private ThirdPersonControllerData _controllerData;
+        private CharacterActorControllerData _controllerData;
 
-        protected ThirdPersonControllerData ControllerData => _controllerData;
+        protected CharacterActorControllerData ControllerData => _controllerData;
 
         [SerializeField]
         [Range(0, 1)]
@@ -207,7 +206,7 @@ namespace pdxpartyparrot.Game.Actors
 
         private void UpdateIsGrounded()
         {
-            Profiler.BeginSample("ThirdPersonController.UpdateIsGrounded");
+            Profiler.BeginSample("Character.UpdateIsGrounded");
             try {
                 _isGrounded = CheckIsGrounded(GroundCheckCenter);
                 if(IsGrounded) {

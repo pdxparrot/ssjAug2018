@@ -7,7 +7,7 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Players
 {
-    // TODO: create a FlightControllerData, similar to ThirdPersonControllerData
+    // TODO: create a FlightControllerData, similar to CharacterControllerData
     public class FlightController : ActorController
     {
 #region Physics

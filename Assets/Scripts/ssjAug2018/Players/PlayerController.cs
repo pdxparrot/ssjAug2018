@@ -14,7 +14,7 @@ using UnityEngine.Serialization;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    public sealed class PlayerController : ThirdPersonController
+    public sealed class PlayerController : CharacterActorController
     {
         private enum MovementState
         {

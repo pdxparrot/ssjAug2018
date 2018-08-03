@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Game.Data
 {
-    [CreateAssetMenu(fileName="ThirdPersonControllerData", menuName="pdxpartyparrot/Game/Data/ThirdPersonController Data")]
+    [CreateAssetMenu(fileName="CharacterActorControllerData", menuName="pdxpartyparrot/Game/Data/CharacterActorController Data")]
     [Serializable]
-    public sealed class ThirdPersonControllerData : ScriptableObject
+    public sealed class CharacterActorControllerData : ScriptableObject
     {
         [SerializeField]
         private LayerMask _collisionCheckLayerMask;
