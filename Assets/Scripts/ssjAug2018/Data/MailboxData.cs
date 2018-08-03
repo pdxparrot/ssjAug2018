@@ -8,6 +8,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
     [Serializable]
     public sealed class MailboxData : ScriptableObject
     {
+        [SerializeField]
+        private LayerMask _mailboxLayer;
+
+        public LayerMask MailboxLayer => _mailboxLayer;
+
 #region Spawn Ranges
         [Header("Spawn Ranges")]
 

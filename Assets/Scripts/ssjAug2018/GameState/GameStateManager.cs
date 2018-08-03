@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Game.State;
+using pdxpartyparrot.ssjAug2018.Data;
 using pdxpartyparrot.ssjAug2018.Loading;
 using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.World;
@@ -15,6 +16,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public sealed class GameStateManager : GameStateManager<GameStateManager>
     {
+        [SerializeField]
+        private GameData _gameData;
+
+        public GameData GameData => _gameData;
+
         [SerializeField]
         private GameManager _gameManagerPrefab;
 

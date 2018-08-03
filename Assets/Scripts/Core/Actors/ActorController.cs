@@ -42,6 +42,7 @@ namespace pdxpartyparrot.Core.Actors
 #region Physics
         [Header("Physics")]
 
+#pragma warning disable 0414
         [SerializeField]
         [ReadOnly]
         private Vector3 _lastVelocity;
@@ -49,6 +50,7 @@ namespace pdxpartyparrot.Core.Actors
         [SerializeField]
         [ReadOnly]
         private Vector3 _lastAngularVelocity;
+#pragma warning restore 0649
 #endregion
 
         [Space(10)]

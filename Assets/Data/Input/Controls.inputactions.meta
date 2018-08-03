@@ -13,6 +13,10 @@ ScriptedImporter:
     11400016: game/aim
     11400018: game/throw mail
     11400020: game/throw snowball
+    11400022: game/move forward
+    11400024: game/move backward
+    11400026: game/move left
+    11400028: game/move right
   externalObjects: {}
   userData: 
   assetBundleName: 

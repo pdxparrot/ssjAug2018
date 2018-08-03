@@ -30,6 +30,7 @@ namespace pdxpartyparrot.ssjAug2018.Loading
             UIManager.CreateFromPrefab(_uiManagerPrefab, ManagersContainer);
             SpawnManager.Create(ManagersContainer);
             ItemManager.CreateFromPrefab(_itemManagerPrefab, ManagersContainer);
+            HighScoreManager.Create(ManagersContainer);
             DroneManager.Create(ManagersContainer);
         }
 

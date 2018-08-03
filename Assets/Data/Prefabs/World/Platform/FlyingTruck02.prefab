@@ -40,6 +40,9 @@ GameObject:
   - component: {fileID: 65616891267050208}
   - component: {fileID: 114858356123834122}
   - component: {fileID: 65176506643417120}
+  - component: {fileID: 208953867254329418}
+  - component: {fileID: 114838824043864514}
+  - component: {fileID: 114591031555787626}
   m_Layer: 11
   m_Name: FlyingTruck02
   m_TagString: Untagged
@@ -158,6 +161,59 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114591031555787626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1060919808508236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114838824043864514
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1060919808508236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 127
+    i1: 80
+    i2: 123
+    i3: 136
+    i4: 226
+    i5: 45
+    i6: 223
+    i7: 228
+    i8: 232
+    i9: 66
+    i10: 209
+    i11: 152
+    i12: 93
+    i13: 240
+    i14: 129
+    i15: 115
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114858356123834122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -171,3 +227,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _waypoints: []
+--- !u!208 &208953867254329418
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1060919808508236}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

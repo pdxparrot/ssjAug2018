@@ -18,11 +18,11 @@ namespace pdxpartyparrot.Core.Camera
         private bool _enableOrbit = true;
 
         [SerializeField]
-        [Range(0, 100)]
+        [Range(0, 500)]
         private float _orbitSpeedX = 100.0f;
 
         [SerializeField]
-        [Range(0, 100)]
+        [Range(0, 500)]
         private float _orbitSpeedY = 100.0f;
 
         [SerializeField]

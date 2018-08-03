@@ -42,6 +42,8 @@ GameObject:
   - component: {fileID: 208592530830458162}
   - component: {fileID: 114238152121343872}
   - component: {fileID: 65093161164029794}
+  - component: {fileID: 114864741761251176}
+  - component: {fileID: 114294606623179656}
   m_Layer: 11
   m_Name: FlyingBoat
   m_TagString: Untagged
@@ -190,6 +192,59 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &114294606623179656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1852419435549704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114864741761251176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1852419435549704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 48
+    i1: 246
+    i2: 41
+    i3: 23
+    i4: 206
+    i5: 161
+    i6: 119
+    i7: 20
+    i8: 203
+    i9: 3
+    i10: 171
+    i11: 178
+    i12: 250
+    i13: 142
+    i14: 9
+    i15: 141
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!208 &208592530830458162
 NavMeshObstacle:
   m_ObjectHideFlags: 1

@@ -163,23 +163,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
-#region Stun
-        [Header("Stun")]
-
-        [SerializeField]
-        [ReadOnly]
-        private float _stunTimeSeconds;
-
-        public bool IsStunned => _stunTimeSeconds > 0.0f;
-#endregion
-
-        [Space(10)]
-
         [SerializeField]
         [Tooltip("Debug break when grabbing fails")]
         private bool _breakOnFall;
 
-        public override bool CanMove => base.CanMove && !IsStunned;
+        public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
 
@@ -213,7 +201,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             UpdateJumping(dt);
             UpdateHovering(dt);
             UpdateThrowing(dt);
-            UpdateStun(dt);
         }
 
         protected override void FixedUpdate()
@@ -531,7 +518,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             DisableGrabbing();
             EnableHovering(false);
 
-            _stunTimeSeconds = _playerControllerData.FallStunTimeSeconds;
+            Player.Stun(_playerControllerData.FallStunTimeSeconds);
         }
 #endregion
 
@@ -611,14 +598,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(ShouldAutoThrowMail) {
                 DoThrowMail();
                 _canThrowMail = false;
-            }
-        }
-
-        private void UpdateStun(float dt)
-        {
-            _stunTimeSeconds -= dt;
-            if(_stunTimeSeconds < 0.0f) {
-                _stunTimeSeconds = 0.0f;
             }
         }
 

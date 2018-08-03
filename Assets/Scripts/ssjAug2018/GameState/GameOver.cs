@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Actors;
+using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
@@ -14,9 +16,19 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         [ReadOnly]
         private long _completeTime;
 
+        public void Initialize()
+        {
+            foreach(IActor actor in PlayerManager.Instance.Actors) {
+                Player player = actor as Player;
+                HighScoreManager.Instance.AddHighScore($"{actor.Id}", player?.Score ?? 0);
+            }
+        }
+
         public override void OnEnter()
         {
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowGameOverText();
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowGameOverText();
+            }
 
             _completeTime = TimeManager.Instance.CurrentUnixMs + (int)(_completeWaitTimeSeconds * 1000.0f);
         }

@@ -6,16 +6,18 @@ namespace pdxpartyparrot.Core.Actors
 {
     public abstract class ActorManager<T> : SingletonBehavior<ActorManager<T>> where T: IActor
     {
-        protected List<T> Actors { get; } = new List<T>();
+        private readonly List<T> _actors = new List<T>();
+
+        public IReadOnlyCollection<T> Actors => _actors;
 
         public void Register(T actor)
         {
-            Actors.Add(actor);
+            _actors.Add(actor);
         }
 
         public void Unregister(T actor)
         {
-            Actors.Remove(actor);
+            _actors.Remove(actor);
         }
     }
 }

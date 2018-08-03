@@ -8,6 +8,34 @@ namespace pdxpartyparrot.ssjAug2018.Data
     [Serializable]
     public sealed class PlayerData : ScriptableObject
     {
+        [SerializeField]
+        private LayerMask _playerLayer;
+
+        public LayerMask PlayerLayer => _playerLayer;
+
+        [SerializeField]
+        private LayerMask _viewerLayer;
+
+        public LayerMask ViewerLayer => _viewerLayer;
+
+        [Space(10)]
+
+#region Animations
+        [Header("Animations")]
+
+        [SerializeField]
+        private string _stunnedParam = "Stunned";
+
+        public string StunnedParam => _stunnedParam;
+
+        [SerializeField]
+        private string _deadParam = "Dead";
+
+        public string DeadParam => _deadParam;
+#endregion
+
+        [Space(10)]
+
 #region Physics
         [Header("Physics")]
 
@@ -29,13 +57,18 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         [Space(10)]
 
-#region Movement
-        [Header("Movement")]
+#region Controls
+        [Header("Controls")]
 
         [SerializeField]
         private float _movementLerpSpeed = 1.0f;
 
         public float MovementLerpSpeed => _movementLerpSpeed;
+
+        [SerializeField]
+        private float _lookLerpSpeed = 1.0f;
+
+        public float LookLerpSpeed => _lookLerpSpeed;
 #endregion
 
         [Space(10)]

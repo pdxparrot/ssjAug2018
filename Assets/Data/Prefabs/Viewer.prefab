@@ -200,7 +200,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 5000
+  far clip plane: 50000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -262,8 +262,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enableOrbit: 1
-  _orbitSpeedX: 100
-  _orbitSpeedY: 100
+  _orbitSpeedX: 200
+  _orbitSpeedY: 200
   _returnToDefault: 0
   _defaultOrbitRotation: {x: 0, y: 20}
   _defaultOrbitReturnTime: 0.5
@@ -338,34 +338,34 @@ MonoBehaviour:
   - 1000
   - 1000
   - 1000
+  - 50000
   - 1000
   - 1000
   - 1000
   - 1000
   - 1000
   - 1000
-  - 1000
-  - 5000
-  - 1000
+  - 50000
   - 1000
   - 1000
   - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
-  - 1000
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
 --- !u!114 &114718274646320594
 MonoBehaviour:
   m_ObjectHideFlags: 1

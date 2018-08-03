@@ -40,6 +40,9 @@ GameObject:
   - component: {fileID: 65148745616047404}
   - component: {fileID: 114161454229417364}
   - component: {fileID: 65676266225395448}
+  - component: {fileID: 208358994231500652}
+  - component: {fileID: 114460383250727708}
+  - component: {fileID: 114189247123497914}
   m_Layer: 11
   m_Name: FlyingTruck03
   m_TagString: Untagged
@@ -171,3 +174,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _waypoints: []
+--- !u!114 &114189247123497914
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1656597993612506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114460383250727708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1656597993612506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 90
+    i1: 112
+    i2: 134
+    i3: 30
+    i4: 238
+    i5: 214
+    i6: 4
+    i7: 52
+    i8: 41
+    i9: 165
+    i10: 135
+    i11: 177
+    i12: 70
+    i13: 92
+    i14: 59
+    i15: 4
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!208 &208358994231500652
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1656597993612506}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

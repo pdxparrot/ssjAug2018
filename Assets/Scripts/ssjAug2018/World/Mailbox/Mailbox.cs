@@ -1,6 +1,5 @@
-﻿using JetBrains.Annotations;
-
-using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Players;
 
 using UnityEngine;
@@ -82,10 +81,10 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 
         [Server]
-        public void MailHit(Player owner)
+        public bool MailHit(Player owner)
         {
             if(!_model.activeInHierarchy) {
-                return;
+                return false;
             }
 
             Debug.Log($"Mailbox {name} hit by mail");
@@ -96,12 +95,13 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
 
             GameManager.Instance.ScoreHit(owner);
+            return true;
         }
 
         [Server]
         public int PlayerCollide(Player player)
         {
-            if(!_model.activeInHierarchy || !GameManager.Instance.GameData.PlayerCollidesMailboxes) {
+            if(!_model.activeInHierarchy || !GameStateManager.Instance.GameData.PlayerCollidesMailboxes) {
                 return -1;
             }
 

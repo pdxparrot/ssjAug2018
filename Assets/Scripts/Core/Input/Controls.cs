@@ -20,6 +20,10 @@ namespace pdxpartyparrot.Core.Input
             m_game_hover = m_game.GetAction("hover");
             m_game_aim = m_game.GetAction("aim");
             m_game_throwsnowball = m_game.GetAction("throw snowball");
+            m_game_movebackward = m_game.GetAction("move backward");
+            m_game_moveleft = m_game.GetAction("move left");
+            m_game_moveright = m_game.GetAction("move right");
+            m_game_moveforward = m_game.GetAction("move forward");
             m_Initialized = true;
         }
         // game
@@ -34,6 +38,10 @@ namespace pdxpartyparrot.Core.Input
         private UnityEngine.Experimental.Input.InputAction m_game_hover;
         private UnityEngine.Experimental.Input.InputAction m_game_aim;
         private UnityEngine.Experimental.Input.InputAction m_game_throwsnowball;
+        private UnityEngine.Experimental.Input.InputAction m_game_movebackward;
+        private UnityEngine.Experimental.Input.InputAction m_game_moveleft;
+        private UnityEngine.Experimental.Input.InputAction m_game_moveright;
+        private UnityEngine.Experimental.Input.InputAction m_game_moveforward;
         public struct GameActions
         {
             private Controls m_Wrapper;
@@ -48,6 +56,10 @@ namespace pdxpartyparrot.Core.Input
             public UnityEngine.Experimental.Input.InputAction @hover { get { return m_Wrapper.m_game_hover; } }
             public UnityEngine.Experimental.Input.InputAction @aim { get { return m_Wrapper.m_game_aim; } }
             public UnityEngine.Experimental.Input.InputAction @throwsnowball { get { return m_Wrapper.m_game_throwsnowball; } }
+            public UnityEngine.Experimental.Input.InputAction @movebackward { get { return m_Wrapper.m_game_movebackward; } }
+            public UnityEngine.Experimental.Input.InputAction @moveleft { get { return m_Wrapper.m_game_moveleft; } }
+            public UnityEngine.Experimental.Input.InputAction @moveright { get { return m_Wrapper.m_game_moveright; } }
+            public UnityEngine.Experimental.Input.InputAction @moveforward { get { return m_Wrapper.m_game_moveforward; } }
             public UnityEngine.Experimental.Input.InputActionMap Get() { return m_Wrapper.m_game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }

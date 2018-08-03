@@ -14,5 +14,8 @@ MonoBehaviour:
   _thrownItemsUseGravity: 0
   _mailPrefab: {fileID: 114507564963906284, guid: cb931409a98871d4e9d165e01e989b90,
     type: 2}
+  _mailLayer:
+    serializedVersion: 2
+    m_Bits: 8192
   _mailDespawnSeconds: 5
   _mailScoreAmount: 1000

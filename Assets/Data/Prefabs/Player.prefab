@@ -2551,7 +2551,6 @@ MonoBehaviour:
   _model: {fileID: 1104154106400246}
   _controller: {fileID: 114450802372136796}
   _animator: {fileID: 95435563614912300}
-  _canMove: 1
   _currentLetterCount: 0
   _reloadCompleteTime: 0
   _score: 0
@@ -2569,9 +2568,10 @@ MonoBehaviour:
   _lastMoveAxes: {x: 0, y: 0, z: 0}
   _isMoving: 0
   _gamepadId: 0
-  _xAxisDeadZone: 0.01
-  _yAxisDeadZone: 0.01
   _invertLookY: 0
+  _mouseSensitivity: 0.5
+  _lastControllerMove: {x: 0, y: 0, z: 0}
+  _lastControllerLook: {x: 0, y: 0, z: 0}
 --- !u!114 &114450802372136796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2586,6 +2586,10 @@ MonoBehaviour:
   _driver: {fileID: 114416925496739310}
   _lastVelocity: {x: 0, y: 0, z: 0}
   _lastAngularVelocity: {x: 0, y: 0, z: 0}
+  _canMove: 1
+  _pauseState:
+    IsKinematic: 0
+    Velocity: {x: 0, y: 0, z: 0}
   _controllerData: {fileID: 11400000, guid: b1063409d4080b544b23ec155a621d14, type: 2}
   _raycastRoutineRate: 0.1
   _groundCheckTransform: {fileID: 4594389412127694}
@@ -2597,6 +2601,7 @@ MonoBehaviour:
   _playerControllerData: {fileID: 11400000, guid: af08040e7e4167f4f8ffe6e4f844c5f3,
     type: 2}
   _movementState: 0
+  _fallStartHeight: -3.4028235e+38
   _leftHandTransform: {fileID: 4350808608469060}
   _rightHandTransform: {fileID: 4805528540693168}
   _headTransform: {fileID: 4426796019341964}
@@ -2610,6 +2615,7 @@ MonoBehaviour:
   _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0
   _isAiming: 0
+  _stunTimeSeconds: 0
   _breakOnFall: 0
 --- !u!114 &114455475182417836
 MonoBehaviour:

@@ -2,6 +2,7 @@
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 
@@ -16,8 +17,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool _invertLookY;
 
         [SerializeField]
+        private float _mouseSensitivity = 0.5f;
+
+        [SerializeField]
         [ReadOnly]
         private Vector3 _lastControllerMove;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastControllerLook;
 
         public Player Player => (Player)Owner;
 
@@ -36,6 +44,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             float dt = Time.deltaTime;
 
             LastMoveAxes = Vector3.Lerp(LastMoveAxes, _lastControllerMove, dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
+            Player.FollowTarget.LastLookAxes = Vector3.Lerp(Player.FollowTarget.LastLookAxes, _lastControllerLook, dt * PlayerManager.Instance.PlayerData.LookLerpSpeed);
 
             base.Update();
         }
@@ -51,12 +60,22 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.move.performed -= OnMove;
                 InputManager.Instance.Controls.game.move.cancelled -= OnMoveStop;
 
+                InputManager.Instance.Controls.game.moveforward.started -= OnMoveForward;
+                InputManager.Instance.Controls.game.moveforward.performed -= OnMoveForwardStop;
+                InputManager.Instance.Controls.game.movebackward.started -= OnMoveBackward;
+                InputManager.Instance.Controls.game.movebackward.performed -= OnMoveBackwardStop;
+                InputManager.Instance.Controls.game.moveleft.started -= OnMoveLeft;
+                InputManager.Instance.Controls.game.moveleft.performed -= OnMoveLeftStop;
+                InputManager.Instance.Controls.game.moveright.started -= OnMoveRight;
+                InputManager.Instance.Controls.game.moveright.performed -= OnMoveRightStop;
+
                 InputManager.Instance.Controls.game.look.started -= OnLook;
                 InputManager.Instance.Controls.game.look.performed -= OnLook;
                 InputManager.Instance.Controls.game.look.cancelled -= OnLookStop;
 
                 InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
+
                 InputManager.Instance.Controls.game.hover.started -= OnHoverStart;
                 InputManager.Instance.Controls.game.hover.performed -= OnHover;
 
@@ -65,8 +84,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.aim.started -= OnAimStart;
                 InputManager.Instance.Controls.game.aim.performed -= OnAim;
+
                 InputManager.Instance.Controls.game.throwmail.started -= OnThrowMailStart;
                 InputManager.Instance.Controls.game.throwmail.performed -= OnThrowMail;
+
                 InputManager.Instance.Controls.game.throwsnowball.started -= OnThrowSnowballStart;
                 InputManager.Instance.Controls.game.throwsnowball.performed -= OnThrowSnowball;
             }
@@ -79,32 +100,46 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Initialize(owner, controller);
 
-            if(CanDrive) {
-                InputManager.Instance.Controls.game.pause.performed += OnPause;
-
-                InputManager.Instance.Controls.game.move.started += OnMove;
-                InputManager.Instance.Controls.game.move.performed += OnMove;
-                InputManager.Instance.Controls.game.move.cancelled += OnMoveStop;
-
-                InputManager.Instance.Controls.game.look.started += OnLook;
-                InputManager.Instance.Controls.game.look.performed += OnLook;
-                InputManager.Instance.Controls.game.look.cancelled += OnLookStop;
-
-                InputManager.Instance.Controls.game.jump.started += OnJumpStart;
-                InputManager.Instance.Controls.game.jump.performed += OnJump;
-                InputManager.Instance.Controls.game.hover.started += OnHoverStart;
-                InputManager.Instance.Controls.game.hover.performed += OnHover;
-
-                InputManager.Instance.Controls.game.grab.performed += OnGrab;
-                InputManager.Instance.Controls.game.drop.performed += OnDrop;
-
-                InputManager.Instance.Controls.game.aim.started += OnAimStart;
-                InputManager.Instance.Controls.game.aim.performed += OnAim;
-                InputManager.Instance.Controls.game.throwmail.started += OnThrowMailStart;
-                InputManager.Instance.Controls.game.throwmail.performed += OnThrowMail;
-                InputManager.Instance.Controls.game.throwsnowball.started += OnThrowSnowballStart;
-                InputManager.Instance.Controls.game.throwsnowball.performed += OnThrowSnowball;
+            if(!Player.isLocalPlayer) {
+                return;
             }
+
+            InputManager.Instance.Controls.game.pause.performed += OnPause;
+
+            InputManager.Instance.Controls.game.move.started += OnMove;
+            InputManager.Instance.Controls.game.move.performed += OnMove;
+            InputManager.Instance.Controls.game.move.cancelled += OnMoveStop;
+
+            InputManager.Instance.Controls.game.moveforward.started += OnMoveForward;
+            InputManager.Instance.Controls.game.moveforward.performed += OnMoveForwardStop;
+            InputManager.Instance.Controls.game.movebackward.started += OnMoveBackward;
+            InputManager.Instance.Controls.game.movebackward.performed += OnMoveBackwardStop;
+            InputManager.Instance.Controls.game.moveleft.started += OnMoveLeft;
+            InputManager.Instance.Controls.game.moveleft.performed += OnMoveLeftStop;
+            InputManager.Instance.Controls.game.moveright.started += OnMoveRight;
+            InputManager.Instance.Controls.game.moveright.performed += OnMoveRightStop;
+
+            InputManager.Instance.Controls.game.look.started += OnLook;
+            InputManager.Instance.Controls.game.look.performed += OnLook;
+            InputManager.Instance.Controls.game.look.cancelled += OnLookStop;
+
+            InputManager.Instance.Controls.game.jump.started += OnJumpStart;
+            InputManager.Instance.Controls.game.jump.performed += OnJump;
+
+            InputManager.Instance.Controls.game.hover.started += OnHoverStart;
+            InputManager.Instance.Controls.game.hover.performed += OnHover;
+
+            InputManager.Instance.Controls.game.grab.performed += OnGrab;
+            InputManager.Instance.Controls.game.drop.performed += OnDrop;
+
+            InputManager.Instance.Controls.game.aim.started += OnAimStart;
+            InputManager.Instance.Controls.game.aim.performed += OnAim;
+
+            InputManager.Instance.Controls.game.throwmail.started += OnThrowMailStart;
+            InputManager.Instance.Controls.game.throwmail.performed += OnThrowMail;
+
+            InputManager.Instance.Controls.game.throwsnowball.started += OnThrowSnowballStart;
+            InputManager.Instance.Controls.game.throwsnowball.performed += OnThrowSnowball;
         }
 
         private bool IsOurDevice(InputAction.CallbackContext ctx)
@@ -139,20 +174,102 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            _lastControllerMove = new Vector3(0.0f, 0.0f, 0.0f);
+            _lastControllerMove = Vector3.zero;
+            LastMoveAxes = _lastControllerMove;
+        }
+
+        private void OnMoveForward(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(_lastControllerMove.x, 1.0f, 0.0f);
+        }
+
+        private void OnMoveForwardStop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
+            LastMoveAxes = _lastControllerMove;
+        }
+
+        private void OnMoveBackward(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(_lastControllerMove.x, -1.0f, 0.0f);
+        }
+
+        private void OnMoveBackwardStop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
+            LastMoveAxes = _lastControllerMove;
+        }
+
+        private void OnMoveLeft(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(-1.0f, _lastControllerMove.y, 0.0f);
+        }
+
+        private void OnMoveLeftStop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
+            LastMoveAxes = _lastControllerMove;
+        }
+
+        private void OnMoveRight(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(1.0f, _lastControllerMove.y, 0.0f);
+        }
+
+        private void OnMoveRightStop(InputAction.CallbackContext ctx)
+        {
+            if(!IsOurDevice(ctx) || !CanDrive) {
+                return;
+            }
+
+            _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
             LastMoveAxes = _lastControllerMove;
         }
 
         private void OnLook(InputAction.CallbackContext ctx)
         {
-            if(!IsOurDevice(ctx) || !CanDrive) {
+            // TODO: mouse is disabled for now because it's annoying in the editor
+            bool isMouse = ctx.control.device is Mouse;
+            if(!IsOurDevice(ctx) || !CanDrive || isMouse) {
                 return;
             }
 
             Vector2 axes = ctx.ReadValue<Vector2>();
             axes.y *= _invertLookY ? -1 : 1;
 
-            Player.FollowTarget.LastLookAxes = new Vector3(axes.x, axes.y, 0.0f);
+            if(isMouse) {
+                axes *= _mouseSensitivity;
+            }
+
+            _lastControllerLook = new Vector3(axes.x, axes.y, 0.0f);
         }
 
         private void OnLookStop(InputAction.CallbackContext ctx)
@@ -161,7 +278,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.FollowTarget.LastLookAxes = new Vector3(0.0f, 0.0f, 0.0f);
+            _lastControllerLook = Vector3.zero;
+            Player.FollowTarget.LastLookAxes = _lastControllerLook;
         }
 
         private void OnJumpStart(InputAction.CallbackContext ctx)
@@ -278,6 +396,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => $"Player {Player.name} Driver");
             _debugMenuNode.RenderContentsAction = () => {
                 _invertLookY = GUILayout.Toggle(_invertLookY, "Invert Look Y");
+                GUILayout.BeginHorizontal();
+                    GUILayout.Label("Mouse Sensitivity:");
+                    _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);
+                GUILayout.EndHorizontal();
             };
         }
 

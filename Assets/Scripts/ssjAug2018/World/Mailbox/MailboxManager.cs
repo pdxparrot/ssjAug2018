@@ -24,8 +24,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         [SerializeField]
         private MailboxData _mailboxData;
 
-        [SerializeField]
-        private LayerMask _mailboxLayer;
+        public MailboxData MailboxData => _mailboxData;
 
         [SerializeField]
         [ReadOnly]
