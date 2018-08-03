@@ -16,6 +16,15 @@ namespace pdxpartyparrot.Game.Actors
 
         protected CharacterActorControllerData ControllerData => _controllerData;
 
+#region Components
+        [Header("Components")]
+
+        [SerializeField]
+        private CharacterActorControllerComponent[] _components;
+#endregion
+
+        [Space(10)]
+
         [SerializeField]
         [Range(0, 1)]
         [Tooltip("How often to run raycast checks, in seconds")]
