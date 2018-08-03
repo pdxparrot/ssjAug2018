@@ -62,8 +62,10 @@ namespace pdxpartyparrot.Game.Players
             InitRigidbody();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
 #if DEBUG
             CheckForDebug();
 #endif

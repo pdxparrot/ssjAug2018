@@ -32,6 +32,27 @@ namespace pdxpartyparrot.Core.Actors
             }
         }
 
+        [Serializable]
+        private struct AnimationState
+        {
+            public bool IsAnimating;
+
+            public float AnimationSeconds;
+            public float AnimationSecondsRemaining;
+
+            public float PercentComplete => 1.0f - (AnimationSecondsRemaining / AnimationSeconds);
+
+            public bool IsFinished => AnimationSecondsRemaining <= 0.0f;
+
+            public Vector3 StartPosition;
+            public Vector3 EndPosition;
+
+            public Quaternion StartRotation;
+            public Quaternion EndRotation;
+
+            public bool WasKinematic;
+        }
+
         [SerializeField]
         private ActorDriver _driver;
 
@@ -51,6 +72,18 @@ namespace pdxpartyparrot.Core.Actors
         [ReadOnly]
         private Vector3 _lastAngularVelocity;
 #pragma warning restore 0649
+#endregion
+
+        [Space(10)]
+
+#region Manual Animation
+        [Header("Manual Animation")]
+
+        [SerializeField]
+        [ReadOnly]
+        private AnimationState _animationState;
+
+        public bool IsAnimating => _animationState.IsAnimating;
 #endregion
 
         [Space(10)]
@@ -77,6 +110,13 @@ namespace pdxpartyparrot.Core.Actors
             Rigidbody = GetComponent<Rigidbody>();
 
             PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
+        }
+
+        protected virtual void Update()
+        {
+            float dt = Time.deltaTime;
+
+            UpdateAnimations(dt);
         }
 
         protected virtual void LateUpdate()
@@ -113,6 +153,57 @@ namespace pdxpartyparrot.Core.Actors
         public virtual void PhysicsMove(Vector3 axes, float dt)
         {
         }
+
+#region Manual Animations
+        protected void StartAnimation(Vector3 targetPosition, Quaternion targetRotation, float timeSeconds)
+        {
+            if(IsAnimating) {
+                return;
+            }
+
+            Debug.Log($"Starting manual animation from {Rigidbody.position}:{Rigidbody.rotation} to {targetPosition}:{targetRotation} over {timeSeconds} seconds");
+
+            _animationState.IsAnimating = true;
+
+            _animationState.StartPosition = Rigidbody.position;
+            _animationState.EndPosition = targetPosition;
+
+            _animationState.StartRotation = Rigidbody.rotation;
+            _animationState.EndRotation = targetRotation;
+
+            _animationState.AnimationSeconds = timeSeconds;
+            _animationState.AnimationSecondsRemaining = timeSeconds;
+
+            _animationState.WasKinematic = Rigidbody.isKinematic;
+            Rigidbody.isKinematic = true;
+        }
+
+        private void UpdateAnimations(float dt)
+        {
+            if(!IsAnimating) {
+                return;
+            }
+
+            if(_animationState.IsFinished) {
+                Debug.Log("Manual animation complete!");
+
+                _animationState.IsAnimating = false;
+
+                Rigidbody.position = _animationState.EndPosition;
+                Rigidbody.rotation = _animationState.EndRotation;
+                Rigidbody.isKinematic = _animationState.WasKinematic;
+                return;
+            }
+
+            _animationState.AnimationSecondsRemaining -= dt;
+            if(_animationState.AnimationSecondsRemaining < 0.0f) {
+                _animationState.AnimationSecondsRemaining = 0.0f;
+            }
+
+            Rigidbody.position = Vector3.Slerp(_animationState.StartPosition, _animationState.EndPosition, _animationState.PercentComplete);
+            Rigidbody.rotation = Quaternion.Slerp(_animationState.StartRotation, _animationState.EndRotation, _animationState.PercentComplete);
+        }
+#endregion
 
 #region Event Handlers
         private void PauseEventHandler(object sender, EventArgs args)

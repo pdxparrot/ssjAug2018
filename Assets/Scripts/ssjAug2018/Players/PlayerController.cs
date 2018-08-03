@@ -167,7 +167,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Tooltip("Debug break when grabbing fails")]
         private bool _breakOnFall;
 
-        public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
+        public override bool CanMove => base.CanMove && !IsAnimating && !Player.IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
 
@@ -300,7 +300,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             if(IsGrabbing) {
-                Vector3 velocity = transform.localRotation * (axes * _playerControllerData.ClimbSpeed);
+                Vector3 velocity = Rigidbody.rotation * (axes * _playerControllerData.ClimbSpeed);
                 if(IsGrounded && velocity.y < 0.0f) {
                     velocity.y = 0.0f;
                 }
@@ -515,6 +515,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public void Stun()
         {
+            if(IsAnimating) {
+                return;
+            }
+
             DisableGrabbing();
             EnableHovering(false);
 
@@ -526,7 +530,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             EnableClimbing(false);
 
-            transform.up = Vector3.up;
+            // fix our orientation, just in case
+            Vector3 rotation = transform.eulerAngles;
+            rotation.x = rotation.z = 0.0f;
+            transform.eulerAngles = rotation;
         }
 
         private void EnableClimbing(bool enable)
@@ -541,7 +548,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
-        public void UpdateJumping(float dt)
+        private void UpdateJumping(float dt)
         {
             if(_canJump && CanLongJump) {
                 DisableGrabbing();
@@ -615,6 +622,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private void UpdateRaycasts()
         {
+            if(IsAnimating) {
+                return;
+            }
+
             Profiler.BeginSample("PlayerController.UpdateRaycasts");
             try {
                 UpdateHandRaycasts();
@@ -755,8 +766,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
-// TODO: these should NOT update the rigidbody directly... we're doing this in a coroutine
-
 #region Auto-Rotate/Climb
         private bool CheckRotateLeft()
         {
@@ -778,11 +787,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return false;
             }
 
-            AttachToSurface(hit);
             _leftHandHitResult = hit;
 
-            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * -transform.right;
-            Rigidbody.position += offset;
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
+            StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal) + offset, Quaternion.LookRotation(-hit.normal), _playerControllerData.WrapTimeSeconds);
 
             return true;
         }
@@ -807,11 +815,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return false;
             }
 
-            AttachToSurface(hit);
             _rightHandHitResult = hit;
 
-            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.right;
-            Rigidbody.position += offset;
+            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
+            StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal) + offset, Quaternion.LookRotation(-hit.normal), _playerControllerData.WrapTimeSeconds);
 
             return true;
 
@@ -828,7 +835,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return false;
             }
 
-            ClimbUp(hit);
+            DisableGrabbing();
+
+            Vector3 offset = Player.CapsuleCollider.radius * 2.0f * transform.forward;
+            StartAnimation(Rigidbody.position + GetSurfaceAttachmentPosition(hit, offset), Rigidbody.rotation, _playerControllerData.ClimbUpTimeSeconds);
 
             return true;
         }
@@ -840,30 +850,22 @@ Debug.Log("TODO: check drop down");
         }
 #endregion
 
-// TODO: smooth/animate these things
-
-        private void AttachToSurface(RaycastHit hit)
+        private Vector3 GetSurfaceAttachmentPosition(RaycastHit hit, Vector3 offset)
         {
-            // align to the surface
-            transform.forward = -hit.normal;
-
             // keep a set distance away from the surface
             Vector3 targetPoint = hit.point + (hit.normal * _playerControllerData.AttachDistance);
             Vector3 a = targetPoint - Rigidbody.position;
             Vector3 p = Vector3.Project(a, hit.normal);
-            Vector3 offset = Player.CapsuleCollider.radius * hit.normal;
-            Rigidbody.position += p + offset;
+
+            return p + offset;
         }
 
-        private void ClimbUp(RaycastHit hit)
+        private void AttachToSurface(RaycastHit hit)
         {
-            Vector3 targetPoint = hit.point + (hit.normal * _playerControllerData.AttachDistance);
-            Vector3 a = targetPoint - Rigidbody.position;
-            Vector3 p = Vector3.Project(a, hit.normal);
-            Vector3 offset = (Player.CapsuleCollider.radius * 2.0f) * transform.forward;
-            Rigidbody.position += p + offset;
+            Debug.Log($"Attach to surface {hit.transform.name}");
 
-            DisableGrabbing();
+            transform.forward = -hit.normal;
+            Rigidbody.position += GetSurfaceAttachmentPosition(hit, Player.CapsuleCollider.radius * hit.normal);
         }
 
         private void DropDown()

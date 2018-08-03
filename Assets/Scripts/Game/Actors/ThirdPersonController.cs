@@ -65,6 +65,8 @@ namespace pdxpartyparrot.Game.Actors
 
         public bool IsRunning => _isRunning;
 
+        [Space(10)]
+
         [SerializeField]
         [ReadOnly]
         private int _doubleJumpCount;
@@ -86,10 +88,15 @@ namespace pdxpartyparrot.Game.Actors
             InitRigidbody();
         }
 
-        protected virtual void Update()
+        protected override void Update()
         {
+            base.Update();
+
             Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.x) : 0.0f);
             Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.y) : 0.0f);
+
+            Owner.Animator.SetBool(ControllerData.GroundedParam, IsGrounded);
+            Owner.Animator.SetBool(ControllerData.FallingParam, IsFalling);
         }
 
         protected virtual void FixedUpdate()
@@ -97,7 +104,6 @@ namespace pdxpartyparrot.Game.Actors
             float dt = Time.fixedDeltaTime;
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
-            Owner.Animator.SetBool(ControllerData.FallingParam, _isFalling);
 
             FudgeVelocity(dt);
         }
@@ -160,7 +166,7 @@ namespace pdxpartyparrot.Game.Actors
             _isRunning = axes.sqrMagnitude >= ControllerData.RunThresholdSquared;
 
             Vector3 speed = axes * ControllerData.MoveSpeed;
-            Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : transform.localRotation;
+            Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : Rigidbody.rotation;
             Vector3 velocity = rotation * new Vector3(speed.x, 0.0f, speed.y);
             velocity.y = Rigidbody.velocity.y;
 
@@ -207,7 +213,6 @@ namespace pdxpartyparrot.Game.Actors
                 if(IsGrounded) {
                     DoubleJumpCount = 0;
                 }
-                Owner.Animator.SetBool(ControllerData.GroundedParam, _isGrounded);
             } finally {
                 Profiler.EndSample();
             }

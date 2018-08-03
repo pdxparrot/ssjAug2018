@@ -42,6 +42,16 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private string _throwMailParam = "ThrowMail";
 
         public string ThrowMailParam => _throwMailParam;
+
+        [SerializeField]
+        private float _wrapTimeSeconds = 1.0f;
+
+        public float WrapTimeSeconds => _wrapTimeSeconds;
+
+        [SerializeField]
+        private float _climbUpTimeSeconds = 1.0f;
+
+        public float ClimbUpTimeSeconds => _climbUpTimeSeconds;
 #endregion
 
         [Space(10)]

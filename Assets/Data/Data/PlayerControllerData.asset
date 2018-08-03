@@ -17,6 +17,8 @@ MonoBehaviour:
   _thurstJumpParam: ThrustJump
   _throwingMailParam: ReadyToThrow
   _throwMailParam: ThrowMail
+  _wrapTimeSeconds: 1
+  _climbUpTimeSeconds: 1
   _climbSpeed: 10
   _armRayLength: 2
   _wrapAroundAngle: 30
