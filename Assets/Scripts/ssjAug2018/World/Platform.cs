@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 
 using pdxpartyparrot.ssjAug2018.World;
 
@@ -15,13 +15,15 @@ namespace pdxparyparrot.ssjAug2018.World
     public class Platform : MonoBehaviour, IGrabbable
     {
         [SerializeField]
-        private float _speed = 5;
+        private float _speed = 5.0f;
 
         [SerializeField]
-        private List<PlatformWaypoint> _waypoints;
+        private PlatformWaypoint[] _waypoints;
 
+        [CanBeNull]
         private PlatformWaypoint _targetWayponit;
-        private int _waypointIterator = 0;
+
+        private int _waypointIterator;
 
         public Collider Collider { get; private set; }
 
@@ -30,21 +32,42 @@ namespace pdxparyparrot.ssjAug2018.World
         {
             Collider = GetComponent<Collider>();
 
-            _targetWayponit = _waypoints[0];
-            transform.LookAt(_targetWayponit.transform);
+            TargetWaypoint(0);
         }
-#endregion
 
         private void FixedUpdate()
         {
-            float step = _speed * Time.fixedDeltaTime;
-            if((_targetWayponit.transform.position - transform.position).sqrMagnitude < float.Epsilon)
-            {
-                _waypointIterator = (_waypointIterator + 1) % _waypoints.Count;
-                _targetWayponit = _waypoints[_waypointIterator];
-                transform.LookAt(_targetWayponit.transform.position);
+            if(null == _targetWayponit) {
+                return;
             }
+
+            if((_targetWayponit.transform.position - transform.position).sqrMagnitude < float.Epsilon) {
+                _waypointIterator = (_waypointIterator + 1) % _waypoints.Length;
+
+                TargetWaypoint(_waypointIterator);
+                if(null == _targetWayponit) {
+                    return;
+                }
+            }
+
+            float step = _speed * Time.fixedDeltaTime;
             transform.position = Vector3.MoveTowards(transform.position, _targetWayponit.transform.position, step);
+        }
+#endregion
+
+        private void TargetWaypoint(int index)
+        {
+            if(index > _waypoints.Length || index < 0) {
+                _targetWayponit = null;
+                return;
+            }
+
+            _targetWayponit = _waypoints[index];
+            if(null == _targetWayponit) {
+                return;
+            }
+
+            transform.LookAt(_targetWayponit.transform);
         }
     }
 }
