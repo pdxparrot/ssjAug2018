@@ -14,6 +14,7 @@ using UnityEngine.Serialization;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
+    [RequireComponent(typeof(DoubleJumpControllerComponent))]
     public sealed class PlayerController : CharacterActorController
     {
         private enum MovementState
