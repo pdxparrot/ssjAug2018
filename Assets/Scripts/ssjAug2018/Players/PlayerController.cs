@@ -171,6 +171,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public Player Player => (Player)Owner;
 
+        private DoubleJumpControllerComponent _doubleJump;
+
         private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
@@ -183,6 +185,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Assert(Math.Abs(_leftHandTransform.position.y - _rightHandTransform.position.y) < float.Epsilon, "Player hands are at different heights!");
             Debug.Assert(_headTransform.position.y > _leftHandTransform.position.y, "Player head should be above player hands!");
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
+
+            _doubleJump = GetControllerComponent<DoubleJumpControllerComponent>();
         }
 
         protected override void OnDestroy()
@@ -554,7 +558,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Player.Animator.SetBool(_playerControllerData.ClimbingParam, enable);
 
             if(enable) {
-                DoubleJumpCount = 0;
+                _doubleJump.Reset();
             }
         }
 

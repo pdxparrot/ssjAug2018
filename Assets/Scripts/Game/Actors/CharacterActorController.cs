@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
@@ -14,14 +16,7 @@ namespace pdxpartyparrot.Game.Actors
         [SerializeField]
         private CharacterActorControllerData _controllerData;
 
-        protected CharacterActorControllerData ControllerData => _controllerData;
-
-#region Components
-        [Header("Components")]
-
-        [SerializeField]
-        private CharacterActorControllerComponent[] _components;
-#endregion
+        public CharacterActorControllerData ControllerData => _controllerData;
 
         [Space(10)]
 
@@ -71,27 +66,17 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private bool _isRunning;
 
+
         public bool IsRunning => _isRunning;
 
-        [Space(10)]
-
-        [SerializeField]
-        [ReadOnly]
-        private int _doubleJumpCount;
-
-        protected int DoubleJumpCount
-        {
-            get { return _doubleJumpCount; }
-
-            set { _doubleJumpCount = value < 0 ? 0 : value; }
-        }
-
-        private bool CanDoubleJump => !IsGrounded && (ControllerData.DoubleJumpCount < 0 || _doubleJumpCount < ControllerData.DoubleJumpCount);
+        private CharacterActorControllerComponent[] _components;
 
 #region Unity Lifecycle
         protected override void Awake()
         {
             base.Awake();
+
+            _components = GetComponents<CharacterActorControllerComponent>();
 
             InitRigidbody();
         }
@@ -181,6 +166,40 @@ namespace pdxpartyparrot.Game.Actors
             Rigidbody.velocity = velocity;
         }
 
+#region Components
+        public T GetControllerComponent<T>() where T: CharacterActorControllerComponent
+        {
+            foreach(var component in _components) {
+                T tc = component as T;
+                if(tc != null) {
+                    return tc;
+                }
+            }
+            return null;
+        }
+
+        public void GetControllerComponents<T>(ICollection<T> components) where T: CharacterActorControllerComponent
+        {
+            components.Clear();
+            foreach(var component in _components) {
+                T tc = component as T;
+                if(tc != null) {
+                    components.Add(tc);
+                }
+            }
+        }
+
+        private bool RunOnComponents(Func<CharacterActorControllerComponent, bool> f)
+        {
+            foreach(var component in _components) {
+                if(f(component)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+#endregion
+
 #region Actions
         public virtual void Jump()
         {
@@ -188,12 +207,32 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            if(IsGrounded) {
-                DoJump(ControllerData.JumpHeight, ControllerData.JumpParam);
-            } else if(CanDoubleJump) {
-                DoubleJumpCount++;
-                DoJump(ControllerData.DoubleJumpHeight, ControllerData.DoubleJumpParam);
+            if(RunOnComponents(c => c.OnJump())) {
+                return;
             }
+
+            if(!IsGrounded) {
+                return;
+            }
+
+            DoJump(ControllerData.JumpHeight, ControllerData.JumpParam);
+        }
+
+        public void DoJump(float height, string animationParam)
+        {
+            if(!CanMove) {
+                return;
+            }
+
+            // factor in fall speed adjust
+            float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
+
+            // v = sqrt(2gh)
+            Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
+
+            Rigidbody.velocity = velocity;
+
+            Owner.Animator.SetTrigger(animationParam);
         }
 #endregion
 
@@ -218,9 +257,6 @@ namespace pdxpartyparrot.Game.Actors
             Profiler.BeginSample("Character.UpdateIsGrounded");
             try {
                 _isGrounded = CheckIsGrounded(GroundCheckCenter);
-                if(IsGrounded) {
-                    DoubleJumpCount = 0;
-                }
             } finally {
                 Profiler.EndSample();
             }
@@ -243,23 +279,6 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             Rigidbody.velocity = adjustedVelocity;
-        }
-
-        protected void DoJump(float height, string animationParam)
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            // factor in fall speed adjust
-            float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
-
-            // v = sqrt(2gh)
-            Vector3 velocity = Vector3.up * Mathf.Sqrt(height * 2.0f * gravity);
-
-            Rigidbody.velocity = velocity;
-
-            Owner.Animator.SetTrigger(animationParam);
         }
     }
 }

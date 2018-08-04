@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 114455475182417836}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
+  - component: {fileID: 114307707372532762}
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114416925496739310}
   m_Layer: 9
@@ -2535,6 +2536,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114307707372532762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c73349eb10daf4f808dfc985e2058c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _doubleJumpCount: 0
 --- !u!114 &114331638870797786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2554,6 +2567,8 @@ MonoBehaviour:
   _currentLetterCount: 0
   _reloadCompleteTime: 0
   _score: 0
+  _stunTimeSeconds: 0
+  _isDead: 0
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2586,6 +2601,15 @@ MonoBehaviour:
   _driver: {fileID: 114416925496739310}
   _lastVelocity: {x: 0, y: 0, z: 0}
   _lastAngularVelocity: {x: 0, y: 0, z: 0}
+  _animationState:
+    IsAnimating: 0
+    AnimationSeconds: 0
+    AnimationSecondsRemaining: 0
+    StartPosition: {x: 0, y: 0, z: 0}
+    EndPosition: {x: 0, y: 0, z: 0}
+    StartRotation: {x: 0, y: 0, z: 0, w: 0}
+    EndRotation: {x: 0, y: 0, z: 0, w: 0}
+    WasKinematic: 0
   _canMove: 1
   _pauseState:
     IsKinematic: 0
@@ -2597,7 +2621,6 @@ MonoBehaviour:
   _isGrounded: 0
   _isFalling: 0
   _isRunning: 0
-  _doubleJumpCount: 0
   _playerControllerData: {fileID: 11400000, guid: af08040e7e4167f4f8ffe6e4f844c5f3,
     type: 2}
   _movementState: 0
@@ -2615,7 +2638,6 @@ MonoBehaviour:
   _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0
   _isAiming: 0
-  _stunTimeSeconds: 0
   _breakOnFall: 0
 --- !u!114 &114455475182417836
 MonoBehaviour:
