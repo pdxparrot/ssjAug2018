@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.DebugMenu;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
@@ -133,8 +134,10 @@ namespace pdxpartyparrot.Game.State
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Game.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
-                GUILayout.Label($"Current Game State: {CurrentState?.Name ?? null}");
-                if(GUILayout.Button("Reset")) {
+                GUILayout.Label($"Current Game State: {CurrentState?.Name}");
+
+                string text = "Reset";
+                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
                     TransitionToInitialState();
                 }
             };

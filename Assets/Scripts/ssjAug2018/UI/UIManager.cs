@@ -90,7 +90,8 @@ namespace pdxpartyparrot.ssjAug2018.UI
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.UIManager");
             debugMenuNode.RenderContentsAction = () => {
                 if(null != PlayerUI) {
-                    if(GUILayout.Button("Toggle HUD")) {
+                    string text = "Toggle HUD";
+                    if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
                         PlayerUI.ToggleHUD();
                     }
                 }

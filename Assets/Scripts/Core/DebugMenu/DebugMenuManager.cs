@@ -185,7 +185,7 @@ namespace pdxpartyparrot.Core.DebugMenu
                     }
                 GUILayout.EndScrollView();
 
-                if(GUILayout.Button("Quit", GUILayout.Width(100), GUILayout.Height(25))) {
+                if(GUILayout.Button("Quit", GUIUtils.GetLayoutButtonSize("Quit"))) {
                     Application.Quit();
                 }
             } else {
@@ -193,7 +193,7 @@ namespace pdxpartyparrot.Core.DebugMenu
                     _currentNode.RenderContents();
                 GUILayout.EndScrollView();
 
-                if(GUILayout.Button("Back", GUILayout.Width(100), GUILayout.Height(25))) {
+                if(GUILayout.Button("Back", GUIUtils.GetLayoutButtonSize("Back"))) {
                     SetCurrentNode(_currentNode.Parent);
                 }
             }

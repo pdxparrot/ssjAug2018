@@ -1,5 +1,7 @@
 ﻿using System;
 
+using pdxpartyparrot.Core.DebugMenu;
+
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -25,11 +27,13 @@ namespace pdxpartyparrot.Core.Network
 
         public static bool HasInstance => null != Instance;
 
+/*
         // TODO: implement the use of this
         [SerializeField]
         private int _maxNetworkPlayers = 16;
 
         public int MaxNetworkPlayers => _maxNetworkPlayers;
+*/
 
         [SerializeField]
         private bool _enableCallbackLogging = true;
@@ -43,7 +47,10 @@ namespace pdxpartyparrot.Core.Network
         {
             base.Awake();
 
+            autoCreatePlayer = false;
             HUD.showGUI = false;
+
+            InitDebugMenu();
         }
 */
 
@@ -51,6 +58,8 @@ namespace pdxpartyparrot.Core.Network
         {
             autoCreatePlayer = false;
             HUD.showGUI = false;
+
+            InitDebugMenu();
         }
 #endregion
 
@@ -224,6 +233,15 @@ namespace pdxpartyparrot.Core.Network
                 return;
             }
             Debug.Log($"[NetworkManager]: {message}");
+        }
+
+        private void InitDebugMenu()
+        {
+            DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.NetworkManager");
+            debugMenuNode.RenderContentsAction = () => {
+                HUD.showGUI = GUILayout.Toggle(HUD.showGUI, "Show Network HUD");
+                _enableCallbackLogging = GUILayout.Toggle(_enableCallbackLogging, "Callback Logging");
+            };
         }
     }
 }

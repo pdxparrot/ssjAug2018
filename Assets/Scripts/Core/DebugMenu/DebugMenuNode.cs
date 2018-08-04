@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using pdxpartyparrot.Core.UI;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.Core.DebugMenu
@@ -29,10 +31,7 @@ namespace pdxpartyparrot.Core.DebugMenu
         public void RenderNode()
         {
             string title = Title();
-
-            // TODO: calculate width/height
-
-            if(GUILayout.Button(title, GUILayout.Width(100), GUILayout.Height(25))) {
+            if(GUILayout.Button(title, GUIUtils.GetLayoutButtonSize(title))) {
                 DebugMenuManager.Instance.SetCurrentNode(this);
             }
         }

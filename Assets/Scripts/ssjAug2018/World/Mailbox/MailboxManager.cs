@@ -3,6 +3,7 @@
 using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.DebugMenu;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
 
@@ -218,7 +219,8 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.MailboxManager");
             _debugMenuNode.RenderContentsAction = () => {
-                if(GUILayout.Button("Force Complete")) {
+                string text = "Force Complete";
+                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
                     CmdCompleteAllMailboxes();
                 }
 

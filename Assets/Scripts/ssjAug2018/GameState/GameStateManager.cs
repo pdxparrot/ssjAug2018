@@ -3,6 +3,7 @@
 using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.DebugMenu;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.Data;
 using pdxpartyparrot.ssjAug2018.Loading;
@@ -131,7 +132,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
                 foreach(string sceneName in _sceneTester.TestScenes) {
-                    if(GUILayout.Button($"Load Test Scene {sceneName}")) {
+                    string text = $"Load Test Scene {sceneName}";
+                    if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
                         TransitionState(_sceneTester, state => {
                             state.SetScene(sceneName);
                         });
