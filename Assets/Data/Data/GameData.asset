@@ -14,7 +14,7 @@ MonoBehaviour:
   _worldLayer:
     serializedVersion: 2
     m_Bits: 2048
-  _gameTimeMinutes: 2.5
+  _gameTimeMinutes: 120
   _scoreGameTimeSeconds: 3
   _playerRespawnSeconds: 3
   _playerCollidesMailboxes: 1
