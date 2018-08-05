@@ -791,7 +791,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckWrapLeft()
         {
-            if(null == _rightHandHitResult) {
+            if(null == _rightHandHitResult || Driver.LastMoveAxes.x >= 0.0f) {
                 return false;
             }
 
@@ -819,7 +819,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckRotateLeft()
         {
-            if(null == _rightHandHitResult) {
+            if(null == _rightHandHitResult || Driver.LastMoveAxes.x >= 0.0f) {
                 return false;
             }
 
@@ -847,7 +847,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckWrapRight()
         {
-            if(null == _leftHandHitResult) {
+            if(null == _leftHandHitResult || Driver.LastMoveAxes.x <= 0.0f) {
                 return false;
             }
 
@@ -876,7 +876,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckRotateRight()
         {
-            if(null == _leftHandHitResult) {
+            if(null == _leftHandHitResult || Driver.LastMoveAxes.x <= 0.0f) {
                 return false;
             }
 
@@ -905,6 +905,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckClimbUp()
         {
+            if(Driver.LastMoveAxes.y <= 0.0f) {
+                return false;
+            }
+
             // cast a ray from the end of our rotated head check straight down to see if we can stand here
             Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-_playerControllerData.HeadRayAngle, transform.right) * transform.forward) * _playerControllerData.HeadRayLength;
             float length = Player.CapsuleCollider.height;
@@ -924,6 +928,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool CheckDropDown()
         {
+            if(Driver.LastMoveAxes.y >= 0.0f) {
+                return false;
+            }
+
 Debug.Log("TODO: check drop down");
             return false;
         }
