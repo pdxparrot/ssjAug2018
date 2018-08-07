@@ -255,7 +255,7 @@ namespace pdxpartyparrot.Game.Actors
         }
 #endregion
 
-        public void DefaultJump(float height, string animationParam)
+        public void Jump(float height, string animationParam)
         {
             if(!CanMove) {
                 return;

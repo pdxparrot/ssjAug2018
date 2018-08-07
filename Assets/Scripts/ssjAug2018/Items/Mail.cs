@@ -52,6 +52,8 @@ namespace pdxpartyparrot.ssjAug2018.Items
 
         private void OnCollisionEnter(Collision collision)
         {
+            Debug.Log($"Mail collision: {collision.gameObject.name}");
+
             Miss();
         }
 

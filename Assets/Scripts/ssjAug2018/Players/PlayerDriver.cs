@@ -369,13 +369,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+#region Throw
         private void OnThrowMailStart(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.StartThrowMail();
+            Player.PlayerController.ActionStarted(ThrowControllerComponent.ThrowMailAction.Default);
         }
 
         private void OnThrowMail(InputAction.CallbackContext ctx)
@@ -384,7 +385,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.ThrowMail();
+            Player.PlayerController.ActionPerformed(ThrowControllerComponent.ThrowMailAction.Default);
         }
 
         private void OnThrowSnowballStart(InputAction.CallbackContext ctx)
@@ -393,7 +394,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.StartThrowSnowball();
+            Player.PlayerController.ActionStarted(ThrowControllerComponent.ThrowSnowballAction.Default);
         }
 
         private void OnThrowSnowball(InputAction.CallbackContext ctx)
@@ -402,8 +403,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.ThrowSnowball();
+            Player.PlayerController.ActionPerformed(ThrowControllerComponent.ThrowSnowballAction.Default);
         }
+#endregion
+
 #endregion
 
         private void InitDebugMenu()

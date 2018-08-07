@@ -18,34 +18,32 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [SerializeField]
         private PlayerControllerData _playerControllerData;
 
+        public PlayerControllerData PlayerControllerData => _playerControllerData;
+
         [SerializeField]
         [ReadOnly]
         private float _fallStartHeight = float.MinValue;
 
-        [Space(10)]
-
-#region Throwing
-        [Header("Throwing")]
-
         [SerializeField]
         private Transform _throwOrigin;
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canThrowMail;
-
-        [SerializeField]
-        [ReadOnly]
-        private Timer _autoThrowMailTimer;
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canThrowSnowball;
-#endregion
 
         public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
+
+        private Vector3 ThrowDirection
+        {
+            get
+            {
+                if(null == Player.Viewer) {
+                    return Player.transform.forward;
+                }
+
+                /*Vector3 target = Player.Viewer.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f)).direction * PlayerControllerData.ThrowConvergeDistance;
+                return (target - _throwOrigin.position).normalized;*/
+                return Player.Viewer.transform.forward;
+            }
+        }
 
 #region Components
         public HoverControllerComponent HoverComponent { get; private set; }
@@ -76,10 +74,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null != UIManager.Instance.PlayerUI) {
                 UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(_aimComponent.IsAiming);
             }
-
-            float dt = Time.deltaTime;
-
-            _autoThrowMailTimer.Update(dt);
         }
 
         protected override void FixedUpdate()
@@ -90,9 +84,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(!wasFalling && IsFalling) {
                 _fallStartHeight = Rigidbody.position.y;
-            } else if(wasFalling && !IsFalling && _playerControllerData.EnableFallStun) {
+            } else if(wasFalling && !IsFalling && PlayerControllerData.EnableFallStun) {
                 float distance = _fallStartHeight - Rigidbody.position.y;
-                if(distance >= _playerControllerData.FallStunDistance) {
+                if(distance >= PlayerControllerData.FallStunDistance) {
                     Stun();
                 }
                 _fallStartHeight = float.MinValue;
@@ -102,87 +96,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
-#region Actions
-        public void StartThrowMail()
-        {
-            if(!CanMove || !Player.CanThrowMail) {
-                return;
-            }
-
-            _canThrowMail = true;
-
-            _autoThrowMailTimer.Start(_playerControllerData.AutoThrowSeconds, DoThrowMail);
-
-            Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, true);
-        }
-
-        public void ThrowMail()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            if(_canThrowMail) {
-                DoThrowMail();
-            }
-
-            Player.Animator.SetBool(_playerControllerData.ThrowingMailParam, false);
-
-            _canThrowMail = true;
-        }
-
-        private void DoThrowMail()
-        {
-            _autoThrowMailTimer.Stop();
-
-            if(null == Player.Viewer) {
-                Debug.LogWarning("Non-local player doing a throw!");
-                return;
-            }
-
-            Player.CmdThrowMail(_throwOrigin.position, /*!IsAiming ? Player.transform.forward :*/ Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
-
-            Player.Animator.SetTrigger(_playerControllerData.ThrowMailParam);
-        }
-
-        public void StartThrowSnowball()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            _canThrowSnowball = true;
-
-            //Player.Animator.SetBool(_playerControllerData.ThrowingSnowballParam, true);
-        }
-
-        public void ThrowSnowball()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            if(_canThrowSnowball) {
-                DoThrowSnowball();
-            }
-
-            //Player.Animator.SetBool(_playerControllerData.ThrowingSnowballParam, false);
-
-            _canThrowSnowball = true;
-        }
-
-        private void DoThrowSnowball()
-        {
-            if(null == Player.Viewer) {
-                Debug.LogWarning("Non-local player doing a throw!");
-                return;
-            }
-
-            Player.CmdThrowSnowball(_throwOrigin.position, /*!IsAiming ? Player.transform.forward :*/ Player.Viewer.transform.forward, _playerControllerData.ThrowSpeed);
-
-            //Player.Animator.SetTrigger(_playerControllerData.ThrowSnowballParam);
-        }
-
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
             if(action is JumpControllerComponent.JumpAction) {
@@ -191,7 +104,30 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             base.ActionPerformed(action);
         }
-#endregion
+
+        public void ThrowMail()
+        {
+            if(null == Player.Viewer) {
+                Debug.LogWarning("Non-local player doing a throw!");
+                return;
+            }
+
+            Player.CmdThrowMail(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
+
+            Player.Animator.SetTrigger(PlayerControllerData.ThrowMailParam);
+        }
+
+        public void ThrowSnowball()
+        {
+            if(null == Player.Viewer) {
+                Debug.LogWarning("Non-local player doing a throw!");
+                return;
+            }
+
+            Player.CmdThrowSnowball(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
+
+            //Player.Animator.SetTrigger(PlayerControllerData.ThrowSnowballParam);
+        }
 
         public void Stun()
         {
@@ -202,7 +138,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             HoverComponent.StopHovering();
             _climbingComponent.StopClimbing();
 
-            Player.Stun(_playerControllerData.FallStunTimeSeconds);
+            Player.Stun(PlayerControllerData.FallStunTimeSeconds);
         }
     }
 }

@@ -273,6 +273,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
+            Debug.Log($"Throwing mail from {origin} in direction {direction} at speed {speed}");
+
             Mail mail = ItemManager.Instance.GetMail();
             Vector3 velocity = direction * speed;
             if(null != mail) {
@@ -286,7 +288,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Command]
         public void CmdThrowSnowball(Vector3 origin, Vector3 direction, float speed)
         {
-            Debug.Log("TODO: throw a snowball!");
+            Debug.Log($"TODO: throw snowball from {origin} in direction {direction} at speed {speed}");
         }
 #endregion
 

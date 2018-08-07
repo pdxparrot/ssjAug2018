@@ -38,6 +38,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _throwSpeed = 5.0f;
 
         public float ThrowSpeed => _throwSpeed;
+
+        [SerializeField]
+        private float _throwConvergeDistance = 100.0f;
+
+        public float ThrowConvergeDistance => _throwConvergeDistance;
 #endregion
 
         [Space(10)]

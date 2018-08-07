@@ -17,7 +17,7 @@
                 return false;
             }
 
-            Controller.DefaultJump(Controller.ControllerData.JumpHeight, Controller.ControllerData.JumpParam);
+            Controller.Jump(Controller.ControllerData.JumpHeight, Controller.ControllerData.JumpParam);
 
             return true;
         }

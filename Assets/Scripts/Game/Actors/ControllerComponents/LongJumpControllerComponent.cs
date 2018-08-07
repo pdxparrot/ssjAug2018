@@ -39,7 +39,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 _heldSeconds += dt;
 
                 if(CanLongJump) {
-                    Controller.DefaultJump(Controller.ControllerData.LongJumpHeight, Controller.ControllerData.LongJumpParam);
+                    Controller.Jump(Controller.ControllerData.LongJumpHeight, Controller.ControllerData.LongJumpParam);
                     _didLongJump = true;
                 }
             }

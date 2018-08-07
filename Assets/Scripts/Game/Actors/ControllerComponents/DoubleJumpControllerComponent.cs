@@ -36,7 +36,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
-            Controller.DefaultJump(Controller.ControllerData.DoubleJumpHeight, Controller.ControllerData.DoubleJumpParam);
+            Controller.Jump(Controller.ControllerData.DoubleJumpHeight, Controller.ControllerData.DoubleJumpParam);
 
             _doubleJumpCount++;
             return true;
