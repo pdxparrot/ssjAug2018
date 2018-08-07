@@ -13,7 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attachDistance: 0.1
   _climbingParam: Climbing
-  _longJumpParam: LongJump
   _throwingMailParam: ReadyToThrow
   _throwMailParam: ThrowMail
   _wrapTimeSeconds: 1
@@ -27,9 +26,6 @@ MonoBehaviour:
   _footRayLength: 2
   _footRayAngle: 30
   _enableGrabbing: 1
-  _enableLongJump: 1
-  _longJumpHoldSeconds: 0.3
-  _longJumpHeight: 30
   _autoThrowSeconds: 3
   _throwSpeed: 25
   _enableFallStun: 0

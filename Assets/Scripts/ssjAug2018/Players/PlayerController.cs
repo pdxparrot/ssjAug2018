@@ -94,18 +94,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
-#region Long Jump
-        [Header("Long Jump")]
-
-        [SerializeField]
-        [ReadOnly]
-        private long _longJumpTriggerTime;
-
-        private bool CanLongJump => _longJumpTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
-#endregion
-
-        [Space(10)]
-
 #region Throwing
         [Header("Throwing")]
 
@@ -181,9 +169,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Update();
 
+            if(IsGrabbing) {
+                IsGrounded = true;
+            }
+
             float dt = Time.deltaTime;
 
-            UpdateLongJumping(dt);
             UpdateThrowing(dt);
         }
 
@@ -295,7 +286,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(IsGrabbing) {
                 Vector3 velocity = Rigidbody.rotation * (axes * _playerControllerData.ClimbSpeed);
-                if(IsGrounded && velocity.y < 0.0f) {
+                if(DidGroundCheckCollide && velocity.y < 0.0f) {
                     velocity.y = 0.0f;
                 }
                 Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
@@ -353,12 +344,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Debug.Log("TODO: zoom and aim!");
 
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(true);
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(true);
+            }
         }
 
         public void Aim()
         {
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(false);
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(false);
+            }
 
             _isAiming = false;
         }
@@ -447,28 +442,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             //Player.Animator.SetTrigger(_playerControllerData.ThrowSnowballParam);
         }
 
-        public void LongJumpStart()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            _longJumpTriggerTime = 0;
-
-            if(_playerControllerData.EnableLongJump && (IsGrounded || IsGrabbing)) {
-                _longJumpTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.LongJumpHoldMs;
-            }
-        }
-
-        public void LongJump()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            _longJumpTriggerTime = 0;
-        }
-
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
             if(action is JumpControllerComponent.JumpAction) {
@@ -487,7 +460,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             DisableGrabbing();
             if(null != HoverComponent) {
-                HoverComponent.DisableHovering();
+                HoverComponent.StopHovering();
             }
 
             Player.Stun(_playerControllerData.FallStunTimeSeconds);
@@ -512,14 +485,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(enable && null != _doubleJumpComponent) {
                 _doubleJumpComponent.Reset();
-            }
-        }
-
-        private void UpdateLongJumping(float dt)
-        {
-            if(CanLongJump) {
-                DisableGrabbing();
-                DefaultJump(_playerControllerData.LongJumpHeight, _playerControllerData.LongJumpParam);
             }
         }
 

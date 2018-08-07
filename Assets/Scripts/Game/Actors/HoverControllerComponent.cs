@@ -49,6 +49,13 @@ namespace pdxpartyparrot.Game.Actors
 
             float dt = Time.deltaTime;
 
+            if(Controller.IsGrounded) {
+                _isHeld = false;
+                _heldSeconds = 0;
+
+                StopHovering();
+            }
+
             if(_isHeld) {
                 _heldSeconds += dt;
             }
@@ -57,12 +64,12 @@ namespace pdxpartyparrot.Game.Actors
                 _hoverTimeSeconds += dt;
                 if(_hoverTimeSeconds >= Controller.ControllerData.HoverTimeSeconds) {
                     _hoverTimeSeconds = Controller.ControllerData.HoverTimeSeconds;
-                    EnableHovering(false);
+                    StopHovering();
                 }
             } else if(IsHoverCooldown) {
                 _cooldownCountdown -= dt;
             } else if(CanHover) {
-                EnableHovering(true);
+                StartHovering();
             } else if(_hoverTimeSeconds > 0.0f) {
                 _hoverTimeSeconds -= dt;
                 if(_hoverTimeSeconds < 0.0f) {
@@ -102,6 +109,16 @@ namespace pdxpartyparrot.Game.Actors
             return true;
         }
 
+        // NOTE: we want to consume jump actions if we're hovering
+        public override bool OnPerformed(CharacterActorControllerAction action)
+        {
+            if(!(action is JumpControllerComponent.JumpAction)) {
+                return false;
+            }
+
+            return _isHovering;
+        }
+
         public override bool OnCancelled(CharacterActorControllerAction action)
         {
             if(!(action is HoverAction)) {
@@ -111,27 +128,30 @@ namespace pdxpartyparrot.Game.Actors
             _isHeld = false;
             _heldSeconds = 0;
 
-            EnableHovering(false);
+            bool wasHover = _isHovering;
+            StopHovering();
 
-            return true;
+            return wasHover;
         }
 
-        public void DisableHovering()
+        private void StartHovering()
         {
-            EnableHovering(false);
+            _isHovering = true;
+
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.HoverParam, true);
+
+            // stop all vertical movement immediately
+            Controller.Rigidbody.velocity = new Vector3(Controller.Rigidbody.velocity.x, 0.0f, Controller.Rigidbody.velocity.z);
         }
 
-        private void EnableHovering(bool enable)
+        public void StopHovering()
         {
             bool wasHovering = IsHovering;
-            _isHovering = enable;
+            _isHovering = false;
 
-            Controller.Owner.Animator.SetBool(Controller.ControllerData.HoverParam, enable);
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.HoverParam, false);
 
-            if(enable) {
-                // stop all vertical movement immediately
-                Controller.Rigidbody.velocity = new Vector3(Controller.Rigidbody.velocity.x, 0.0f, Controller.Rigidbody.velocity.z);
-            } else if(wasHovering) {
+            if(wasHovering) {
                 _cooldownCountdown = Controller.ControllerData.HoverCooldownSeconds;
             }
         }

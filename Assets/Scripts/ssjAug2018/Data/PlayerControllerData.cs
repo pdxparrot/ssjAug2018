@@ -24,11 +24,6 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public string ClimbingParam => _climbingParam;
 
         [SerializeField]
-        private string _longJumpParam = "LongJump";
-
-        public string LongJumpParam => _longJumpParam;
-
-        [SerializeField]
         private string _throwingMailParam = "ReadyMail";
 
         public string ThrowingMailParam => _throwingMailParam;
@@ -116,31 +111,6 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private bool _enableGrabbing = true;
 
         public bool EnableGrabbing => _enableGrabbing;
-#endregion
-
-        [Space(10)]
-
-#region Long Jumping
-        [Header("Long Jumping")]
-
-        [SerializeField]
-        private bool _enableLongJump = true;
-
-        public bool EnableLongJump => _enableLongJump;
-
-        [SerializeField]
-        [Range(0, 10)]
-        [Tooltip("How long to hold jump before allowing a long jump")]
-        private float _longJumpHoldSeconds = 1.0f;
-
-        public int LongJumpHoldMs => (int)(_longJumpHoldSeconds * 1000.0f);
-
-        [SerializeField]
-        [Range(0, 50)]
-        [Tooltip("How high does the character jump when long jumping")]
-        private float _longJumpHeight = 5.0f;
-
-        public float LongJumpHeight => _longJumpHeight;
 #endregion
 
         [Space(10)]

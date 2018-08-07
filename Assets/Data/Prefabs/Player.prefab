@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
   - component: {fileID: 114521932353532936}
+  - component: {fileID: 114005285931988784}
   - component: {fileID: 114307707372532762}
   - component: {fileID: 114841388732295906}
   - component: {fileID: 114450802372136796}
@@ -2538,6 +2539,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114005285931988784
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aea75f5456382d40b663f43952868f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isHeld: 0
+  _heldSeconds: 0
+  _didLongJump: 0
 --- !u!114 &114307707372532762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2631,7 +2646,6 @@ MonoBehaviour:
   _rightHandTransform: {fileID: 4805528540693168}
   _headTransform: {fileID: 4426796019341964}
   _chestTransform: {fileID: 4943192097314312}
-  _longJumpTriggerTime: 0
   _canThrowMail: 0
   _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0

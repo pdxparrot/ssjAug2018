@@ -44,7 +44,13 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private bool _isGrounded;
 
-        public bool IsGrounded => _isGrounded;
+        public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didGroundCheckCollide;
+
+        protected bool DidGroundCheckCollide => _didGroundCheckCollide;
 
         [SerializeField]
         [ReadOnly]
@@ -246,12 +252,15 @@ namespace pdxpartyparrot.Game.Actors
         {
             RunOnComponents(c => c.OnCancelled(action));
         }
+#endregion
 
         public void DefaultJump(float height, string animationParam)
         {
             if(!CanMove) {
                 return;
             }
+
+            Rigidbody.isKinematic = false;
 
             // factor in fall speed adjust
             float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
@@ -263,7 +272,6 @@ namespace pdxpartyparrot.Game.Actors
 
             Owner.Animator.SetTrigger(animationParam);
         }
-#endregion
 
         private IEnumerator RaycastRoutine()
         {
@@ -285,7 +293,10 @@ namespace pdxpartyparrot.Game.Actors
         {
             Profiler.BeginSample("Character.UpdateIsGrounded");
             try {
-                _isGrounded = CheckIsGrounded(GroundCheckCenter);
+                _didGroundCheckCollide = CheckIsGrounded(GroundCheckCenter);
+                if(!Rigidbody.isKinematic) {
+                    _isGrounded = _didGroundCheckCollide;
+                }
             } finally {
                 Profiler.EndSample();
             }

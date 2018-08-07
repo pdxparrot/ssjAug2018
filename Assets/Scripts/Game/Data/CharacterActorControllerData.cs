@@ -44,6 +44,11 @@ namespace pdxpartyparrot.Game.Data
         public string JumpParam => _jumpParam;
 
         [SerializeField]
+        private string _longJumpParam = "LongJump";
+
+        public string LongJumpParam => _longJumpParam;
+
+        [SerializeField]
         private string _doubleJumpParam = "DoubleJump";
 
         public string DoubleJumpParam => _doubleJumpParam;
@@ -111,7 +116,29 @@ namespace pdxpartyparrot.Game.Data
 
         [Space(10)]
 
+#region Long Jumping
+        [Header("Long Jumping")]
+
+        [SerializeField]
+        [Range(0, 10)]
+        [Tooltip("How long to hold jump before allowing a long jump")]
+        private float _longJumpHoldSeconds = 1.0f;
+
+        public float LongJumpHoldSeconds => _longJumpHoldSeconds;
+
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("How high does the character jump when long jumping")]
+        private float _longJumpHeight = 5.0f;
+
+        public float LongJumpHeight => _longJumpHeight;
+#endregion
+
+        [Space(10)]
+
 #region Double Jump
+        [Header("Double Jumping")]
+
         [SerializeField]
         [Range(0, 50)]
         [Tooltip("How high does the character jump when double jumping")]
@@ -133,7 +160,7 @@ namespace pdxpartyparrot.Game.Data
 
         [SerializeField]
         [Range(0, 10)]
-        [Tooltip("How long to hold jump before hovering starts")]
+        [Tooltip("How long to hold hover before hovering starts")]
         private float _hoverHoldSeconds = 1.0f;
 
         public float HoverHoldSeconds => _hoverHoldSeconds;

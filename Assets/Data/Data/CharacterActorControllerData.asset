@@ -19,6 +19,7 @@ MonoBehaviour:
   _groundedParam: Landed
   _fallingParam: InAir
   _jumpParam: Jump
+  _longJumpParam: LongJump
   _doubleJumpParam: DoubleJump
   _hoverParam: ThrustJump
   _moveSpeed: 20
@@ -27,6 +28,8 @@ MonoBehaviour:
   _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
   _jumpHeight: 6
+  _longJumpHoldSeconds: 0.3
+  _longJumpHeight: 30
   _doubleJumpHeight: 6
   _doubleJumpCount: 1
   _hoverHoldSeconds: 0.25
