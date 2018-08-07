@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 
-using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Util;
 
@@ -9,7 +8,7 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.Game.Actors
 {
-    public abstract class GamepadDriver : ActorDriver
+    public sealed class GamepadListener : MonoBehaviour
     {
         [SerializeField]
         [ReadOnly]
@@ -19,29 +18,28 @@ namespace pdxpartyparrot.Game.Actors
         private Gamepad _gamepad;
 
         [CanBeNull]
-        protected Gamepad Gamepad => _gamepad;
+        public Gamepad Gamepad => _gamepad;
 
         public bool HasGamepad => null != _gamepad;
 
 #region Unity Lifecycle
-        protected virtual void OnDestroy()
+        private void Awake()
         {
-            if(InputManager.HasInstance) {
-                InputManager.Instance.ReleaseGamepad(_gamepadId);
-                _gamepadId = 0;
-                _gamepad = null;
-            }
-        }
-#endregion
-
-        public override void Initialize(IActor owner, ActorController controller)
-        {
-            base.Initialize(owner, controller);
-
             _gamepadId = InputManager.Instance.AcquireGamepad(OnAcquireGamepad, OnGamepadDisconnect);
         }
 
-        protected bool IsOurGamepad(InputAction.CallbackContext ctx)
+        private void OnDestroy()
+        {
+            if(InputManager.HasInstance) {
+                InputManager.Instance.ReleaseGamepad(_gamepadId);
+            }
+
+            _gamepadId = 0;
+            _gamepad = null;
+        }
+#endregion
+
+        public bool IsOurGamepad(InputAction.CallbackContext ctx)
         {
             return ctx.control.device == _gamepad;
         }

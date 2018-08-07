@@ -334,7 +334,9 @@ GameObject:
   - component: {fileID: 114307707372532762}
   - component: {fileID: 114841388732295906}
   - component: {fileID: 114529441601372064}
+  - component: {fileID: 114063931701214196}
   - component: {fileID: 114450802372136796}
+  - component: {fileID: 114438805701182994}
   - component: {fileID: 114416925496739310}
   m_Layer: 9
   m_Name: Player
@@ -2555,6 +2557,19 @@ MonoBehaviour:
   _isHeld: 0
   _heldSeconds: 0
   _didLongJump: 0
+--- !u!114 &114063931701214196
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 840108358e534c14591b68f0b2a35c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canThrowMail: 0
+  _canThrowSnowball: 0
 --- !u!114 &114307707372532762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2599,11 +2614,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lastMoveAxes: {x: 0, y: 0, z: 0}
   _isMoving: 0
-  _gamepadId: 0
   _invertLookY: 0
   _mouseSensitivity: 0.5
   _lastControllerMove: {x: 0, y: 0, z: 0}
   _lastControllerLook: {x: 0, y: 0, z: 0}
+--- !u!114 &114438805701182994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e2e2144cc37e54babcaeeaa7e807a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gamepadId: 0
 --- !u!114 &114450802372136796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2642,9 +2668,6 @@ MonoBehaviour:
     type: 2}
   _fallStartHeight: -3.4028235e+38
   _throwOrigin: {fileID: 4805528540693168}
-  _canThrowMail: 0
-  _canThrowSnowball: 0
-  _isAiming: 0
 --- !u!114 &114455475182417836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2691,6 +2714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34465ce126a712143b341ca7baee9bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isAiming: 0
 --- !u!114 &114742398105448036
 MonoBehaviour:
   m_ObjectHideFlags: 1

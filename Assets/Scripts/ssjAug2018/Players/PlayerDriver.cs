@@ -12,7 +12,8 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    public sealed class PlayerDriver : GamepadDriver
+    [RequireComponent(typeof(GamepadListener))]
+    public sealed class PlayerDriver : ActorDriver
     {
         [SerializeField]
         private bool _invertLookY;
@@ -32,11 +33,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         protected override bool CanDrive => base.CanDrive && Player.isLocalPlayer;
 
+        private GamepadListener _gamepadListener;
+
         private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
         private void Awake()
         {
+            _gamepadListener = GetComponent<GamepadListener>();
+
             InitDebugMenu();
         }
 
@@ -50,7 +55,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             base.Update();
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             DestroyDebugMenu();
 
@@ -92,8 +97,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 InputManager.Instance.Controls.game.throwsnowball.started -= OnThrowSnowballStart;
                 InputManager.Instance.Controls.game.throwsnowball.performed -= OnThrowSnowball;
             }
-
-            base.OnDestroy();
         }
 #endregion
 
@@ -146,7 +149,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool IsOurDevice(InputAction.CallbackContext ctx)
         {
             // TODO: this probably doesn't handle multiple keyboards/mice
-            return IsOurGamepad(ctx) || Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device;
+            return _gamepadListener.IsOurGamepad(ctx) || Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device;
         }
 
 #region Event Handlers
