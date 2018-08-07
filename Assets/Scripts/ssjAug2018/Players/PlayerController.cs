@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.Data;
@@ -8,11 +10,6 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    [RequireComponent(typeof(JumpControllerComponent))]
-    [RequireComponent(typeof(DoubleJumpControllerComponent))]
-    [RequireComponent(typeof(HoverControllerComponent))]
-    [RequireComponent(typeof(ClimbingControllerComponent))]
-    [RequireComponent(typeof(AimControllerComponent))]
     public sealed class PlayerController : CharacterActorController
     {
         [SerializeField]
@@ -46,10 +43,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 
 #region Components
+        [CanBeNull]
         public HoverControllerComponent HoverComponent { get; private set; }
 
+        [CanBeNull]
         private ClimbingControllerComponent _climbingComponent;
 
+        [CanBeNull]
         private AimControllerComponent _aimComponent;
 #endregion
 
@@ -67,12 +67,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Update();
 
-            if(_climbingComponent.IsClimbing) {
+            if(null != _climbingComponent && _climbingComponent.IsClimbing) {
                 IsGrounded = true;
             }
 
             if(null != UIManager.Instance.PlayerUI) {
-                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(_aimComponent.IsAiming);
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(null != _aimComponent && _aimComponent.IsAiming);
             }
         }
 
@@ -98,7 +98,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
-            if(action is JumpControllerComponent.JumpAction) {
+            if(action is JumpControllerComponent.JumpAction && null != _climbingComponent) {
                 _climbingComponent.StopClimbing();
             }
 
@@ -137,8 +137,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            HoverComponent.StopHovering();
-            _climbingComponent.StopClimbing();
+            if(null != HoverComponent) {
+                HoverComponent.StopHovering();
+            }
+
+            if(null != _climbingComponent) {
+                _climbingComponent.StopClimbing();
+            }
 
             Player.Stun(PlayerControllerData.FallStunTimeSeconds);
         }
