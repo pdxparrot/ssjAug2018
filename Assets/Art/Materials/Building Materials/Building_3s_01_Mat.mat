@@ -94,6 +94,15 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Material1_AOLift: 0
+    - _Material1_Rotation: 0
+    - _Material1_RoughnessMult: 1
+    - _Material2_AOLift: 0
+    - _Material2_Rotation: 0
+    - _Material2_RoughnessMult: 1
+    - _Material3_AOLift: 0
+    - _Material3_Rotation: 0
+    - _Material3_RoughnessMult: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -103,7 +112,7 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - __dirty: 1
+    - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
