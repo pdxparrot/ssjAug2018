@@ -225,7 +225,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             Debug.Log($"Show snow VFX: {show}");
 
-            _snowVFX.gameObject.SetActive(show);
+            if(show) {
+                _snowVFX.Play();
+            } else {
+                _snowVFX.Stop();
+            }
         }
 
         private void CheckVFXTrigger(GameObject go, bool enter)
