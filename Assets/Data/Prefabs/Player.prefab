@@ -2601,6 +2601,7 @@ MonoBehaviour:
   _currentLetterCount: 0
   _score: 0
   _isDead: 0
+  _snowVFX: {fileID: 198393406761613632}
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1
