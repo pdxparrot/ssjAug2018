@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace pdxpartyparrot.Game.Actors
+namespace pdxpartyparrot.Game.Actors.ControllerComponents
 {
     public sealed class DoubleJumpControllerComponent : CharacterActorControllerComponent
     {

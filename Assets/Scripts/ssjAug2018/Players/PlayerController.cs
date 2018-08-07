@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
+using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.Data;
 using pdxpartyparrot.ssjAug2018.UI;
 using pdxpartyparrot.ssjAug2018.World;

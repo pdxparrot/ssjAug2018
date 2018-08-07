@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.Game.Data;
 
 using UnityEngine;

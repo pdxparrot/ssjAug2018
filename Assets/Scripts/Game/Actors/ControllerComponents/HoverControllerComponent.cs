@@ -3,7 +3,7 @@ using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
-namespace pdxpartyparrot.Game.Actors
+namespace pdxpartyparrot.Game.Actors.ControllerComponents
 {
     public sealed class HoverControllerComponent : CharacterActorControllerComponent
     {
