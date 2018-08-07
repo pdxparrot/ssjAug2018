@@ -19,9 +19,11 @@ namespace pdxpartyparrot.ssjAug2018.Items
     {
         [SerializeField]
         [ReadOnly]
-        private long _despawnTime;
+        //[SyncVar]
+        private Timer _despawnTimer;
 
         private Rigidbody _rigidbody;
+
         private PooledObject _pooledObject;
 
         private Player _owner;
@@ -43,9 +45,9 @@ namespace pdxpartyparrot.ssjAug2018.Items
 
         private void Update()
         {
-            if(_despawnTime > 0 && TimeManager.Instance.CurrentUnixMs >= _despawnTime) {
-                Miss();
-            }
+            float dt = Time.deltaTime;
+
+            _despawnTimer.Update(dt);
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -73,13 +75,15 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _rigidbody.interpolation = RigidbodyInterpolation.None;
         }
 
+        [Server]
         public void Throw(Player owner, Vector3 origin, Vector3 velocity)
         {
             _owner = owner;
 
             _rigidbody.position = origin;
             _rigidbody.velocity = velocity;
-            _despawnTime = TimeManager.Instance.CurrentUnixMs + ItemManager.Instance.ItemData.MailDespawnMs;
+
+            _despawnTimer.Start(ItemManager.Instance.ItemData.MailDespawnSeconds, Miss);
         }
 
         [Server]
@@ -87,6 +91,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
         {
             Mailbox b = go.GetComponent<Mailbox>();
             if(null != b && b.MailHit(_owner)) {
+                _despawnTimer.Stop();
                 _pooledObject.Recycle();
             }
         }
@@ -96,6 +101,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
         {
             Debug.Log("Mailed missed!");
 
+            _despawnTimer.Stop();
             _pooledObject.Recycle();
         }
 

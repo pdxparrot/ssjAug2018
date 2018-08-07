@@ -14,13 +14,13 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         [SerializeField]
         [ReadOnly]
-        private long _completeTime;
+        private Timer _completeTimer;
 
         public void Initialize()
         {
             foreach(IActor actor in PlayerManager.Instance.Actors) {
                 Player player = actor as Player;
-                HighScoreManager.Instance.AddHighScore($"{actor.Id}", player?.Score ?? 0);
+                HighScoreManager.Instance.AddHighScore($"{actor.Id}", null == player ? 0 : player.Score);
             }
         }
 
@@ -30,14 +30,14 @@ namespace pdxpartyparrot.ssjAug2018.GameState
                 UIManager.Instance.PlayerUI.PlayerHUD.ShowGameOverText();
             }
 
-            _completeTime = TimeManager.Instance.CurrentUnixMs + (int)(_completeWaitTimeSeconds * 1000.0f);
+            _completeTimer.Start(_completeWaitTimeSeconds, () => {
+                GameStateManager.Instance.TransitionToInitialState();
+            });
         }
 
         public override void OnUpdate(float dt)
         {
-            if(TimeManager.Instance.CurrentUnixMs >= _completeTime) {
-                GameStateManager.Instance.TransitionToInitialState();
-            }
+            _completeTimer.Update(dt);
         }
     }
 }

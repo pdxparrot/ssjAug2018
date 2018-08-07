@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 114455475182417836}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
+  - component: {fileID: 114742398105448036}
   - component: {fileID: 114521932353532936}
   - component: {fileID: 114005285931988784}
   - component: {fileID: 114307707372532762}
@@ -2636,21 +2637,17 @@ MonoBehaviour:
   _groundCheckTransform: {fileID: 4594389412127694}
   _groundCheckRadius: 0.5
   _isGrounded: 0
+  _didGroundCheckCollide: 0
   _isFalling: 0
   _isRunning: 0
   _playerControllerData: {fileID: 11400000, guid: af08040e7e4167f4f8ffe6e4f844c5f3,
     type: 2}
-  _movementState: 0
   _fallStartHeight: -3.4028235e+38
-  _leftHandTransform: {fileID: 4350808608469060}
-  _rightHandTransform: {fileID: 4805528540693168}
-  _headTransform: {fileID: 4426796019341964}
-  _chestTransform: {fileID: 4943192097314312}
+  _throwOrigin: {fileID: 4805528540693168}
   _canThrowMail: 0
   _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0
   _isAiming: 0
-  _breakOnFall: 0
 --- !u!114 &114455475182417836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2686,6 +2683,23 @@ MonoBehaviour:
   _hoverTimeSeconds: 0
   _cooldownCountdown: 0
   _isHovering: 0
+--- !u!114 &114742398105448036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8bd788f25910a74c9cae40e997f5057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isClimbing: 0
+  _leftHandTransform: {fileID: 4350808608469060}
+  _rightHandTransform: {fileID: 4805528540693168}
+  _headTransform: {fileID: 4426796019341964}
+  _chestTransform: {fileID: 4943192097314312}
+  _breakOnFall: 0
 --- !u!114 &114748589338881858
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -21,18 +21,14 @@ namespace pdxpartyparrot.ssjAug2018
 
         [SerializeField]
         [ReadOnly]
-        [SyncVar]
-        private long _gameOverTime;
+        //[SyncVar]
+        private Timer _gameTimer;
 
-        public long GameOverTime => _gameOverTime;
+        public bool IsGameOver { get; private set; }
 
-        public bool IsGameOver => _gameOverTime > 0 && TimeManager.Instance.CurrentUnixMs >= GameOverTime;
+        public int RemainingMinutesPart => ((int)_gameTimer.SecondsRemaining) / 60;
 
-        public int RemainingMs => IsGameOver ? 0 : (int)(_gameOverTime - TimeManager.Instance.CurrentUnixMs);
-
-        public int RemainingMinutesPart => RemainingMs / 1000 / 60;
-
-        public int RemainingSecondsPart => (RemainingMs / 1000) % 60;
+        public int RemainingSecondsPart => ((int)_gameTimer.SecondsRemaining) % 60;
 
 #region Unity Lifecycle
         private void Awake()
@@ -49,13 +45,23 @@ namespace pdxpartyparrot.ssjAug2018
         {
             Instance = null;
         }
+
+        private void Update()
+        {
+            float dt = Time.deltaTime;
+
+            _gameTimer.Update(dt);
+        }
 #endregion
 
         [Server]
         public void StartGame()
         {
             MailboxManager.Instance.Initialize();
-            _gameOverTime = TimeManager.Instance.CurrentUnixMs + GameStateManager.Instance.GameData.GameTimeMs;
+
+            _gameTimer.Start(GameStateManager.Instance.GameData.GameTimeSeconds, () => {
+                IsGameOver = true;
+            });
         }
 
         [Server]
@@ -70,7 +76,7 @@ namespace pdxpartyparrot.ssjAug2018
         public void Score(Player player)
         {
             player.IncreaseScore(ItemManager.Instance.ItemData.MailScoreAmount);
-            _gameOverTime += GameStateManager.Instance.GameData.ScoreGameTimeMs;
+            _gameTimer.AddTime(GameStateManager.Instance.GameData.ScoreGameTimeSeconds);
 
             RpcGameTimeUpdated(GameStateManager.Instance.GameData.ScoreGameTimeSeconds);
         }
@@ -78,13 +84,17 @@ namespace pdxpartyparrot.ssjAug2018
         [ClientRpc]
         private void RpcGameTimeUpdated(int amount)
         {
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowTimeAdded(amount);
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowTimeAdded(amount);
+            }
         }
 
         [ClientRpc]
         private void RpcHit()
         {
-            UIManager.Instance.PlayerUI.PlayerHUD.ShowHitMarker();
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowHitMarker();
+            }
         }
     }
 }

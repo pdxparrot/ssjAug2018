@@ -25,10 +25,16 @@ namespace pdxpartyparrot.Core.Network
 
         public GameObject GameObject => gameObject;
 
+        public string Name => name;
+
         [SerializeField]
         private Collider _collider;
 
         public Collider Collider => _collider;
+
+        public abstract float Height { get; }
+
+        public abstract float Radius { get; }
 
         [SerializeField]
         private GameObject _model;

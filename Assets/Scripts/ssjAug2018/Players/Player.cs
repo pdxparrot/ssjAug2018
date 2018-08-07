@@ -2,6 +2,7 @@
 
 using JetBrains.Annotations;
 
+using pdxpartyparrot.Core;
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.Network;
@@ -36,10 +37,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [SerializeField]
         [ReadOnly]
-        [SyncVar]
-        private long _reloadCompleteTime;
+        //[SyncVar]
+        private Timer _reloadTimer;
 
-        public bool IsReloading => _reloadCompleteTime > 0 && TimeManager.Instance.CurrentUnixMs <= _reloadCompleteTime;
+        public bool IsReloading => _reloadTimer.SecondsRemaining > 0.0f;
 #endregion
 
         [Space(10)]
@@ -62,10 +63,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [SerializeField]
         [ReadOnly]
-        [SyncVar]
-        private float _stunTimeSeconds;
+        //[SyncVar]
+        private Timer _stunTimer;
 
-        public bool IsStunned => _stunTimeSeconds > 0.0f;
+        public bool IsStunned => _stunTimer.SecondsRemaining > 0.0f;
 #endregion
 
         [Space(10)]
@@ -77,13 +78,22 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool _isDead;
 
         public bool IsDead => _isDead;
+
+        [SerializeField]
+        [ReadOnly]
+        //[SyncVar]
+        public Timer _respawnTimer;
+
+        public bool IsAwaitingRespawn => IsDead && _respawnTimer.SecondsRemaining > 0.0f;
 #endregion
 
         public FollowTarget FollowTarget { get; private set; }
 
         public PlayerController PlayerController => (PlayerController)Controller;
 
-        public CapsuleCollider CapsuleCollider => (CapsuleCollider)Collider;
+        public override float Height => ((CapsuleCollider)Collider).height;
+
+        public override float Radius => ((CapsuleCollider)Collider).radius;
 
         private AudioSource _audioSource;
 
@@ -121,7 +131,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             float dt = Time.deltaTime;
 
-            UpdateStun(dt);
+            _reloadTimer.Update(dt);
+            _stunTimer.Update(dt);
+            _respawnTimer.Update(dt);
         }
 
         protected override void OnDestroy()
@@ -204,15 +216,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Server]
         private void Reload()
         {
-            _reloadCompleteTime = TimeManager.Instance.CurrentUnixMs + PlayerManager.Instance.PlayerData.ReloadTimeMs;
-            StartCoroutine(ReloadRoutine());
-        }
-
-        private IEnumerator ReloadRoutine()
-        {
-            yield return new WaitForSeconds(PlayerManager.Instance.PlayerData.ReloadTimeSeconds);
-
-            _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+            _reloadTimer.Start(PlayerManager.Instance.PlayerData.ReloadTimeSeconds, () => {
+                _currentLetterCount = PlayerManager.Instance.PlayerData.MaxLetters;
+            });
         }
 
         [Server]
@@ -230,24 +236,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Debug.Log($"Player {name} is stunned for {seconds} seconds!");
 
-            _stunTimeSeconds = seconds;
             Controller.Rigidbody.velocity = new Vector3(0.0f, Controller.Rigidbody.velocity.y, 0.0f);
 
-            RpcStunned();
-        }
+            //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, true);
 
-        [Server]
-        private void UpdateStun(float dt)
-        {
-            if(!IsStunned) {
-                return;
-            }
-
-            _stunTimeSeconds -= dt;
-            if(_stunTimeSeconds <= 0.0f) {
-                _stunTimeSeconds = 0.0f;
+            _stunTimer.Start(seconds, () => {
                 //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, false);
-            }
+            });
         }
 
         [Server]
@@ -264,16 +259,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             RpcDead();
 
-            StartCoroutine(RespawnRoutine());
-        }
+            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, true);
 
-        [Server]
-        private IEnumerator RespawnRoutine()
-        {
             Debug.Log($"Player {name} respawning in {GameStateManager.Instance.GameData.PlayerRespawnSeconds} seconds");
-            yield return new WaitForSeconds(GameStateManager.Instance.GameData.PlayerRespawnSeconds);
 
-            PlayerManager.Instance.RespawnPlayer(this);
+            _respawnTimer.Start(GameStateManager.Instance.GameData.PlayerRespawnSeconds, () => {
+                PlayerManager.Instance.RespawnPlayer(this);
+            });
         }
 
 #region Commands
@@ -303,16 +295,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
 #region Callbacks
         [ClientRpc]
-        private void RpcStunned()
-        {
-            //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, true);
-        }
-
-        [ClientRpc]
         private void RpcDead()
         {
-            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, true);
-
             Debug.Log("TODO: show player dead UI on client");
         }
 

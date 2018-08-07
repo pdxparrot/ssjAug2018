@@ -86,13 +86,7 @@ namespace pdxpartyparrot.Core.Actors
         public bool IsAnimating => _animationState.IsAnimating;
 #endregion
 
-        [Space(10)]
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canMove = true;
-
-        public virtual bool CanMove { get { return _canMove; } protected set { _canMove = value; } }
+        public virtual bool CanMove => !IsAnimating;
 
         public Rigidbody Rigidbody { get; private set; }
 
@@ -155,7 +149,7 @@ namespace pdxpartyparrot.Core.Actors
         }
 
 #region Manual Animations
-        protected void StartAnimation(Vector3 targetPosition, Quaternion targetRotation, float timeSeconds)
+        public void StartAnimation(Vector3 targetPosition, Quaternion targetRotation, float timeSeconds)
         {
             if(IsAnimating) {
                 return;
@@ -180,7 +174,7 @@ namespace pdxpartyparrot.Core.Actors
 
         private void UpdateAnimations(float dt)
         {
-            if(!IsAnimating) {
+            if(!IsAnimating || PartyParrotManager.Instance.IsPaused) {
                 return;
             }
 

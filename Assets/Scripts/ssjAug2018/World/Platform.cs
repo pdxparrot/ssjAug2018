@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-using pdxpartyparrot.ssjAug2018.World;
+using pdxpartyparrot.Game.World;
 
 using UnityEngine;
 using UnityEngine.AI;

@@ -8,20 +8,8 @@ namespace pdxpartyparrot.ssjAug2018.Data
     [Serializable]
     public sealed class PlayerControllerData : ScriptableObject
     {
-        [SerializeField]
-        private float _attachDistance = 0.1f;
-
-        public float AttachDistance => _attachDistance;
-
-        [Space(10)]
-
 #region Animations
         [Header("Animations")]
-
-        [SerializeField]
-        private string _climbingParam = "Climbing";
-
-        public string ClimbingParam => _climbingParam;
 
         [SerializeField]
         private string _throwingMailParam = "ReadyMail";
@@ -32,85 +20,6 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private string _throwMailParam = "ThrowMail";
 
         public string ThrowMailParam => _throwMailParam;
-
-        [SerializeField]
-        private float _wrapTimeSeconds = 1.0f;
-
-        public float WrapTimeSeconds => _wrapTimeSeconds;
-
-        [SerializeField]
-        private float _climbUpTimeSeconds = 1.0f;
-
-        public float ClimbUpTimeSeconds => _climbUpTimeSeconds;
-#endregion
-
-        [Space(10)]
-
-#region Physics
-        [Header("Physics")]
-
-        [SerializeField]
-        [Range(0, 50)]
-        private float _climbSpeed = 1.0f;
-
-        public float ClimbSpeed => _climbSpeed;
-#endregion
-
-        [Space(10)]
-
-#region Raycasts
-        [Header("Raycasts")]
-
-        [SerializeField]
-        [Range(0, 10)]
-        private float _armRayLength = 1.0f;
-
-        public float ArmRayLength => _armRayLength;
-
-        [SerializeField]
-        [Range(0, 90)]
-        private float _wrapAroundAngle = 45.0f;
-
-        public float WrapAroundAngle => _wrapAroundAngle;
-
-        [SerializeField]
-        [Range(0, 10)]
-        private float _headRayLength = 1.0f;
-
-        public float HeadRayLength => _headRayLength;
-
-        [SerializeField]
-        [Range(0, 90)]
-        private float _headRayAngle = 45.0f;
-
-        public float HeadRayAngle => _headRayAngle;
-
-        [SerializeField]
-        [Range(0, 10)]
-        private float _chestRayLength = 1.0f;
-
-        public float ChestRayLength => _chestRayLength;
-
-        [SerializeField]
-        [Range(0, 10)]
-        private float _footRayLength = 1.0f;
-
-        public float FootRayLength => _footRayLength;
-
-        [SerializeField]
-        [Range(0, 90)]
-        private float _footRayAngle = 45.0f;
-
-        public float FootRayAngle => _footRayAngle;
-#endregion
-
-        [Space(10)]
-
-#region Grabbing
-        [SerializeField]
-        private bool _enableGrabbing = true;
-
-        public bool EnableGrabbing => _enableGrabbing;
 #endregion
 
         [Space(10)]
@@ -123,7 +32,7 @@ namespace pdxpartyparrot.ssjAug2018.Data
         [Tooltip("Player will auto throw after this many seconds")]
         private float _autoThrowSeconds = 1.0f;
 
-        public int AutoThrowMs => (int)(_autoThrowSeconds * 1000.0f);
+        public float AutoThrowSeconds => _autoThrowSeconds;
 
         [SerializeField]
         private float _throwSpeed = 5.0f;

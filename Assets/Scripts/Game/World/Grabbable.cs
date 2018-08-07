@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace pdxpartyparrot.ssjAug2018.World
+namespace pdxpartyparrot.Game.World
 {
     public interface IGrabbable
     {

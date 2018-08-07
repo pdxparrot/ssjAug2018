@@ -71,7 +71,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             } else if(CanHover) {
                 StartHovering();
             } else if(_hoverTimeSeconds > 0.0f) {
-                _hoverTimeSeconds -= dt;
+                _hoverTimeSeconds -= dt * Controller.ControllerData.HoverRechargeRate;
                 if(_hoverTimeSeconds < 0.0f) {
                     _hoverTimeSeconds = 0.0f;
                 }

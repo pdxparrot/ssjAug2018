@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using pdxpartyparrot.Game.World;
+
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace pdxpartyparrot.ssjAug2018.World
@@ -9,7 +11,7 @@ namespace pdxpartyparrot.ssjAug2018.World
     {
         public Collider Collider { get; private set; }
 
-        #region Unity Lifecycle
+#region Unity Lifecycle
         private void Awake()
         {
             Collider = GetComponent<Collider>();

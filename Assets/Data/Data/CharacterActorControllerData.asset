@@ -22,11 +22,15 @@ MonoBehaviour:
   _longJumpParam: LongJump
   _doubleJumpParam: DoubleJump
   _hoverParam: ThrustJump
+  _climbingParam: Climbing
+  _wrapTimeSeconds: 1
+  _climbUpTimeSeconds: 1
   _moveSpeed: 20
   _runThreshold: 0.75
   _fallSpeedAdjustment: 200
   _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
+  _climbSpeed: 10
   _jumpHeight: 6
   _longJumpHoldSeconds: 0.3
   _longJumpHeight: 30
@@ -38,4 +42,12 @@ MonoBehaviour:
   _hoverRechargeRate: 0.5
   _hoverAcceleration: 20
   _hoverWhenGrounded: 0
+  _attachDistance: 0.1
+  _armRayLength: 2
+  _wrapAroundAngle: 30
+  _headRayLength: 2
+  _headRayAngle: 30
+  _chestRayLength: 2
+  _footRayLength: 2
+  _footRayAngle: 30
   _allowAirControl: 1

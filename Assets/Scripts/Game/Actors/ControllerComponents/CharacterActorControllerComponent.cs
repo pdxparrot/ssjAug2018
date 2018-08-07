@@ -16,6 +16,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         {
             Controller = GetComponent<CharacterActorController>();
         }
+
+        protected virtual void OnDestroy()
+        {
+        }
 #endregion
 
         public virtual bool OnAnimationMove(Vector3 axes, float dt)

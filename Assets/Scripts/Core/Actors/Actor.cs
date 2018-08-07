@@ -12,9 +12,15 @@ namespace pdxpartyparrot.Core.Actors
 
         GameObject GameObject { get; }
 
+        string Name { get; }
+
         GameObject Model { get; }
 
         Collider Collider { get; }
+
+        float Height { get; }
+
+        float Radius { get; }
 
         Animator Animator { get; }
 

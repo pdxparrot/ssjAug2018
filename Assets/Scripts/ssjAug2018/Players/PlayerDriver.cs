@@ -329,13 +329,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+#region Grabbing / Dropping
         private void OnGrab(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.Grab();
+            Player.PlayerController.ActionPerformed(ClimbingControllerComponent.GrabAction.Default);
         }
 
         private void OnDrop(InputAction.CallbackContext ctx)
@@ -344,8 +345,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.Drop();
+            Player.PlayerController.ActionPerformed(ClimbingControllerComponent.ReleaseAction.Default);
         }
+#endregion
 
         private void OnAimStart(InputAction.CallbackContext ctx)
         {

@@ -31,7 +31,7 @@ namespace pdxpartyparrot.ssjAug2018.Data
         [SerializeField]
         private float _mailDespawnSeconds = 5.0f;
 
-        public int MailDespawnMs => (int)(_mailDespawnSeconds * 1000.0f);
+        public float MailDespawnSeconds => _mailDespawnSeconds;
 
         [SerializeField]
         private int _mailScoreAmount = 1;

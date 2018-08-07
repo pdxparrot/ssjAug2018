@@ -28,7 +28,7 @@ namespace pdxpartyparrot.Game.Actors
         [Tooltip("How often to run raycast checks, in seconds")]
         private float _raycastRoutineRate = 0.1f;
 
-        protected float RaycastRoutineRate => _raycastRoutineRate;
+        public float RaycastRoutineRate => _raycastRoutineRate;
 
         [Space(10)]
 
@@ -51,7 +51,7 @@ namespace pdxpartyparrot.Game.Actors
         [ReadOnly]
         private bool _didGroundCheckCollide;
 
-        protected bool DidGroundCheckCollide => _didGroundCheckCollide;
+        public bool DidGroundCheckCollide => _didGroundCheckCollide;
 
         [SerializeField]
         [ReadOnly]
