@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.Data;
@@ -14,6 +12,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
     [RequireComponent(typeof(DoubleJumpControllerComponent))]
     [RequireComponent(typeof(HoverControllerComponent))]
     [RequireComponent(typeof(ClimbingControllerComponent))]
+    [RequireComponent(typeof(AimControllerComponent))]
     public sealed class PlayerController : CharacterActorController
     {
         [SerializeField]
@@ -44,28 +43,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private bool _canThrowSnowball;
 #endregion
 
-        [Space(10)]
-
-#region Aiming
-        [Header("Aiming")]
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _isAiming;
-
-        public bool IsAiming => _isAiming;
-#endregion
-
         public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
 
         public Player Player => (Player)Owner;
 
 #region Components
-        [CanBeNull]
         public HoverControllerComponent HoverComponent { get; private set; }
 
-        [CanBeNull]
         private ClimbingControllerComponent _climbingComponent;
+
+        private AimControllerComponent _aimComponent;
 #endregion
 
 #region Unity Lifecycle
@@ -75,14 +62,19 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             HoverComponent = GetControllerComponent<HoverControllerComponent>();
             _climbingComponent = GetControllerComponent<ClimbingControllerComponent>();
+            _aimComponent = GetControllerComponent<AimControllerComponent>();
         }
 
         protected override void Update()
         {
             base.Update();
 
-            if(null != _climbingComponent && _climbingComponent.IsClimbing) {
+            if(_climbingComponent.IsClimbing) {
                 IsGrounded = true;
+            }
+
+            if(null != UIManager.Instance.PlayerUI) {
+                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(_aimComponent.IsAiming);
             }
 
             float dt = Time.deltaTime;
@@ -111,30 +103,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #endregion
 
 #region Actions
-        public void StartAim()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            _isAiming = true;
-
-            Debug.Log("TODO: zoom and aim!");
-
-            if(null != UIManager.Instance.PlayerUI) {
-                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(true);
-            }
-        }
-
-        public void Aim()
-        {
-            if(null != UIManager.Instance.PlayerUI) {
-                UIManager.Instance.PlayerUI.PlayerHUD.ShowAimer(false);
-            }
-
-            _isAiming = false;
-        }
-
         public void StartThrowMail()
         {
             if(!CanMove || !Player.CanThrowMail) {
@@ -217,7 +185,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
-            if(action is JumpControllerComponent.JumpAction && null != _climbingComponent) {
+            if(action is JumpControllerComponent.JumpAction) {
                 _climbingComponent.StopClimbing();
             }
 
@@ -231,13 +199,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            if(null != HoverComponent) {
-                HoverComponent.StopHovering();
-            }
-
-            if(null != _climbingComponent) {
-                _climbingComponent.StopClimbing();
-            }
+            HoverComponent.StopHovering();
+            _climbingComponent.StopClimbing();
 
             Player.Stun(_playerControllerData.FallStunTimeSeconds);
         }

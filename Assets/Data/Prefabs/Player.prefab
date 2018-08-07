@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 114005285931988784}
   - component: {fileID: 114307707372532762}
   - component: {fileID: 114841388732295906}
+  - component: {fileID: 114529441601372064}
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114416925496739310}
   m_Layer: 9
@@ -2583,9 +2584,7 @@ MonoBehaviour:
   _controller: {fileID: 114450802372136796}
   _animator: {fileID: 95435563614912300}
   _currentLetterCount: 0
-  _reloadCompleteTime: 0
   _score: 0
-  _stunTimeSeconds: 0
   _isDead: 0
 --- !u!114 &114416925496739310
 MonoBehaviour:
@@ -2628,7 +2627,6 @@ MonoBehaviour:
     StartRotation: {x: 0, y: 0, z: 0, w: 0}
     EndRotation: {x: 0, y: 0, z: 0, w: 0}
     IsKinematic: 0
-  _canMove: 1
   _pauseState:
     IsKinematic: 0
     Velocity: {x: 0, y: 0, z: 0}
@@ -2645,7 +2643,6 @@ MonoBehaviour:
   _fallStartHeight: -3.4028235e+38
   _throwOrigin: {fileID: 4805528540693168}
   _canThrowMail: 0
-  _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0
   _isAiming: 0
 --- !u!114 &114455475182417836
@@ -2683,6 +2680,17 @@ MonoBehaviour:
   _hoverTimeSeconds: 0
   _cooldownCountdown: 0
   _isHovering: 0
+--- !u!114 &114529441601372064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34465ce126a712143b341ca7baee9bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114742398105448036
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -63,15 +63,13 @@ namespace pdxpartyparrot.ssjAug2018.UI
 #region Unity Lifecycle
         private void Update()
         {
-            _aimer.SetActive(_owner.PlayerController.IsAiming);
-
             _timer.text = $"{GameManager.Instance.RemainingMinutesPart:00}:{GameManager.Instance.RemainingSecondsPart:00}";
 
             _letterCounter.text = $"{_owner.CurrentLetterCount} / {PlayerManager.Instance.PlayerData.MaxLetters}";
             _mailboxCounter.text = $"{MailboxManager.Instance.CompletedMailboxes} / {MailboxManager.Instance.CurrentSetSize}";
             _scoreText.text = $"{_owner.Score:000}";
 
-            _thrusterFill.fillAmount = null == _owner.PlayerController.HoverComponent ? 0.0f : _owner.PlayerController.HoverComponent.RemainingPercent;
+            _thrusterFill.fillAmount = _owner.PlayerController.HoverComponent.RemainingPercent;
         }
 #endregion
 
@@ -79,6 +77,7 @@ namespace pdxpartyparrot.ssjAug2018.UI
         {
             _owner = owner;
 
+            _aimer.SetActive(false);
             _infoText.gameObject.SetActive(false);
             _gameOverText.gameObject.SetActive(false);
             _aimer.SetActive(false);
@@ -120,7 +119,7 @@ namespace pdxpartyparrot.ssjAug2018.UI
 
         public void ShowAimer(bool show)
         {
-            _aimer.gameObject.SetActive(show);
+            _aimer.SetActive(show);
         }
 
 #region Hit Marker

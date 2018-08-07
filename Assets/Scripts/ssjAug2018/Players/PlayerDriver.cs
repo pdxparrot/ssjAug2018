@@ -349,13 +349,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
+#region Aim
         private void OnAimStart(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.StartAim();
+            Player.PlayerController.ActionStarted(AimControllerComponent.AimAction.Default);
         }
 
         private void OnAim(InputAction.CallbackContext ctx)
@@ -364,8 +365,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.Aim();
+            Player.PlayerController.ActionCancelled(AimControllerComponent.AimAction.Default);
         }
+#endregion
 
         private void OnThrowMailStart(InputAction.CallbackContext ctx)
         {
