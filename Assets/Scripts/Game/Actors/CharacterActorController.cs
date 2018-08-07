@@ -99,7 +99,6 @@ namespace pdxpartyparrot.Game.Actors
             Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.x) : 0.0f);
             Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.y) : 0.0f);
 
-            Owner.Animator.SetBool(ControllerData.GroundedParam, IsGrounded);
             Owner.Animator.SetBool(ControllerData.FallingParam, IsFalling);
         }
 
@@ -294,9 +293,15 @@ namespace pdxpartyparrot.Game.Actors
         {
             Profiler.BeginSample("Character.UpdateIsGrounded");
             try {
+                bool wasGrounded = IsGrounded;
+
                 _didGroundCheckCollide = CheckIsGrounded(GroundCheckCenter);
                 if(!Rigidbody.isKinematic) {
                     _isGrounded = _didGroundCheckCollide;
+                }
+
+                if(!wasGrounded && IsGrounded) {
+                    Owner.Animator.SetTrigger(ControllerData.GroundedParam);
                 }
             } finally {
                 Profiler.EndSample();

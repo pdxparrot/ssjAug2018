@@ -115,6 +115,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Player.CmdThrowMail(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
             Player.Animator.SetTrigger(PlayerControllerData.ThrowMailParam);
+            Player.Animator.SetBool(PlayerControllerData.ThrowingMailParam, false);
         }
 
         public void ThrowSnowball()
@@ -127,6 +128,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Player.CmdThrowSnowball(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
             //Player.Animator.SetTrigger(PlayerControllerData.ThrowSnowballParam);
+            //Player.Animator.SetBool(PlayerControllerData.ThrowingSnowball, false);
         }
 
         public void Stun()

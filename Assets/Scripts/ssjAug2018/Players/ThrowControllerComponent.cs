@@ -67,9 +67,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 if(_canThrowMail) {
                     _autoThrowMailTimer.Stop();
                     PlayerController.ThrowMail();
+                } else {
+                    PlayerController.Owner.Animator.SetBool(PlayerController.PlayerControllerData.ThrowingMailParam, false);
                 }
-
-                PlayerController.Owner.Animator.SetBool(PlayerController.PlayerControllerData.ThrowingMailParam, false);
 
                 _canThrowMail = false;
                 return true;
@@ -78,9 +78,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(action is ThrowSnowballAction) {
                 if(_canThrowSnowball) {
                     PlayerController.ThrowSnowball();
+                } else {
+                    //PlayerController.Owner.Animator.SetBool(PlayerController.PlayerControllerData.ThrowingSnowballParam, false);
                 }
-
-                //PlayerController.Owner.Animator.SetBool(PlayerController.PlayerControllerData.ThrowingSnowballParam, false);
 
                 _canThrowSnowball = false;
                 return true;
