@@ -2,7 +2,7 @@
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(BoxCollider))]
     public sealed class WeatherZone : MonoBehaviour
     {
         public enum ZoneType
@@ -16,10 +16,21 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public ZoneType WeatherZoneType => _zoneType;
 
+        private BoxCollider _collider;
+
 #region Unity Lifecycle
         private void Awake()
         {
-            GetComponent<Collider>().isTrigger = true;
+            _collider = GetComponent<BoxCollider>();
+            _collider.isTrigger = true;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if(null != _collider) {
+                Gizmos.color = Color.green;
+                Gizmos.DrawCube(_collider.center, _collider.size);
+            }
         }
 #endregion
     }

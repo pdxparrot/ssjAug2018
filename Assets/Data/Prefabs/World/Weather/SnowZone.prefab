@@ -9,30 +9,31 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1249215030052378}
+  m_RootGameObject: {fileID: 1046565677760648}
   m_IsPrefabAsset: 1
---- !u!1 &1249215030052378
+--- !u!1 &1046565677760648
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4423763697947220}
-  - component: {fileID: 114238898189173934}
-  m_Layer: 0
-  m_Name: SceneTester
+  - component: {fileID: 4922754290731124}
+  - component: {fileID: 65776043487911980}
+  - component: {fileID: 114302525597356806}
+  m_Layer: 15
+  m_Name: SnowZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4423763697947220
+--- !u!4 &4922754290731124
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1249215030052378}
+  m_GameObject: {fileID: 1046565677760648}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,22 +41,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114238898189173934
+--- !u!65 &65776043487911980
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1046565677760648}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114302525597356806
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1249215030052378}
+  m_GameObject: {fileID: 1046565677760648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b381835ac9f51a445bfb5bcdaaa7a5b9, type: 3}
+  m_Script: {fileID: 11500000, guid: cca1372135feb7a4bbf92f2565bd008c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneName: 
-  _makeSceneActive: 1
-  _viewerPrefab: {fileID: 114567109661045988, guid: 90d2034f2dac7c8418bb452cda507c68,
-    type: 2}
-  _testScenes:
-  - climbing_arena
-  - shooting_gallery
-  - weather_zones
+  _zoneType: 1

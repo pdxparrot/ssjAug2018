@@ -140,5 +140,4 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  _maxNetworkPlayers: 16
   _enableCallbackLogging: 1

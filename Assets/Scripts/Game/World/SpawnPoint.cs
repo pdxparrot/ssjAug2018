@@ -18,6 +18,12 @@ namespace pdxpartyparrot.Game.World
                 SpawnManager.Instance.UnregisterSpawnPoint(this);
             }
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, 1.0f);
+        }
 #endregion
 
         public virtual void Spawn(IActor actor)
