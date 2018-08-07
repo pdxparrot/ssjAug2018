@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 
+using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
@@ -14,14 +16,15 @@ using UnityEngine.Serialization;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
+    [RequireComponent(typeof(JumpControllerComponent))]
     [RequireComponent(typeof(DoubleJumpControllerComponent))]
+    [RequireComponent(typeof(HoverControllerComponent))]
     public sealed class PlayerController : CharacterActorController
     {
         private enum MovementState
         {
             Platforming,
-            Climbing,
-            Hovering
+            Climbing
         }
 
         [SerializeField]
@@ -37,8 +40,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public bool IsClimbing => MovementState.Climbing == _movementState;
 
         public bool IsGrabbing => IsClimbing;
-
-        public bool IsHovering => MovementState.Hovering == _movementState;
 
         [SerializeField]
         [ReadOnly]
@@ -93,42 +94,14 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [Space(10)]
 
-#region Jumping
-        [Header("Jumping")]
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _canJump;
+#region Long Jump
+        [Header("Long Jump")]
 
         [SerializeField]
         [ReadOnly]
         private long _longJumpTriggerTime;
 
         private bool CanLongJump => _longJumpTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _longJumpTriggerTime;
-#endregion
-
-        [Space(10)]
-
-#region Hover
-        [Header("Hover")]
-
-        [SerializeField]
-        [ReadOnly]
-        private long _hoverTriggerTime;
-
-        [SerializeField]
-        [ReadOnly]
-        private int _hoverTimeMs;
-
-        [SerializeField]
-        [ReadOnly]
-        private long _hoverCooldownEndTime;
-
-        public float HoverRemainingPercent => _hoverTimeMs / (float)_playerControllerData.HoverTimeMs;
-
-        private bool IsHoverCooldown => _hoverCooldownEndTime > 0 && TimeManager.Instance.CurrentUnixMs < _hoverCooldownEndTime;
-
-        private bool CanHover => _hoverTriggerTime > 0 && TimeManager.Instance.CurrentUnixMs >= _hoverTriggerTime;
 #endregion
 
         [Space(10)]
@@ -172,7 +145,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public Player Player => (Player)Owner;
 
-        private DoubleJumpControllerComponent _doubleJump;
+#region Components
+        [CanBeNull]
+        private DoubleJumpControllerComponent _doubleJumpComponent;
+
+        [CanBeNull]
+        public HoverControllerComponent HoverComponent { get; private set; }
+#endregion
 
         private DebugMenuNode _debugMenuNode;
 
@@ -187,7 +166,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Debug.Assert(_headTransform.position.y > _leftHandTransform.position.y, "Player head should be above player hands!");
             Debug.Assert(_chestTransform.position.y < _leftHandTransform.position.y, "Player chest should be below player hands!");
 
-            _doubleJump = GetControllerComponent<DoubleJumpControllerComponent>();
+            _doubleJumpComponent = GetControllerComponent<DoubleJumpControllerComponent>();
+            HoverComponent = GetControllerComponent<HoverControllerComponent>();
         }
 
         protected override void OnDestroy()
@@ -203,8 +183,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             float dt = Time.deltaTime;
 
-            UpdateJumping(dt);
-            UpdateHovering(dt);
+            UpdateLongJumping(dt);
             UpdateThrowing(dt);
         }
 
@@ -320,11 +299,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
                     velocity.y = 0.0f;
                 }
                 Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
-            } else if(IsHovering) {
-                Vector3 acceleration = (_playerControllerData.HoverAcceleration + ControllerData.FallSpeedAdjustment) * Vector3.up;
-                Rigidbody.AddForce(acceleration, ForceMode.Acceleration);
-
-                base.PhysicsMove(axes, dt);
             } else {
                 base.PhysicsMove(axes, dt);
             }
@@ -473,13 +447,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
             //Player.Animator.SetTrigger(_playerControllerData.ThrowSnowballParam);
         }
 
-        public void JumpStart()
+        public void LongJumpStart()
         {
             if(!CanMove) {
                 return;
             }
 
-            _canJump = true;
             _longJumpTriggerTime = 0;
 
             if(_playerControllerData.EnableLongJump && (IsGrounded || IsGrabbing)) {
@@ -487,46 +460,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
         }
 
-        public override void Jump()
+        public void LongJump()
         {
             if(!CanMove) {
                 return;
-            }
-
-            if(_canJump && ControllerData.EnableJumping) {
-                DisableGrabbing();
-
-                base.Jump();
             }
 
             _longJumpTriggerTime = 0;
-            _canJump = true;
         }
 
-        public void HoverStart()
+        public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
-            if(!CanMove) {
-                return;
+            if(action is JumpControllerComponent.JumpAction) {
+                DisableGrabbing();
             }
 
-            _hoverTriggerTime = 0;
-
-            if(_playerControllerData.EnableHover && (!IsGrounded || _playerControllerData.HoverWhenGrounded) && !IsGrabbing) {
-                _hoverTriggerTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverHoldMs;
-            }
+            base.ActionPerformed(action);
         }
-
-        public void Hover()
-        {
-            if(!CanMove) {
-                return;
-            }
-
-            EnableHovering(false);
-
-            _hoverTriggerTime = 0;
-            _canJump = true;
-        }
+#endregion
 
         public void Stun()
         {
@@ -535,11 +486,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             DisableGrabbing();
-            EnableHovering(false);
+            if(null != HoverComponent) {
+                HoverComponent.DisableHovering();
+            }
 
             Player.Stun(_playerControllerData.FallStunTimeSeconds);
         }
-#endregion
 
         private void DisableGrabbing()
         {
@@ -558,60 +510,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Player.Animator.SetBool(_playerControllerData.ClimbingParam, enable);
 
-            if(enable) {
-                _doubleJump.Reset();
+            if(enable && null != _doubleJumpComponent) {
+                _doubleJumpComponent.Reset();
             }
         }
 
-        private void UpdateJumping(float dt)
+        private void UpdateLongJumping(float dt)
         {
-            if(_canJump && CanLongJump) {
+            if(CanLongJump) {
                 DisableGrabbing();
-                DoJump(_playerControllerData.LongJumpHeight, _playerControllerData.LongJumpParam);
-
-                _canJump = false;
-            }
-        }
-
-        private void EnableHovering(bool enable)
-        {
-            bool wasHovering = IsHovering;
-            _movementState = enable ? MovementState.Hovering : MovementState.Platforming;
-
-            Player.Animator.SetBool(_playerControllerData.ThrustJumpParam, enable);
-
-            if(enable) {
-                _hoverTriggerTime = 0;
-                Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, 0.0f, Rigidbody.velocity.z);
-            } else if(wasHovering) {
-                _hoverCooldownEndTime = TimeManager.Instance.CurrentUnixMs + _playerControllerData.HoverCooldownMs;
-            }
-        }
-
-        private void UpdateHovering(float dt)
-        {
-            int dtms = (int)(dt * 1000.0f);
-
-            if(IsHovering) {
-                if(_hoverTimeMs >= _playerControllerData.HoverTimeMs) {
-                    _hoverTimeMs = _playerControllerData.HoverTimeMs;
-                    EnableHovering(false);
-                } else {
-                    _hoverTimeMs += dtms;
-                }
-                _canJump = false;
-            } else if(!IsHoverCooldown) {
-                _hoverCooldownEndTime = 0;
-                if(_hoverTimeMs > 0) {
-                    _hoverTimeMs -= dtms;
-                    if(_hoverTimeMs < 0) {
-                        _hoverTimeMs = 0;
-                    }
-                }
-
-                if(CanHover) {
-                    EnableHovering(true);
-                }
+                DefaultJump(_playerControllerData.LongJumpHeight, _playerControllerData.LongJumpParam);
             }
         }
 

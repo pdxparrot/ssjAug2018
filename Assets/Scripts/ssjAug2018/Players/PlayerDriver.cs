@@ -158,6 +158,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             PartyParrotManager.Instance.TogglePause();
         }
 
+#region Gamepad Move
         private void OnMove(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
@@ -177,7 +178,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _lastControllerMove = Vector3.zero;
             LastMoveAxes = _lastControllerMove;
         }
+#endregion
 
+#region Keyboard Move
         private void OnMoveForward(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
@@ -253,7 +256,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
             LastMoveAxes = _lastControllerMove;
         }
+#endregion
 
+#region Look
         private void OnLook(InputAction.CallbackContext ctx)
         {
             // TODO: mouse is disabled for now because it's annoying in the editor
@@ -281,14 +286,16 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _lastControllerLook = Vector3.zero;
             Player.FollowTarget.LastLookAxes = _lastControllerLook;
         }
+#endregion
 
+#region Jump
         private void OnJumpStart(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.JumpStart();
+            Player.PlayerController.ActionStarted(JumpControllerComponent.JumpAction.Default);
         }
 
         private void OnJump(InputAction.CallbackContext ctx)
@@ -297,16 +304,18 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.Jump();
+            Player.PlayerController.ActionPerformed(JumpControllerComponent.JumpAction.Default);
         }
+#endregion
 
+#region Hover
         private void OnHoverStart(InputAction.CallbackContext ctx)
         {
             if(!IsOurDevice(ctx) || !CanDrive) {
                 return;
             }
 
-            Player.PlayerController.HoverStart();
+            Player.PlayerController.ActionStarted(HoverControllerComponent.HoverAction.Default);
         }
 
         private void OnHover(InputAction.CallbackContext ctx)
@@ -315,8 +324,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.PlayerController.Hover();
+            Player.PlayerController.ActionCancelled(HoverControllerComponent.HoverAction.Default);
         }
+#endregion
 
         private void OnGrab(InputAction.CallbackContext ctx)
         {

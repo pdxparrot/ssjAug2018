@@ -50,7 +50,7 @@ namespace pdxpartyparrot.Core.Actors
             public Quaternion StartRotation;
             public Quaternion EndRotation;
 
-            public bool WasKinematic;
+            public bool IsKinematic;
         }
 
         [SerializeField]
@@ -96,7 +96,7 @@ namespace pdxpartyparrot.Core.Actors
 
         public Rigidbody Rigidbody { get; private set; }
 
-        protected IActor Owner { get; private set; }
+        public IActor Owner { get; private set; }
 
         [SerializeField]
         [ReadOnly]
@@ -174,7 +174,7 @@ namespace pdxpartyparrot.Core.Actors
             _animationState.AnimationSeconds = timeSeconds;
             _animationState.AnimationSecondsRemaining = timeSeconds;
 
-            _animationState.WasKinematic = Rigidbody.isKinematic;
+            _animationState.IsKinematic = Rigidbody.isKinematic;
             Rigidbody.isKinematic = true;
         }
 
@@ -191,7 +191,7 @@ namespace pdxpartyparrot.Core.Actors
 
                 Rigidbody.position = _animationState.EndPosition;
                 Rigidbody.rotation = _animationState.EndRotation;
-                Rigidbody.isKinematic = _animationState.WasKinematic;
+                Rigidbody.isKinematic = _animationState.IsKinematic;
                 return;
             }
 

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Data;
@@ -85,6 +87,8 @@ namespace pdxpartyparrot.Game.Actors
         {
             base.Update();
 
+            _isRunning = Driver.LastMoveAxes.sqrMagnitude >= ControllerData.RunThresholdSquared;
+
             Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.x) : 0.0f);
             Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.y) : 0.0f);
 
@@ -135,6 +139,19 @@ namespace pdxpartyparrot.Game.Actors
 
         public override void AnimationMove(Vector3 axes, float dt)
         {
+            if(!CanMove) {
+                return;
+            }
+
+            if(RunOnComponents(c => c.OnAnimationMove(axes, dt))) {
+                return;
+            }
+
+            DefaultAnimationMove(axes, dt);
+        }
+
+        public void DefaultAnimationMove(Vector3 axes, float dt)
+        {
             Vector3 forward = new Vector3(axes.x, 0.0f, axes.y);
 
             // align the movement with the camera
@@ -146,17 +163,30 @@ namespace pdxpartyparrot.Game.Actors
             if(forward.sqrMagnitude > float.Epsilon) {
                 transform.forward = forward;
             }
-
-            base.AnimationMove(axes, dt);
         }
 
         public override void PhysicsMove(Vector3 axes, float dt)
         {
-            if(!CanMove || (!ControllerData.AllowAirControl && !IsGrounded)) {
+            if(!CanMove) {
                 return;
             }
 
-            _isRunning = axes.sqrMagnitude >= ControllerData.RunThresholdSquared;
+            if(RunOnComponents(c => c.OnPhysicsMove(axes, dt))) {
+                return;
+            }
+
+            if(!ControllerData.AllowAirControl && !IsGrounded) {
+                return;
+            }
+
+            DefaultPhysicsMove(axes, dt);
+        }
+
+        public void DefaultPhysicsMove(Vector3 axes, float dt)
+        {
+            if(!CanMove) {
+                return;
+            }
 
             Vector3 speed = axes * ControllerData.MoveSpeed;
             Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : Rigidbody.rotation;
@@ -167,6 +197,7 @@ namespace pdxpartyparrot.Game.Actors
         }
 
 #region Components
+        [CanBeNull]
         public T GetControllerComponent<T>() where T: CharacterActorControllerComponent
         {
             foreach(var component in _components) {
@@ -201,24 +232,22 @@ namespace pdxpartyparrot.Game.Actors
 #endregion
 
 #region Actions
-        public virtual void Jump()
+        public virtual void ActionStarted(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
-            if(!ControllerData.EnableJumping) {
-                return;
-            }
-
-            if(RunOnComponents(c => c.OnJump())) {
-                return;
-            }
-
-            if(!IsGrounded) {
-                return;
-            }
-
-            DoJump(ControllerData.JumpHeight, ControllerData.JumpParam);
+            RunOnComponents(c => c.OnStarted(action));
         }
 
-        public void DoJump(float height, string animationParam)
+        public virtual void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
+        {
+            RunOnComponents(c => c.OnPerformed(action));
+        }
+
+        public virtual void ActionCancelled(CharacterActorControllerComponent.CharacterActorControllerAction action)
+        {
+            RunOnComponents(c => c.OnCancelled(action));
+        }
+
+        public void DefaultJump(float height, string animationParam)
         {
             if(!CanMove) {
                 return;

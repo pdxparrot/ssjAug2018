@@ -71,7 +71,7 @@ namespace pdxpartyparrot.ssjAug2018.UI
             _mailboxCounter.text = $"{MailboxManager.Instance.CompletedMailboxes} / {MailboxManager.Instance.CurrentSetSize}";
             _scoreText.text = $"{_owner.Score:000}";
 
-            _thrusterFill.fillAmount = 1.0f - _owner.PlayerController.HoverRemainingPercent;
+            _thrusterFill.fillAmount = null == _owner.PlayerController.HoverComponent ? 0.0f : _owner.PlayerController.HoverComponent.RemainingPercent;
         }
 #endregion
 

@@ -20,13 +20,19 @@ MonoBehaviour:
   _fallingParam: InAir
   _jumpParam: Jump
   _doubleJumpParam: DoubleJump
+  _hoverParam: ThrustJump
   _moveSpeed: 20
   _runThreshold: 0.75
   _fallSpeedAdjustment: 200
   _terminalVelocity: 75
   _groundedCheckEpsilon: 0.1
-  _enableJumping: 1
   _jumpHeight: 6
   _doubleJumpHeight: 6
   _doubleJumpCount: 1
+  _hoverHoldSeconds: 0.25
+  _hoverTimeSeconds: 5
+  _hoverCooldownSeconds: 1.5
+  _hoverRechargeRate: 0.5
+  _hoverAcceleration: 20
+  _hoverWhenGrounded: 0
   _allowAirControl: 1

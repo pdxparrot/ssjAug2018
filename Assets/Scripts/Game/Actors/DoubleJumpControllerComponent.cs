@@ -26,13 +26,17 @@ namespace pdxpartyparrot.Game.Actors
             _doubleJumpCount = 0;
         }
 
-        public override bool OnJump()
+        public override bool OnPerformed(CharacterActorControllerAction action)
         {
+            if(!(action is JumpControllerComponent.JumpAction)) {
+                return false;
+            }
+
             if(!CanDoubleJump) {
                 return false;
             }
 
-            Controller.DoJump(Controller.ControllerData.DoubleJumpHeight, Controller.ControllerData.DoubleJumpParam);
+            Controller.DefaultJump(Controller.ControllerData.DoubleJumpHeight, Controller.ControllerData.DoubleJumpParam);
 
             _doubleJumpCount++;
             return true;

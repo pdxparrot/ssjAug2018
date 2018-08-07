@@ -29,11 +29,6 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public string LongJumpParam => _longJumpParam;
 
         [SerializeField]
-        private string _thurstJumpParam = "ThrustJump";
-
-        public string ThrustJumpParam => _thurstJumpParam;
-
-        [SerializeField]
         private string _throwingMailParam = "ReadyMail";
 
         public string ThrowingMailParam => _throwingMailParam;
@@ -125,8 +120,8 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         [Space(10)]
 
-#region Jumping
-        [Header("Jumping")]
+#region Long Jumping
+        [Header("Long Jumping")]
 
         [SerializeField]
         private bool _enableLongJump = true;
@@ -146,56 +141,6 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private float _longJumpHeight = 5.0f;
 
         public float LongJumpHeight => _longJumpHeight;
-#endregion
-
-        [Space(10)]
-
-#region Hover
-        [Header("Hover")]
-
-        [SerializeField]
-        private bool _enableHover = true;
-
-        public bool EnableHover => _enableHover;
-
-        [SerializeField]
-        [Range(0, 10)]
-        [Tooltip("How long to hold jump before hovering starts")]
-        private float _hoverHoldSeconds = 1.0f;
-
-        public int HoverHoldMs => (int)(_hoverHoldSeconds * 1000.0f);
-
-        [SerializeField]
-        [Range(0, 60)]
-        [Tooltip("Max time hover can last")]
-        private float _hoverTimeSeconds = 10.0f;
-
-        public int HoverTimeMs => (int)(_hoverTimeSeconds * 1000.0f);
-
-        [SerializeField]
-        [Range(0, 60)]
-        private float _hoverCooldownSeconds = 1.0f;
-
-        public int HoverCooldownMs => (int)(_hoverCooldownSeconds * 1000.0f);
-
-        [SerializeField]
-        [Range(0, 60)]
-        [Tooltip("Seconds of charge to recover every second after cooldown")]
-        private float _hoverRechargeRate = 1.0f;
-
-        public float HoverRechargeRate => _hoverRechargeRate;
-
-        [SerializeField]
-        [Range(0, 100)]
-        [Tooltip("The acceleration caused by hovering")]
-        private float _hoverAcceleration = 20.0f;
-
-        public float HoverAcceleration => _hoverAcceleration;
-
-        [SerializeField]
-        private bool _hoverWhenGrounded;
-
-        public bool HoverWhenGrounded => _hoverWhenGrounded;
 #endregion
 
         [Space(10)]

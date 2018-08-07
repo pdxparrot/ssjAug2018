@@ -14,7 +14,6 @@ MonoBehaviour:
   _attachDistance: 0.1
   _climbingParam: Climbing
   _longJumpParam: LongJump
-  _thurstJumpParam: ThrustJump
   _throwingMailParam: ReadyToThrow
   _throwMailParam: ThrowMail
   _wrapTimeSeconds: 1
@@ -31,13 +30,6 @@ MonoBehaviour:
   _enableLongJump: 1
   _longJumpHoldSeconds: 0.3
   _longJumpHeight: 30
-  _enableHover: 1
-  _hoverHoldSeconds: 0.25
-  _hoverTimeSeconds: 5
-  _hoverCooldownSeconds: 1.5
-  _hoverRechargeRate: 0.5
-  _hoverAcceleration: 20
-  _hoverWhenGrounded: 0
   _autoThrowSeconds: 3
   _throwSpeed: 25
   _enableFallStun: 0

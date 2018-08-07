@@ -5,6 +5,10 @@ namespace pdxpartyparrot.Game.Actors
     [RequireComponent(typeof(CharacterActorController))]
     public abstract class CharacterActorControllerComponent : MonoBehaviour
     {
+        public abstract class CharacterActorControllerAction
+        {
+        }
+
         protected CharacterActorController Controller { get; private set; }
 
 #region Unity Lifecycle
@@ -14,7 +18,27 @@ namespace pdxpartyparrot.Game.Actors
         }
 #endregion
 
-        public virtual bool OnJump()
+        public virtual bool OnAnimationMove(Vector3 axes, float dt)
+        {
+            return false;
+        }
+
+        public virtual bool OnPhysicsMove(Vector3 axes, float dt)
+        {
+            return false;
+        }
+
+        public virtual bool OnStarted(CharacterActorControllerAction action)
+        {
+            return false;
+        }
+
+        public virtual bool OnPerformed(CharacterActorControllerAction action)
+        {
+            return false;
+        }
+
+        public virtual bool OnCancelled(CharacterActorControllerAction action)
         {
             return false;
         }

@@ -328,7 +328,9 @@ GameObject:
   - component: {fileID: 114455475182417836}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
+  - component: {fileID: 114521932353532936}
   - component: {fileID: 114307707372532762}
+  - component: {fileID: 114841388732295906}
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114416925496739310}
   m_Layer: 9
@@ -2609,7 +2611,7 @@ MonoBehaviour:
     EndPosition: {x: 0, y: 0, z: 0}
     StartRotation: {x: 0, y: 0, z: 0, w: 0}
     EndRotation: {x: 0, y: 0, z: 0, w: 0}
-    WasKinematic: 0
+    IsKinematic: 0
   _canMove: 1
   _pauseState:
     IsKinematic: 0
@@ -2629,11 +2631,7 @@ MonoBehaviour:
   _rightHandTransform: {fileID: 4805528540693168}
   _headTransform: {fileID: 4426796019341964}
   _chestTransform: {fileID: 4943192097314312}
-  _canJump: 0
   _longJumpTriggerTime: 0
-  _hoverTriggerTime: 0
-  _hoverTimeMs: 0
-  _hoverCooldownEndTime: 0
   _canThrowMail: 0
   _autoThrowMailTriggerTime: 0
   _canThrowSnowball: 0
@@ -2658,6 +2656,22 @@ MonoBehaviour:
   param3: 
   param4: 
   param5: 
+--- !u!114 &114521932353532936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aacf170ad1aff0645b6703a9660bd4d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isHeld: 0
+  _heldSeconds: 0
+  _hoverTimeSeconds: 0
+  _cooldownCountdown: 0
+  _isHovering: 0
 --- !u!114 &114748589338881858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2679,6 +2693,17 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114841388732295906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8dbe91d075cd048b3827276d1fc751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114918540809867056
 MonoBehaviour:
   m_ObjectHideFlags: 1
