@@ -57,7 +57,7 @@ namespace pdxparyparrot.ssjAug2018.World
 
         private void TargetWaypoint(int index)
         {
-            if(index > _waypoints.Length || index < 0) {
+            if(index >= _waypoints.Length || index < 0) {
                 _targetWayponit = null;
                 return;
             }

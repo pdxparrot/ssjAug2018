@@ -13,7 +13,6 @@ namespace pdxpartyparrot.Core.Network
 {
     [RequireComponent(typeof(NetworkIdentity))]
     [RequireComponent(typeof(NetworkTransform))]
-    [RequireComponent(typeof(NetworkAnimator))]
     public abstract class NetworkActor : NetworkBehaviour, IActor
     {
 #region IActor
@@ -59,15 +58,17 @@ namespace pdxpartyparrot.Core.Network
 
         protected NetworkTransform NetworkTransform { get; private set; }
 
+        [SerializeField]
+        private NetworkAnimator _networkAnimator;
+
 #region Unity Lifecycle
         protected virtual void Awake()
         {
             NetworkIdentity = GetComponent<NetworkIdentity>();
             NetworkTransform = GetComponent<NetworkTransform>();
 
-            NetworkAnimator networkAnimator = GetComponent<NetworkAnimator>();
-            if(null == networkAnimator.animator) {
-                networkAnimator.animator = Animator;
+            if(null == _networkAnimator.animator) {
+                _networkAnimator.animator = Animator;
             }
 
             PartyParrotManager.Instance.PauseEvent += PauseEventHandler;

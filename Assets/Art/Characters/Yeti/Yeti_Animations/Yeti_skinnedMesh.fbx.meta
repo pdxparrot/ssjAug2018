@@ -203,7 +203,10 @@ ModelImporter:
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
-    extraExposedTransformPaths: []
+    extraExposedTransformPaths:
+    - root/hips/spine_01/spine_02/chest/l_clav/l_shoulder/l_shoulderDist/l_elbow/l_forearm
+    - root/hips/spine_01/spine_02/chest/r_clav/r_shoulder/r_shoulderDist/r_elbow/r_forearm
+    - root
     extraUserProperties: []
     clipAnimations: []
     isReadable: 1
