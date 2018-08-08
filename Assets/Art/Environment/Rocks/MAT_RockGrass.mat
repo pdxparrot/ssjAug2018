@@ -76,8 +76,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _CoverageAmount: -1
-    - _CoverageFalloff: 0.01
+    - _CoverageAmount: -0.3
+    - _CoverageFalloff: 0.34
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -94,11 +94,11 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WorldtoObjectSwitch: 1
+    - _WorldtoObjectSwitch: 0
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Tiling: {r: 30, g: 30, b: 30, a: 0}
-    - _TopNormalTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tiling: {r: 8, g: 8, b: 8, a: 0}
+    - _TopNormalTiling: {r: 20, g: 20, b: 0, a: 0}
