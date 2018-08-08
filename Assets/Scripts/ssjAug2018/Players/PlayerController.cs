@@ -127,8 +127,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Player.CmdThrowSnowball(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
-            //Player.Animator.SetTrigger(PlayerControllerData.ThrowSnowballParam);
-            //Player.Animator.SetBool(PlayerControllerData.ThrowingSnowball, false);
+            Player.Animator.SetTrigger(PlayerControllerData.ThrowSnowballParam);
+            Player.Animator.SetBool(PlayerControllerData.ThrowingSnowballParam, false);
         }
 
         public void Stun()

@@ -11,10 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74d87e80ee0e1ab4fabec381ffa8538a, type: 3}
   m_Name: PlayerControllerData
   m_EditorClassIdentifier: 
-  _throwingMailParam: ReadyToThrow
+  _throwingMailParam: ReadyToThrowMail
   _throwMailParam: ThrowMail
+  _throwingSnowballParam: ReadyToThrowSnowball
+  _throwSnowballParam: ThrowSnowball
   _autoThrowSeconds: 3
   _throwSpeed: 25
+  _throwConvergeDistance: 100
   _enableFallStun: 0
   _fallStunDistance: 50
   _fallStunTimeSeconds: 3

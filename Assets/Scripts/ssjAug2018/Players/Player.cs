@@ -286,10 +286,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Controller.Rigidbody.velocity = new Vector3(0.0f, Controller.Rigidbody.velocity.y, 0.0f);
 
-            //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, true);
+            Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, true);
 
             _stunTimer.Start(seconds, () => {
-                //Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, false);
+                Animator.SetBool(PlayerManager.Instance.PlayerData.StunnedParam, false);
             });
         }
 
@@ -307,7 +307,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             RpcDead();
 
-            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, true);
+            Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, true);
 
             Debug.Log($"Player {name} respawning in {GameStateManager.Instance.GameData.PlayerRespawnSeconds} seconds");
 
@@ -365,7 +365,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             _isDead = false;
 
-            //Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, false);
+            Animator.SetBool(PlayerManager.Instance.PlayerData.DeadParam, false);
         }
 #endregion
     }

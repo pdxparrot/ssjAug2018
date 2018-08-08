@@ -20,6 +20,16 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private string _throwMailParam = "ThrowMail";
 
         public string ThrowMailParam => _throwMailParam;
+
+        [SerializeField]
+        private string _throwingSnowballParam = "ReadySnowball";
+
+        public string ThrowingSnowballParam => _throwingSnowballParam;
+
+        [SerializeField]
+        private string _throwSnowballParam = "ThrowSnowball";
+
+        public string ThrowSnowballParam => _throwSnowballParam;
 #endregion
 
         [Space(10)]
