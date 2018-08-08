@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _threshold: 1.05
-  _stretch: 0.8
+  _stretch: 0.4
   _intensity: 0.4
   _tint: {r: 0.7960785, g: 0.9490197, b: 1, a: 1}
   _shader: {fileID: 4800000, guid: 10949a53e15fb4a4589953320ecc54b6, type: 3}
