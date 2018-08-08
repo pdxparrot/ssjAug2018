@@ -85,7 +85,7 @@ namespace pdxpartyparrot.Core.Camera
 
         [SerializeField]
         [Tooltip("Enable zooming in and out relative to the follow target")]
-        private bool _enableZoom = false;
+        private bool _enableZoom;
 
         [SerializeField]
         [Range(0, 10)]
@@ -107,7 +107,7 @@ namespace pdxpartyparrot.Core.Camera
 
         [SerializeField]
         [Tooltip("Enable rotating the camera around its local axes")]
-        private bool _enableLook = false;
+        private bool _enableLook;
 
         [SerializeField]
         [Range(0, 100)]

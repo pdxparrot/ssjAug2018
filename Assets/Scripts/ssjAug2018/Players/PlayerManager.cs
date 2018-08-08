@@ -55,7 +55,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
             Destroy(_playerContainer);
             _playerContainer = null;
 
-            Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
+            if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
+            }
 
             DestroyDebugMenu();
 

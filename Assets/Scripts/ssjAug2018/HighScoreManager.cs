@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Util;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018

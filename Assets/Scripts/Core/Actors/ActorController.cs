@@ -3,6 +3,7 @@
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Core.Actors
 {
@@ -178,24 +179,29 @@ namespace pdxpartyparrot.Core.Actors
                 return;
             }
 
-            if(_animationState.IsFinished) {
-                Debug.Log("Manual animation complete!");
+            Profiler.BeginSample("ActorController.UpdateAnimations");
+            try {
+                if(_animationState.IsFinished) {
+                    Debug.Log("Manual animation complete!");
 
-                _animationState.IsAnimating = false;
+                    _animationState.IsAnimating = false;
 
-                Rigidbody.position = _animationState.EndPosition;
-                Rigidbody.rotation = _animationState.EndRotation;
-                Rigidbody.isKinematic = _animationState.IsKinematic;
-                return;
+                    Rigidbody.position = _animationState.EndPosition;
+                    Rigidbody.rotation = _animationState.EndRotation;
+                    Rigidbody.isKinematic = _animationState.IsKinematic;
+                    return;
+                }
+
+                _animationState.AnimationSecondsRemaining -= dt;
+                if(_animationState.AnimationSecondsRemaining < 0.0f) {
+                    _animationState.AnimationSecondsRemaining = 0.0f;
+                }
+
+                Rigidbody.position = Vector3.Slerp(_animationState.StartPosition, _animationState.EndPosition, _animationState.PercentComplete);
+                Rigidbody.rotation = Quaternion.Slerp(_animationState.StartRotation, _animationState.EndRotation, _animationState.PercentComplete);
+            } finally {
+                Profiler.EndSample();
             }
-
-            _animationState.AnimationSecondsRemaining -= dt;
-            if(_animationState.AnimationSecondsRemaining < 0.0f) {
-                _animationState.AnimationSecondsRemaining = 0.0f;
-            }
-
-            Rigidbody.position = Vector3.Slerp(_animationState.StartPosition, _animationState.EndPosition, _animationState.PercentComplete);
-            Rigidbody.rotation = Quaternion.Slerp(_animationState.StartRotation, _animationState.EndRotation, _animationState.PercentComplete);
         }
 #endregion
 

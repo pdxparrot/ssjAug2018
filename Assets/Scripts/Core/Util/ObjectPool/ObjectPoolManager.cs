@@ -179,7 +179,10 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
         public T GetPooledObject<T>(string poolTag, Transform parent=null, bool activate=true) where T: Component
         {
             PooledObject po = GetPooledObject(poolTag, parent, activate);
-            return po?.GetComponent<T>();
+            if(null != po) {
+                return po.GetComponent<T>();
+            }
+            return null;
         }
 
         public void Recycle(PooledObject pooledObject)

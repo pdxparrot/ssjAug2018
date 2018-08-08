@@ -50,10 +50,14 @@ namespace pdxpartyparrot.ssjAug2018.UI
         public void InitializePlayerUI(Player player)
         {
             _playerUI = Instantiate(_playerUIPrefab, UIContainer.transform);
-            _playerUI?.Initialize(player);
+            if(null != _playerUI) {
+                _playerUI.Initialize(player);
+            }
 
             _pauseMenu = Instantiate(_pauseMenuPrefab, UIContainer.transform);
-            _pauseMenu?.gameObject.SetActive(PartyParrotManager.Instance.IsPaused);
+            if(null != _pauseMenu) {
+                _pauseMenu.gameObject.SetActive(PartyParrotManager.Instance.IsPaused);
+            }
         }
 
         public void Shutdown()

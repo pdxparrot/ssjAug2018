@@ -7,16 +7,20 @@ namespace pdxpartyparrot.Core.UI
     {
         [SerializeField]
         private PhysicsRaycaster _physicsRaycaster;
-/*
+
+#if USE_GVR
         [SerializeField]
         private GvrPointerPhysicsRaycaster _gvrPhysicsRaycaster;
-*/
+#endif
+
 
 #region Unity Lifecycle
         private void Awake()
         {
             _physicsRaycaster.enabled = !PartyParrotManager.Instance.EnableVR;
-//            _gvrPhysicsRaycaster.enabled = GameManager.Instance.EnableGoogleVR;
+#if USE_GVR
+            _gvrPhysicsRaycaster.enabled = GameManager.Instance.EnableGoogleVR;
+#endif
         }
 #endregion
     }

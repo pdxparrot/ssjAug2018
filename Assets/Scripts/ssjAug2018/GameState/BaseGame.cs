@@ -55,8 +55,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
                 return;
             }
 
-            GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartLANHost();
-            Core.Network.NetworkManager.Instance.ServerChangeScene();
+            GameStateManager.Instance.NetworkClient = NetworkManager.Instance.StartLANHost();
+            NetworkManager.Instance.ServerChangeScene();
         }
 
         private void InitializeManagers()

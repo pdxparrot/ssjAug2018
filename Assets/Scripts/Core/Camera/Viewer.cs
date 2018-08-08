@@ -142,7 +142,9 @@ namespace pdxpartyparrot.Core.Camera
 
         private void ResetPostProcessProfile()
         {
-            GlobalPostProcessProfile?.Destroy();
+            if(null != GlobalPostProcessProfile) {
+                GlobalPostProcessProfile.Destroy();
+            }
             GlobalPostProcessProfile = null;
 
             _globalPostProcessVolume.profile = null;
@@ -156,8 +158,8 @@ namespace pdxpartyparrot.Core.Camera
             Rect viewport = new Rect(
                 viewportX + ViewerManager.Instance.ViewportEpsilon,
                 viewportY + ViewerManager.Instance.ViewportEpsilon,
-                viewportWidth - (ViewerManager.Instance.ViewportEpsilon * 2),
-                viewportHeight - (ViewerManager.Instance.ViewportEpsilon * 2));
+                viewportWidth - (ViewerManager.Instance.ViewportEpsilon * 2.0f),
+                viewportHeight - (ViewerManager.Instance.ViewportEpsilon * 2.0f));
 
             Camera.rect = viewport;
             UICamera.rect = viewport;

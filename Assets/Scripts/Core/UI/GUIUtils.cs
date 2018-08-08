@@ -28,7 +28,7 @@ namespace pdxpartyparrot.Core.UI
 
 // TODO: these don't really work, we need to be able to hold the string that is the text
 // but also the float that comes out of it so that typing out 1.0 or -1 or whatever doesn't fuck up
-
+/*
         public static int IntField(int currentValue)
         {
             string text = GUILayout.TextField($"{currentValue}");
@@ -50,5 +50,6 @@ namespace pdxpartyparrot.Core.UI
             float value;
             return float.TryParse(text, out value) ? value : currentValue;
         }
+*/
     }
 }

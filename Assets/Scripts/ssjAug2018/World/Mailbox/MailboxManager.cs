@@ -110,7 +110,12 @@ namespace pdxpartyparrot.ssjAug2018.World
         public void Initialize()
         {
             Mailbox mailbox = _random.GetRandomEntry(_mailboxes);
-            ActivateMailboxGroup(mailbox?.transform.position ?? Vector3.zero);
+
+            Vector3 seedPosition = Vector3.zero;
+            if(null != mailbox) {
+                seedPosition = mailbox.transform.position;
+            }
+            ActivateMailboxGroup(seedPosition);
         }
 
         [Server]

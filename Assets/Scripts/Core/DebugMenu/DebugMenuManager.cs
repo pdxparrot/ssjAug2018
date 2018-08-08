@@ -1,6 +1,9 @@
-﻿using System;
+﻿#define USE_LOG_MESSAGE_BUFFER
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using JetBrains.Annotations;
 
@@ -16,11 +19,13 @@ namespace pdxpartyparrot.Core.DebugMenu
     // https://blogs.unity3d.com/2015/12/22/going-deep-with-imgui-and-editor-customization/
     public sealed class DebugMenuManager : SingletonBehavior<DebugMenuManager>
     {
+#if !USE_LOG_MESSAGE_BUFFER
         private struct LogMessage
         {
             public string message;
             public LogType type;
         };
+#endif
 
         [SerializeField]
         private Key _enableKey = Key.Backquote;
@@ -49,9 +54,13 @@ namespace pdxpartyparrot.Core.DebugMenu
 
         private readonly Queue<float> _fpsAccumulator = new Queue<float>();
 
-        private float AverageFPS => _fpsAccumulator.Average();
+        private float AverageFPS => _fpsAccumulator.Count < 1 ? 0 : _fpsAccumulator.Average();
 
+#if USE_LOG_MESSAGE_BUFFER
+        private readonly StringBuilder _logMessageBuffer = new StringBuilder();
+#else
         private readonly Queue<LogMessage> _logMessages = new Queue<LogMessage>();
+#endif
 
         [SerializeField]
         private int _maxLogMessages = 1000;
@@ -203,6 +212,11 @@ namespace pdxpartyparrot.Core.DebugMenu
         {
             DebugMenuNode debugMenuNode = AddNode(() => "Logs");
             debugMenuNode.RenderContentsAction = () => {
+#if USE_LOG_MESSAGE_BUFFER
+                GUIStyle style = GUI.skin.textArea;
+                style.richText = true;
+                GUILayout.TextArea(_logMessageBuffer.ToString(), style);
+#else
                 foreach(LogMessage message in _logMessages) {
                     switch(message.type)
                     {
@@ -220,18 +234,40 @@ namespace pdxpartyparrot.Core.DebugMenu
                         GUI.color = Color.white;
                         break;
                     }
-                    GUILayout.Label(message.message);
+                    GUILayout.Label($"[{message.type}]: {message.message}");
                 }
+#endif
             };
         }
 
 #region Event Handlers
         private void OnLogMessageReceived(string logString, string stackTrace, LogType type)
         {
+#if USE_LOG_MESSAGE_BUFFER
+            Color color;
+            switch(type)
+            {
+            case LogType.Assert:
+                color = Color.green;
+                break;
+            case LogType.Warning:
+                color = Color.yellow;
+                break;
+            case LogType.Error:
+            case LogType.Exception:
+                color = Color.red;
+                break;
+            default:
+                color = Color.white;
+                break;
+            }
+            _logMessageBuffer.AppendLine($"<color={color}>[{type}]: {logString}</color>");
+#else
             _logMessages.Enqueue(new LogMessage{ message = logString, type = type });
             if(_logMessages.Count > _maxLogMessages) {
                 _logMessages.Dequeue();
             }
+#endif
         }
 #endregion
     }

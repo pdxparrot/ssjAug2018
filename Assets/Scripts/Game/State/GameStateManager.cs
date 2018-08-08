@@ -91,10 +91,12 @@ namespace pdxpartyparrot.Game.State
             _currentGameState = null;
 
             gameState.UnloadScene(() => {
-                gameState?.OnExit();
+                if(null != gameState) {
+                    gameState.OnExit();
 
-                // TODO: disable the state, don't destroy it
-                Destroy(gameState?.gameObject);
+                    // TODO: disable the state, don't destroy it
+                    Destroy(gameState.gameObject);
+                }
 
                 callback?.Invoke();
             });
@@ -123,8 +125,10 @@ namespace pdxpartyparrot.Game.State
             SubGameState previousState = (SubGameState)_currentGameState;
             _currentGameState = null;
 
-            previousState?.OnExit();
-            Destroy(previousState?.gameObject);
+            if(null != previousState) {
+                previousState.OnExit();
+                Destroy(previousState.gameObject);
+            }
 
             _currentGameState = _stateStack.Count > 0 ? _stateStack.Pop() : null;
             _currentGameState?.OnResume();

@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace pdxpartyparrot.Core.UI
+namespace pdxpartyparrot.Core.Util
 {
     public class Billboard : MonoBehaviour
     {
