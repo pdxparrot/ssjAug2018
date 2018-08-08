@@ -64,6 +64,11 @@ namespace pdxpartyparrot.Game.Data
         public string ClimbingParam => _climbingParam;
 
         [SerializeField]
+        private string _hangingParam = "Hanging";
+
+        public string HangingParam => _hangingParam;
+
+        [SerializeField]
         private float _wrapTimeSeconds = 1.0f;
 
         public float WrapTimeSeconds => _wrapTimeSeconds;
@@ -72,6 +77,11 @@ namespace pdxpartyparrot.Game.Data
         private float _climbUpTimeSeconds = 1.0f;
 
         public float ClimbUpTimeSeconds => _climbUpTimeSeconds;
+
+        [SerializeField]
+        private float _hangTimeSeconds = 1.0f;
+
+        public float HangTimeSeconds => _hangTimeSeconds;
 #endregion
 
         [Space(10)]
@@ -114,12 +124,6 @@ namespace pdxpartyparrot.Game.Data
         private float _groundedCheckEpsilon = 0.1f;
 
         public float GroundedCheckEpsilon => _groundedCheckEpsilon;
-
-        [SerializeField]
-        [Range(0, 50)]
-        private float _climbSpeed = 1.0f;
-
-        public float ClimbSpeed => _climbSpeed;
 #endregion
 
         [Space(10)]
@@ -214,6 +218,12 @@ namespace pdxpartyparrot.Game.Data
         public float HoverAcceleration => _hoverAcceleration;
 
         [SerializeField]
+        [Range(0, 100)]
+        private float _hoverMoveSpeed = 1.0f;
+
+        public float HoverMoveSpeed => _hoverMoveSpeed;
+
+        [SerializeField]
         private bool _hoverWhenGrounded;
 
         public bool HoverWhenGrounded => _hoverWhenGrounded;
@@ -255,6 +265,12 @@ namespace pdxpartyparrot.Game.Data
 
         [SerializeField]
         [Range(0, 10)]
+        private float _hangRayLength = 1.0f;
+
+        public float HangRayLength => _hangRayLength;
+
+        [SerializeField]
+        [Range(0, 10)]
         private float _chestRayLength = 1.0f;
 
         public float ChestRayLength => _chestRayLength;
@@ -270,6 +286,18 @@ namespace pdxpartyparrot.Game.Data
         private float _footRayAngle = 45.0f;
 
         public float FootRayAngle => _footRayAngle;
+
+        [SerializeField]
+        [Range(0, 50)]
+        private float _climbSpeed = 1.0f;
+
+        public float ClimbSpeed => _climbSpeed;
+
+        [SerializeField]
+        [Range(0, 50)]
+        private float _hangSpeed = 1.0f;
+
+        public float HangSpeed => _hangSpeed;
 #endregion
 
         [Space(10)]

@@ -88,7 +88,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             Vector3 acceleration = (Controller.ControllerData.HoverAcceleration + Controller.ControllerData.FallSpeedAdjustment) * Vector3.up;
             Controller.Rigidbody.AddForce(acceleration, ForceMode.Acceleration);
 
-            Controller.DefaultPhysicsMove(axes, dt);
+            Controller.DefaultPhysicsMove(axes, Controller.ControllerData.HoverMoveSpeed, dt);
 
             return true;
         }

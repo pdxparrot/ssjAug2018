@@ -22,13 +22,18 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             public static ReleaseAction Default = new ReleaseAction();
         }
 
+        private enum ClimbMode
+        {
+            None,
+            Climbing,
+            Hanging
+        }
+
         [SerializeField]
         [ReadOnly]
-        private bool _isClimbing;
+        private ClimbMode _climbMode = ClimbMode.None;
 
-        public bool IsClimbing => _isClimbing;
-
-        private bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
+        public bool IsClimbing => _climbMode != ClimbMode.None;
 
         [Space(10)]
 
@@ -40,15 +45,26 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private RaycastHit? _leftHandHitResult;
 
+        private RaycastHit? _leftHandHangHitResult;
+
         private bool CanGrabLeft => null != _leftHandHitResult;
+
+        private bool CanHangLeft => null != _leftHandHangHitResult;
 
         [SerializeField]
         private Transform _rightHandTransform;
 
         private RaycastHit? _rightHandHitResult;
 
+        private RaycastHit? _rightHandHangHitResult;
+
         private bool CanGrabRight => null != _rightHandHitResult;
+
+        private bool CanHangRight => null != _rightHandHangHitResult;
 #endregion
+
+        [SerializeField]
+        private Transform _hangTransform;
 
         [Space(10)]
 
@@ -71,6 +87,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private RaycastHit? _chestHitResult;
 #endregion
+
+        private bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
 
         [Space(10)]
 
@@ -110,6 +128,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             // left hand
             Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
             Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+
+            Gizmos.color = null != _leftHandHangHitResult ? Color.red : Color.yellow;
+            Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+
             if(IsClimbing) {
                 //if(!CanGrabLeft && CanGrabRight) {
                     Gizmos.color = Color.yellow;
@@ -123,6 +145,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             // right hand
             Gizmos.color = null != _rightHandHitResult ? Color.red : Color.yellow;
             Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+
+            Gizmos.color = null != _rightHandHangHitResult ? Color.red : Color.yellow;
+            Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+
             if(IsClimbing) {
                 //if(CanGrabLeft && !CanGrabRight) {
                     Gizmos.color = Color.yellow;
@@ -168,7 +194,17 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         public override bool OnAnimationMove(Vector3 axes, float dt)
         {
-            return IsClimbing;
+            switch(_climbMode)
+            {
+            case ClimbMode.None:
+                return false;
+            case ClimbMode.Climbing:
+                return true;
+            case ClimbMode.Hanging:
+                Controller.DefaultAnimationMove(axes, dt);
+                return true;
+            }
+            return false;
         }
 
         public override bool OnPhysicsMove(Vector3 axes, float dt)
@@ -177,11 +213,19 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
-            Vector3 velocity = Controller.Rigidbody.rotation * (axes * Controller.ControllerData.ClimbSpeed);
-            if(Controller.DidGroundCheckCollide && velocity.y < 0.0f) {
-                velocity.y = 0.0f;
+            switch(_climbMode)
+            {
+            case ClimbMode.Climbing:
+                Vector3 velocity = Controller.Rigidbody.rotation * (axes * Controller.ControllerData.ClimbSpeed);
+                if(Controller.DidGroundCheckCollide && velocity.y < 0.0f) {
+                    velocity.y = 0.0f;
+                }
+                Controller.Rigidbody.MovePosition(Controller.Rigidbody.position + velocity * dt);
+                break;
+            case ClimbMode.Hanging:
+                Controller.DefaultPhysicsMove(axes, Controller.ControllerData.HangSpeed, dt);
+                break;
             }
-            Controller.Rigidbody.MovePosition(Controller.Rigidbody.position + velocity * dt);
 
             return true;
         }
@@ -193,16 +237,24 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                     return true;
                 }
 
-                if(!CanGrabLeft && !CanGrabRight) {
+                if(CanGrabLeft && CanGrabRight) {
+                    StartClimbing();
+
+                    if(null != _leftHandHitResult) {
+                        AttachToSurface(_leftHandHitResult.Value, false);
+                    } else if(null != _rightHandHitResult) {
+                        AttachToSurface(_rightHandHitResult.Value, false);
+                    }
+                } else if(CanHangLeft && CanHangRight) {
+                    StartHanging();
+
+                    if(null != _leftHandHangHitResult) {
+                        AttachToSurface(_leftHandHangHitResult.Value, true);
+                    } else if(null != _rightHandHangHitResult) {
+                        AttachToSurface(_rightHandHangHitResult.Value, true);
+                    }
+                } else {
                     return false;
-                }
-
-                StartClimbing();
-
-                if(null != _leftHandHitResult) {
-                    AttachToSurface(_leftHandHitResult.Value);
-                } else if(null != _rightHandHitResult) {
-                    AttachToSurface(_rightHandHitResult.Value);
                 }
 
                 return true;
@@ -223,19 +275,30 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void StartClimbing()
         {
-            _isClimbing = true;
+            _climbMode = ClimbMode.Climbing;
             Controller.Rigidbody.isKinematic = true;
 
             Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, true);
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, false);
+        }
+
+        private void StartHanging()
+        {
+            _climbMode = ClimbMode.Hanging;
+            Controller.Rigidbody.isKinematic = true;
+
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, false);
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, true);
         }
 
 
         public void StopClimbing()
         {
-            _isClimbing = false;
+            _climbMode = ClimbMode.None;
             Controller.Rigidbody.isKinematic = false;
 
             Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, false);
+            Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, false);
 
             // fix our orientation, just in case
             Vector3 rotation = transform.eulerAngles;
@@ -289,6 +352,15 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                     _leftHandHitResult = hit;
                 }
             }
+
+            _leftHandHangHitResult = null;
+
+            if(Physics.Raycast(_leftHandTransform.position, transform.up, out hit, Controller.ControllerData.HangRayLength, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+                if(null != grabbable) {
+                    _leftHandHangHitResult = hit;
+                }
+            }
         }
 
         private void UpdateRightHandRaycasts()
@@ -300,6 +372,15 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
                 if(null != grabbable) {
                     _rightHandHitResult = hit;
+                }
+            }
+
+            _rightHandHangHitResult = null;
+
+            if(Physics.Raycast(_rightHandTransform.position, transform.up, out hit, Controller.ControllerData.HangRayLength, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
+                IGrabbable grabbable = hit.transform.GetComponent<IGrabbable>();
+                if(null != grabbable) {
+                    _rightHandHangHitResult = hit;
                 }
             }
         }
@@ -382,26 +463,44 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void HandleClimbingRaycasts()
         {
-            if(!CanGrabLeft && CanGrabRight) {
-                CheckWrapLeft();
-            } else if(CanGrabLeft && !CanGrabRight) {
-                CheckWrapRight();
-            } else if(!CanGrabLeft && !CanGrabRight) {
-                if(CanClimbUp) {
-                    CheckClimbUp();
-                } else {
+            // check for wrapping / climbing up
+            if(ClimbMode.Hanging == _climbMode) {
+                if(!CanHangLeft && !CanHangRight) {
                     Debug.LogWarning("Unexpectedly fell off!");
                     StopClimbing();
 
                     if(_breakOnFall) {
                         Debug.Break();
                     }
+                } if(CanHangLeft != CanHangRight) {
+                    // TODO: check to see if we can climb up
+                }
+            } else {
+                if(!CanGrabLeft && CanGrabRight) {
+                    CheckWrapLeft();
+                } else if(CanGrabLeft && !CanGrabRight) {
+                    CheckWrapRight();
+                } else if(!CanGrabLeft && !CanGrabRight && ClimbMode.Hanging != _climbMode) {
+                    if(CanClimbUp) {
+                        CheckClimbUp();
+                    } else {
+                        Debug.LogWarning("Unexpectedly fell off!");
+                        StopClimbing();
+
+                        if(_breakOnFall) {
+                            Debug.Break();
+                        }
+                    }
                 }
             }
 
-            // check for non-wrap rotations
-            if(!CheckRotateLeft()) {
-                CheckRotateRight();
+            // check for hanging and non-wrap rotations
+            if(ClimbMode.Hanging == _climbMode) {
+                // TODO: check shit here
+            } else if(!CheckHang()) {
+                if(!CheckRotateLeft()) {
+                    CheckRotateRight();
+                }
             }
         }
 
@@ -545,6 +644,20 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             return true;
         }
 
+        private bool CheckHang()
+        {
+            if((!CanHangLeft && !CanHangRight) || Controller.Driver.LastMoveAxes.y <= 0.0f) {
+                return false;
+            }
+
+            StartHanging();
+
+            Vector3 offset = -_hangTransform.localPosition;
+            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition((_leftHandHangHitResult ?? _rightHandHangHitResult).Value, offset), Controller.Rigidbody.rotation, Controller.ControllerData.HangTimeSeconds);
+
+            return true;
+        }
+
         private bool CheckDropDown()
         {
             if(Controller.Driver.LastMoveAxes.y >= 0.0f) {
@@ -566,12 +679,17 @@ Debug.Log("TODO: check drop down");
             return p + offset;
         }
 
-        private void AttachToSurface(RaycastHit hit)
+        private void AttachToSurface(RaycastHit hit, bool isHang)
         {
             Debug.Log($"Attach to surface {hit.transform.name}");
 
-            transform.forward = -hit.normal;
-            Controller.Rigidbody.position += GetSurfaceAttachmentPosition(hit, Controller.Owner.Radius * hit.normal);
+            // TODO: we can probably infer this using the dot product
+            if(isHang) {
+                Controller.Rigidbody.position += GetSurfaceAttachmentPosition(hit, -_hangTransform.localPosition);
+            } else {
+                transform.forward = -hit.normal;
+                Controller.Rigidbody.position += GetSurfaceAttachmentPosition(hit, Controller.Owner.Radius * hit.normal);
+            }
         }
 
         private void DropDown()

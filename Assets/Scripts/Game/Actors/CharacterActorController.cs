@@ -158,6 +158,10 @@ namespace pdxpartyparrot.Game.Actors
 
         public void DefaultAnimationMove(Vector3 axes, float dt)
         {
+            if(!CanMove) {
+                return;
+            }
+
             Vector3 forward = new Vector3(axes.x, 0.0f, axes.y);
 
             // align the movement with the camera
@@ -185,21 +189,25 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            DefaultPhysicsMove(axes, dt);
+            DefaultPhysicsMove(axes, ControllerData.MoveSpeed, dt);
         }
 
-        public void DefaultPhysicsMove(Vector3 axes, float dt)
+        public void DefaultPhysicsMove(Vector3 axes, float speed, float dt)
         {
             if(!CanMove) {
                 return;
             }
 
-            Vector3 speed = axes * ControllerData.MoveSpeed;
+            Vector3 velocity = axes * speed;
             Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : Rigidbody.rotation;
-            Vector3 velocity = rotation * new Vector3(speed.x, 0.0f, speed.y);
+            velocity = rotation * new Vector3(velocity.x, 0.0f, velocity.y);
             velocity.y = Rigidbody.velocity.y;
 
-            Rigidbody.velocity = velocity;
+            if(Rigidbody.isKinematic) {
+                Rigidbody.MovePosition(Rigidbody.position + velocity * dt);
+            } else {
+                Rigidbody.velocity = velocity;
+            }
         }
 
 #region Components
