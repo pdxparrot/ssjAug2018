@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82117a3f2140234cae3f7dcb4a608db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _menuPrefab: {fileID: 114720694338620740, guid: b7d91440657cfd641b3a3cad0523e566,
+  _menuPrefab: {fileID: 114574489448487800, guid: b7d91440657cfd641b3a3cad0523e566,
     type: 2}
   _creditsStatePrefab: {fileID: 114619618274238472, guid: 0eac82967bd678c4e80893d0fee43a69,
     type: 2}

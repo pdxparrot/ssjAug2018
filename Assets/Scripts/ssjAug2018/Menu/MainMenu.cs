@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.Game.Menu;
+﻿using pdxpartyparrot.Core.UI;
+using pdxpartyparrot.Game.Menu;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.GameState;
 
@@ -6,16 +7,40 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Menu
 {
-    public sealed class MainMenu : Game.Menu.Menu
+    public sealed class MainMenu : MenuPanel
     {
-        public SubGameState NewGameState { private get; set; }
+        [SerializeField]
+        private Button _multiplayerButton;
 
-        public SubGameState CreditsGameState { private get; set; }
+        [SerializeField]
+        private MultiplayerMenu _multiplayerPanel;
+
+        public NetworkConnect ConnectGameState { private get; set; }
+
+        public Credits CreditsGameState { private get; set; }
+
+#region Unity Lifecycle
+        private void Awake()
+        {
+            if(!Application.isEditor) {
+                _multiplayerButton.gameObject.SetActive(false);
+            }
+
+            _multiplayerPanel.gameObject.SetActive(false);
+        }
+#endregion
 
 #region Event Handlers
-        public void OnNewGame()
+        public void OnSinglePlayer()
         {
-            GameStateManager.Instance.PushSubState(NewGameState);
+            GameStateManager.Instance.PushSubState(ConnectGameState, state => {
+                state.Initialize(NetworkConnect.ConnectType.SinglePlayer);
+            });
+        }
+
+        public void OnMultiplayer()
+        {
+            Owner.PushPanel(_multiplayerPanel);
         }
 
         public void OnCredits()

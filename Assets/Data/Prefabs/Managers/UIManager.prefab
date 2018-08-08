@@ -53,5 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerUIPrefab: {fileID: 114690114540402272, guid: 815e9fd79aed665419081abd7a873757,
     type: 2}
-  _pauseMenuPrefab: {fileID: 114611417465315670, guid: 2ef5de593b68fca4e8fa5874e725ce16,
+  _pauseMenuPrefab: {fileID: 114033203078541262, guid: 2ef5de593b68fca4e8fa5874e725ce16,
     type: 2}

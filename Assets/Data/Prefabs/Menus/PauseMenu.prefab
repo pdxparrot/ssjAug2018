@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 222016275218847392}
   - component: {fileID: 114934138634167240}
   - component: {fileID: 114708830921334632}
+  - component: {fileID: 114914778861191384}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -112,7 +113,7 @@ GameObject:
   - component: {fileID: 223146198506922118}
   - component: {fileID: 114745872808770864}
   - component: {fileID: 114563049758362336}
-  - component: {fileID: 114611417465315670}
+  - component: {fileID: 114033203078541262}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -120,6 +121,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114033203078541262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1702410127707450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6003e5cc0150c14384d7b1a97d09a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainPanel: {fileID: 114914778861191384}
+  _currentPanel: {fileID: 0}
 --- !u!114 &114077326298523318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -498,7 +512,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114611417465315670}
+      - m_Target: {fileID: 114914778861191384}
         m_MethodName: OnSettings
         m_Mode: 1
         m_Arguments:
@@ -511,18 +525,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114611417465315670
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1702410127707450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c82f27c28c50d7b469947f18c886cdad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialSelection: {fileID: 114581330688917766}
 --- !u!114 &114684472998516548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -562,7 +564,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114611417465315670}
+      - m_Target: {fileID: 114914778861191384}
         m_MethodName: OnExit
         m_Mode: 1
         m_Arguments:
@@ -613,6 +615,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114914778861191384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550274834955044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82f27c28c50d7b469947f18c886cdad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _owner: {fileID: 114033203078541262}
+  _initialSelection: {fileID: 114581330688917766}
 --- !u!114 &114934138634167240
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -24,10 +24,10 @@ namespace pdxpartyparrot.ssjAug2018.UI
         public PlayerUI PlayerUI => _playerUI;
 
         [SerializeField]
-        private PauseMenu _pauseMenuPrefab;
+        private Game.Menu.Menu _pauseMenuPrefab;
 
         [CanBeNull]
-        private PauseMenu _pauseMenu;
+        private Game.Menu.Menu _pauseMenu;
 
 #region Unity Lifecycle
         protected override void Awake()

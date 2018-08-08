@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 224268168855260916}
   - component: {fileID: 222016275218847392}
   - component: {fileID: 114708830921334632}
+  - component: {fileID: 114500216173584810}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -75,7 +76,7 @@ GameObject:
   - component: {fileID: 223146198506922118}
   - component: {fileID: 114745872808770864}
   - component: {fileID: 114563049758362336}
-  - component: {fileID: 114489695243785724}
+  - component: {fileID: 114202333321452596}
   m_Layer: 5
   m_Name: CreditsMenu
   m_TagString: Untagged
@@ -196,6 +197,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114202333321452596
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1702410127707450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6003e5cc0150c14384d7b1a97d09a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainPanel: {fileID: 114500216173584810}
+  _currentPanel: {fileID: 0}
 --- !u!114 &114452573731937618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,17 +237,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114489695243785724
+--- !u!114 &114500216173584810
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1702410127707450}
+  m_GameObject: {fileID: 1550274834955044}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39400849905c493f9b4298fe97603b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _owner: {fileID: 114202333321452596}
   _initialSelection: {fileID: 114684472998516548}
 --- !u!114 &114552802330954564
 MonoBehaviour:
@@ -314,7 +329,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114489695243785724}
+      - m_Target: {fileID: 114500216173584810}
         m_MethodName: OnBack
         m_Mode: 1
         m_Arguments:

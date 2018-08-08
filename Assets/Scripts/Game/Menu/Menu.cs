@@ -1,40 +1,58 @@
-﻿using pdxpartyparrot.Core.Input;
-using pdxpartyparrot.Core.UI;
+﻿using System.Collections.Generic;
+
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
 namespace pdxpartyparrot.Game.Menu
 {
     [RequireComponent(typeof(Canvas))]
-    public class Menu : MonoBehaviour
+    public sealed class Menu : MonoBehaviour
     {
         [SerializeField]
-        private Button _initialSelection;
+        private MenuPanel _mainPanel;
+
+        [SerializeField]
+        [ReadOnly]
+        private MenuPanel _currentPanel;
+
+        private readonly Stack<MenuPanel> _panelStack = new Stack<MenuPanel>();
 
 #region Unity Lifecycle
-        protected virtual void Awake()
+        private void Awake()
         {
             GetComponent<Canvas>().sortingOrder = 100;
-        }
 
-        private void Update()
-        {
-            if(null == InputManager.Instance.EventSystem.currentSelectedGameObject) {
-                _initialSelection.Select();
-            }
-        }
-
-        private void Start()
-        {
-            Reset();
+            PushPanel(_mainPanel);
         }
 #endregion
 
         public void Reset()
         {
-            Debug.Log($"TODO: reset menu {name}");
+            _currentPanel.Reset();
+        }
 
-            _initialSelection.Select();
+        public void PushPanel(MenuPanel panel)
+        {
+            if(null != _currentPanel) {
+                _currentPanel.gameObject.SetActive(false);
+                _panelStack.Push(_currentPanel);
+            }
+
+            _currentPanel = panel;
+            _currentPanel.gameObject.SetActive(true);
+        }
+
+        public void PopPanel()
+        {
+            if(_panelStack.Count < 1) {
+                return;
+            }
+
+            _currentPanel.gameObject.SetActive(false);
+
+            _currentPanel = _panelStack.Pop();
+            _currentPanel.gameObject.SetActive(true);
         }
     }
 }

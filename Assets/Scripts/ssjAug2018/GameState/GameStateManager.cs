@@ -132,6 +132,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
                 foreach(string sceneName in _sceneTester.TestScenes) {
+                    // TODO: the way this is setup, the network connection happens *after* the scene is loaded
+                    // but we really need it to happen before it's loaded
                     string text = $"Load Test Scene {sceneName}";
                     if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
                         TransitionState(_sceneTester, state => {

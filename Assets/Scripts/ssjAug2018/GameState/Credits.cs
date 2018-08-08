@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.ssjAug2018.UI;
+﻿using pdxpartyparrot.Game.Menu;
+using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
 
@@ -7,9 +8,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
     public sealed class Credits : pdxpartyparrot.Game.State.SubGameState
     {
         [SerializeField]
-        private Menu.CreditsMenu _menuPrefab;
+        private pdxpartyparrot.Game.Menu.Menu _menuPrefab;
 
-        private Menu.CreditsMenu _menu;
+        private pdxpartyparrot.Game.Menu.Menu _menu;
 
         public override void OnEnter()
         {
