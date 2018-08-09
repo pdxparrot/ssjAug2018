@@ -25,7 +25,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &1727872134428312
 GameObject:
@@ -37,12 +37,13 @@ GameObject:
   - component: {fileID: 4279298457124956}
   - component: {fileID: 33156962929775112}
   - component: {fileID: 23278030336283216}
+  - component: {fileID: 114763318457773084}
   m_Layer: 0
   m_Name: Lantern_001_Lit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4279298457124956
 Transform:
@@ -50,14 +51,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1727872134428312}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4356465045723426}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4356465045723426
 Transform:
   m_ObjectHideFlags: 1
@@ -150,3 +151,27 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114763318457773084
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727872134428312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21e34ee831217b14cbd50c679cec3e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playOnAwake: 1
+  _resetOnEnable: 1
+  _duration: 1
+  _loops: 0
+  _loopType: 0
+  _ease: 1
+  _firstRunDelay: 0
+  _delay: 0
+  _firstRun: 1
+  _from: {x: 0, y: 0, z: 0}
+  _to: {x: 0, y: 0, z: 0}
+  _snapping: 0
+  _useLocalPosition: 1
