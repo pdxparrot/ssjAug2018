@@ -92,9 +92,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _networkConnectUI = null;
 
             if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.Discovery.ReceivedBroadcastEvent -= ReceivedBroadcastEventHandler;
                 Core.Network.NetworkManager.Instance.DiscoverStop();
 
                 Core.Network.NetworkManager.Instance.ServerConnectEvent -= ServerConnectEventHandler;
+                Core.Network.NetworkManager.Instance.ClientConnectEvent -= ClientConnectEventHandler;
 
                 if(NetworkServer.active) {
                     Core.Network.NetworkManager.Instance.ServerChangeScene();
@@ -133,24 +135,44 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         private void StartClient()
         {
-            GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartClient();
-            if(null == GameStateManager.Instance.NetworkClient) {
-                _networkConnectUI.SetStatus("Unable to start network client!");
-                return;
-            }
-
+            Core.Network.NetworkManager.Instance.Discovery.ReceivedBroadcastEvent += ReceivedBroadcastEventHandler;
             if(!Core.Network.NetworkManager.Instance.DiscoverClient()) {
                 _networkConnectUI.SetStatus("Unable to start network client discovery!");
                 return;
             }
 
-            _networkConnectUI.SetStatus("Waiting for players...");
+            _networkConnectUI.SetStatus("Searching for server...");
         }
 
 #region Event Handlers
         private void ServerConnectEventHandler(object sender, EventArgs args)
         {
+            _networkConnectUI.SetStatus("Client connected, loading scene...");
+
             GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
+        }
+
+        private void ClientConnectEventHandler(object sender, EventArgs args)
+        {
+            _networkConnectUI.SetStatus("Connected, loading scene...");
+
+            GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
+        }
+
+        private void ReceivedBroadcastEventHandler(object sender, ReceivedBroadcastEventArgs args)
+        {
+            Core.Network.NetworkManager.Instance.Discovery.ReceivedBroadcastEvent -= ReceivedBroadcastEventHandler;
+
+            _networkConnectUI.SetStatus($"Found server at {args.FromAddress}, connecting...");
+
+            Core.Network.NetworkManager.Instance.networkAddress = args.FromAddress;
+            Core.Network.NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
+
+            GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartClient();
+            if(null == GameStateManager.Instance.NetworkClient) {
+                _networkConnectUI.SetStatus("Unable to start network client!");
+                return;
+            }
         }
 #endregion
     }

@@ -41,6 +41,8 @@ namespace pdxpartyparrot.Core.Network
 
         private NetworkDiscovery _networkDiscovery;
 
+        public NetworkDiscovery Discovery => _networkDiscovery;
+
 #region Unity Lifecycle
         // TODO: whenever this becomes a thing...
 /*
