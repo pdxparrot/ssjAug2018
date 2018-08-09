@@ -8,7 +8,8 @@ namespace pdxpartyparrot.ssjAug2018.World
         public enum ZoneType
         {
             None,
-            Snow
+            Snow,
+			LightRain
         }
 
         [SerializeField]
