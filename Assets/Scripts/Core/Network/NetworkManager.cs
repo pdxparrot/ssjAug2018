@@ -41,8 +41,6 @@ namespace pdxpartyparrot.Core.Network
 
         private NetworkDiscovery _networkDiscovery;
 
-        public NetworkDiscovery Discovery => _networkDiscovery;
-
 #region Unity Lifecycle
         // TODO: whenever this becomes a thing...
 /*
@@ -69,14 +67,66 @@ namespace pdxpartyparrot.Core.Network
             _hud.showGUI = false;
 
             _networkDiscovery = GetComponent<NetworkDiscovery>();
-            _networkDiscovery.enabled = Data.EnableDiscovery;
+            _networkDiscovery.useNetworkManager = true;
             _networkDiscovery.showGUI = false;
+            _networkDiscovery.enabled = Data.EnableDiscovery;
 
             autoCreatePlayer = false;
 
             InitDebugMenu();
         }
 #endregion
+
+#region Discovery
+        public bool DiscoverServer()
+        {
+            if(!Data.EnableDiscovery) {
+                return true;
+            }
+
+            Debug.Log("[NetworkManager]: Starting server discovery");
+
+            if(!_networkDiscovery.Initialize()) {
+                return false;
+            }
+
+            return _networkDiscovery.StartAsServer();
+        }
+
+        public bool DiscoverClient()
+        {
+            if(!Data.EnableDiscovery) {
+                return true;
+            }
+
+            Debug.Log("[NetworkManager]: Starting client discovery");
+
+            if(!_networkDiscovery.Initialize()) {
+                return false;
+            }
+
+            return _networkDiscovery.StartAsClient();
+        }
+
+        public void DiscoverStop()
+        {
+            Debug.Log("[NetworkManager]: Stopping discovery");
+
+            _networkDiscovery.StopBroadcast();
+        }
+#endregion
+
+        public override NetworkClient StartHost()
+        {
+            maxConnections = Data.MaxNetworkPlayers;
+            return base.StartHost();
+        }
+
+        public new bool StartServer()
+        {
+            maxConnections = Data.MaxNetworkPlayers;
+            return base.StartServer();
+        }
 
         public void LocalClientReady(NetworkConnection conn, short playerControllerId)
         {
@@ -104,18 +154,6 @@ namespace pdxpartyparrot.Core.Network
             Debug.Log("Server changed scene...");
 
             NetworkServer.SpawnObjects();
-        }
-
-        public override NetworkClient StartHost()
-        {
-            maxConnections = Data.MaxNetworkPlayers;
-            return base.StartHost();
-        }
-
-        public new bool StartServer()
-        {
-            maxConnections = Data.MaxNetworkPlayers;
-            return base.StartServer();
         }
 
 #region Server Callbacks

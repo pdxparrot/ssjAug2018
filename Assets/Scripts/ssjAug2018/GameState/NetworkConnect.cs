@@ -40,6 +40,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public void Cancel()
         {
+            Core.Network.NetworkManager.Instance.DiscoverStop();
+
             switch(_connectType)
             {
             case ConnectType.SinglePlayer:
@@ -66,31 +68,13 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             switch(_connectType)
             {
             case ConnectType.SinglePlayer:
-                Core.Network.NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
-                Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
-                GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartHost();
-                if(null == GameStateManager.Instance.NetworkClient) {
-                    _networkConnectUI.SetStatus("Unable to start network host!");
-                }
+                StartSinglePlayer();
                 break;
             case ConnectType.Server:
-                // TODO: when do we transition??
-                Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
-                if(!Core.Network.NetworkManager.Instance.StartServer()) {
-                    _networkConnectUI.SetStatus("Unable to start network server!");
-                } else {
-                    _networkConnectUI.SetStatus("Waiting for players...");
-                }
+                StartServer();
                 break;
             case ConnectType.Client:
-                Core.Network.NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
-// TODO: handle connection errors
-                GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartClient();
-                if(null == GameStateManager.Instance.NetworkClient) {
-                    _networkConnectUI.SetStatus("Unable to start network client!");
-                } else {
-                    _networkConnectUI.SetStatus("Waiting for players...");
-                }
+                StartClient();
                 break;
             }
         }
@@ -108,8 +92,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             _networkConnectUI = null;
 
             if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.DiscoverStop();
+
                 Core.Network.NetworkManager.Instance.ServerConnectEvent -= ServerConnectEventHandler;
-                Core.Network.NetworkManager.Instance.ClientConnectEvent -= ClientConnectEventHandler;
 
                 if(NetworkServer.active) {
                     Core.Network.NetworkManager.Instance.ServerChangeScene();
@@ -119,14 +104,51 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             base.OnExit();
         }
 
-#region Event Handlers
-        private void ServerConnectEventHandler(object sender, EventArgs args)
+        private void StartSinglePlayer()
         {
-// TODO: if this is single player we transition twice, right?
-            //GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
+            Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
+
+            GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartHost();
+            if(null == GameStateManager.Instance.NetworkClient) {
+                _networkConnectUI.SetStatus("Unable to start network host!");
+            }
         }
 
-        private void ClientConnectEventHandler(object sender, EventArgs args)
+        private void StartServer()
+        {
+            Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
+
+            if(!Core.Network.NetworkManager.Instance.StartServer()) {
+                _networkConnectUI.SetStatus("Unable to start network server!");
+                return;
+            }
+
+            if(!Core.Network.NetworkManager.Instance.DiscoverServer()) {
+                _networkConnectUI.SetStatus("Unable to start network server discovery!");
+                return;
+            }
+
+            _networkConnectUI.SetStatus("Waiting for players...");
+        }
+
+        private void StartClient()
+        {
+            GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartClient();
+            if(null == GameStateManager.Instance.NetworkClient) {
+                _networkConnectUI.SetStatus("Unable to start network client!");
+                return;
+            }
+
+            if(!Core.Network.NetworkManager.Instance.DiscoverClient()) {
+                _networkConnectUI.SetStatus("Unable to start network client discovery!");
+                return;
+            }
+
+            _networkConnectUI.SetStatus("Waiting for players...");
+        }
+
+#region Event Handlers
+        private void ServerConnectEventHandler(object sender, EventArgs args)
         {
             GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
         }
