@@ -129,10 +129,10 @@ Material:
     - _Smoothness3: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Splat0_Tiling: 0.05
-    - _Splat1_Tiling: 0.05
-    - _Splat2_Tiling: 0.05
-    - _Splat3_Tiling: 0.05
+    - _Splat0_Tiling: 0.02
+    - _Splat1_Tiling: 0.02
+    - _Splat2_Tiling: 0.02
+    - _Splat3_Tiling: 0.02
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
