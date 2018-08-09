@@ -1,4 +1,6 @@
 ﻿using pdxpartyparrot.Game.Menu;
+using pdxpartyparrot.Game.State;
+using pdxpartyparrot.ssjAug2018.GameState;
 
 using UnityEngine;
 
@@ -22,7 +24,12 @@ namespace pdxpartyparrot.ssjAug2018.Menu
             Owner.PushPanel(_settingsMenu);
         }
 
-        public void OnExit()
+        public void OnExitMainMenu()
+        {
+            GameStateManager.Instance.TransitionToInitialState();
+        }
+
+        public void OnQuitGame()
         {
             Application.Quit();
         }

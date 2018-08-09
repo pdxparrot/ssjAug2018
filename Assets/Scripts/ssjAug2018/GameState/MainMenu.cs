@@ -16,7 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private Credits _creditsStatePrefab;
 
         [SerializeField]
-        private NetworkConnect _networkConnectStatePrefab;
+        private Game _gameStatePrefab;
 
         public override void OnEnter()
         {
@@ -26,12 +26,14 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             // TODO: this is shitty
             Menu.MainMenu mainMenu = _menu.GetComponentInChildren<Menu.MainMenu>(true);
-            mainMenu.ConnectGameState = _networkConnectStatePrefab;
+            mainMenu.ConnectGameState = GameStateManager.Instance.NetworkConnectStatePrefab;
             mainMenu.CreditsGameState = _creditsStatePrefab;
+            mainMenu.GameState = _gameStatePrefab;
 
             // TODO: this is also shitty
             Menu.MultiplayerMenu multiplayerMenu = _menu.GetComponentInChildren<Menu.MultiplayerMenu>(true);
-            multiplayerMenu.ConnectGameState = _networkConnectStatePrefab;
+            multiplayerMenu.ConnectGameState = GameStateManager.Instance.NetworkConnectStatePrefab;
+            multiplayerMenu.GameState = _gameStatePrefab;
         }
 
         public override void OnExit()

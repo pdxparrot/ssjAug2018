@@ -23,6 +23,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public GameData GameData => _gameData;
 
         [SerializeField]
+        private NetworkConnect _networkConnectStatePrefab;
+
+        public NetworkConnect NetworkConnectStatePrefab => _networkConnectStatePrefab;
+
+        [SerializeField]
         private GameManager _gameManagerPrefab;
 
         private GameManager _gameManager;
@@ -38,7 +43,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private MailboxManager _mailboxManager;
 
         [SerializeField]
-        private SceneTester _sceneTester;
+        private SceneTester _sceneTesterStatePrefab;
 
         [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
@@ -78,7 +83,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         public void ShutdownNetwork()
         {
             if(Core.Network.NetworkManager.HasInstance) {
-                Core.Network.NetworkManager.Instance.Stop();
+                // TODO: this depends on how we were run...
+                Core.Network.NetworkManager.Instance.StopHost();
             }
 
             NetworkClient = null;
@@ -131,13 +137,14 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
-                foreach(string sceneName in _sceneTester.TestScenes) {
-                    // TODO: the way this is setup, the network connection happens *after* the scene is loaded
-                    // but we really need it to happen before it's loaded
+                foreach(string sceneName in _sceneTesterStatePrefab.TestScenes) {
                     string text = $"Load Test Scene {sceneName}";
                     if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
-                        TransitionState(_sceneTester, state => {
-                            state.SetScene(sceneName);
+                        PushSubState(NetworkConnectStatePrefab, connectState => {
+                            connectState.Initialize(NetworkConnect.ConnectType.SinglePlayer, _sceneTesterStatePrefab, state => {
+                                SceneTester sceneTester = (SceneTester)state;
+                                sceneTester.SetScene(sceneName);
+                            });
                         });
                         break;
                     }

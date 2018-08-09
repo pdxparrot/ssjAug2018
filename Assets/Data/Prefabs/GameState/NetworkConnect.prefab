@@ -51,5 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526ecd507ca93424898a3a0e88bf7398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _networkConnectUIPrefab: {fileID: 114965448104380002, guid: 18101bef84e139e46b566b7564d8b4db,
+    type: 2}
   _gameStatePrefab: {fileID: 114305255165609082, guid: 888ea60fc1fee3b4a8141ba132bdea90,
     type: 2}
+  _connectType: 0

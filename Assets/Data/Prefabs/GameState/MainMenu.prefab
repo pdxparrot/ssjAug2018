@@ -55,5 +55,5 @@ MonoBehaviour:
     type: 2}
   _creditsStatePrefab: {fileID: 114619618274238472, guid: 0eac82967bd678c4e80893d0fee43a69,
     type: 2}
-  _networkConnectStatePrefab: {fileID: 114969377140087770, guid: 8bcd7f9885c6731439549114c6039383,
+  _gameStatePrefab: {fileID: 114305255165609082, guid: 888ea60fc1fee3b4a8141ba132bdea90,
     type: 2}

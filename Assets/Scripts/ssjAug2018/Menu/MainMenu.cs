@@ -19,6 +19,8 @@ namespace pdxpartyparrot.ssjAug2018.Menu
 
         public Credits CreditsGameState { private get; set; }
 
+        public GameState.Game GameState { private get; set; }
+
 #region Unity Lifecycle
         private void Awake()
         {
@@ -34,7 +36,7 @@ namespace pdxpartyparrot.ssjAug2018.Menu
         public void OnSinglePlayer()
         {
             GameStateManager.Instance.PushSubState(ConnectGameState, state => {
-                state.Initialize(NetworkConnect.ConnectType.SinglePlayer);
+                state.Initialize(NetworkConnect.ConnectType.SinglePlayer, GameState);
             });
         }
 
@@ -48,7 +50,7 @@ namespace pdxpartyparrot.ssjAug2018.Menu
             GameStateManager.Instance.PushSubState(CreditsGameState);
         }
 
-        public void OnExit()
+        public void OnQuitGame()
         {
             Application.Quit();
         }

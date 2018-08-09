@@ -45,7 +45,22 @@ namespace pdxpartyparrot.Core
         [ReadOnly]
         private bool _isPaused;
 
-        public bool IsPaused => _isPaused;
+        public bool IsPaused
+        {
+            get { return _isPaused; }
+
+            set
+            {
+                bool wasPaused = _isPaused;
+                _isPaused = value;
+
+                if(wasPaused != _isPaused) {
+                    Debug.Log($"Pause: {_isPaused}");
+
+                    PauseEvent?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
 #endregion
 
         [Space(10)]
@@ -157,10 +172,7 @@ namespace pdxpartyparrot.Core
 
         public void TogglePause()
         {
-            _isPaused = !_isPaused;
-            Debug.Log($"Pause: {_isPaused}");
-
-            PauseEvent?.Invoke(this, EventArgs.Empty);
+            IsPaused = !IsPaused;
         }
     }
 }

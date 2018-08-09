@@ -1,5 +1,6 @@
 ﻿using System;
 
+using pdxpartyparrot.Core.Data;
 using pdxpartyparrot.Core.DebugMenu;
 
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace pdxpartyparrot.Core.Network
     // https://bitbucket.org/Unity-Technologies/networking
     // https://docs.unity3d.com/Manual/UNetGameObjects.html
     [RequireComponent(typeof(NetworkManagerHUD))]
+    [RequireComponent(typeof(NetworkDiscovery))]
     public sealed class NetworkManager : UnityEngine.Networking.NetworkManager
     {
 #region Events
@@ -27,18 +29,19 @@ namespace pdxpartyparrot.Core.Network
 
         public static bool HasInstance => null != Instance;
 
-/*
-        // TODO: implement the use of this
         [SerializeField]
-        private int _maxNetworkPlayers = 16;
+        private NetworkManagerData _data;
 
-        public int MaxNetworkPlayers => _maxNetworkPlayers;
-*/
+        public NetworkManagerData Data => _data;
 
         [SerializeField]
         private bool _enableCallbackLogging = true;
 
-        public NetworkManagerHUD HUD => GetComponent<NetworkManagerHUD>();
+        private NetworkManagerHUD _hud;
+
+        private NetworkDiscovery _networkDiscovery;
+
+        public NetworkDiscovery Discovery => _networkDiscovery;
 
 #region Unity Lifecycle
         // TODO: whenever this becomes a thing...
@@ -47,8 +50,14 @@ namespace pdxpartyparrot.Core.Network
         {
             base.Awake();
 
+            _hud = GetComponent<NetworkManagerHUD>();
+            _hud.showGUI = false;
+
+            _networkDiscovery = GetComponent<NetworkDiscovery>();
+            _networkDiscovery.enabled = _enableDiscovery;
+            _networkDiscovery.showGUI = false;
+
             autoCreatePlayer = false;
-            HUD.showGUI = false;
 
             InitDebugMenu();
         }
@@ -56,27 +65,18 @@ namespace pdxpartyparrot.Core.Network
 
         private void Start()
         {
+            _hud = GetComponent<NetworkManagerHUD>();
+            _hud.showGUI = false;
+
+            _networkDiscovery = GetComponent<NetworkDiscovery>();
+            _networkDiscovery.enabled = Data.EnableDiscovery;
+            _networkDiscovery.showGUI = false;
+
             autoCreatePlayer = false;
-            HUD.showGUI = false;
 
             InitDebugMenu();
         }
 #endregion
-
-        public NetworkClient StartLANHost()
-        {
-            Debug.Log($"Starting LAN host on {networkAddress}:{networkPort}...");
-
-            return StartHost();
-        }
-
-        public void Stop()
-        {
-            Debug.Log("Stopping host...");
-
-            // TODO: don't assume this
-            StopHost();
-        }
 
         public void LocalClientReady(NetworkConnection conn, short playerControllerId)
         {
@@ -101,7 +101,21 @@ namespace pdxpartyparrot.Core.Network
                 return;
             }
 
+            Debug.Log("Server changed scene...");
+
             NetworkServer.SpawnObjects();
+        }
+
+        public override NetworkClient StartHost()
+        {
+            maxConnections = Data.MaxNetworkPlayers;
+            return base.StartHost();
+        }
+
+        public new bool StartServer()
+        {
+            maxConnections = Data.MaxNetworkPlayers;
+            return base.StartServer();
         }
 
 #region Server Callbacks
@@ -187,16 +201,16 @@ namespace pdxpartyparrot.Core.Network
 #endregion
 
 #region Client Callbacks
-        public override void OnStartClient(NetworkClient client)
+        public override void OnStartClient(NetworkClient networkClient)
         {
-            CallbackLog($"OnStartClient({client})");
+            CallbackLog($"OnStartClient({networkClient})");
 
-            base.OnStartClient(client);
+            base.OnStartClient(networkClient);
         }
 
         public override void OnStopClient()
         {
-            CallbackLog($"OnStopClient()");
+            CallbackLog("OnStopClient()");
 
             base.OnStopClient();
         }
@@ -239,7 +253,14 @@ namespace pdxpartyparrot.Core.Network
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Core.NetworkManager");
             debugMenuNode.RenderContentsAction = () => {
-                HUD.showGUI = GUILayout.Toggle(HUD.showGUI, "Show Network HUD");
+                if(_hud.enabled) {
+                    _hud.showGUI = GUILayout.Toggle(_hud.showGUI, "Show Network HUD GUI");
+                }
+
+                if(_networkDiscovery.enabled) {
+                    _networkDiscovery.showGUI = GUILayout.Toggle(_networkDiscovery.showGUI, "Show Network Discovery GUI");
+                }
+
                 _enableCallbackLogging = GUILayout.Toggle(_enableCallbackLogging, "Callback Logging");
             };
         }

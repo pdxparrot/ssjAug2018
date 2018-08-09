@@ -7,18 +7,20 @@ namespace pdxpartyparrot.ssjAug2018.Menu
     {
         public NetworkConnect ConnectGameState { private get; set; }
 
+        public GameState.Game GameState { private get; set; }
+
 #region Event Handlers
         public void OnHost()
         {
             GameStateManager.Instance.PushSubState(ConnectGameState, state => {
-                state.Initialize(NetworkConnect.ConnectType.Host);
+                state.Initialize(NetworkConnect.ConnectType.Server, GameState);
             });
         }
 
         public void OnJoin()
         {
             GameStateManager.Instance.PushSubState(ConnectGameState, state => {
-                state.Initialize(NetworkConnect.ConnectType.Client);
+                state.Initialize(NetworkConnect.ConnectType.Client, GameState);
             });
         }
 
