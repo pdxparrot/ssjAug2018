@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using pdxpartyparrot.Core.Util;
-
 using JetBrains.Annotations;
+
+using pdxpartyparrot.Core;
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
@@ -10,8 +11,6 @@ namespace pdxpartyparrot.Game.World
 {
     public class SpawnManager : SingletonBehavior<SpawnManager>
     {
-        protected static readonly System.Random Random = new System.Random();
-
         private readonly HashSet<SpawnPoint> _spawnPoints = new HashSet<SpawnPoint>();
 
 #region Registration
@@ -37,7 +36,7 @@ namespace pdxpartyparrot.Game.World
                 Debug.LogWarning("No spawn points registered on spawn, are there any in the scene?");
                 return null;
             }
-            return Random.GetRandomEntry(_spawnPoints);
+            return PartyParrotManager.Instance.Random.GetRandomEntry(_spawnPoints);
         }
     }
 }

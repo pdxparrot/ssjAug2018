@@ -2,6 +2,7 @@
 
 using JetBrains.Annotations;
 
+using pdxpartyparrot.Core;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
@@ -52,8 +53,6 @@ namespace pdxpartyparrot.ssjAug2018.World
         private readonly List<Mailbox> _suitableMailboxes = new List<Mailbox>();
 
         public int CompletedMailboxes => CurrentSetSize - _activeMailboxes.Count;
-
-        private readonly System.Random _random = new System.Random();
 
         private DebugMenuNode _debugMenuNode;
 
@@ -109,7 +108,7 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void Initialize()
         {
-            Mailbox mailbox = _random.GetRandomEntry(_mailboxes);
+            Mailbox mailbox = PartyParrotManager.Instance.Random.GetRandomEntry(_mailboxes);
 
             Vector3 seedPosition = Vector3.zero;
             if(null != mailbox) {
@@ -143,9 +142,9 @@ namespace pdxpartyparrot.ssjAug2018.World
                 List<Mailbox> foundBoxes = GetValidMailboxesInRange(_seedBox.transform.position, _mailboxData.SetMinRange, _mailboxData.SetMaxRange);
 
                 // Select & activate the rest of the required boxes
-                int setSize = _random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);     // NOTE: not SetCountMax - 1 because we spawend the seed already
+                int setSize = PartyParrotManager.Instance.Random.Next(_mailboxData.SetCountMin, _mailboxData.SetCountMax);     // NOTE: not SetCountMax - 1 because we spawend the seed already
                 while(setSize > 0 && foundBoxes.Count > 0) {
-                    Mailbox box = _random.RemoveRandomEntry(foundBoxes);
+                    Mailbox box = PartyParrotManager.Instance.Random.RemoveRandomEntry(foundBoxes);
                     SpawnMailbox(box);
                     setSize--;
                 }
@@ -163,9 +162,9 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             if(foundBoxes.Count < 1) {
                 Debug.LogWarning("Using random mailbox seed, consider resizing the seed range!");
-                return _random.GetRandomEntry(_mailboxes);
+                return PartyParrotManager.Instance.Random.GetRandomEntry(_mailboxes);
             }
-            return _random.GetRandomEntry(foundBoxes);
+            return PartyParrotManager.Instance.Random.GetRandomEntry(foundBoxes);
         }
 
         private List<Mailbox> GetValidMailboxesInRange(Vector3 origin, float minimum, float maximum)
@@ -189,7 +188,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Server]
         private void SpawnMailbox(Mailbox mailbox)
         {
-            int letterCount = _random.Next(1, _mailboxData.MaxLettersPerBox + 1);
+            int letterCount = PartyParrotManager.Instance.Random.Next(1, _mailboxData.MaxLettersPerBox + 1);
 
             mailbox.ActivateMailbox(letterCount);
             NetworkServer.Spawn(mailbox.gameObject);

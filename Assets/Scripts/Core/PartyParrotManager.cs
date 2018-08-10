@@ -72,6 +72,8 @@ namespace pdxpartyparrot.Core
         public LayerMask UILayer => _uiLayer;
 #endregion
 
+        public System.Random Random { get; } = new System.Random();
+
 #region Unity Lifecycle
         private void Awake()
         {

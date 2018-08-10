@@ -22,11 +22,34 @@ namespace pdxpartyparrot.Core.Tween
 
         public bool ResetOnEnable { get { return _resetOnEnable; } set { _resetOnEnable = value; } }
 
+#region Time Scale
+        [SerializeField]
+        private float _timeScale = 1.0f;
+
+        [SerializeField]
+        private bool _useRandomTimeScale;
+
+        [SerializeField]
+        private float _randomTimeScaleMin = 1.0f;
+
+        [SerializeField]
+        private float _randomTimeScaleMax = 1.0f;
+#endregion
+
 #region Duration
         [SerializeField]
         private float _duration = 1.0f;
 
         protected float Duration => _duration;
+
+        [SerializeField]
+        private bool _useRandomDuration;
+
+        [SerializeField]
+        private float _randomDurationMin = 1.0f;
+
+        [SerializeField]
+        private float _randomDurationMax = 1.0f;
 #endregion
 
 #region Looping
@@ -54,6 +77,14 @@ namespace pdxpartyparrot.Core.Tween
         private float _delay = 0.0f;
 #endregion
 
+#region From / Relative
+        [SerializeField]
+        private bool _isFrom = false;
+
+        [SerializeField]
+        private bool _isRelative = false;
+#endregion
+
         [SerializeField]
         [ReadOnly]
         private bool _firstRun = true;
@@ -66,6 +97,9 @@ namespace pdxpartyparrot.Core.Tween
 #region Unity Lifecycle
         protected virtual void Awake()
         {
+            InitDuration();
+            InitTimeScale();
+
             if(PlayOnAwake) {
                 Play();
             }
@@ -80,18 +114,48 @@ namespace pdxpartyparrot.Core.Tween
         }
 #endregion
 
+        private void InitDuration()
+        {
+            if(!_useRandomDuration) {
+                return;
+            }
+            _duration = PartyParrotManager.Instance.Random.NextSingle(_randomDurationMin, _randomDurationMax);
+        }
+
+        private void InitTimeScale()
+        {
+            if(!_useRandomTimeScale) {
+                return;
+            }
+            _timeScale = PartyParrotManager.Instance.Random.NextSingle(_randomTimeScaleMin, _randomTimeScaleMax);
+        }
+
         public virtual void Reset()
         {
             Kill();
+
+            InitDuration();
+            InitTimeScale();
         }
 
         public Tweener Play()
         {
-            _tweener = CreateTweener()
-                .SetEase(_ease)
+            _tweener = CreateTweener();
+            if(null == _tweener) {
+                return null;
+            }
+            _tweener.timeScale = _timeScale;
+
+            _tweener.SetEase(_ease)
                 .SetDelay(_firstRun ? (_firstRunDelay + _delay) : _delay)
                 .SetLoops(_loops, _loopType)
                 .SetRecyclable(true);
+
+            if(_isFrom) {
+                _tweener.From(_isRelative);
+            } else {
+                _tweener.SetRelative(_isRelative);
+            }
 
             _firstRun = false;
 
