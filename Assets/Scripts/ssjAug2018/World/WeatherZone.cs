@@ -5,17 +5,10 @@ namespace pdxpartyparrot.ssjAug2018.World
     [RequireComponent(typeof(BoxCollider))]
     public sealed class WeatherZone : MonoBehaviour
     {
-        public enum ZoneType
-        {
-            None,
-            Snow,
-			LightRain
-        }
-
         [SerializeField]
-        private ZoneType _zoneType = ZoneType.None;
+        private string _zoneType;
 
-        public ZoneType WeatherZoneType => _zoneType;
+        public string WeatherZoneType => _zoneType;
 
         private BoxCollider _collider;
 

@@ -129,6 +129,8 @@ GameObject:
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114438805701182994}
   - component: {fileID: 114416925496739310}
+  - component: {fileID: 114002271618550520}
+  - component: {fileID: 114237565309612032}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -837,6 +839,19 @@ Animator:
   m_HasTransformHierarchy: 0
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114002271618550520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 288e88e062d10c04fa9348fca342baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _zoneType: snow
+  _vfx: {fileID: 198393406761613632}
 --- !u!114 &114005285931988784
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -864,6 +879,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canThrowMail: 0
   _canThrowSnowball: 0
+--- !u!114 &114237565309612032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 288e88e062d10c04fa9348fca342baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _zoneType: light_rain
+  _vfx: {fileID: 198174834326148054}
 --- !u!114 &114292790582812294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -915,7 +943,6 @@ MonoBehaviour:
   _currentLetterCount: 0
   _score: 0
   _isDead: 0
-  _snowVFX: {fileID: 198393406761613632}
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1

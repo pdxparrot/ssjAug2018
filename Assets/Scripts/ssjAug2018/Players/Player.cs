@@ -69,6 +69,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [Space(10)]
 
 #region Dead
+        [Header("Dead")]
+
         [SerializeField]
         [ReadOnly]
         [SyncVar]
@@ -82,15 +84,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public Timer _respawnTimer;
 
         public bool IsAwaitingRespawn => IsDead && _respawnTimer.SecondsRemaining > 0.0f;
-#endregion
-
-        [Space(10)]
-
-#region VFX
-        [Header("VFX")]
-
-        [SerializeField]
-        private ParticleSystem _snowVFX;
 #endregion
 
         public FollowTarget FollowTarget { get; private set; }
@@ -133,11 +126,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             PlayerManager.Instance.Register(this);
         }
 
-        private void Start()
-        {
-            ShowSnowVFX(false);
-        }
-
         private void Update()
         {
             float dt = Time.deltaTime;
@@ -164,13 +152,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void OnTriggerEnter(Collider other)
         {
             CheckMailboxTrigger(other.gameObject);
-
-            CheckVFXTrigger(other.gameObject, true);
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            CheckVFXTrigger(other.gameObject, false);
         }
 #endregion
 
@@ -219,36 +200,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _currentLetterCount -= consumed;
             CheckReload();
         }
-
-#region VFX
-        private void ShowSnowVFX(bool show)
-        {
-            Debug.Log($"Show snow VFX: {show}");
-
-            if(show) {
-                _snowVFX.Play();
-            } else {
-                _snowVFX.Stop();
-            }
-        }
-
-        private void CheckVFXTrigger(GameObject go, bool enter)
-        {
-            WeatherZone weather = go.GetComponent<WeatherZone>();
-            if(null == weather) {
-                return;
-            }
-
-            switch(weather.WeatherZoneType)
-            {
-            case WeatherZone.ZoneType.None:
-                break;
-            case WeatherZone.ZoneType.Snow:
-                ShowSnowVFX(enter);
-                break;
-            }
-        }
-#endregion
 
         [Server]
         private void CheckReload()
