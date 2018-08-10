@@ -17,7 +17,7 @@ namespace pdxpartyparrot.Game.Menu
         private Core.UI.Button _initialSelection;
 
 #region Unity Lifecycle
-        private void Update()
+        protected virtual void Update()
         {
             if(null == InputManager.Instance.EventSystem.currentSelectedGameObject || (!InputManager.Instance.EventSystem.currentSelectedGameObject.activeInHierarchy && _initialSelection.gameObject.activeInHierarchy)) {
                 _initialSelection.Select();

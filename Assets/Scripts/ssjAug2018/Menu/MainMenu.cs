@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.Core.UI;
+﻿using pdxpartyparrot.Core.DebugMenu;
+using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Game.Menu;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.GameState;
@@ -15,11 +16,7 @@ namespace pdxpartyparrot.ssjAug2018.Menu
         [SerializeField]
         private MultiplayerMenu _multiplayerPanel;
 
-        public NetworkConnect ConnectGameState { private get; set; }
-
-        public Credits CreditsGameState { private get; set; }
-
-        public GameState.Game GameState { private get; set; }
+        private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
         private void Awake()
@@ -29,15 +26,20 @@ namespace pdxpartyparrot.ssjAug2018.Menu
             }
 
             _multiplayerPanel.gameObject.SetActive(false);
+
+            InitDebugMenu();
+        }
+
+        private void OnDestroy()
+        {
+            DestroyDebugMenu();
         }
 #endregion
 
 #region Event Handlers
         public void OnSinglePlayer()
         {
-            GameStateManager.Instance.PushSubState(ConnectGameState, state => {
-                state.Initialize(NetworkConnect.ConnectType.SinglePlayer, GameState);
-            });
+            GameStateManager.Instance.StartSinglePlayer();
         }
 
         public void OnMultiplayer()
@@ -47,7 +49,7 @@ namespace pdxpartyparrot.ssjAug2018.Menu
 
         public void OnCredits()
         {
-            GameStateManager.Instance.PushSubState(CreditsGameState);
+            GameStateManager.Instance.PushSubState(GameStateManager.Instance.CreditsStatePrefab);
         }
 
         public void OnQuitGame()
@@ -55,5 +57,33 @@ namespace pdxpartyparrot.ssjAug2018.Menu
             Application.Quit();
         }
 #endregion
+
+        private void InitDebugMenu()
+        {
+// TODO: this should change depending on if we're hosting/joining or whatever
+// so that we don't get into a fucked up state
+            _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Multiplayer Menu");
+            _debugMenuNode.RenderContentsAction = () => {
+                string text = "Host";
+                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                    GameStateManager.Instance.StartHost();
+                    return;
+                }
+
+                text = "Join";
+                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                    GameStateManager.Instance.StartJoin();
+                    return;
+                }
+            };
+        }
+
+        private void DestroyDebugMenu()
+        {
+            if(DebugMenuManager.HasInstance) {
+                DebugMenuManager.Instance.RemoveNode(_debugMenuNode);
+            }
+            _debugMenuNode = null;
+        }
     }
 }

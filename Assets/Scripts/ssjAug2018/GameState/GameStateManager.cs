@@ -22,10 +22,30 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public GameData GameData => _gameData;
 
+        [Space(10)]
+
+#region Game States
+        [Header("Game States")]
+
         [SerializeField]
         private NetworkConnect _networkConnectStatePrefab;
 
-        public NetworkConnect NetworkConnectStatePrefab => _networkConnectStatePrefab;
+        [SerializeField]
+        private Credits _creditsStatePrefab;
+
+        public Credits CreditsStatePrefab => _creditsStatePrefab;
+
+        [SerializeField]
+        private Game _gameStatePrefab;
+
+        [SerializeField]
+        private SceneTester _sceneTesterStatePrefab;
+#endregion
+
+        [Space(10)]
+
+#region Network Managers
+        [Header("Network Managers")]
 
         [SerializeField]
         private GameManager _gameManagerPrefab;
@@ -41,9 +61,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private MailboxManager _mailboxManagerPrefab;
 
         private MailboxManager _mailboxManager;
-
-        [SerializeField]
-        private SceneTester _sceneTesterStatePrefab;
+#endregion
 
         [CanBeNull]
         public NetworkClient NetworkClient { get; set; }
@@ -78,6 +96,27 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         protected override void UpdateLoadingScreen(float percent, string text)
         {
             LoadingManager.Instance.UpdateLoadingScreen(percent, text);
+        }
+
+        public void StartSinglePlayer()
+        {
+            PushSubState(_networkConnectStatePrefab, state => {
+                state.Initialize(NetworkConnect.ConnectType.SinglePlayer, _gameStatePrefab);
+            });
+        }
+
+        public void StartHost()
+        {
+            PushSubState(_networkConnectStatePrefab, state => {
+                state.Initialize(NetworkConnect.ConnectType.Server, _gameStatePrefab);
+            });
+        }
+
+        public void StartJoin()
+        {
+            PushSubState(_networkConnectStatePrefab, state => {
+                state.Initialize(NetworkConnect.ConnectType.Client, _gameStatePrefab);
+            });
         }
 
         public void ShutdownNetwork()
@@ -140,7 +179,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
                 foreach(string sceneName in _sceneTesterStatePrefab.TestScenes) {
                     string text = $"Load Test Scene {sceneName}";
                     if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
-                        PushSubState(NetworkConnectStatePrefab, connectState => {
+                        PushSubState(_networkConnectStatePrefab, connectState => {
                             connectState.Initialize(NetworkConnect.ConnectType.SinglePlayer, _sceneTesterStatePrefab, state => {
                                 SceneTester sceneTester = (SceneTester)state;
                                 sceneTester.SetScene(sceneName);
