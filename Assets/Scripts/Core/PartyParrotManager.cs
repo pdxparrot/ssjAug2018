@@ -8,6 +8,8 @@ namespace pdxpartyparrot.Core
 {
     public sealed class PartyParrotManager : SingletonBehavior<PartyParrotManager>
     {
+        private const string ConfigFileName = "config.json";
+
 #region Events
         public event EventHandler<EventArgs> PauseEvent;
 #endregion
@@ -72,6 +74,8 @@ namespace pdxpartyparrot.Core
         public LayerMask UILayer => _uiLayer;
 #endregion
 
+        public Config Config { get; } = new Config();
+
         public System.Random Random { get; } = new System.Random();
 
 #region Unity Lifecycle
@@ -80,6 +84,8 @@ namespace pdxpartyparrot.Core
             QualitySettings.vSyncCount = 0;
 
             Debug.Log($"Gravity: {Physics.gravity}");
+
+            Config.Load(Application.streamingAssetsPath, ConfigFileName);
         }
 #endregion
 

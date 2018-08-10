@@ -1,6 +1,5 @@
 ﻿using System;
 
-using pdxpartyparrot.Core.Data;
 using pdxpartyparrot.Core.DebugMenu;
 
 using UnityEngine;
@@ -28,11 +27,6 @@ namespace pdxpartyparrot.Core.Network
         public static NetworkManager Instance => (NetworkManager)singleton;
 
         public static bool HasInstance => null != Instance;
-
-        [SerializeField]
-        private NetworkManagerData _data;
-
-        public NetworkManagerData Data => _data;
 
         [SerializeField]
         private bool _enableCallbackLogging = true;
@@ -71,7 +65,7 @@ namespace pdxpartyparrot.Core.Network
             _networkDiscovery = GetComponent<NetworkDiscovery>();
             _networkDiscovery.useNetworkManager = true;
             _networkDiscovery.showGUI = false;
-            _networkDiscovery.enabled = Data.EnableDiscovery;
+            _networkDiscovery.enabled = PartyParrotManager.Instance.Config.Network.Discovery.Enable;
 
             autoCreatePlayer = false;
 
@@ -80,15 +74,21 @@ namespace pdxpartyparrot.Core.Network
 #endregion
 
 #region Discovery
+        private bool InitDiscovery()
+        {
+            _networkDiscovery.broadcastPort = PartyParrotManager.Instance.Config.Network.Discovery.Port;
+            return _networkDiscovery.Initialize();
+        }
+
         public bool DiscoverServer()
         {
-            if(!Data.EnableDiscovery) {
+            if(!_networkDiscovery.enabled) {
                 return true;
             }
 
             Debug.Log("[NetworkManager]: Starting server discovery");
 
-            if(!_networkDiscovery.Initialize()) {
+            if(!InitDiscovery()) {
                 return false;
             }
 
@@ -97,13 +97,13 @@ namespace pdxpartyparrot.Core.Network
 
         public bool DiscoverClient()
         {
-            if(!Data.EnableDiscovery) {
+            if(!_networkDiscovery.enabled) {
                 return true;
             }
 
             Debug.Log("[NetworkManager]: Starting client discovery");
 
-            if(!_networkDiscovery.Initialize()) {
+            if(!InitDiscovery()) {
                 return false;
             }
 
@@ -112,6 +112,10 @@ namespace pdxpartyparrot.Core.Network
 
         public void DiscoverStop()
         {
+            if(!_networkDiscovery.running) {
+                return;
+            }
+
             Debug.Log("[NetworkManager]: Stopping discovery");
 
             _networkDiscovery.StopBroadcast();
@@ -120,13 +124,20 @@ namespace pdxpartyparrot.Core.Network
 
         public override NetworkClient StartHost()
         {
-            maxConnections = Data.MaxNetworkPlayers;
+            maxConnections = PartyParrotManager.Instance.Config.Network.Server.MaxConnections;
             return base.StartHost();
         }
 
         public new bool StartServer()
         {
-            maxConnections = Data.MaxNetworkPlayers;
+            maxConnections = PartyParrotManager.Instance.Config.Network.Server.MaxConnections;
+            networkAddress = PartyParrotManager.Instance.Config.Network.Server.NetworkAddress;
+            networkPort = PartyParrotManager.Instance.Config.Network.Server.Port;
+
+            if(PartyParrotManager.Instance.Config.Network.Server.BindIp()) {
+                serverBindAddress = PartyParrotManager.Instance.Config.Network.Server.NetworkAddress;
+                serverBindToIP = true;
+            }
             return base.StartServer();
         }
 

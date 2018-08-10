@@ -162,5 +162,4 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  _data: {fileID: 11400000, guid: 433491cb037638b4da99f8b89b87ffe7, type: 2}
   _enableCallbackLogging: 1
