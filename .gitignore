@@ -165,6 +165,8 @@ Assets/Plugins/WMSplatmapScript.meta
 /Assets/Plugins/TerrainStitcher.meta
 Assets/ProBuilder Data/ProBuilderPreferences.asset
 Assets/ProBuilder Data/ProBuilderPreferences.asset.meta
+Assets/StreamingAssets/config.json
+Assets/StreamingAssets/config.json.meta
 
 *.swp
 *.swo
