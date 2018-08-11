@@ -77,11 +77,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             base.OnDestroy();
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            PlayerController.HandleCollision(collision);
-        }
-
         private void OnTriggerEnter(Collider other)
         {
             if(NetworkServer.active) {
