@@ -26,12 +26,26 @@ namespace pdxpartyparrot.Game.World
         }
 #endregion
 
-        public virtual void Spawn(IActor actor)
+        private void InitActor(Actor actor)
         {
             actor.GameObject.transform.position = transform.position;
             actor.GameObject.transform.rotation = transform.rotation;
 
             actor.GameObject.SetActive(true);
+        }
+
+        public virtual void Spawn(Actor actor)
+        {
+            InitActor(actor);
+
+            actor.OnSpawn();
+        }
+
+        public virtual void ReSpawn(Actor actor)
+        {
+            InitActor(actor);
+
+            actor.OnReSpawn();
         }
     }
 }

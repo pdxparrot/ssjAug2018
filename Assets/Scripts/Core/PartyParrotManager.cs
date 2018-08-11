@@ -3,6 +3,7 @@
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace pdxpartyparrot.Core
 {
@@ -73,6 +74,8 @@ namespace pdxpartyparrot.Core
 
         public LayerMask UILayer => _uiLayer;
 #endregion
+
+        public bool IsHeadless => GraphicsDeviceType.Null == SystemInfo.graphicsDeviceType;
 
         public Config Config { get; } = new Config();
 

@@ -821,7 +821,13 @@ MonoBehaviour:
     type: 2}
   _uiManagerPrefab: {fileID: 114116840764165926, guid: 9c45accca2596d840afe99206844ed68,
     type: 2}
+  _gameManagerPrefab: {fileID: 114275746360012258, guid: 579f77f5b4ea73a40b6562e42d599e19,
+    type: 2}
+  _playerManagerPrefab: {fileID: 114654468024192066, guid: b64b73bd6105322458c84b1d2ab2c62c,
+    type: 2}
   _itemManagerPrefab: {fileID: 114018978608229330, guid: 639ddd9d6d0a158439d33473f75893d2,
+    type: 2}
+  _mailboxManagerPrefab: {fileID: 114516698971545230, guid: 9d4632f7b3304894b864c8b12ed2fa80,
     type: 2}
 --- !u!1 &2071533183
 GameObject:

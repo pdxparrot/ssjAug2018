@@ -30,7 +30,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
 
             if(_deadly) {
-                player.Kill();
+                player.NetworkPlayer.Kill();
             }
         }
     }

@@ -3,3 +3,7 @@
 * http://pigsquad.com/summerslowjams
 * https://itch.io/jam/ssjlocationbased
 * https://luminoth.itch.io/air-yeti
+
+# Notes
+
+* Player NetworkIdentity must have Local Player Authority checked

@@ -1,38 +1,85 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+
+using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 
 namespace pdxpartyparrot.Core.Actors
 {
-    public interface IActor
+    public abstract class Actor : MonoBehaviour
     {
-        int Id { get; }
+        [SerializeField]
+        [ReadOnly]
+        private int _id = -1;
 
-        GameObject GameObject { get; }
+        public int Id => _id;
 
-        string Name { get; }
+        public GameObject GameObject => gameObject;
 
-        GameObject Model { get; }
+        public string Name => name;
 
-        Collider Collider { get; }
+        [SerializeField]
+        private Collider _collider;
 
-        float Height { get; }
+        public Collider Collider => _collider;
 
-        float Radius { get; }
+        public abstract float Height { get; }
 
-        Animator Animator { get; }
+        public abstract float Radius { get; }
 
-        ActorController Controller { get; }
+        [SerializeField]
+        private GameObject _model;
+
+        public GameObject Model => _model;
+
+        [SerializeField]
+        private ActorController _controller;
+
+        public ActorController Controller => _controller;
+
+        [SerializeField]
+        private Animator _animator;
+
+        public Animator Animator => _animator;
+
+        public abstract bool IsLocalActor { get; }
 
         [CanBeNull]
-        Viewer Viewer { get; }
+        public abstract Viewer Viewer { get; }
 
-        void Initialize(int id);
+#region Unity Lifecycle
+        protected virtual void Awake()
+        {
+            PartyParrotManager.Instance.PauseEvent += PauseEventHandler;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if(PartyParrotManager.HasInstance) {
+                PartyParrotManager.Instance.PauseEvent -= PauseEventHandler;
+            }
+        }
+#endregion
+
+        public virtual void Initialize(int id)
+        {
+            _id = id;
+        }
 
 #region Callbacks
-        void OnSpawn();
+        public abstract void OnSpawn();
+
+        public abstract void OnReSpawn();
+#endregion
+
+#region Event Handlers
+        private void PauseEventHandler(object sender, EventArgs args)
+        {
+            Animator.enabled = !PartyParrotManager.Instance.IsPaused;
+        }
 #endregion
     }
 }

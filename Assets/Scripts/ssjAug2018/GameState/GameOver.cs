@@ -1,5 +1,4 @@
-﻿using pdxpartyparrot.Core.Actors;
-using pdxpartyparrot.Core.Util;
+﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.UI;
 
@@ -18,9 +17,8 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public void Initialize()
         {
-            foreach(IActor actor in PlayerManager.Instance.Actors) {
-                Player player = actor as Player;
-                HighScoreManager.Instance.AddHighScore($"{actor.Id}", null == player ? 0 : player.Score);
+            foreach(Player player in PlayerManager.Instance.Actors) {
+                HighScoreManager.Instance.AddHighScore($"{player.Id}", player.NetworkPlayer.Score);
             }
         }
 

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+
+using pdxpartyparrot.Core.Util;
 
 namespace pdxpartyparrot.Core.Network
 {
@@ -8,10 +11,16 @@ namespace pdxpartyparrot.Core.Network
 
         public string Data { get; }
 
-        public ReceivedBroadcastEventArgs(string fromAddress, string data)
+        private readonly IPEndPoint _endPoint;
+
+        public IPEndPoint EndPoint => _endPoint;
+
+        public ReceivedBroadcastEventArgs(string fromAddress, string data, string endPoint)
         {
             FromAddress = fromAddress;
             Data = data;
+
+            IPEndPointExtensions.TryParseWithPort(endPoint, out _endPoint);
         }
     }
 }

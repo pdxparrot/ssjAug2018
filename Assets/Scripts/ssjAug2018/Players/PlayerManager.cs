@@ -5,18 +5,13 @@ using pdxpartyparrot.Game.World;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    public sealed class PlayerManager : NetworkActorManager
+    public sealed class PlayerManager : ActorManager<Player, PlayerManager>
     {
-#region NetworkSingleton
-        public static PlayerManager Instance { get; private set; }
-
-        public static bool HasInstance => null != Instance;
-#endregion
-
 #region Data
         [SerializeField]
         private PlayerData _playerData;
@@ -36,69 +31,66 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Unity Lifecycle
         private void Awake()
         {
-            if(HasInstance) {
-                Debug.LogError($"[NetworkSingleton] Instance already created: {Instance.gameObject.name}");
-                return;
-            }
-
-            Instance = this;
-
             _playerContainer = new GameObject("Players");
+
+            Core.Network.NetworkManager.Instance.RegisterPlayerPrefab(_playerPrefab.NetworkPlayer);
 
             Core.Network.NetworkManager.Instance.ServerAddPlayerEvent += ServerAddPlayerEventHandler;
 
             InitDebugMenu();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
+
+                Core.Network.NetworkManager.Instance.UnregisterPlayerPrefab();
+            }
+
             Destroy(_playerContainer);
             _playerContainer = null;
 
-            if(Core.Network.NetworkManager.HasInstance) {
-                Core.Network.NetworkManager.Instance.ServerAddPlayerEvent -= ServerAddPlayerEventHandler;
-            }
-
             DestroyDebugMenu();
 
-            Instance = null;
+            base.OnDestroy();
         }
 #endregion
 
-        [Server]
+        //[Server]
         private void SpawnPlayer(NetworkConnection conn, short controllerId)
         {
+            Assert.IsTrue(NetworkServer.active);
+
             SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();
             if(null == spawnPoint) {
+                Debug.LogError("Failed to get player spawnpoint!");
                 return;
             }
 
-            Player player = Instantiate(_playerPrefab, _playerContainer.transform);
+            NetworkPlayer player = Core.Network.NetworkManager.Instance.SpawnPlayer<NetworkPlayer>(controllerId, conn, _playerContainer.transform);
             if(null == player) {
                 Debug.LogError("Failed to spawn player!");
                 return;
             }
-            player.name = $"Player {controllerId}";
 
-            spawnPoint.Spawn(player);
-
-            NetworkServer.AddPlayerForConnection(conn, player.gameObject, controllerId);
-
-            player.OnSpawn();
+            spawnPoint.Spawn(player.Player);
         }
 
-        [Server]
+        //[Server]
         public void RespawnPlayer(Player player)
         {
+            Assert.IsTrue(NetworkServer.active);
+
             Debug.Log($"Respawning player {player.name}");
 
             SpawnPoint spawnPoint = SpawnManager.Instance.GetSpawnPoint();
             if(null == spawnPoint) {
+                Debug.LogError("Failed to get player spawnpoint!");
                 return;
             }
 
-            spawnPoint.Spawn(player);
-            player.OnRespawn();
+            spawnPoint.ReSpawn(player);
         }
 
 #region Event Handlers
@@ -113,8 +105,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.PlayerManager");
             _debugMenuNode.RenderContentsAction = () => {
                 GUILayout.BeginVertical("Players", GUI.skin.box);
-                    foreach(IActor actor in Actors) {
-                        Player player = (Player)actor;
+                    foreach(Player player in Actors) {
                         GUILayout.Label($"{player.name} {player.transform.position}");
                     }
                 GUILayout.EndVertical();

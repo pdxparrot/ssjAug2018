@@ -65,9 +65,9 @@ namespace pdxpartyparrot.ssjAug2018.UI
         {
             _timer.text = $"{GameManager.Instance.RemainingMinutesPart:00}:{GameManager.Instance.RemainingSecondsPart:00}";
 
-            _letterCounter.text = $"{_owner.CurrentLetterCount} / {PlayerManager.Instance.PlayerData.MaxLetters}";
+            _letterCounter.text = $"{_owner.NetworkPlayer.CurrentLetterCount} / {PlayerManager.Instance.PlayerData.MaxLetters}";
             _mailboxCounter.text = $"{MailboxManager.Instance.CompletedMailboxes} / {MailboxManager.Instance.CurrentSetSize}";
-            _scoreText.text = $"{_owner.Score:000}";
+            _scoreText.text = $"{_owner.NetworkPlayer.Score:000}";
 
             _thrusterFill.fillAmount = null == _owner.PlayerController.HoverComponent ? 0.0f : _owner.PlayerController.HoverComponent.RemainingPercent;
         }

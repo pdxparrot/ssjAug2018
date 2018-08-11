@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4824004772577762}
-  - component: {fileID: 114195926388236472}
   - component: {fileID: 114516698971545230}
   m_Layer: 0
   m_Name: MailboxManager
@@ -41,38 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114195926388236472
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1867098054582258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 157
-    i1: 70
-    i2: 50
-    i3: 247
-    i4: 179
-    i5: 48
-    i6: 72
-    i7: 148
-    i8: 184
-    i9: 100
-    i10: 200
-    i11: 177
-    i12: 46
-    i13: 210
-    i14: 250
-    i15: 128
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &114516698971545230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,8 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06159db9cc499024abfef2c5e7079bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeMailboxes: 0
   _mailboxData: {fileID: 11400000, guid: dea3bbb1d7cda704197ed2fb94725f20, type: 2}
-  _mailboxLayer:
-    serializedVersion: 2
-    m_Bits: 4096
+  _seedPosition: {x: 0, y: 0, z: 0}
+  _seedBox: {fileID: 0}
+  _currentSetSize: 0

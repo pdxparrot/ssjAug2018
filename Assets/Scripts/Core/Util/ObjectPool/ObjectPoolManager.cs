@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
 namespace pdxpartyparrot.Core.Util.ObjectPool
@@ -12,30 +13,32 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
     {
         private sealed class ObjectPool
         {
-            public int Size { get; private set; }
+            public int Size { get; }
 
-            public string Tag { get; private set; }
+            public string Tag { get; }
 
-            public bool IsNetwork { get; set; }
+            public bool IsNetwork { get; }
 
             public bool AllowExpand { get; set; } = true;
 
-            private readonly PooledObject _prefab;
+            public PooledObject Prefab { get; }
 
             private readonly Queue<PooledObject> _pooledObjects;
 
             private GameObject _container;
 
-            public ObjectPool(GameObject parent, string tag, PooledObject prefab, int size)
+            public ObjectPool(GameObject parent, string tag, PooledObject prefab, int size, bool isNetwork)
             {
                 Tag = tag;
-                _prefab = prefab;
+                Prefab = prefab;
                 Size = size;
+                IsNetwork = isNetwork;
 
                 _container = new GameObject(Tag);
                 _container.transform.SetParent(parent.transform);
 
                 _pooledObjects = new Queue<PooledObject>(Size);
+
                 PopulatePool();
             }
 
@@ -63,7 +66,7 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
                 pooledObject.gameObject.SetActive(activate);
 
                 if(IsNetwork) {
-                    NetworkServer.Spawn(pooledObject.gameObject);
+                    Network.NetworkManager.Instance.SpawnNetworkObject(pooledObject.GetComponent<NetworkBehaviour>());
                 }
 
                 return pooledObject;
@@ -72,7 +75,7 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             public void Recycle(PooledObject pooledObject)
             {
                 if(IsNetwork) {
-                    NetworkServer.UnSpawn(pooledObject.gameObject);
+                    Network.NetworkManager.Instance.UnSpawnNetworkObject(pooledObject.GetComponent<NetworkBehaviour>());
                 }
 
                 // NOTE: de-activate and then repart to avoid hierarchy rebuild
@@ -84,8 +87,10 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
 
             private void PopulatePool()
             {
+                Assert.IsTrue(!IsNetwork || NetworkServer.active);
+
                 for(int i=0; i<Size; ++i) {
-                    PooledObject pooledObject = Instantiate(_prefab);
+                    PooledObject pooledObject = Instantiate(Prefab);
                     pooledObject.Tag = Tag;
                     Recycle(pooledObject);
                 }
@@ -118,39 +123,33 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
 
         public void InitializePool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
         {
-            Debug.Log($"Initializing object pool of size {size} for {poolTag} (allowExpand={allowExpand})");
-            InitializePoolInternal(poolTag, prefab, size, allowExpand);
-        }
-
-        public void InitializeNetworkPool(string poolTag, PooledObject prefab, int size, bool allowExpand=true)
-        {
-            Debug.Log($"Initializing network object pool of size {size} for {poolTag} (allowExpand={allowExpand})");
-            ObjectPool objectPool = InitializePoolInternal(poolTag, prefab, size, allowExpand);
-            if(null != objectPool) {
-                objectPool.IsNetwork = true;
-            }
-        }
-
-        [CanBeNull]
-        private ObjectPool InitializePoolInternal(string poolTag, PooledObject prefab, int size, bool allowExpand)
-        {
             if(null == prefab) {
                 Debug.LogError("Attempt to pool non-PooledObject!");
-                return null;
+                return;
             }
+
+            NetworkBehaviour networkBehaviour = prefab.GetComponent<NetworkBehaviour>();
+            if(null != networkBehaviour) {
+                Network.NetworkManager.Instance.RegisterNetworkPrefab(networkBehaviour);
+
+                // network pools are server-only
+                if(!NetworkServer.active) {
+                    return;
+                }
+            }
+
+            Debug.Log($"Initializing {(null == networkBehaviour ? "local" : "network")} object pool of size {size} for {poolTag} (allowExpand={allowExpand})");
 
             ObjectPool objectPool = _objectPools.GetOrDefault(poolTag);
             if(null != objectPool) {
-                return objectPool;
+                return;
             }
 
-            objectPool = new ObjectPool(_poolContainer, poolTag, prefab, size)
+            objectPool = new ObjectPool(_poolContainer, poolTag, prefab, size, null != networkBehaviour)
             {
                 AllowExpand = allowExpand
             };
             _objectPools.Add(poolTag, objectPool);
-
-            return objectPool;
         }
 
         public void DestroyPool(string poolTag)
@@ -158,6 +157,10 @@ namespace pdxpartyparrot.Core.Util.ObjectPool
             ObjectPool objectPool = _objectPools.GetOrDefault(poolTag);
             if(null == objectPool) {
                 return;
+            }
+
+            if(objectPool.IsNetwork) {
+                Network.NetworkManager.Instance.UnregisterNetworkPrefab(objectPool.Prefab.GetComponent<NetworkBehaviour>());
             }
 
             _objectPools.Remove(poolTag);

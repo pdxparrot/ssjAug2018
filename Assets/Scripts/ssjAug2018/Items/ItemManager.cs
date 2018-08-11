@@ -30,7 +30,7 @@ namespace pdxpartyparrot.ssjAug2018.Items
 
         public void PopulateItemPools()
         {
-            ObjectPoolManager.Instance.InitializeNetworkPool(MailItemPool, ItemData.MailPrefab.GetComponent<PooledObject>(), PlayerManager.Instance.PlayerData.MaxLetters);
+            ObjectPoolManager.Instance.InitializePool(MailItemPool, ItemData.MailPrefab.GetComponent<PooledObject>(), PlayerManager.Instance.PlayerData.MaxLetters);
         }
 
         public void FreeItemPools()

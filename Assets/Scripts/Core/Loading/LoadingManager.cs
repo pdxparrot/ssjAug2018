@@ -67,6 +67,9 @@ namespace pdxpartyparrot.Core.Loading
             UpdateLoadingScreen(0.0f, "Creating managers...");
             yield return null;
 
+            PreCreateManagers();
+            yield return null;
+
             CreateManagers();
             yield return null;
 
@@ -83,21 +86,28 @@ namespace pdxpartyparrot.Core.Loading
             ShowLoadingScreen(false);
         }
 
-        protected virtual void CreateManagers()
+        private void PreCreateManagers()
         {
             // third party stuff
             DOTween.Init();
 
-            // these managers must come first, in this order
+            // core managers
             DebugMenuManager.CreateFromPrefab(_debugMenuManagerPrefab, ManagersContainer);
             PartyParrotManager.CreateFromPrefab(_engineManagerPrefab, ManagersContainer);
 
+            // TODO: for now this dude does stuff in Start() rather than Awake()
+            // someday when Awake() can be overriden, we can get rid of PreCreateManagers()
+            // and just do everything in CreateManagers()
+            Instantiate(_networkManagerPrefab, ManagersContainer.transform);
+        }
+
+        protected virtual void CreateManagers()
+        {
             TimeManager.Create(ManagersContainer);
             AudioManager.CreateFromPrefab(_audioManagerPrefab, ManagersContainer);
             ObjectPoolManager.CreateFromPrefab(_objectPoolManagerPrefab, ManagersContainer);
             ViewerManager.CreateFromPrefab(_viewerManagerPrefab, ManagersContainer);
             InputManager.CreateFromPrefab(_inputManagerPrefab, ManagersContainer);
-            Instantiate(_networkManagerPrefab, ManagersContainer.transform);
             SceneManager.CreateFromPrefab(_sceneManagerPrefab, ManagersContainer);
             TerrainManager.Create(ManagersContainer);
             ScriptingManager.Create(ManagersContainer);

@@ -1,7 +1,6 @@
 ﻿using System;
 
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace pdxpartyparrot.Core.Network
 {
@@ -15,7 +14,12 @@ namespace pdxpartyparrot.Core.Network
         {
             Debug.Log($"[NetworkDiscovery]: Broadcast from {fromAddress}: {data}");
 
-            ReceivedBroadcastEvent?.Invoke(this, new ReceivedBroadcastEventArgs(fromAddress, data));
+            int idx = data.IndexOf(":", StringComparison.Ordinal);
+            if(idx < 0 || idx >= data.Length - 1) {
+                return;
+            }
+
+            ReceivedBroadcastEvent?.Invoke(this, new ReceivedBroadcastEventArgs(fromAddress, data, data.Substring(idx + 1)));
         }
     }
 }

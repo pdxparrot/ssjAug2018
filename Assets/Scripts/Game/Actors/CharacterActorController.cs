@@ -88,22 +88,26 @@ namespace pdxpartyparrot.Game.Actors
             _components = GetComponents<CharacterActorControllerComponent>();
 
             InitRigidbody();
+
+            StartCoroutine(RaycastRoutine());
         }
 
         protected override void Update()
         {
             base.Update();
 
-            _isRunning = Driver.LastMoveAxes.sqrMagnitude >= ControllerData.RunThresholdSquared;
+            _isRunning = LastMoveAxes.sqrMagnitude >= ControllerData.RunThresholdSquared;
 
-            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.x) : 0.0f);
-            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(Driver.LastMoveAxes.y) : 0.0f);
+            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.x) : 0.0f);
+            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.y) : 0.0f);
 
             Owner.Animator.SetBool(ControllerData.FallingParam, IsFalling);
         }
 
-        protected virtual void FixedUpdate()
+        protected override void FixedUpdate()
         {
+            base.FixedUpdate();
+
             float dt = Time.fixedDeltaTime;
 
             _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
@@ -123,13 +127,6 @@ namespace pdxpartyparrot.Game.Actors
             Gizmos.DrawWireSphere(GroundCheckCenter, _groundCheckRadius);
         }
 #endregion
-
-        public override void Initialize(IActor actor)
-        {
-            base.Initialize(actor);
-
-            StartCoroutine(RaycastRoutine());
-        }
 
         private void InitRigidbody()
         {

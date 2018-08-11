@@ -19,7 +19,6 @@ namespace pdxpartyparrot.ssjAug2018.Items
     {
         [SerializeField]
         [ReadOnly]
-        //[SyncVar]
         private Timer _despawnTimer;
 
         private Rigidbody _rigidbody;
@@ -45,6 +44,10 @@ namespace pdxpartyparrot.ssjAug2018.Items
 
         private void Update()
         {
+            if(!NetworkServer.active) {
+                return;
+            }
+
             float dt = Time.deltaTime;
 
             _despawnTimer.Update(dt);

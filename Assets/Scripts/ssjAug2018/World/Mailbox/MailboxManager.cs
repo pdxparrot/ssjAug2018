@@ -9,20 +9,14 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Data;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
-    [RequireComponent(typeof(NetworkIdentity))]
-    public sealed class MailboxManager : NetworkSingletonBehavior
+    public sealed class MailboxManager : SingletonBehavior<MailboxManager>
     {
-#region NetworkSingleton
-        public static MailboxManager Instance { get; private set; }
-
-        public static bool HasInstance => null != Instance;
-#endregion
-
         [SerializeField]
         private MailboxData _mailboxData;
 
@@ -39,7 +33,6 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         [SerializeField]
         [ReadOnly]
-        [SyncVar]
         private int _currentSetSize;
 
         public int CurrentSetSize => _currentSetSize;
@@ -59,21 +52,14 @@ namespace pdxpartyparrot.ssjAug2018.World
 #region Unity Lifecycle
         private void Awake()
         {
-            if(HasInstance) {
-                Debug.LogError($"[NetworkSingleton] Instance already created: {Instance.gameObject.name}");
-                return;
-            }
-
-            Instance = this;
-
             InitDebugMenu();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             DestroyDebugMenu();
 
-            Instance = null;
+            base.OnDestroy();
         }
 
         private void OnDrawGizmos()
@@ -108,6 +94,10 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public void Initialize()
         {
+            if(!NetworkServer.active) {
+                return;
+            }
+
             Mailbox mailbox = PartyParrotManager.Instance.Random.GetRandomEntry(_mailboxes);
 
             Vector3 seedPosition = Vector3.zero;
@@ -117,9 +107,11 @@ namespace pdxpartyparrot.ssjAug2018.World
             ActivateMailboxGroup(seedPosition);
         }
 
-        [Server]
-        public void ActivateMailboxGroup(Vector3 seedPosition)
+        //[Server]
+        private void ActivateMailboxGroup(Vector3 seedPosition)
         {
+            Assert.IsTrue(NetworkServer.active);
+
             _seedPosition = seedPosition;
             Debug.Log($"Seeding mailboxes at {_seedPosition}");
 
@@ -185,9 +177,11 @@ namespace pdxpartyparrot.ssjAug2018.World
             return _suitableMailboxes;
         }
 
-        [Server]
+        //[Server]
         private void SpawnMailbox(Mailbox mailbox)
         {
+            Assert.IsTrue(NetworkServer.active);
+
             int letterCount = PartyParrotManager.Instance.Random.Next(1, _mailboxData.MaxLettersPerBox + 1);
 
             mailbox.ActivateMailbox(letterCount);
@@ -196,9 +190,11 @@ namespace pdxpartyparrot.ssjAug2018.World
             _activeMailboxes.Add(mailbox);
         }
 
-        [Server]
+        //[Server]
         public void MailboxCompleted(Mailbox mailbox)
         {
+            Assert.IsTrue(NetworkServer.active);
+
             NetworkServer.UnSpawn(mailbox.gameObject);
 
             _activeMailboxes.Remove(mailbox);
@@ -208,9 +204,12 @@ namespace pdxpartyparrot.ssjAug2018.World
             }
         }
 
-        [Command]
-        private void CmdCompleteAllMailboxes()
+        private void CompleteAllMailboxes()
         {
+            if(!NetworkServer.active) {
+                return;
+            }
+
             List<Mailbox> temp = new List<Mailbox>();
             temp.AddRange(_activeMailboxes);
 
@@ -223,22 +222,24 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.MailboxManager");
             _debugMenuNode.RenderContentsAction = () => {
-                string text = "Force Complete";
-                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
-                    CmdCompleteAllMailboxes();
-                }
-
-                GUILayout.Label($"Current seed position: {_seedPosition}");
-                if(null != _seedBox) {
-                    GUILayout.Label($"Current seed mailbox: {_seedBox.name} {_seedBox.transform.position}");
-                }
-                GUILayout.Label($"Current set size: {CurrentSetSize}");
-                GUILayout.BeginVertical("Active mailboxes", GUI.skin.box);
-                    foreach(Mailbox mailbox in _activeMailboxes) {
-                        GUILayout.Label($"{mailbox.name} {mailbox.transform.position}");
+                if(NetworkServer.active) {
+                    string text = "Force Complete";
+                    if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                        CompleteAllMailboxes();
                     }
-                GUILayout.EndVertical();
-                GUILayout.Label($"Completed mailboxes: {CompletedMailboxes}");
+
+                    GUILayout.Label($"Current seed position: {_seedPosition}");
+                    if(null != _seedBox) {
+                        GUILayout.Label($"Current seed mailbox: {_seedBox.name} {_seedBox.transform.position}");
+                    }
+                    GUILayout.Label($"Current set size: {CurrentSetSize}");
+                    GUILayout.BeginVertical("Active mailboxes", GUI.skin.box);
+                        foreach(Mailbox mailbox in _activeMailboxes) {
+                            GUILayout.Label($"{mailbox.name} {mailbox.transform.position}");
+                        }
+                    GUILayout.EndVertical();
+                    GUILayout.Label($"Completed mailboxes: {CompletedMailboxes}");
+                }
             };
         }
 

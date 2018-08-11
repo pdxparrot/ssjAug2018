@@ -8,11 +8,11 @@ using UnityEngine.Networking;
 
 namespace pdxparyparrot.ssjAug2018.World
 {
-    [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkIdentity))]
+    [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(NavMeshObstacle))]
-    public class Platform : MonoBehaviour, IGrabbable
+    public class Platform : NetworkBehaviour, IGrabbable
     {
         [SerializeField]
         private float _speed = 5.0f;

@@ -24,7 +24,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [SerializeField]
         private Transform _throwOrigin;
 
-        public override bool CanMove => base.CanMove && !Player.IsStunned && !Player.IsDead;
+        public override bool CanMove => base.CanMove && !Player.NetworkPlayer.IsStunned && !Player.NetworkPlayer.IsDead;
 
         public Player Player => (Player)Owner;
 
@@ -112,7 +112,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.CmdThrowMail(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
+            Player.NetworkPlayer.CmdThrowMail(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
             Player.Animator.SetTrigger(PlayerControllerData.ThrowMailParam);
             Player.Animator.SetBool(PlayerControllerData.ThrowingMailParam, false);
@@ -125,7 +125,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            Player.CmdThrowSnowball(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
+            Player.NetworkPlayer.CmdThrowSnowball(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
             Player.Animator.SetTrigger(PlayerControllerData.ThrowSnowballParam);
             Player.Animator.SetBool(PlayerControllerData.ThrowingSnowballParam, false);
@@ -145,7 +145,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 _climbingComponent.StopClimbing();
             }
 
-            Player.Stun(PlayerControllerData.FallStunTimeSeconds);
+            Player.NetworkPlayer.Stun(PlayerControllerData.FallStunTimeSeconds);
         }
     }
 }

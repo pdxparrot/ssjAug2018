@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4681233222874696}
   - component: {fileID: 137378270328064966}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4684500508557926}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,6 +117,9 @@ GameObject:
   - component: {fileID: 114918540809867056}
   - component: {fileID: 114985267475367800}
   - component: {fileID: 114748589338881858}
+  - component: {fileID: 95894273405047928}
+  - component: {fileID: 114688782993375838}
+  - component: {fileID: 114826284238239696}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
   - component: {fileID: 114742398105448036}
@@ -127,7 +130,6 @@ GameObject:
   - component: {fileID: 114529441601372064}
   - component: {fileID: 114063931701214196}
   - component: {fileID: 114450802372136796}
-  - component: {fileID: 114438805701182994}
   - component: {fileID: 114416925496739310}
   - component: {fileID: 114002271618550520}
   - component: {fileID: 114237565309612032}
@@ -147,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4053669115165458}
   - component: {fileID: 137896862614977794}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: eyelid_upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4169900125335894}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4389707901160988}
   - component: {fileID: 137494100748466988}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: eyelense
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,9 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4624783218183112}
   - component: {fileID: 95215605526034082}
-  - component: {fileID: 114525368967418350}
-  - component: {fileID: 114292790582812294}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Yeti_skinnedMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +336,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4434651203760912}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -352,7 +352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4790289547711174}
   - component: {fileID: 137126504087034484}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: yeti_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4894975309813268}
   - component: {fileID: 137390108016433962}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: eyelid_lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -839,6 +839,24 @@ Animator:
   m_HasTransformHierarchy: 0
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!95 &95894273405047928
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114002271618550520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -878,6 +896,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canThrowMail: 0
+  _autoThrowMailTimer:
+    _timerSeconds: 0
+    _secondsRemaining: 0
+    _isRunning: 0
   _canThrowSnowball: 0
 --- !u!114 &114237565309612032
 MonoBehaviour:
@@ -892,25 +914,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: light_rain
   _vfx: {fileID: 198174834326148054}
---- !u!114 &114292790582812294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1737250241727740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 95215605526034082}
-  m_ParameterSendBits: 65535
-  param0: 
-  param1: 
-  param2: 
-  param3: 
-  param4: 
-  param5: 
 --- !u!114 &114307707372532762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -939,10 +942,8 @@ MonoBehaviour:
   _model: {fileID: 1737250241727740}
   _controller: {fileID: 114450802372136796}
   _animator: {fileID: 95215605526034082}
-  _networkAnimator: {fileID: 114292790582812294}
-  _currentLetterCount: 0
-  _score: 0
-  _isDead: 0
+  _networkPlayer: {fileID: 114826284238239696}
+  _driver: {fileID: 114416925496739310}
 --- !u!114 &114416925496739310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -954,24 +955,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00606a2d09ede1646b6c8a586f842039, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lastMoveAxes: {x: 0, y: 0, z: 0}
-  _isMoving: 0
+  _controller: {fileID: 114450802372136796}
   _invertLookY: 0
   _mouseSensitivity: 0.5
   _lastControllerMove: {x: 0, y: 0, z: 0}
   _lastControllerLook: {x: 0, y: 0, z: 0}
---- !u!114 &114438805701182994
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1356650051019368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e2e2144cc37e54babcaeeaa7e807a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gamepadId: 0
 --- !u!114 &114450802372136796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -983,7 +971,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa15cdd536675334bbb3a8bd20768572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _driver: {fileID: 114416925496739310}
+  _lastMoveAxes: {x: 0, y: 0, z: 0}
+  _isMoving: 0
   _lastVelocity: {x: 0, y: 0, z: 0}
   _lastAngularVelocity: {x: 0, y: 0, z: 0}
   _animationState:
@@ -995,6 +984,7 @@ MonoBehaviour:
     StartRotation: {x: 0, y: 0, z: 0, w: 0}
     EndRotation: {x: 0, y: 0, z: 0, w: 0}
     IsKinematic: 0
+  _owner: {fileID: 114331638870797786}
   _pauseState:
     IsKinematic: 0
     Velocity: {x: 0, y: 0, z: 0}
@@ -1026,38 +1016,6 @@ MonoBehaviour:
   _hoverTimeSeconds: 0
   _cooldownCountdown: 0
   _isHovering: 0
---- !u!114 &114525368967418350
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1737250241727740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 17
-    i1: 71
-    i2: 205
-    i3: 12
-    i4: 13
-    i5: 188
-    i6: 89
-    i7: 244
-    i8: 107
-    i9: 201
-    i10: 239
-    i11: 27
-    i12: 193
-    i13: 165
-    i14: 206
-    i15: 183
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &114529441601372064
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1070,6 +1028,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isAiming: 0
+--- !u!114 &114688782993375838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95215605526034082}
+  m_ParameterSendBits: 65535
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!114 &114742398105448036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1109,6 +1086,32 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114826284238239696
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d603c5687948ce9449ea47582ab9e928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentLetterCount: 0
+  _reloadTimer:
+    _timerSeconds: 0
+    _secondsRemaining: 0
+    _isRunning: 0
+  _score: 0
+  _stunTimer:
+    _timerSeconds: 0
+    _secondsRemaining: 0
+    _isRunning: 0
+  _isDead: 0
+  _respawnTimer:
+    _timerSeconds: 0
+    _secondsRemaining: 0
+    _isRunning: 0
 --- !u!114 &114841388732295906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1165,7 +1168,7 @@ MonoBehaviour:
     i14: 206
     i15: 183
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!135 &135241250124037124
 SphereCollider:
   m_ObjectHideFlags: 1

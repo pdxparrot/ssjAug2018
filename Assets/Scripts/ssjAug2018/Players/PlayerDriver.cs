@@ -12,7 +12,6 @@ using UnityEngine.Experimental.Input;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
-    [RequireComponent(typeof(GamepadListener))]
     public sealed class PlayerDriver : ActorDriver
     {
         [SerializeField]
@@ -29,34 +28,34 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [ReadOnly]
         private Vector3 _lastControllerLook;
 
-        public Player Player => (Player)Owner;
+        private PlayerController PlayerController => (PlayerController)Controller;
 
-        protected override bool CanDrive => base.CanDrive && Player.isLocalPlayer;
+        private Player Player => PlayerController.Player;
+
+        protected override bool CanDrive => base.CanDrive && Player.IsLocalActor;
 
         private GamepadListener _gamepadListener;
 
         private DebugMenuNode _debugMenuNode;
 
 #region Unity Lifecycle
-        private void Awake()
+        private void Update()
         {
-            _gamepadListener = GetComponent<GamepadListener>();
+            if(!Player.IsLocalActor) {
+                return;
+            }
 
-            InitDebugMenu();
-        }
-
-        protected override void Update()
-        {
             float dt = Time.deltaTime;
 
-            LastMoveAxes = Vector3.Lerp(LastMoveAxes, _lastControllerMove, dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
+            Controller.LastMoveAxes = Vector3.Lerp(Controller.LastMoveAxes, _lastControllerMove, dt * PlayerManager.Instance.PlayerData.MovementLerpSpeed);
             Player.FollowTarget.LastLookAxes = Vector3.Lerp(Player.FollowTarget.LastLookAxes, _lastControllerLook, dt * PlayerManager.Instance.PlayerData.LookLerpSpeed);
-
-            base.Update();
         }
 
         private void OnDestroy()
         {
+            Destroy(_gamepadListener);
+            _gamepadListener = null;
+
             DestroyDebugMenu();
 
             if(InputManager.HasInstance) {
@@ -100,13 +99,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
         }
 #endregion
 
-        public override void Initialize(IActor owner, ActorController controller)
+        public void Initialize()
         {
-            base.Initialize(owner, controller);
-
-            if(!Player.isLocalPlayer) {
+            if(!Player.IsLocalActor) {
                 return;
             }
+
+            _gamepadListener = gameObject.AddComponent<GamepadListener>();
 
             InputManager.Instance.Controls.game.pause.performed += OnPause;
 
@@ -144,6 +143,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             InputManager.Instance.Controls.game.throwsnowball.started += OnThrowSnowballStart;
             InputManager.Instance.Controls.game.throwsnowball.performed += OnThrowSnowball;
+
+            InitDebugMenu();
         }
 
         private bool IsOurDevice(InputAction.CallbackContext ctx)
@@ -180,7 +181,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = Vector3.zero;
-            LastMoveAxes = _lastControllerMove;
+            Controller.LastMoveAxes = _lastControllerMove;
         }
 #endregion
 
@@ -201,7 +202,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
-            LastMoveAxes = _lastControllerMove;
+            Controller.LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveBackward(InputAction.CallbackContext ctx)
@@ -220,7 +221,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(_lastControllerMove.x, 0.0f, 0.0f);
-            LastMoveAxes = _lastControllerMove;
+            Controller.LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveLeft(InputAction.CallbackContext ctx)
@@ -239,7 +240,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
-            LastMoveAxes = _lastControllerMove;
+            Controller.LastMoveAxes = _lastControllerMove;
         }
 
         private void OnMoveRight(InputAction.CallbackContext ctx)
@@ -258,7 +259,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             _lastControllerMove = new Vector3(0.0f, _lastControllerMove.y, 0.0f);
-            LastMoveAxes = _lastControllerMove;
+            Controller.LastMoveAxes = _lastControllerMove;
         }
 #endregion
 

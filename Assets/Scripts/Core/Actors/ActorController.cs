@@ -54,10 +54,26 @@ namespace pdxpartyparrot.Core.Actors
             public bool IsKinematic;
         }
 
-        [SerializeField]
-        private ActorDriver _driver;
+#region Movement
+        [Header("Movement")]
 
-        public ActorDriver Driver => _driver;
+        [SerializeField]
+        [ReadOnly]
+        private Vector3 _lastMoveAxes;
+
+        public Vector3 LastMoveAxes
+        {
+            get { return _lastMoveAxes; }
+
+            set { _lastMoveAxes = value; }
+        }
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _isMoving;
+
+        public bool IsMoving => _isMoving;
+#endregion
 
         [Space(10)]
 
@@ -87,11 +103,16 @@ namespace pdxpartyparrot.Core.Actors
         public bool IsAnimating => _animationState.IsAnimating;
 #endregion
 
+        [Space(10)]
+
+        [SerializeField]
+        private Actor _owner;
+
+        public Actor Owner => _owner;
+
         public virtual bool CanMove => !IsAnimating;
 
         public Rigidbody Rigidbody { get; private set; }
-
-        public IActor Owner { get; private set; }
 
         [SerializeField]
         [ReadOnly]
@@ -109,9 +130,20 @@ namespace pdxpartyparrot.Core.Actors
 
         protected virtual void Update()
         {
+            _isMoving = LastMoveAxes.sqrMagnitude > float.Epsilon;
+
             float dt = Time.deltaTime;
 
             UpdateAnimations(dt);
+
+            AnimationMove(LastMoveAxes, dt);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            float dt = Time.fixedDeltaTime;
+
+            PhysicsMove(LastMoveAxes, dt);
         }
 
         protected virtual void LateUpdate()
@@ -127,13 +159,6 @@ namespace pdxpartyparrot.Core.Actors
             }
         }
 #endregion
-
-        public virtual void Initialize(IActor owner)
-        {
-            Owner = owner;
-
-            _driver.Initialize(owner, this);
-        }
 
         public virtual void MoveTo(Vector3 position)
         {

@@ -509,7 +509,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckWrapLeft()
         {
-            if(null == _rightHandHitResult || Controller.Driver.LastMoveAxes.x >= 0.0f) {
+            if(null == _rightHandHitResult || Controller.LastMoveAxes.x >= 0.0f) {
                 return false;
             }
 
@@ -537,7 +537,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckRotateLeft()
         {
-            if(null == _rightHandHitResult || Controller.Driver.LastMoveAxes.x >= 0.0f) {
+            if(null == _rightHandHitResult || Controller.LastMoveAxes.x >= 0.0f) {
                 return false;
             }
 
@@ -565,7 +565,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckWrapRight()
         {
-            if(null == _leftHandHitResult || Controller.Driver.LastMoveAxes.x <= 0.0f) {
+            if(null == _leftHandHitResult || Controller.LastMoveAxes.x <= 0.0f) {
                 return false;
             }
 
@@ -594,7 +594,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckRotateRight()
         {
-            if(null == _leftHandHitResult || Controller.Driver.LastMoveAxes.x <= 0.0f) {
+            if(null == _leftHandHitResult || Controller.LastMoveAxes.x <= 0.0f) {
                 return false;
             }
 
@@ -623,7 +623,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckClimbUp()
         {
-            if(Controller.Driver.LastMoveAxes.y <= 0.0f) {
+            if(Controller.LastMoveAxes.y <= 0.0f) {
                 return false;
             }
 
@@ -646,7 +646,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckHang()
         {
-            if((!CanHangLeft && !CanHangRight) || Controller.Driver.LastMoveAxes.y <= 0.0f) {
+            if((!CanHangLeft && !CanHangRight) || Controller.LastMoveAxes.y <= 0.0f) {
                 return false;
             }
 
@@ -660,7 +660,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private bool CheckDropDown()
         {
-            if(Controller.Driver.LastMoveAxes.y >= 0.0f) {
+            if(Controller.LastMoveAxes.y >= 0.0f) {
                 return false;
             }
 

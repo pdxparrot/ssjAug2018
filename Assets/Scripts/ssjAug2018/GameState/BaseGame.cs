@@ -4,12 +4,12 @@ using pdxpartyparrot.Core;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
-using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Game.State;
 using pdxpartyparrot.ssjAug2018.Items;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
@@ -30,15 +30,15 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             DebugMenuManager.Instance.ResetFrameStats();
 
-            NetworkManager.Instance.ServerDisconnectEvent += ServerDisconnectEventHandler;
-            NetworkManager.Instance.ClientDisconnectEvent += ClientDisconnectEventHandler;
+            Core.Network.NetworkManager.Instance.ServerDisconnectEvent += ServerDisconnectEventHandler;
+            Core.Network.NetworkManager.Instance.ClientDisconnectEvent += ClientDisconnectEventHandler;
         }
 
         public override void OnExit()
         {
-            if(NetworkManager.HasInstance) {
-                NetworkManager.Instance.ServerDisconnectEvent -= ServerDisconnectEventHandler;
-                NetworkManager.Instance.ClientDisconnectEvent -= ClientDisconnectEventHandler;
+            if(Core.Network.NetworkManager.HasInstance) {
+                Core.Network.NetworkManager.Instance.ServerDisconnectEvent -= ServerDisconnectEventHandler;
+                Core.Network.NetworkManager.Instance.ClientDisconnectEvent -= ClientDisconnectEventHandler;
             }
 
             if(ItemManager.HasInstance) {
@@ -62,17 +62,19 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         private void InitializeManagers()
         {
-            ViewerManager.Instance.AllocateViewers(1, _viewerPrefab);
+            if(NetworkServer.active) {
+                Core.Network.NetworkManager.Instance.ServerChangedScene();
 
-            InputManager.Instance.Controls.game.Enable();
+                GameManager.Instance.StartGame();
+            }
 
-            NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
+            if(NetworkClient.active) {
+                ViewerManager.Instance.AllocateViewers(1, _viewerPrefab);
 
-            // TODO: this probably should wait until all of the clients are ready
-            // is there a callback tho on the client that we can use as a "stop showing the loading screen" thing?
-            NetworkManager.Instance.ServerChangedScene();
+                InputManager.Instance.Controls.game.Enable();
 
-            GameManager.Instance.StartGame();
+                Core.Network.NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
+            }
 
             ItemManager.Instance.PopulateItemPools();
         }

@@ -34,7 +34,9 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             MailboxManager.Instance.RegisterMailbox(this);
 
-            DeactivateMailbox(false);
+            if(NetworkServer.active) {
+                DeactivateMailbox(false);
+            }
         }
 
         private void OnDestroy()
@@ -107,7 +109,7 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             Debug.Log($"Mailbox {name} hit by player");
 
-            int consumed = player.CurrentLetterCount < _mailRequired ? player.CurrentLetterCount : _mailRequired;
+            int consumed = player.NetworkPlayer.CurrentLetterCount < _mailRequired ? player.NetworkPlayer.CurrentLetterCount : _mailRequired;
 
             _mailRequired -= consumed;
             if(_mailRequired <= 0) {

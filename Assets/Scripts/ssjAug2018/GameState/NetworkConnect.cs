@@ -25,6 +25,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private NetworkConnectUI _networkConnectUI;
 
         private pdxpartyparrot.Game.State.GameState _gameStatePrefab;
+
         private Action<pdxpartyparrot.Game.State.GameState> _gameStateInit;
 
         [SerializeField]
@@ -79,17 +80,12 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             }
         }
 
-        public override void OnUpdate(float dt)
-        {
-            base.OnUpdate(dt);
-
-// TODO: possible UI updates here
-        }
-
         public override void OnExit()
         {
-            Destroy(_networkConnectUI.gameObject);
-            _networkConnectUI = null;
+            if(null != _networkConnectUI) {
+                Destroy(_networkConnectUI.gameObject);
+                _networkConnectUI = null;
+            }
 
             if(Core.Network.NetworkManager.HasInstance) {
                 Core.Network.NetworkManager.Instance.Discovery.ReceivedBroadcastEvent -= ReceivedBroadcastEventHandler;
@@ -97,10 +93,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
                 Core.Network.NetworkManager.Instance.ServerConnectEvent -= ServerConnectEventHandler;
                 Core.Network.NetworkManager.Instance.ClientConnectEvent -= ClientConnectEventHandler;
-
-                if(NetworkServer.active) {
-                    Core.Network.NetworkManager.Instance.ServerChangeScene();
-                }
+                Core.Network.NetworkManager.Instance.ClientSceneChangedEvent -= ClientSceneChangedEventHandler;
             }
 
             base.OnExit();
@@ -111,7 +104,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             Core.Network.NetworkManager.Instance.ServerConnectEvent += ServerConnectEventHandler;
 
             GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartHost();
-            if(null == GameStateManager.Instance.NetworkClient) {
+            if(!NetworkClient.active) {
                 _networkConnectUI.SetStatus("Unable to start network host!");
             }
         }
@@ -147,14 +140,26 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 #region Event Handlers
         private void ServerConnectEventHandler(object sender, EventArgs args)
         {
+            Core.Network.NetworkManager.Instance.DiscoverStop();
+
             _networkConnectUI.SetStatus("Client connected, loading scene...");
 
+            Core.Network.NetworkManager.Instance.ServerChangeScene(_gameStatePrefab.SceneName);
             GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
         }
 
         private void ClientConnectEventHandler(object sender, EventArgs args)
         {
-            _networkConnectUI.SetStatus("Connected, loading scene...");
+            Core.Network.NetworkManager.Instance.DiscoverStop();
+
+            _networkConnectUI.SetStatus("Connected, waiting for server...");
+
+            Core.Network.NetworkManager.Instance.ClientSceneChangedEvent += ClientSceneChangedEventHandler;
+        }
+
+        private void ClientSceneChangedEventHandler(object sender, ClientSceneEventArgs args)
+        {
+            _networkConnectUI.SetStatus("Server ready, loading scene...");
 
             GameStateManager.Instance.TransitionState(_gameStatePrefab, _gameStateInit);
         }
@@ -162,10 +167,13 @@ namespace pdxpartyparrot.ssjAug2018.GameState
         private void ReceivedBroadcastEventHandler(object sender, ReceivedBroadcastEventArgs args)
         {
             Core.Network.NetworkManager.Instance.Discovery.ReceivedBroadcastEvent -= ReceivedBroadcastEventHandler;
+            Core.Network.NetworkManager.Instance.DiscoverStop();
 
-            _networkConnectUI.SetStatus($"Found server at {args.FromAddress}, connecting...");
+            _networkConnectUI.SetStatus($"Found server at {args.EndPoint}, connecting...");
 
-            Core.Network.NetworkManager.Instance.networkAddress = args.FromAddress;
+            Core.Network.NetworkManager.Instance.networkAddress = args.EndPoint.Address.ToString();
+            Core.Network.NetworkManager.Instance.networkPort = args.EndPoint.Port;
+
             Core.Network.NetworkManager.Instance.ClientConnectEvent += ClientConnectEventHandler;
 
             GameStateManager.Instance.NetworkClient = Core.Network.NetworkManager.Instance.StartClient();
