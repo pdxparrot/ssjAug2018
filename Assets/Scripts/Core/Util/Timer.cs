@@ -1,18 +1,26 @@
 ﻿using System;
 
+using UnityEngine;
+
 namespace pdxpartyparrot.Core.Util
 {
     [Serializable]
     public struct Timer
     {
+        [SerializeField]
+        [ReadOnly]
         private float _timerSeconds;
 
         public float TimerSeconds => _timerSeconds;
 
+        [SerializeField]
+        [ReadOnly]
         private float _secondsRemaining;
 
         public float SecondsRemaining => _secondsRemaining;
 
+        [SerializeField]
+        [ReadOnly]
         private bool _isRunning;
 
         public bool IsRunning => _isRunning;

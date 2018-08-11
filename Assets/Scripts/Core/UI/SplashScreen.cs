@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Util;
+﻿using System;
+
+using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,8 +10,16 @@ namespace pdxpartyparrot.Core.UI
 {
     public sealed class SplashScreen : MonoBehaviour
     {
+        [Serializable]
+        public struct SplashScreenConfig
+        {
+            public VideoClip videoClip;
+
+            public float[] volume;
+        }
+
         [SerializeField]
-        private VideoClip[] _splashScreens;
+        private SplashScreenConfig[] _splashScreens;
 
         [SerializeField]
         private string _mainSceneName = "main";
@@ -66,7 +76,16 @@ namespace pdxpartyparrot.Core.UI
                 PlayNextSplashScreen();
             };
 
-            _videoPlayer.clip = _splashScreens[_currentSplashScreen];
+            SplashScreenConfig config = _splashScreens[_currentSplashScreen];
+
+            _videoPlayer.clip = config.videoClip;
+
+            // config the volume for each track
+            _videoPlayer.SetDirectAudioVolume(0, 1.0f);
+            for(ushort i=0; i<config.volume.Length; ++i) {
+                _videoPlayer.SetDirectAudioVolume(i, config.volume[i]);
+            }
+
             _videoPlayer.loopPointReached += eventHandler;
             _videoPlayer.Play();
         }

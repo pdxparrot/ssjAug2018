@@ -140,6 +140,10 @@ namespace pdxpartyparrot.Core.DebugMenu
 
         public void RemoveNode(DebugMenuNode node)
         {
+            if(null == node) {
+                return;
+            }
+
             _nodes.Remove(node);
 
             if(_currentNode == node) {
