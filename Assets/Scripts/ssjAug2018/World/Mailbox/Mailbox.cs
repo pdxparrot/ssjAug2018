@@ -1,4 +1,5 @@
 ﻿using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Players;
 
@@ -71,7 +72,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 Debug.Log($"Mailbox {name} completed");
                 MailboxManager.Instance.MailboxCompleted(this);
             }
-
+            AudioManager.Instance.PlayOneShot(MailboxManager.Instance.MailboxData.MailboxCompleteAudio);
             _model.SetActive(false);
         }
 
@@ -96,6 +97,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 DeactivateMailbox(owner);
             }
 
+            AudioManager.Instance.PlayOneShot(MailboxManager.Instance.MailboxData.MailReceivedAudio);
             GameManager.Instance.ScoreHit(owner);
             return true;
         }

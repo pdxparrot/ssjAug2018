@@ -70,5 +70,20 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public int MaxLettersPerBox => _maxLettersPerBox;
 #endregion
+
+        [Space(10)]
+
+#region Audio
+        [Header("Audio files")]
+        [SerializeField]
+        private AudioClip _mailboxCompleteAudio;
+
+        public AudioClip MailboxCompleteAudio => _mailboxCompleteAudio;
+
+        [SerializeField]
+        private AudioClip _mailRecievedAudio;
+
+        public AudioClip MailReceivedAudio => _mailRecievedAudio;
+#endregion
     }
 }
