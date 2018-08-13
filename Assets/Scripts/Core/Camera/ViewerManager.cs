@@ -45,7 +45,7 @@ namespace pdxpartyparrot.Core.Camera
 #endregion
 
 #region Allocate
-        public void AllocateViewers(int count, Viewer viewerPrefab)
+        public void AllocateViewers<T>(int count, T viewerPrefab) where T: Viewer
         {
             int actualCount = count - _viewers.Count;
             if(actualCount <= 0) {
@@ -83,7 +83,7 @@ namespace pdxpartyparrot.Core.Camera
 
 #region Acquire
         [CanBeNull]
-        public Viewer AcquireViewer()
+        public T AcquireViewer<T>() where T: Viewer
         {
             if(_unassignedViewers.Count < 1) {
                 return null;
@@ -94,10 +94,10 @@ namespace pdxpartyparrot.Core.Camera
             _assignedViewers.Add(viewer);
 
             //Debug.Log($"Acquired viewer {viewer.name}  (assigned: {_assignedViewers.Count}, unassigned: {_unassignedViewers.Count})");
-            return viewer;
+            return viewer as T;
         }
 
-        public void ReleaseViewer(Viewer viewer)
+        public void ReleaseViewer<T>(T viewer) where T: Viewer
         {
             if(!_assignedViewers.Contains(viewer)) {
                 return;

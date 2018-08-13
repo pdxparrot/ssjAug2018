@@ -17,6 +17,10 @@ MonoBehaviour:
   _viewerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  _playerViewerPrefab: {fileID: 114567109661045988, guid: 90d2034f2dac7c8418bb452cda507c68,
+    type: 2}
+  _serverSpectatorViewer: {fileID: 114400553936008500, guid: c3ab75d0955ed5e4daa692dcc506d391,
+    type: 2}
   _stunnedParam: Stunned
   _deadParam: Dead
   _mass: 275

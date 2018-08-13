@@ -76,7 +76,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Awake();
 
-            NetworkIdentity.localPlayerAuthority = true;
             NetworkTransform.transformSyncMode = NetworkTransform.TransformSyncMode.SyncRigidbody3D;
             NetworkTransform.syncRotationAxis = NetworkTransform.AxisSyncMode.AxisY;
         }

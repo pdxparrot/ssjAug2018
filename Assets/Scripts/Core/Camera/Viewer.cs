@@ -1,4 +1,6 @@
-﻿using Kino;
+﻿using JetBrains.Annotations;
+
+using Kino;
 
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Rendering;
@@ -38,8 +40,10 @@ namespace pdxpartyparrot.Core.Camera
         [Header("Post Processing")]
 
         [SerializeField]
+        [CanBeNull]
         private PostProcessVolume _globalPostProcessVolume;
 
+        [CanBeNull]
         public PostProcessProfile GlobalPostProcessProfile { get; private set; }
 
         [SerializeField]
@@ -61,8 +65,10 @@ namespace pdxpartyparrot.Core.Camera
             _uiCamera.cullingMask = PartyParrotManager.Instance.UILayer;
             _uiCamera.useOcclusionCulling = false;
 
-            _globalPostProcessVolume.isGlobal = true;
-            _globalPostProcessVolume.priority = 1;
+            if(null != _globalPostProcessVolume) {
+                _globalPostProcessVolume.isGlobal = true;
+                _globalPostProcessVolume.priority = 1;
+            }
         }
 
         protected virtual void OnDestroy()
@@ -79,7 +85,7 @@ namespace pdxpartyparrot.Core.Camera
 
             // setup the camera to only render it's own post processing volume
             LayerMask postProcessLayer = LayerMask.NameToLayer($"Viewer{Id}_PostProcess");
-            if(postProcessLayer != -1) {
+            if(postProcessLayer != -1 && null != _globalPostProcessVolume) {
                 _globalPostProcessVolume.gameObject.layer = postProcessLayer;
 
                 PostProcessLayer layer = Camera.GetComponent<PostProcessLayer>();
@@ -147,7 +153,9 @@ namespace pdxpartyparrot.Core.Camera
             }
             GlobalPostProcessProfile = null;
 
-            _globalPostProcessVolume.profile = null;
+            if(null != _globalPostProcessVolume) {
+                _globalPostProcessVolume.profile = null;
+            }
         }
 
         public void SetViewport(int x, int y, float viewportWidth, float viewportHeight)
@@ -174,8 +182,10 @@ namespace pdxpartyparrot.Core.Camera
         {
             ResetPostProcessProfile();
 
-            GlobalPostProcessProfile = profile;
-            _globalPostProcessVolume.profile = profile;
+            if(null != _globalPostProcessVolume) {
+                GlobalPostProcessProfile = profile;
+                _globalPostProcessVolume.profile = profile;
+            }
         }
 
 #region Render Layers

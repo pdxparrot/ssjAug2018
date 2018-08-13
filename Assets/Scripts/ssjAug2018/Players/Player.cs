@@ -88,6 +88,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Initialize(id);
 
+            InitializeLocalPlayer();
+        }
+
+        private void InitializeLocalPlayer()
+        {
             if(!IsLocalActor) {
                 return;
             }
@@ -96,7 +101,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             _driver.Initialize();
 
-            _viewer = (Camera.Viewer)ViewerManager.Instance.AcquireViewer();
+            _viewer = ViewerManager.Instance.AcquireViewer<Camera.Viewer>();
             if(null != _viewer) {
                 _viewer.Initialize(this);
             }
