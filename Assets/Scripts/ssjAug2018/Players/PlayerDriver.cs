@@ -268,7 +268,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private void OnLook(InputAction.CallbackContext ctx)
         {
             bool isMouse = ctx.control.device is Mouse;
-            if(!IsOurDevice(ctx) || !CanDrive || !_enableMouseLook) {
+            if(!IsOurDevice(ctx) || !CanDrive || (isMouse && !_enableMouseLook)) {
                 return;
             }
 
