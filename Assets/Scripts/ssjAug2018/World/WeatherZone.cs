@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+
+using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
@@ -6,13 +8,17 @@ namespace pdxpartyparrot.ssjAug2018.World
     public sealed class WeatherZone : MonoBehaviour
     {
         [SerializeField]
-        private string _zoneType;
+        [CanBeNull]
+        private ParticleSystem _particleSystemPrefab;
 
-        public string WeatherZoneType => _zoneType;
+        [CanBeNull]
+        public ParticleSystem ParticleSystemPrefab => _particleSystemPrefab;
 
         [SerializeField]
+        [CanBeNull]
         private AudioClip _audioClip;
 
+        [CanBeNull]
         public AudioClip AudioClip => _audioClip;
 
         private BoxCollider _collider;
