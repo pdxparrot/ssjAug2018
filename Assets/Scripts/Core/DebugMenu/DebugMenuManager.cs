@@ -33,6 +33,8 @@ namespace pdxpartyparrot.Core.DebugMenu
         [SerializeField]
         private bool _enabled;
 
+        public bool Enabled => _enabled;
+
         private DebugWindow _window;
 
         [SerializeField]

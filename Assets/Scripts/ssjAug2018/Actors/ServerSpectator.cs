@@ -107,6 +107,11 @@ namespace pdxpartyparrot.ssjAug2018.Actors
 
         private bool IsOurDevice(InputAction.CallbackContext ctx)
         {
+            // no input unless we have focus
+            if(!Application.isFocused) {
+                return false;
+            }
+
             // TODO: this probably doesn't handle multiple keyboards/mice
             return Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device;
         }

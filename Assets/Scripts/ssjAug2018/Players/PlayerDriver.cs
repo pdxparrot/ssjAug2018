@@ -150,8 +150,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         private bool IsOurDevice(InputAction.CallbackContext ctx)
         {
-            // TODO: this probably doesn't handle multiple keyboards/mice
-            return _gamepadListener.IsOurGamepad(ctx) || Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device;
+            // no input unless we have focus
+            if(!Application.isFocused) {
+                return false;
+            }
+
+            return _gamepadListener.IsOurGamepad(ctx) ||
+                // ignore keyboard/mouse while the debug menu is open
+                // TODO: this probably doesn't handle multiple keyboards/mice
+                (!DebugMenuManager.Instance.Enabled && (Keyboard.current == ctx.control.device || Mouse.current == ctx.control.device));
         }
 
 #region Event Handlers

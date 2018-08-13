@@ -32,7 +32,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             get
             {
-                if(null == Player.Viewer) {
+                if(null == Player.Viewer || IsMoving) {
                     return Player.transform.forward;
                 }
 
@@ -112,6 +112,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
+            if(!IsMoving) {
+                Player.transform.forward = new Vector3(ThrowDirection.x, 0.0f, ThrowDirection.z).normalized;
+            }
             Player.NetworkPlayer.CmdThrowMail(_throwOrigin.position, ThrowDirection, PlayerControllerData.ThrowSpeed);
 
             Player.Animator.SetTrigger(PlayerControllerData.ThrowMailParam);

@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Util;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
@@ -71,7 +72,10 @@ namespace pdxpartyparrot.ssjAug2018.World
                 Destroy(zoneParticleSystem.gameObject);
             }
 
-            _audioSource.Stop();
+            // null check just in case we're shutting down
+            if(null != _audioSource) {
+                _audioSource.Stop();
+            }
         }
     }
 }

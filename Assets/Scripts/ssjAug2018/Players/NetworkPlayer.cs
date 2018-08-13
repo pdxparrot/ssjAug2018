@@ -30,7 +30,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public bool IsReloading => _reloadTimer.SecondsRemaining > 0.0f;
 
-       public bool CanThrowMail => !IsReloading && CurrentLetterCount > 0;
+        public bool CanThrowMail => !IsReloading && CurrentLetterCount > 0;
+
+        public bool CanThrowSnowball => true;
 #endregion
 
 #region Score
