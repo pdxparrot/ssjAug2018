@@ -1,7 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
 
-using pdxpartyparrot.Core.Audio;
-using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
@@ -10,12 +8,17 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class WeatherZoneEffect : MonoBehaviour
     {
-        [SerializeField]
-        [ReadOnly]
-        [CanBeNull]
-        private ParticleSystem _particleSystem;
+        private readonly HashSet<WeatherZone> _zones = new HashSet<WeatherZone>();
 
 #region Unity Lifecycle
+        private void OnDestroy()
+        {
+            foreach(WeatherZone zone in _zones) {
+                zone.Exit(gameObject);
+            }
+            _zones.Clear();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             WeatherZone weather = other.GetComponent<WeatherZone>();
@@ -23,14 +26,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            if(null != weather.ParticleSystemPrefab) {
-                _particleSystem = Instantiate(weather.ParticleSystemPrefab, transform);
-                if(null != _particleSystem) {
-                    _particleSystem.Play();
-                }
-            }
-
-            AudioManager.Instance.PlayAmbient(weather.AudioClip);
+            weather.Enter(gameObject);
+            _zones.Add(weather);
         }
 
         private void OnTriggerExit(Collider other)
@@ -40,12 +37,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 return;
             }
 
-            AudioManager.Instance.StopAmbient();
-
-            if(null != _particleSystem) {
-                Destroy(_particleSystem.gameObject);
-            }
-            _particleSystem = null;
+            weather.Exit(gameObject);
+            _zones.Remove(weather);
         }
 #endregion
     }

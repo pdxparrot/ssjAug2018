@@ -12,5 +12,10 @@ namespace pdxpartyparrot.Core.Util
             TV value;
             return dict.TryGetValue(key, out value) ? value : defaultValue;
         }
+
+        public static bool Remove<TK, TV>(this IDictionary<TK, TV> dict, TK key, out TV value)
+        {
+            return dict.TryGetValue(key, out value) && dict.Remove(key);
+        }
     }
 }
