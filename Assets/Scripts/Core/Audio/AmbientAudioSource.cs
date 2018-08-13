@@ -13,7 +13,7 @@ namespace pdxpartyparrot.Core.Audio
         {
             _audioSources = GetComponents<AudioSource>();
             foreach(AudioSource source in _audioSources) {
-                AudioManager.Instance.InitSFXAudioMixerGroup(source);
+                AudioManager.Instance.InitAmbientAudioMixerGroup(source);
             }
         }
 #endregion

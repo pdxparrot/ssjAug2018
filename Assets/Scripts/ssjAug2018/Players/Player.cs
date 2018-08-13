@@ -57,7 +57,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             FollowTarget = GetComponent<FollowTarget>();
 
             _audioSource = GetComponent<AudioSource>();
-            _audioSource.playOnAwake = false;
             AudioManager.Instance.InitSFXAudioMixerGroup(_audioSource);
 
             PlayerManager.Instance.Register(this);

@@ -10,6 +10,11 @@ namespace pdxpartyparrot.ssjAug2018.World
 
         public string WeatherZoneType => _zoneType;
 
+        [SerializeField]
+        private AudioClip _audioClip;
+
+        public AudioClip AudioClip => _audioClip;
+
         private BoxCollider _collider;
 
 #region Unity Lifecycle

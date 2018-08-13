@@ -8,6 +8,7 @@ using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.Game.Data;
+using pdxpartyparrot.Game.Effects;
 
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -71,10 +72,19 @@ namespace pdxpartyparrot.Game.Actors
 
         [Space(10)]
 
+#region Effects
+        [Header("Effects")]
+
+        [SerializeField]
+        [CanBeNull]
+        private EffectTrigger _groundedEffect;
+#endregion
+
+        [Space(10)]
+
         [SerializeField]
         [ReadOnly]
         private bool _isRunning;
-
 
         public bool IsRunning => _isRunning;
 
@@ -307,6 +317,9 @@ namespace pdxpartyparrot.Game.Actors
 
                 if(!wasGrounded && IsGrounded) {
                     Owner.Animator.SetTrigger(ControllerData.GroundedParam);
+                    if(null != _groundedEffect) {
+                        _groundedEffect.Trigger();
+                    }
                 }
             } finally {
                 Profiler.EndSample();

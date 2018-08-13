@@ -213,6 +213,11 @@ namespace pdxpartyparrot.Core.Audio
             source.outputAudioMixerGroup = mixerGroups.Length > 0 ? mixerGroups[0] : _mixer.outputAudioMixerGroup;
         }
 
+        public void InitAmbientAudioMixerGroup(AudioSource source)
+        {
+            InitAudioMixerGroup(source, _ambientMixerGroupName);
+        }
+
         public void PlayOneShot(AudioClip audioClip)
         {
             _oneShotAudioSource.PlayOneShot(audioClip);
