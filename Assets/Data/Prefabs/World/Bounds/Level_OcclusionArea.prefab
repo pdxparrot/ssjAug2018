@@ -20,8 +20,24 @@ GameObject:
   m_Component:
   - component: {fileID: 4682591988050506}
   - component: {fileID: 192195398912129762}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: West_OcclusionArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1494166361868620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4838715985925342}
+  - component: {fileID: 192679627029260974}
+  m_Layer: 16
+  m_Name: North_OcclusionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4500456564084368}
   - component: {fileID: 192283967598950812}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Central_OcclusionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4141268650685846}
   - component: {fileID: 192956710142178682}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: East_OcclusionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +83,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4113029535925818}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Level_OcclusionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,6 +103,7 @@ Transform:
   - {fileID: 4500456564084368}
   - {fileID: 4141268650685846}
   - {fileID: 4682591988050506}
+  - {fileID: 4838715985925342}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -129,6 +146,19 @@ Transform:
   m_Father: {fileID: 4113029535925818}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4838715985925342
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1494166361868620}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4113029535925818}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!192 &192195398912129762
 OcclusionArea:
   m_ObjectHideFlags: 1
@@ -136,8 +166,8 @@ OcclusionArea:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1042044868461778}
   serializedVersion: 2
-  m_Size: {x: 3500, y: 1600, z: 1350}
-  m_Center: {x: 0, y: 400, z: -1100}
+  m_Size: {x: 3500, y: 900, z: 1450}
+  m_Center: {x: 0, y: 150, z: -1000}
   m_IsViewVolume: 1
 --- !u!192 &192283967598950812
 OcclusionArea:
@@ -146,8 +176,18 @@ OcclusionArea:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873814409286992}
   serializedVersion: 2
-  m_Size: {x: 3500, y: 1600, z: 800}
-  m_Center: {x: 0, y: 400, z: -100}
+  m_Size: {x: 3500, y: 900, z: 600}
+  m_Center: {x: 0, y: 150, z: 0}
+  m_IsViewVolume: 1
+--- !u!192 &192679627029260974
+OcclusionArea:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1494166361868620}
+  serializedVersion: 2
+  m_Size: {x: 1700, y: 1400, z: 2800}
+  m_Center: {x: -800, y: 500, z: 0}
   m_IsViewVolume: 1
 --- !u!192 &192956710142178682
 OcclusionArea:
@@ -156,6 +196,6 @@ OcclusionArea:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1934647402476598}
   serializedVersion: 2
-  m_Size: {x: 3500, y: 1600, z: 1350}
-  m_Center: {x: 0, y: 400, z: 900}
+  m_Size: {x: 3500, y: 900, z: 1350}
+  m_Center: {x: 0, y: 150, z: 900}
   m_IsViewVolume: 1
