@@ -38,15 +38,5 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public int MailScoreAmount => _mailScoreAmount;
 #endregion
-
-#region Audio
-        [Header("Audio")]
-
-        [SerializeField]
-        private AudioClip _throwMailAudio;
-
-        public AudioClip ThrowMailAudio => _throwMailAudio;
-
-#endregion
     }
 }

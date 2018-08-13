@@ -238,7 +238,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [ClientRpc]
         public void RpcThrowMail()
         {
-            AudioManager.Instance.PlayOneShot(ItemManager.Instance.ItemData.ThrowMailAudio);
+            AudioManager.Instance.PlayOneShot(PlayerManager.Instance.PlayerData.ThrowMailAudio);
         }
 
         [ClientRpc]
