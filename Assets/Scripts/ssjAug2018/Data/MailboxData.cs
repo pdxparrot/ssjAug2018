@@ -13,6 +13,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public LayerMask MailboxLayer => _mailboxLayer;
 
+        [SerializeField]
+        private float _completedMailboxDespawnSeconds = 1.0f;
+
+        public float CompletedMailboxDespawnSeconds => _completedMailboxDespawnSeconds;
+
 #region Spawn Ranges
         [Header("Spawn Ranges")]
 

@@ -214,7 +214,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             temp.AddRange(_activeMailboxes);
 
             foreach(Mailbox mailbox in temp) {
-                mailbox.ForceComplete();
+                mailbox.Complete();
             }
         }
 

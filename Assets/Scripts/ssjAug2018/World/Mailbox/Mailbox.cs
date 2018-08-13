@@ -23,6 +23,8 @@ namespace pdxpartyparrot.ssjAug2018.World
         [SyncVar]
         private int _mailRequired;
 
+        public bool IsCompleted => _mailRequired <= 0;
+
         [SerializeField]
         [ReadOnly]
         [SyncVar]
@@ -31,12 +33,20 @@ namespace pdxpartyparrot.ssjAug2018.World
         public bool HasActivated => _hasActivated;
 
         [Space(10)]
+
+#region Effects
         [Header("Effects")]
+
         [SerializeField]
         private EffectTrigger _receivedMail;
        
         [SerializeField]
         private EffectTrigger _mailboxComplete;
+#endregion
+
+        [SerializeField]
+        [ReadOnly]
+        private Timer _despawnTimer;
 
 #region Unity Lifecycle
         private void Awake()
@@ -44,7 +54,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             MailboxManager.Instance.RegisterMailbox(this);
 
             if(NetworkServer.active) {
-                DeactivateMailbox(false);
+                _model.SetActive(false);
             }
         }
 
@@ -52,6 +62,15 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             if(MailboxManager.HasInstance) {
                 MailboxManager.Instance.UnregisterMailbox(this);
+            }
+        }
+
+        private void Update()
+        {
+            float dt = Time.deltaTime;
+
+            if(NetworkServer.active) {
+                _despawnTimer.Update(dt);
             }
         }
 #endregion
@@ -74,27 +93,23 @@ namespace pdxpartyparrot.ssjAug2018.World
         }
 
         [Server]
-        public void DeactivateMailbox(bool complete=true)
+        public void Complete()
         {
-            if(complete) {
-                Debug.Log($"Mailbox {name} completed");
-                MailboxManager.Instance.MailboxCompleted(this);
-                _mailboxComplete.Trigger();
-            }
-            _model.SetActive(false);
-        }
-
-        [Server]
-        public void ForceComplete()
-        {
+            Debug.Log($"Mailbox {name} completed");
             _mailRequired = 0;
-            DeactivateMailbox();
+
+            RpcComplete();
+
+            _despawnTimer.Start(MailboxManager.Instance.MailboxData.CompletedMailboxDespawnSeconds, () => {
+                MailboxManager.Instance.MailboxCompleted(this);
+                _model.SetActive(false);
+            });
         }
 
         [Server]
         public bool MailHit(Player owner)
         {
-            if(!_model.activeInHierarchy) {
+            if(IsCompleted || !_model.activeInHierarchy) {
                 return false;
             }
 
@@ -102,10 +117,11 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             _mailRequired--;
             if(_mailRequired <= 0) {
-                DeactivateMailbox(owner);
+                Complete();
+            } else {
+                RpcHit();
             }
 
-            _receivedMail.Trigger();
             GameManager.Instance.ScoreHit(owner);
             return true;
         }
@@ -113,7 +129,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         [Server]
         public int PlayerCollide(Player player)
         {
-            if(!_model.activeInHierarchy || !GameStateManager.Instance.GameData.PlayerCollidesMailboxes) {
+            if(IsCompleted || !_model.activeInHierarchy || !GameStateManager.Instance.GameData.PlayerCollidesMailboxes) {
                 return -1;
             }
 
@@ -123,12 +139,27 @@ namespace pdxpartyparrot.ssjAug2018.World
 
             _mailRequired -= consumed;
             if(_mailRequired <= 0) {
-                DeactivateMailbox(player);
+                Complete();
+            } else {
+                RpcHit();
             }
 
-            GameManager.Instance.Score(player);
-
+            GameManager.Instance.Score(player, consumed);
             return consumed;
         }
+
+#region Callbacks
+        [ClientRpc]
+        private void RpcComplete()
+        {
+            _mailboxComplete.Trigger();
+        }
+
+        [ClientRpc]
+        private void RpcHit()
+        {
+            _receivedMail.Trigger();
+        }
+#endregion
     }
 }

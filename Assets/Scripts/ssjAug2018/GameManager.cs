@@ -52,20 +52,27 @@ namespace pdxpartyparrot.ssjAug2018
         {
             Assert.IsTrue(NetworkServer.active);
 
-            Score(player);
+            Score(player, 1);
 
             player.NetworkPlayer.RpcHit();
         }
 
         //[Server]
-        public void Score(Player player)
+        public void Score(Player player, int amount)
         {
             Assert.IsTrue(NetworkServer.active);
 
-            player.NetworkPlayer.IncreaseScore(ItemManager.Instance.ItemData.MailScoreAmount);
-            _gameTimer.AddTime(GameStateManager.Instance.GameData.ScoreGameTimeSeconds);
+            int score = ItemManager.Instance.ItemData.MailScoreAmount;
+            int extraSeconds = GameStateManager.Instance.GameData.ScoreGameTimeSeconds;
+            if(GameStateManager.Instance.GameData.PlayerCollisionScoreIsMultiplier) {
+                score *= amount;
+                extraSeconds *= amount;
+            }
 
-            player.NetworkPlayer.RpcGameTimeUpdated(GameStateManager.Instance.GameData.ScoreGameTimeSeconds);
+            player.NetworkPlayer.IncreaseScore(score);
+
+            _gameTimer.AddTime(extraSeconds);
+            player.NetworkPlayer.RpcGameTimeUpdated(extraSeconds);
         }
     }
 }

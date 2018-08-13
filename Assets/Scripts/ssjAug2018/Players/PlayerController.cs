@@ -38,9 +38,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 if(null == Player.Viewer || IsMoving) {
                     return Player.transform.forward;
                 }
-
-                /*Vector3 target = Player.Viewer.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f)).direction * PlayerControllerData.ThrowConvergeDistance;
-                return (target - _throwOrigin.position).normalized;*/
                 return Player.Viewer.transform.forward;
             }
         }

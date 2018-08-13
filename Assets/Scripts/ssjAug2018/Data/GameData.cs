@@ -39,5 +39,10 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private bool _playerCollidesMailboxes;
 
         public bool PlayerCollidesMailboxes => _playerCollidesMailboxes;
+
+        [SerializeField]
+        private bool _playerCollisionScoreIsMultiplier;
+
+        public bool PlayerCollisionScoreIsMultiplier => _playerCollisionScoreIsMultiplier;
     }
 }
