@@ -608,7 +608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _particleSystemPrefab: {fileID: 198680564433572222, guid: 3c934de676e73494f8a2467229218e6a,
     type: 2}
-  _audioClip: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: 2dc96bb9117634e44aa7f469bc852d98, type: 3}
 --- !u!114 &114026309254030618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -622,7 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _particleSystemPrefab: {fileID: 198191362232655224, guid: 24ff574a3c7568b49b10c46653d23393,
     type: 2}
-  _audioClip: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: b6ea66a2b07414840aff95452a1c5293, type: 3}
 --- !u!114 &114381645144171178
 MonoBehaviour:
   m_ObjectHideFlags: 1
