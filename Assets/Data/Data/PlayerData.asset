@@ -30,3 +30,4 @@ MonoBehaviour:
   _lookLerpSpeed: 10
   _maxLetters: 10
   _reloadTimeSeconds: 2
+  _throwMailAudio: {fileID: 8300000, guid: ee46d370b02cd1d4bb5ebb0bb8ae218d, type: 3}

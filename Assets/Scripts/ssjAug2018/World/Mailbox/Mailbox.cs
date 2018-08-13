@@ -1,4 +1,5 @@
 ﻿using pdxpartyparrot.Core.Util;
+using pdxpartyparrot.Game.Effects;
 using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Players;
 
@@ -28,6 +29,14 @@ namespace pdxpartyparrot.ssjAug2018.World
         private bool _hasActivated;
 
         public bool HasActivated => _hasActivated;
+
+        [Space(10)]
+        [Header("Effects")]
+        [SerializeField]
+        private EffectTrigger _receivedMail;
+       
+        [SerializeField]
+        private EffectTrigger _mailboxComplete;
 
 #region Unity Lifecycle
         private void Awake()
@@ -70,8 +79,8 @@ namespace pdxpartyparrot.ssjAug2018.World
             if(complete) {
                 Debug.Log($"Mailbox {name} completed");
                 MailboxManager.Instance.MailboxCompleted(this);
+                _mailboxComplete.Trigger();
             }
-
             _model.SetActive(false);
         }
 
@@ -96,6 +105,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 DeactivateMailbox(owner);
             }
 
+            _receivedMail.Trigger();
             GameManager.Instance.ScoreHit(owner);
             return true;
         }

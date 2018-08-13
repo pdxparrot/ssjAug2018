@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 114452634713672820}
   - component: {fileID: 65981094800522822}
   - component: {fileID: 114078025486838648}
+  - component: {fileID: 114123184069104188}
+  - component: {fileID: 114750672421111680}
   m_Layer: 12
   m_Name: Mailbox
   m_TagString: Untagged
@@ -192,6 +194,22 @@ MonoBehaviour:
   _animator: {fileID: 95451696309214956}
   _mailRequired: 0
   _hasActivated: 0
+  _receivedMail: {fileID: 114123184069104188}
+  _mailboxComplete: {fileID: 114750672421111680}
+--- !u!114 &114123184069104188
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738565080964254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa504bece785856469a16d453fb754c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _vfx: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: 86126de1edca56144baf8dec9923f526, type: 3}
+  _audioSource: {fileID: 0}
 --- !u!114 &114452634713672820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,3 +242,17 @@ MonoBehaviour:
     i15: 139
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114750672421111680
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738565080964254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa504bece785856469a16d453fb754c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _vfx: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: a9ce00dc03e605944a7b330903013143, type: 3}
+  _audioSource: {fileID: 0}

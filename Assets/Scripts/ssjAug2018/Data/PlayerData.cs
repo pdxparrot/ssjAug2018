@@ -105,5 +105,16 @@ namespace pdxpartyparrot.ssjAug2018.Data
 
         public float ReloadTimeSeconds => _reloadTimeSeconds;
 #endregion
+
+        [Space(10)]
+
+#region Audio
+        [Header("Audio")]
+
+        [SerializeField]
+        private AudioClip _throwMailAudio;
+
+        public AudioClip ThrowMailAudio => _throwMailAudio;
+#endregion
     }
 }
