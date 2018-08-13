@@ -1,4 +1,6 @@
-﻿using pdxpartyparrot.Core.Audio;
+﻿using JetBrains.Annotations;
+
+using pdxpartyparrot.Core.Audio;
 
 using UnityEngine;
 
@@ -7,12 +9,15 @@ namespace pdxpartyparrot.Game.Effects
     public sealed class EffectTrigger : MonoBehaviour
     {
         [SerializeField]
+        [CanBeNull]
         private ParticleSystem _vfx;
 
         [SerializeField]
+        [CanBeNull]
         private AudioClip _audioClip;
 
         [SerializeField]
+        [CanBeNull]
         private AudioSource _audioSource;
 
 #region Unity Lifecycle
@@ -25,13 +30,17 @@ namespace pdxpartyparrot.Game.Effects
 
         private void Start()
         {
-            _vfx.Stop();
+            if(null != _vfx) {
+                _vfx.Stop();
+            }
         }
 #endregion
 
         public void Trigger()
         {
-            _vfx.Play();
+            if(null != _vfx) {
+                _vfx.Play();
+            }
 
             if(null == _audioSource) {
                 AudioManager.Instance.PlayOneShot(_audioClip);
