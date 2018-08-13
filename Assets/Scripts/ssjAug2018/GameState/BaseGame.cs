@@ -1,6 +1,7 @@
 ﻿using System;
 
 using pdxpartyparrot.Core;
+using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
@@ -17,6 +18,9 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public abstract class BaseGame : pdxpartyparrot.Game.State.GameState
     {
+        [SerializeField]
+        private AudioClip _music;
+
         private ServerSpectator _serverSpectator;
 
         public override void OnEnter()
@@ -27,10 +31,16 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
             Core.Network.NetworkManager.Instance.ServerDisconnectEvent += ServerDisconnectEventHandler;
             Core.Network.NetworkManager.Instance.ClientDisconnectEvent += ClientDisconnectEventHandler;
+
+            if(NetworkClient.active) {
+                AudioManager.Instance.PlayMusic(_music);
+            }
         }
 
         public override void OnExit()
         {
+            AudioManager.Instance.StopMusic();
+
             if(null != _serverSpectator) {
                 Destroy(_serverSpectator);
             }
