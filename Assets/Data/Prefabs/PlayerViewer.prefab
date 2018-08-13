@@ -60,7 +60,6 @@ GameObject:
   - component: {fileID: 54860354957275670}
   - component: {fileID: 114084330026138302}
   - component: {fileID: 114567109661045988}
-  - component: {fileID: 114091312553206734}
   m_Layer: 10
   m_Name: PlayerViewer
   m_TagString: Untagged
@@ -290,18 +289,6 @@ MonoBehaviour:
   _velocity: {x: 0, y: 0, z: 0}
   _lastTargetPosition: {x: 0, y: 0, z: 0}
   _isLooking: 0
---- !u!114 &114091312553206734
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1614754266016784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 288e88e062d10c04fa9348fca342baa6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _particleSystem: {fileID: 0}
 --- !u!114 &114567109661045988
 MonoBehaviour:
   m_ObjectHideFlags: 1

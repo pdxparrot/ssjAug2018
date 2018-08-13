@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 82787397950864878}
   - component: {fileID: 114302525597356806}
   m_Layer: 15
-  m_Name: SnowZone
+  m_Name: LightRain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,6 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca1372135feb7a4bbf92f2565bd008c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _particleSystemPrefab: {fileID: 198680564433572222, guid: 3c934de676e73494f8a2467229218e6a,
+  _particleSystemPrefab: {fileID: 198191362232655224, guid: 24ff574a3c7568b49b10c46653d23393,
     type: 2}
-  _audioClip: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: b6ea66a2b07414840aff95452a1c5293, type: 3}

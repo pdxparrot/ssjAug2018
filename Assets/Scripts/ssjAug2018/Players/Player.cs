@@ -15,6 +15,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
     [RequireComponent(typeof(FollowTarget))]
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(WeatherZoneEffect))]
     public sealed class Player : Actor
     {
         public override float Height => ((CapsuleCollider)Collider).height;
@@ -45,6 +46,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public Camera.Viewer PlayerViewer => _viewer;
 
+        private WeatherZoneEffect _weatherZoneEffect;
+
 #region Unity Lifecycle
         protected override void Awake()
         {
@@ -61,11 +64,15 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _audioSource = GetComponent<AudioSource>();
             AudioManager.Instance.InitSFXAudioMixerGroup(_audioSource);
 
+            _weatherZoneEffect = GetComponent<WeatherZoneEffect>();
+
             PlayerManager.Instance.Register(this);
         }
 
         protected override void OnDestroy()
         {
+            _weatherZoneEffect.ParticleSystemParent = null;
+
             if(ViewerManager.HasInstance) {
                 ViewerManager.Instance.ReleaseViewer(_viewer);
             }
@@ -106,6 +113,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             _viewer = ViewerManager.Instance.AcquireViewer<Camera.Viewer>();
             if(null != _viewer) {
                 _viewer.Initialize(this);
+                _weatherZoneEffect.ParticleSystemParent = _viewer.transform;
             }
 
             UIManager.Instance.InitializePlayerUI(this);

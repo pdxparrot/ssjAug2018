@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 95894273405047928}
   - component: {fileID: 114688782993375838}
   - component: {fileID: 114826284238239696}
+  - component: {fileID: 114211211029005834}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
   - component: {fileID: 114742398105448036}
@@ -764,6 +765,18 @@ MonoBehaviour:
     _secondsRemaining: 0
     _isRunning: 0
   _canThrowSnowball: 0
+--- !u!114 &114211211029005834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356650051019368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 288e88e062d10c04fa9348fca342baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particleSystemParent: {fileID: 0}
 --- !u!114 &114307707372532762
 MonoBehaviour:
   m_ObjectHideFlags: 1

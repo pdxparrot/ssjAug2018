@@ -45,22 +45,21 @@ namespace pdxpartyparrot.ssjAug2018.World
         {
             if(null != _collider) {
                 Gizmos.color = Color.green;
-                Gizmos.DrawCube(_collider.center, _collider.size);
+                Gizmos.DrawCube(_collider.bounds.center, _collider.bounds.size);
             }
         }
 #endregion
 
-        public void Enter(GameObject obj)
+        public void Enter(GameObject obj, Transform parent=null)
         {
             if(_zoneParticleSystems.ContainsKey(obj)) {
                 Debug.LogWarning($"Duplicate zone {name} particle systems for {obj.name}");
             }
 
-            ParticleSystem zoneParticleSystem = null;
             if(null != _particleSystemPrefab) {
-                zoneParticleSystem = Instantiate(_particleSystemPrefab, obj.transform);
+                ParticleSystem zoneParticleSystem = Instantiate(_particleSystemPrefab, null == parent ? obj.transform : parent);
+                _zoneParticleSystems.Add(obj, zoneParticleSystem);
             }
-            _zoneParticleSystems.Add(obj, zoneParticleSystem);
 
             _audioSource.Play();
         }
@@ -68,7 +67,7 @@ namespace pdxpartyparrot.ssjAug2018.World
         public void Exit(GameObject obj)
         {
             ParticleSystem zoneParticleSystem;
-            if(_zoneParticleSystems.Remove(obj, out zoneParticleSystem)) {
+            if(_zoneParticleSystems.Remove(obj, out zoneParticleSystem) && null != zoneParticleSystem) {
                 Destroy(zoneParticleSystem.gameObject);
             }
 
