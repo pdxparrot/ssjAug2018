@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 using pdxpartyparrot.Core.Audio;
+using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class WeatherZoneEffect : MonoBehaviour
     {
+        [SerializeField]
+        [ReadOnly]
         [CanBeNull]
         private ParticleSystem _particleSystem;
 
@@ -21,7 +24,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             if(null != weather.ParticleSystemPrefab) {
-                _particleSystem = Instantiate(weather.ParticleSystemPrefab);
+                _particleSystem = Instantiate(weather.ParticleSystemPrefab, transform);
                 if(null != _particleSystem) {
                     _particleSystem.Play();
                 }
