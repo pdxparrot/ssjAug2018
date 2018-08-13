@@ -30,8 +30,7 @@ namespace pdxpartyparrot.Core.DebugMenu
 
         public void RenderNode()
         {
-            string title = Title();
-            if(GUILayout.Button(title, GUIUtils.GetLayoutButtonSize(title))) {
+            if(GUIUtils.LayoutButton(Title())) {
                 DebugMenuManager.Instance.SetCurrentNode(this);
             }
         }

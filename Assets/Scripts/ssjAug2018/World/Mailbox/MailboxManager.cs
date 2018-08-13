@@ -223,8 +223,7 @@ namespace pdxpartyparrot.ssjAug2018.World
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.MailboxManager");
             _debugMenuNode.RenderContentsAction = () => {
                 if(NetworkServer.active) {
-                    string text = "Force Complete";
-                    if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                    if(GUIUtils.LayoutButton("Force Complete")) {
                         CompleteAllMailboxes();
                     }
 

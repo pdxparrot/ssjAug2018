@@ -64,14 +64,12 @@ namespace pdxpartyparrot.ssjAug2018.Menu
 // so that we don't get into a fucked up state
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => "Multiplayer Menu");
             _debugMenuNode.RenderContentsAction = () => {
-                string text = "Host";
-                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                if(GUIUtils.LayoutButton("Host")) {
                     GameStateManager.Instance.StartHost();
                     return;
                 }
 
-                text = "Join";
-                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                if(GUIUtils.LayoutButton("Join")) {
                     GameStateManager.Instance.StartJoin();
                     return;
                 }

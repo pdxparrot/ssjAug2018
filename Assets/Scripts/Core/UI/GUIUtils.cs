@@ -11,9 +11,14 @@ namespace pdxpartyparrot.Core.UI
 
         public static GUILayoutOption[] GetLayoutButtonSize(string text)
         {
+            return GetLayoutButtonSize(text, GUI.skin.button);
+        }
+
+        public static GUILayoutOption[] GetLayoutButtonSize(string text, GUIStyle style)
+        {
             GUIContent titleContent = new GUIContent(text);
 
-            Vector2 size = GUI.skin.button.CalcSize(titleContent);
+            Vector2 size = style.CalcSize(titleContent);
 
             // enforce some decent minimums
             if(size.x < MinimumButtonWidth) {
@@ -24,6 +29,16 @@ namespace pdxpartyparrot.Core.UI
             }
 
             return new[] { GUILayout.Width(size.x), GUILayout.Height(size.y) };
+        }
+
+        public static bool LayoutButton(string text)
+        {
+            return GUILayout.Button(text, GetLayoutButtonSize(text));
+        }
+
+        public static bool LayoutButton(string text, GUIStyle style)
+        {
+            return GUILayout.Button(text, style, GetLayoutButtonSize(text, style));
         }
 
 // TODO: these don't really work, we need to be able to hold the string that is the text

@@ -140,8 +140,7 @@ namespace pdxpartyparrot.Game.State
             debugMenuNode.RenderContentsAction = () => {
                 GUILayout.Label($"Current Game State: {CurrentState?.Name}");
 
-                string text = "Reset";
-                if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                if(GUIUtils.LayoutButton("Reset")) {
                     TransitionToInitialState();
                 }
             };

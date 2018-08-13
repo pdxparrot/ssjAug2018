@@ -94,8 +94,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
                 foreach(string sceneName in _sceneTesterStatePrefab.TestScenes) {
-                    string text = $"Load Test Scene {sceneName}";
-                    if(GUILayout.Button(text, GUIUtils.GetLayoutButtonSize(text))) {
+                    if(GUIUtils.LayoutButton($"Load Test Scene {sceneName}")) {
                         PushSubState(_networkConnectStatePrefab, connectState => {
                             connectState.Initialize(NetworkConnect.ConnectType.SinglePlayer, _sceneTesterStatePrefab, state => {
                                 SceneTester sceneTester = (SceneTester)state;
