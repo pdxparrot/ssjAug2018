@@ -79,8 +79,8 @@ namespace pdxpartyparrot.ssjAug2018.World
             if(complete) {
                 Debug.Log($"Mailbox {name} completed");
                 MailboxManager.Instance.MailboxCompleted(this);
+                _mailboxComplete.Trigger();
             }
-            _mailboxComplete.Trigger();
             _model.SetActive(false);
         }
 
