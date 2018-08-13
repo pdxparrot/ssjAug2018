@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.Core.Network;
+﻿using pdxpartyparrot.Core.Audio;
+using pdxpartyparrot.Core.Network;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Items;
@@ -203,6 +204,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null != mail) {
                 mail.Throw(Player, origin, velocity);
             }
+            if(Player.IsLocalActor) AudioManager.Instance.PlayOneShot(ItemManager.Instance.ItemData.ThrowMailAudio);
 
             RpcThrowMail();
 

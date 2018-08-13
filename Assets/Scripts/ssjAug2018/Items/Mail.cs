@@ -1,6 +1,5 @@
 ﻿using System;
 
-using pdxpartyparrot.Core.Audio;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Util.ObjectPool;
 using pdxpartyparrot.ssjAug2018.Players;
@@ -90,8 +89,6 @@ namespace pdxpartyparrot.ssjAug2018.Items
             _rigidbody.velocity = velocity;
 
             _despawnTimer.Start(ItemManager.Instance.ItemData.MailDespawnSeconds, Miss);
-
-            AudioManager.Instance.PlayOneShot(ItemManager.Instance.ItemData.ThrowMailAudio);
         }
 
         [Server]
