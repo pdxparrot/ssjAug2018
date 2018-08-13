@@ -204,7 +204,6 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null != mail) {
                 mail.Throw(Player, origin, velocity);
             }
-            if(Player.IsLocalActor) AudioManager.Instance.PlayOneShot(ItemManager.Instance.ItemData.ThrowMailAudio);
 
             RpcThrowMail();
 
@@ -239,6 +238,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         [ClientRpc]
         public void RpcThrowMail()
         {
+            AudioManager.Instance.PlayOneShot(ItemManager.Instance.ItemData.ThrowMailAudio);
         }
 
         [ClientRpc]
