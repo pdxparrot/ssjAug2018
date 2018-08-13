@@ -114,11 +114,11 @@ namespace pdxpartyparrot.Core.Audio
 
         public float MasterVolume
         {
-            get { return PartyParrotManager.Instance.GetFloat(MasterVolumeKey, 1.0f); }
+            get { return PartyParrotManager.Instance.GetFloat(MasterVolumeKey, Mixer.GetFloatOrDefault(_masterVolumeParameter)); }
 
             set
             {
-                value = Mathf.Clamp01(value);
+                value = Mathf.Clamp(value, -80.0f, 20.0f);
 
                 Mixer.SetFloat(_masterVolumeParameter, value);
                 PartyParrotManager.Instance.SetFloat(MasterVolumeKey, value);
@@ -129,11 +129,11 @@ namespace pdxpartyparrot.Core.Audio
 
         public float MusicVolume
         {
-            get { return PartyParrotManager.Instance.GetFloat(MusicVolumeKey, 0.5f); }
+            get { return PartyParrotManager.Instance.GetFloat(MusicVolumeKey, Mixer.GetFloatOrDefault(_musicVolumeParameter, -5.0f)); }
 
             set
             {
-                value = Mathf.Clamp01(value);
+                value = Mathf.Clamp(value, -80.0f, 20.0f);
 
                 Mixer.SetFloat(_musicVolumeParameter, value);
                 PartyParrotManager.Instance.SetFloat(MusicVolumeKey, value);
@@ -144,11 +144,11 @@ namespace pdxpartyparrot.Core.Audio
 
         public float SFXVolume
         {
-            get { return PartyParrotManager.Instance.GetFloat(SFXVolumeKey, 1.0f); }
+            get { return PartyParrotManager.Instance.GetFloat(SFXVolumeKey, Mixer.GetFloatOrDefault(_sfxVolumeParameter)); }
 
             set
             {
-                value = Mathf.Clamp01(value);
+                value = Mathf.Clamp(value, -80.0f, 20.0f);
 
                 Mixer.SetFloat(_sfxVolumeParameter, value);
                 PartyParrotManager.Instance.SetFloat(SFXVolumeKey, value);
@@ -159,11 +159,11 @@ namespace pdxpartyparrot.Core.Audio
 
         public float AmbientVolume
         {
-            get { return PartyParrotManager.Instance.GetFloat(AmbientVolumeKey, 1.0f); }
+            get { return PartyParrotManager.Instance.GetFloat(AmbientVolumeKey, Mixer.GetFloatOrDefault(_ambientVolumeParameter, -10.0f)); }
 
             set
             {
-                value = Mathf.Clamp01(value);
+                value = Mathf.Clamp(value, -80.0f, 20.0f);
 
                 Mixer.SetFloat(_ambientVolumeParameter, value);
                 PartyParrotManager.Instance.SetFloat(AmbientVolumeKey, value);
