@@ -40,6 +40,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public override bool OnStarted(CharacterActorControllerAction action)
         {
             if(action is ThrowMailAction) {
+                if(!PlayerController.Player.NetworkPlayer.CanThrowMail) {
+                    return false;
+                }
+
                 _canThrowMail = true;
 
                 _autoThrowMailTimer.Start(PlayerController.PlayerControllerData.AutoThrowSeconds, () => {
@@ -52,6 +56,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             if(action is ThrowSnowballAction) {
+                if(!PlayerController.Player.NetworkPlayer.CanThrowSnowball) {
+                    return false;
+                }
+
                 _canThrowSnowball = true;
 
                 PlayerController.Owner.Animator.SetBool(PlayerController.PlayerControllerData.ThrowingSnowballParam, true);

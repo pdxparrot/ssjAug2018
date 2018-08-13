@@ -80,14 +80,6 @@ namespace pdxpartyparrot.Game.Actors
         private EffectTrigger _groundedEffect;
 #endregion
 
-        [Space(10)]
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _isRunning;
-
-        public bool IsRunning => _isRunning;
-
         private CharacterActorControllerComponent[] _components;
 
 #region Unity Lifecycle
@@ -105,11 +97,6 @@ namespace pdxpartyparrot.Game.Actors
         protected override void Update()
         {
             base.Update();
-
-            _isRunning = LastMoveAxes.sqrMagnitude >= ControllerData.RunThresholdSquared;
-
-            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.x) : 0.0f);
-            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.y) : 0.0f);
 
             Owner.Animator.SetBool(ControllerData.FallingParam, IsFalling);
         }
@@ -180,6 +167,9 @@ namespace pdxpartyparrot.Game.Actors
             if(forward.sqrMagnitude > float.Epsilon) {
                 transform.forward = forward;
             }
+
+            Owner.Animator.SetFloat(ControllerData.MoveXAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.x) : 0.0f);
+            Owner.Animator.SetFloat(ControllerData.MoveZAxisParam, CanMove ? Mathf.Abs(LastMoveAxes.y) : 0.0f);
         }
 
         public override void PhysicsMove(Vector3 axes, float dt)

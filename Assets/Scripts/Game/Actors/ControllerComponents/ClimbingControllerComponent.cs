@@ -199,12 +199,15 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             case ClimbMode.None:
                 return false;
             case ClimbMode.Climbing:
-                return true;
+                break;
             case ClimbMode.Hanging:
                 Controller.DefaultAnimationMove(axes, dt);
-                return true;
+                break;
             }
-            return false;
+
+            Controller.Owner.Animator.SetFloat(Controller.ControllerData.MoveXAxisParam, Controller.CanMove ? Mathf.Abs(Controller.LastMoveAxes.x) : 0.0f);
+            Controller.Owner.Animator.SetFloat(Controller.ControllerData.MoveZAxisParam, Controller.CanMove ? Mathf.Abs(Controller.LastMoveAxes.y) : 0.0f);
+            return true;
         }
 
         public override bool OnPhysicsMove(Vector3 axes, float dt)

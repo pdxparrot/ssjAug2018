@@ -28,6 +28,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public Player Player => (Player)Owner;
 
+        public bool IsAiming => null != _aimComponent && _aimComponent.IsAiming;
+
         private Vector3 ThrowDirection
         {
             get
