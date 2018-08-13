@@ -50,6 +50,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public float ThrowSpeed => _throwSpeed;
 
         [SerializeField]
+        private bool _throwInheritsPlayerVelocity;
+
+        public bool ThrowInheritsPlayerVelocity => _throwInheritsPlayerVelocity;
+
+        [SerializeField]
         private float _throwConvergeDistance = 100.0f;
 
         public float ThrowConvergeDistance => _throwConvergeDistance;

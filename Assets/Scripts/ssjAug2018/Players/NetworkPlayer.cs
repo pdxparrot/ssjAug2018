@@ -200,8 +200,12 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Debug.Log($"Throwing mail from {origin} in direction {direction} at speed {speed}");
 
-            Mail mail = ItemManager.Instance.GetMail();
             Vector3 velocity = direction * speed;
+            if(Player.PlayerController.PlayerControllerData.ThrowInheritsPlayerVelocity) {
+                velocity += Player.Controller.Rigidbody.velocity;
+            }
+
+            Mail mail = ItemManager.Instance.GetMail();
             if(null != mail) {
                 mail.Throw(Player, origin, velocity);
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 
-using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.ssjAug2018.Camera;
 
 using UnityEngine;
@@ -27,9 +26,9 @@ namespace pdxpartyparrot.ssjAug2018.Data
 #region Viewers
         [SerializeField]
         [FormerlySerializedAs("_viewerPrefab")]
-        private Camera.Viewer _playerViewerPrefab;
+        private Viewer _playerViewerPrefab;
 
-        public Camera.Viewer PlayerViewerPrefab => _playerViewerPrefab;
+        public Viewer PlayerViewerPrefab => _playerViewerPrefab;
 
         [SerializeField]
         private ServerSpectatorViewer _serverSpectatorViewer;
