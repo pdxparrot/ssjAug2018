@@ -130,10 +130,12 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
                 foreach(string sceneName in _sceneTesterStatePrefab.TestScenes) {
                     if(GUIUtils.LayoutButton($"Load Test Scene {sceneName}")) {
-                        PushSubState(_networkConnectStatePrefab, connectState => {
-                            connectState.Initialize(NetworkConnect.ConnectType.SinglePlayer, _sceneTesterStatePrefab, state => {
-                                SceneTester sceneTester = (SceneTester)state;
-                                sceneTester.SetScene(sceneName);
+                        TransitionToInitialState(null, () => {
+                            PushSubState(_networkConnectStatePrefab, connectState => {
+                                connectState.Initialize(NetworkConnect.ConnectType.SinglePlayer, _sceneTesterStatePrefab, state => {
+                                    SceneTester sceneTester = (SceneTester)state;
+                                    sceneTester.SetScene(sceneName);
+                                });
                             });
                         });
                         break;

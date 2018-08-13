@@ -50,13 +50,13 @@ namespace pdxpartyparrot.Game.State
         }
 #endregion
 
-        public void TransitionToInitialState(Action<GameState> initializeState=null)
+        public void TransitionToInitialState(Action<GameState> initializeState=null, Action onStateLoaded=null)
         {
             Debug.Log("Transition to initial state");
-            TransitionState(_initialGameStatePrefab, initializeState);
+            TransitionState(_initialGameStatePrefab, initializeState, onStateLoaded);
         }
 
-        public void TransitionState<TV>(TV gameStatePrefab, Action<TV> initializeState=null) where TV: GameState
+        public void TransitionState<TV>(TV gameStatePrefab, Action<TV> initializeState=null, Action onStateLoaded=null) where TV: GameState
         {
             ShowLoadingScreen(true);
 
@@ -71,8 +71,9 @@ namespace pdxpartyparrot.Game.State
                     _currentGameState.OnEnter();
 
                     ShowLoadingScreen(false);
-                });
 
+                    onStateLoaded?.Invoke();
+                });
             });
         }
 
