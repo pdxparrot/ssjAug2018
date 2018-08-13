@@ -87,12 +87,47 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             if(Core.Network.NetworkManager.HasInstance) {
                 Core.Network.NetworkManager.Instance.Stop();
             }
+            NetworkClient = null;
         }
 
         private void InitDebugMenu()
         {
             DebugMenuNode debugMenuNode = DebugMenuManager.Instance.AddNode(() => "ssjAug2018.GameStateManager");
             debugMenuNode.RenderContentsAction = () => {
+                if(null != NetworkClient) {
+                    GUILayout.BeginVertical("Client Stats", GUI.skin.box);
+                        GUILayout.Label($"Ping: {NetworkClient.GetRTT()}ms");
+
+                        int numMsgs, numBytes;
+                        NetworkClient.GetStatsIn(out numMsgs, out numBytes);
+                        GUILayout.Label($"Messages received: {numMsgs}");
+                        GUILayout.Label($"Bytes received: {numBytes}");
+
+                        int numBufferedMsgs, lastBufferedPerSecond;
+                        NetworkClient.GetStatsOut(out numMsgs, out numBufferedMsgs, out numBytes, out lastBufferedPerSecond);
+                        GUILayout.Label($"Messages sent: {numMsgs}");
+                        GUILayout.Label($"Messages buffered: {numBufferedMsgs}");
+                        GUILayout.Label($"Bytes sent: {numBytes}");
+                        GUILayout.Label($"Messages buffered per second: {lastBufferedPerSecond}");
+                    GUILayout.EndVertical();
+                }
+
+                if(NetworkServer.active) {
+                    GUILayout.BeginVertical("Server Stats", GUI.skin.box);
+                        int numMsgs, numBytes;
+                        NetworkServer.GetStatsIn(out numMsgs, out numBytes);
+                        GUILayout.Label($"Messages received: {numMsgs}");
+                        GUILayout.Label($"Bytes received: {numBytes}");
+
+                        int numBufferedMsgs, lastBufferedPerSecond;
+                        NetworkServer.GetStatsOut(out numMsgs, out numBufferedMsgs, out numBytes, out lastBufferedPerSecond);
+                        GUILayout.Label($"Messages sent: {numMsgs}");
+                        GUILayout.Label($"Messages buffered: {numBufferedMsgs}");
+                        GUILayout.Label($"Bytes sent: {numBytes}");
+                        GUILayout.Label($"Messages buffered per second: {lastBufferedPerSecond}");
+                    GUILayout.EndVertical();
+                }
+
                 foreach(string sceneName in _sceneTesterStatePrefab.TestScenes) {
                     if(GUIUtils.LayoutButton($"Load Test Scene {sceneName}")) {
                         PushSubState(_networkConnectStatePrefab, connectState => {
