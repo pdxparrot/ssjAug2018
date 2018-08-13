@@ -163,6 +163,8 @@ Assets/Plugins/PanoramaToCubemap.meta
 Assets/Plugins/WMSplatmapScript.meta
 /Assets/Plugins/TerrainStitcher/
 /Assets/Plugins/TerrainStitcher.meta
+/Assets/Plugins/MTE/
+/Assets/Plugins/MTE.meta
 Assets/ProBuilder Data/ProBuilderPreferences.asset
 Assets/ProBuilder Data/ProBuilderPreferences.asset.meta
 Assets/StreamingAssets/config.json
