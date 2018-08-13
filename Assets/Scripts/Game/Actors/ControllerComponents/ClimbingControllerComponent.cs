@@ -125,6 +125,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void OnDrawGizmos()
         {
+            if(!Application.isPlaying) {
+                return;
+            }
+
             // left hand
             Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
             Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);

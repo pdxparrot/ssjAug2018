@@ -15,7 +15,7 @@ namespace pdxpartyparrot.Core.Camera
         [SerializeField]
         private Transform _targetTransform;
 
-        public Transform TargetTransform => null == _targetTransform ? transform : _targetTransform;
+        public Transform TargetTransform { get { return null == _targetTransform ? transform : _targetTransform; } set { _targetTransform = value; } }
 
         [SerializeField]
         [ReadOnly]

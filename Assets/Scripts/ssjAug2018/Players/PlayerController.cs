@@ -4,6 +4,7 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.Data;
+using pdxpartyparrot.ssjAug2018.Players.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;

@@ -73,6 +73,10 @@ namespace pdxpartyparrot.Game.Players
 
         private void OnDrawGizmos()
         {
+            if(!Application.isPlaying) {
+                return;
+            }
+
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + Rigidbody.angularVelocity);
 

@@ -2,9 +2,9 @@
 
 using UnityEngine;
 
-namespace pdxpartyparrot.Game.Actors.ControllerComponents
+namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
 {
-    public sealed class AimControllerComponent : CharacterActorControllerComponent
+    public sealed class AimControllerComponent : PlayerControllerComponent
     {
         public class AimAction : CharacterActorControllerAction
         {
@@ -12,16 +12,26 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         }
 
         [SerializeField]
+        private Transform _aimFollowTarget;
+
+        [SerializeField]
         [ReadOnly]
         private bool _isAiming;
 
         public bool IsAiming => _isAiming;
+
+        private Transform _previousFollowTarget;
 
         public override bool OnAnimationMove(Vector3 axes, float dt)
         {
             if(!IsAiming) {
                 return false;
             }
+
+            Vector3 viewerForward = null != PlayerController.Player.Viewer
+                                    ? PlayerController.Player.Viewer.transform.forward
+                                    : PlayerController.Player.transform.forward;
+            PlayerController.Player.transform.forward = new Vector3(viewerForward.x, 0.0f, viewerForward.z).normalized;
 
             return true;
         }
@@ -49,7 +59,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
             _isAiming = true;
 
-            Debug.Log("TODO: zoom and aim!");
+            PlayerController.Player.PlayerViewer.Aim(_aimFollowTarget);
 
             return true;
         }
@@ -59,6 +69,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(!(action is AimAction)) {
                 return false;
             }
+
+            PlayerController.Player.PlayerViewer.ResetTarget();
 
             _isAiming = false;
 

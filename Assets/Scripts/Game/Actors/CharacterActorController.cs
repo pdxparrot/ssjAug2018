@@ -114,6 +114,10 @@ namespace pdxpartyparrot.Game.Actors
 
         protected virtual void OnDrawGizmos()
         {
+            if(!Application.isPlaying) {
+                return;
+            }
+
             Gizmos.color = Color.green;
             Gizmos.DrawLine(Rigidbody.position, transform.position + Rigidbody.angularVelocity);
 

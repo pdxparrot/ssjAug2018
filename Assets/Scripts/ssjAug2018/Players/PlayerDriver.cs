@@ -5,6 +5,7 @@ using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
+using pdxpartyparrot.ssjAug2018.Players.ControllerComponents;
 
 using UnityEngine;
 using UnityEngine.Experimental.Input;
