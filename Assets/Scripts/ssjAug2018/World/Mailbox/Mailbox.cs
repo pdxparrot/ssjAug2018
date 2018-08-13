@@ -1,5 +1,6 @@
 ﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Core.Audio;
+using pdxpartyparrot.Game.Effects;
 using pdxpartyparrot.ssjAug2018.GameState;
 using pdxpartyparrot.ssjAug2018.Players;
 
@@ -29,6 +30,14 @@ namespace pdxpartyparrot.ssjAug2018.World
         private bool _hasActivated;
 
         public bool HasActivated => _hasActivated;
+
+        [Space(10)]
+        [Header("Effects")]
+        [SerializeField]
+        private EffectTrigger _receivedMailAudio;
+       
+        [SerializeField]
+        private EffectTrigger _mailboxCompleteAudio;
 
 #region Unity Lifecycle
         private void Awake()
@@ -72,7 +81,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 Debug.Log($"Mailbox {name} completed");
                 MailboxManager.Instance.MailboxCompleted(this);
             }
-            AudioManager.Instance.PlayOneShot(MailboxManager.Instance.MailboxData.MailboxCompleteAudio);
+            _mailboxCompleteAudio.Trigger();
             _model.SetActive(false);
         }
 
@@ -97,7 +106,7 @@ namespace pdxpartyparrot.ssjAug2018.World
                 DeactivateMailbox(owner);
             }
 
-            AudioManager.Instance.PlayOneShot(MailboxManager.Instance.MailboxData.MailReceivedAudio);
+            _receivedMailAudio.Trigger();
             GameManager.Instance.ScoreHit(owner);
             return true;
         }
