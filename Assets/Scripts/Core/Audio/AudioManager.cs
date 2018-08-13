@@ -10,9 +10,11 @@ namespace pdxpartyparrot.Core.Audio
 {
     public sealed class AudioManager : SingletonBehavior<AudioManager>
     {
+        // config keys
         private const string MasterVolumeKey = "audio.volume.master";
         private const string MusicVolumeKey = "audio.volume.music";
         private const string SFXVolumeKey = "audio.volume.sfx";
+        private const string AmbientVolumeKey = "audio.volume.ambient";
 
         [SerializeField]
         private AudioMixer _mixer;
@@ -27,6 +29,9 @@ namespace pdxpartyparrot.Core.Audio
 
         [SerializeField]
         private string _sfxMixerGroupName = "SFX";
+
+        [SerializeField]
+        private string _ambientMixerGroupName = "Ambient";
 #endregion
 
         [Space(10)]
@@ -42,6 +47,9 @@ namespace pdxpartyparrot.Core.Audio
 
         [SerializeField]
         private string _sfxVolumeParameter = "SFXVolume";
+
+        [SerializeField]
+        private string _ambientVolumeParameter = "AmbientVolume";
 #endregion
 
         [Space(10)]
@@ -73,6 +81,15 @@ namespace pdxpartyparrot.Core.Audio
 
         [SerializeField]
         private float _updateCrossfadeUpdateMs = 100.0f;
+#endregion
+
+        [Space(10)]
+
+#region Ambient
+        [Header("Ambient")]
+
+        [SerializeField]
+        private AudioSource _ambientAudioSource;
 #endregion
 
         [Space(10)]
@@ -139,6 +156,21 @@ namespace pdxpartyparrot.Core.Audio
                 Mute = false;
             }
         }
+
+        public float AmbientVolume
+        {
+            get { return PartyParrotManager.Instance.GetFloat(AmbientVolumeKey, 1.0f); }
+
+            set
+            {
+                value = Mathf.Clamp01(value);
+
+                Mixer.SetFloat(_ambientVolumeParameter, value);
+                PartyParrotManager.Instance.SetFloat(AmbientVolumeKey, value);
+
+                Mute = false;
+            }
+        }
 #endregion
 
 #region Unity Lifecycle
@@ -152,10 +184,14 @@ namespace pdxpartyparrot.Core.Audio
             InitAudioMixerGroup(_music2AudioSource, _musicMixerGroupName);
             _music2AudioSource.loop = true;
 
+            InitAudioMixerGroup(_ambientAudioSource, _ambientMixerGroupName);
+            _ambientAudioSource.loop = true;
+
             // this ensures we've loaded the volumes from the config
             MasterVolume = MasterVolume;
             MusicVolume = MusicVolume;
             SFXVolume = SFXVolume;
+            AmbientVolume = AmbientVolume;
 
             InitDebugMenu();
         }
@@ -207,6 +243,19 @@ namespace pdxpartyparrot.Core.Audio
             _music2AudioSource.Stop();
         }
 
+        public void PlayAmbient(AudioClip audioClip)
+        {
+            StopAmbient();
+
+            _ambientAudioSource.clip = audioClip;
+            _ambientAudioSource.Play();
+        }
+
+        public void StopAmbient()
+        {
+            _ambientAudioSource.Stop();
+        }
+
         private IEnumerator UpdateMusicCrossfade()
         {
             WaitForSeconds wait = new WaitForSeconds(_updateCrossfadeUpdateMs / 1000.0f);
@@ -226,11 +275,8 @@ namespace pdxpartyparrot.Core.Audio
                     GUILayout.Label($"Master Volume: {MasterVolume}");
                     GUILayout.Label($"Music Volume: {MusicVolume}");
                     GUILayout.Label($"SFX Volume: {SFXVolume}");
+                    GUILayout.Label($"Ambient Volume: {AmbientVolume}");
                     GUILayout.Label($"Mute: {Mute}");
-                GUILayout.EndVertical();
-
-                GUILayout.BeginVertical("SFX", GUI.skin.box);
-                    GUILayout.Label("TODO");
                 GUILayout.EndVertical();
 
                 GUILayout.BeginVertical("Music", GUI.skin.box);

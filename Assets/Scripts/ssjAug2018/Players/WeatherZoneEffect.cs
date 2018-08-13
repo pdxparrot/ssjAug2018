@@ -1,4 +1,5 @@
-﻿using pdxpartyparrot.ssjAug2018.World;
+﻿using pdxpartyparrot.Core.Audio;
+using pdxpartyparrot.ssjAug2018.World;
 
 using UnityEngine;
 
@@ -11,6 +12,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         [SerializeField]
         private ParticleSystem _vfx;
+
+        [SerializeField]
+        private AudioClip _audioClip;
 
 #region Unity Lifecycle
         private void Start()
@@ -27,6 +31,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(weather.WeatherZoneType == _zoneType) {
                 _vfx.Play();
+                AudioManager.Instance.PlayAmbient(_audioClip);
             }
         }
 
@@ -39,6 +44,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(weather.WeatherZoneType == _zoneType) {
                 _vfx.Stop();
+                AudioManager.Instance.StopAmbient();
             }
         }
 #endregion
