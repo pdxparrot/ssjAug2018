@@ -204,6 +204,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 mail.Throw(Player, origin, velocity);
             }
 
+            RpcThrowMail();
+
             _currentLetterCount--;
             CheckReload();
         }
@@ -230,6 +232,11 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null != UIManager.Instance.PlayerUI) {
                 UIManager.Instance.PlayerUI.PlayerHUD.ShowTimeAdded(amount);
             }
+        }
+
+        [ClientRpc]
+        public void RpcThrowMail()
+        {
         }
 
         [ClientRpc]
