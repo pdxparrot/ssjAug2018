@@ -14,6 +14,8 @@ MonoBehaviour:
   _worldLayer:
     serializedVersion: 2
     m_Bits: 2048
+  _serverSpectatorPrefab: {fileID: 114967961014353822, guid: 442635db8cfcd184db3f39ee462367ea,
+    type: 2}
   _gameTimeMinutes: 120
   _scoreGameTimeSeconds: 3
   _playerRespawnSeconds: 3

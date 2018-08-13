@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-
+﻿using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.World;
 
 using UnityEngine;
@@ -20,10 +19,10 @@ namespace pdxparyparrot.ssjAug2018.World
         [SerializeField]
         private PlatformWaypoint[] _waypoints;
 
-        [CanBeNull]
-        private PlatformWaypoint _targetWayponit;
-
-        private int _waypointIterator;
+        [SerializeField]
+        [ReadOnly]
+        [SyncVar]
+        private int _currentWaypointIndex;
 
         public Collider Collider { get; private set; }
 
@@ -31,43 +30,26 @@ namespace pdxparyparrot.ssjAug2018.World
         private void Awake()
         {
             Collider = GetComponent<Collider>();
-
-            TargetWaypoint(0);
         }
 
         private void FixedUpdate()
         {
-            if(null == _targetWayponit) {
+            if(_currentWaypointIndex < 0 || _currentWaypointIndex >= _waypoints.Length) {
+                _currentWaypointIndex = 0;
                 return;
             }
 
-            if((_targetWayponit.transform.position - transform.position).sqrMagnitude < float.Epsilon) {
-                _waypointIterator = (_waypointIterator + 1) % _waypoints.Length;
-
-                TargetWaypoint(_waypointIterator);
-                if(null == _targetWayponit) {
-                    return;
-                }
+            PlatformWaypoint targetWaypoint = _waypoints[_currentWaypointIndex];
+            if((targetWaypoint.transform.position - transform.position).sqrMagnitude < float.Epsilon) {
+                _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+                targetWaypoint = _waypoints[_currentWaypointIndex];
             }
+
+            transform.LookAt(targetWaypoint.transform);
 
             float step = _speed * Time.fixedDeltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, _targetWayponit.transform.position, step);
+            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.transform.position, step);
         }
 #endregion
-
-        private void TargetWaypoint(int index)
-        {
-            if(index >= _waypoints.Length || index < 0) {
-                _targetWayponit = null;
-                return;
-            }
-
-            _targetWayponit = _waypoints[index];
-            if(null == _targetWayponit) {
-                return;
-            }
-
-            transform.LookAt(_targetWayponit.transform);
-        }
     }
 }

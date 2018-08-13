@@ -17,6 +17,7 @@ ScriptedImporter:
     11400024: game/move backward
     11400026: game/move left
     11400028: game/move right
+    11400030: game/move down
   externalObjects: {}
   userData: 
   assetBundleName: 

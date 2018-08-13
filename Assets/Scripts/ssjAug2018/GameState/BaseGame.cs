@@ -5,7 +5,9 @@ using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Game.State;
+using pdxpartyparrot.ssjAug2018.Actors;
 using pdxpartyparrot.ssjAug2018.Items;
+using pdxpartyparrot.ssjAug2018.Players;
 using pdxpartyparrot.ssjAug2018.UI;
 
 using UnityEngine;
@@ -15,20 +17,13 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public abstract class BaseGame : pdxpartyparrot.Game.State.GameState
     {
-        [SerializeField]
-        private Viewer _viewerPrefab;
-
-        protected Viewer ViewerPrefab => _viewerPrefab;
+        private ServerSpectator _serverSpectator;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            InitializeManagers();
-
-            PartyParrotManager.Instance.IsPaused = false;
-
-            DebugMenuManager.Instance.ResetFrameStats();
+            Initialize();
 
             Core.Network.NetworkManager.Instance.ServerDisconnectEvent += ServerDisconnectEventHandler;
             Core.Network.NetworkManager.Instance.ClientDisconnectEvent += ClientDisconnectEventHandler;
@@ -36,6 +31,11 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 
         public override void OnExit()
         {
+            if(null != _serverSpectator) {
+                Destroy(_serverSpectator);
+            }
+            _serverSpectator = null;
+
             if(Core.Network.NetworkManager.HasInstance) {
                 Core.Network.NetworkManager.Instance.ServerDisconnectEvent -= ServerDisconnectEventHandler;
                 Core.Network.NetworkManager.Instance.ClientDisconnectEvent -= ClientDisconnectEventHandler;
@@ -60,23 +60,48 @@ namespace pdxpartyparrot.ssjAug2018.GameState
             base.OnExit();
         }
 
-        private void InitializeManagers()
+        private void Initialize()
         {
-            if(NetworkServer.active) {
-                Core.Network.NetworkManager.Instance.ServerChangedScene();
+            PartyParrotManager.Instance.IsPaused = false;
 
-                GameManager.Instance.StartGame();
+            DebugMenuManager.Instance.ResetFrameStats();
+
+            InitializeServer();
+            InitializeClient();
+
+            ItemManager.Instance.PopulateItemPools();
+        }
+
+        private void InitializeServer()
+        {
+            if(!NetworkServer.active) {
+                return;
             }
 
-            if(NetworkClient.active) {
-                ViewerManager.Instance.AllocateViewers(1, _viewerPrefab);
+            Core.Network.NetworkManager.Instance.ServerChangedScene();
+
+            if(!NetworkClient.active && !PartyParrotManager.Instance.IsHeadless) {
+                ViewerManager.Instance.AllocateViewers(1, PlayerManager.Instance.PlayerData.ServerSpectatorViewer);
 
                 InputManager.Instance.Controls.game.Enable();
 
-                Core.Network.NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
+                _serverSpectator = Instantiate(GameStateManager.Instance.GameData.ServerSpectatorPrefab);
             }
 
-            ItemManager.Instance.PopulateItemPools();
+            GameManager.Instance.StartGame();
+        }
+
+        private void InitializeClient()
+        {
+            if(!NetworkClient.active) {
+                return;
+            }
+
+            ViewerManager.Instance.AllocateViewers(1, PlayerManager.Instance.PlayerData.PlayerViewerPrefab);
+
+            InputManager.Instance.Controls.game.Enable();
+
+            Core.Network.NetworkManager.Instance.LocalClientReady(GameStateManager.Instance.NetworkClient?.connection, 0);
         }
 
 #region Event Handlers

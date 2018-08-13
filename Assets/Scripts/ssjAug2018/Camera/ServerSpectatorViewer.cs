@@ -1,11 +1,11 @@
 ﻿using pdxpartyparrot.Core.Camera;
-using pdxpartyparrot.ssjAug2018.Players;
+using pdxpartyparrot.ssjAug2018.Actors;
 
 namespace pdxpartyparrot.ssjAug2018.Camera
 {
-    public sealed class Viewer : FollowViewer
+    public sealed class ServerSpectatorViewer : FollowViewer
     {
-        public void Initialize(Player owner)
+        public void Initialize(ServerSpectator owner)
         {
             Initialize(0);
 

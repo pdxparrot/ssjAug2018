@@ -1,5 +1,7 @@
 ﻿using System;
 
+using pdxpartyparrot.ssjAug2018.Actors;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Data
@@ -12,6 +14,11 @@ namespace pdxpartyparrot.ssjAug2018.Data
         private LayerMask _worldLayer;
 
         public LayerMask WorldLayer => _worldLayer;
+
+        [SerializeField]
+        private ServerSpectator _serverSpectatorPrefab;
+
+        public  ServerSpectator ServerSpectatorPrefab => _serverSpectatorPrefab;
 
         [SerializeField]
         private float _gameTimeMinutes = 1.0f;

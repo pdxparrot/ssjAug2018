@@ -56,13 +56,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4892340076082514}
-  - component: {fileID: 54860354957275670}
   - component: {fileID: 135156105752404496}
+  - component: {fileID: 54860354957275670}
   - component: {fileID: 114084330026138302}
   - component: {fileID: 114567109661045988}
   - component: {fileID: 114091312553206734}
   m_Layer: 10
-  m_Name: Viewer
+  m_Name: PlayerViewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
