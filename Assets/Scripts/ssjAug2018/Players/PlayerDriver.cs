@@ -2,7 +2,6 @@
 using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.DebugMenu;
 using pdxpartyparrot.Core.Input;
-using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.Game.Actors;
 using pdxpartyparrot.Game.Actors.ControllerComponents;
@@ -33,6 +32,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private Player Player => PlayerController.Player;
 
         protected override bool CanDrive => base.CanDrive && Player.IsLocalActor;
+
+        private bool _enableMouseLook = !Application.isEditor;
 
         private GamepadListener _gamepadListener;
 
@@ -266,9 +267,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 #region Look
         private void OnLook(InputAction.CallbackContext ctx)
         {
-            // TODO: mouse is disabled for now because it's annoying in the editor
             bool isMouse = ctx.control.device is Mouse;
-            if(!IsOurDevice(ctx) || !CanDrive || isMouse) {
+            if(!IsOurDevice(ctx) || !CanDrive || !_enableMouseLook) {
                 return;
             }
 
@@ -422,6 +422,10 @@ namespace pdxpartyparrot.ssjAug2018.Players
                     GUILayout.Label("Mouse Sensitivity:");
                     _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);
                 GUILayout.EndHorizontal();*/
+
+                if(Application.isEditor) {
+                    _enableMouseLook = GUILayout.Toggle(_enableMouseLook, "Enable Mouse Look");
+                }
             };
         }
 
