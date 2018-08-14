@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa504bece785856469a16d453fb754c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vfx: {fileID: 0}
+  _vfx: {fileID: 198051530877473020, guid: dab194616ca0aff4182475cc0948e3d6, type: 2}
   _audioClip: {fileID: 0}
   _audioSource: {fileID: 0}
 --- !u!114 &114688782993375838
