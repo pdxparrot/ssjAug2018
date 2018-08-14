@@ -16,8 +16,9 @@ namespace pdxpartyparrot.ssjAug2018.Actors
     [RequireComponent(typeof(FollowTarget))]
     public sealed class ServerSpectator : MonoBehaviour
     {
-        [SerializeField]
-        private bool _invertLookY;
+        private const string InvertLookYKey = "serverspectator.invertlooky";
+
+        private bool InvertLookY { get { return PartyParrotManager.Instance.GetBool(InvertLookYKey); } set { PartyParrotManager.Instance.SetBool(InvertLookYKey, value); } }
 
         [SerializeField]
         private float _mouseSensitivity = 0.5f;
@@ -246,7 +247,7 @@ namespace pdxpartyparrot.ssjAug2018.Actors
             }
 
             Vector2 axes = ctx.ReadValue<Vector2>();
-            axes.y *= _invertLookY ? -1 : 1;
+            axes.y *= InvertLookY ? -1 : 1;
 
             if(isMouse) {
                 axes *= _mouseSensitivity;

@@ -14,8 +14,9 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     public sealed class PlayerDriver : ActorDriver
     {
-        [SerializeField]
-        private bool _invertLookY;
+        private const string InvertLookYKey = "playerdriver.invertlooky";
+
+        private bool InvertLookY { get { return PartyParrotManager.Instance.GetBool(InvertLookYKey); } set { PartyParrotManager.Instance.SetBool(InvertLookYKey, value); } }
 
         [SerializeField]
         private float _mouseSensitivity = 0.5f;
@@ -281,7 +282,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             }
 
             Vector2 axes = ctx.ReadValue<Vector2>();
-            axes.y *= _invertLookY ? -1 : 1;
+            axes.y *= InvertLookY ? -1 : 1;
 
             if(isMouse) {
                 axes *= _mouseSensitivity;
@@ -425,7 +426,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             _debugMenuNode = DebugMenuManager.Instance.AddNode(() => $"Player {Player.name} Driver");
             _debugMenuNode.RenderContentsAction = () => {
-                _invertLookY = GUILayout.Toggle(_invertLookY, "Invert Look Y");
+                InvertLookY = GUILayout.Toggle(InvertLookY, "Invert Look Y");
                 /*GUILayout.BeginHorizontal();
                     GUILayout.Label("Mouse Sensitivity:");
                     _mouseSensitivity = GUIUtils.FloatField(_mouseSensitivity);

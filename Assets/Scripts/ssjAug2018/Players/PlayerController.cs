@@ -94,6 +94,18 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             Rigidbody.angularVelocity = Vector3.zero;
         }
+
+        protected override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+
+            if(!Application.isPlaying) {
+                return;
+            }
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(_throwOrigin.position, _throwOrigin.position + (PlayerControllerData.ThrowSpeed * ThrowDirection));
+        }
 #endregion
 
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
