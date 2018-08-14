@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace pdxpartyparrot.Game.Actors.ControllerComponents
 {
@@ -22,11 +22,13 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         }
 #endregion
 
+        // NOTE: axes are (x, y, 0)
         public virtual bool OnAnimationMove(Vector3 axes, float dt)
         {
             return false;
         }
 
+        // NOTE: axes are (x, y, 0)
         public virtual bool OnPhysicsMove(Vector3 axes, float dt)
         {
             return false;

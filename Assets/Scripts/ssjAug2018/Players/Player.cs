@@ -13,14 +13,13 @@ namespace pdxpartyparrot.ssjAug2018.Players
 {
     [RequireComponent(typeof(NetworkPlayer))]
     [RequireComponent(typeof(FollowTarget))]
-    [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(WeatherZoneEffect))]
     public sealed class Player : Actor
     {
-        public override float Height => ((CapsuleCollider)Collider).height;
+        public override float Height => PlayerController.Capsule.height;
 
-        public override float Radius => ((CapsuleCollider)Collider).radius;
+        public override float Radius => PlayerController.Capsule.radius;
 
         public override bool IsLocalActor => NetworkPlayer.isLocalPlayer;
 

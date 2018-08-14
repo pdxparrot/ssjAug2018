@@ -22,6 +22,15 @@ namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
 
         private Transform _previousFollowTarget;
 
+#region Unity Lifecycle
+        private void Update()
+        {
+            if(IsAiming) {
+                Controller.LastMoveAxes = Vector3.zero;
+            }
+        }
+#endregion
+
         public override bool OnAnimationMove(Vector3 axes, float dt)
         {
             if(!IsAiming) {
@@ -42,8 +51,7 @@ namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
                 return false;
             }
 
-            // TODO: this is bullshit, but until we get slopes fixed in CharacterActorController
-            // we need this in order to not slide down stuff
+            // stop our directional movement
             Vector3 velocity = Controller.Rigidbody.velocity;
             velocity.x = velocity.z = 0.0f;
             Controller.Rigidbody.velocity = velocity;

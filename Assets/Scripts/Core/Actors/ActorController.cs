@@ -52,6 +52,8 @@ namespace pdxpartyparrot.Core.Actors
             public Quaternion EndRotation;
 
             public bool IsKinematic;
+
+            public Action OnComplete;
         }
 
 #region Movement
@@ -166,16 +168,18 @@ namespace pdxpartyparrot.Core.Actors
             Rigidbody.position = position;
         }
 
+        // NOTE: axes are (x, y, 0)
         public virtual void AnimationMove(Vector3 axes, float dt)
         {
         }
 
+        // NOTE: axes are (x, y, 0)
         public virtual void PhysicsMove(Vector3 axes, float dt)
         {
         }
 
 #region Manual Animations
-        public void StartAnimation(Vector3 targetPosition, Quaternion targetRotation, float timeSeconds)
+        public void StartAnimation(Vector3 targetPosition, Quaternion targetRotation, float timeSeconds, Action onComplete=null)
         {
             if(IsAnimating) {
                 return;
@@ -196,6 +200,8 @@ namespace pdxpartyparrot.Core.Actors
 
             _animationState.IsKinematic = Rigidbody.isKinematic;
             Rigidbody.isKinematic = true;
+
+            _animationState.OnComplete = onComplete;
         }
 
         private void UpdateAnimations(float dt)
@@ -214,6 +220,10 @@ namespace pdxpartyparrot.Core.Actors
                     Rigidbody.position = _animationState.EndPosition;
                     Rigidbody.rotation = _animationState.EndRotation;
                     Rigidbody.isKinematic = _animationState.IsKinematic;
+
+                    _animationState.OnComplete?.Invoke();
+                    _animationState.OnComplete = null;
+
                     return;
                 }
 

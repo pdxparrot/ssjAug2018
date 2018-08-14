@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,12 +15,15 @@ using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Game.Actors
 {
+    [RequireComponent(typeof(CapsuleCollider))]
     public class CharacterActorController : ActorController
     {
         [SerializeField]
         private CharacterActorControllerData _controllerData;
 
         public CharacterActorControllerData ControllerData => _controllerData;
+
+        public CapsuleCollider Capsule => (CapsuleCollider)Owner.Collider;
 
         [Space(10)]
 
@@ -36,17 +39,7 @@ namespace pdxpartyparrot.Game.Actors
 #region Ground Check
         [Header("Ground Check")]
 
-        [SerializeField]
-        private Transform _groundCheckTransform;
-
-        [SerializeField]
-        private float _groundCheckRadius = 1.0f;
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _isGrounded;
-
-        public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
+        private RaycastHit[] _groundCheckHits = new RaycastHit[4];
 
         [SerializeField]
         [ReadOnly]
@@ -56,18 +49,35 @@ namespace pdxpartyparrot.Game.Actors
 
         [SerializeField]
         [ReadOnly]
-        private bool _isFalling;
+        private Vector3 _groundCheckNormal;
 
-        public bool IsFalling { get { return _isFalling; } protected set { _isFalling = value; } }
+        [SerializeField]
+        [ReadOnly]
+        private bool _isGrounded;
 
-        protected Vector3 GroundCheckCenter
-        {
-            get
-            {
-                Vector3 center = _groundCheckTransform.position;
-                return new Vector3(center.x, center.y + _groundCheckRadius - ControllerData.GroundedCheckEpsilon, center.z);
-            }
-        }
+        public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
+
+        public bool IsFalling => !IsGrounded && !IsSliding && Rigidbody.velocity.y < 0.0f;
+
+        private float GroundCheckRadius => Capsule.radius - 0.1f;
+
+        protected Vector3 GroundCheckCenter => transform.position + (GroundCheckRadius * Vector3.up);
+#endregion
+
+        [Space(10)]
+
+#region Slope Check
+        [Header("Slope Check")]
+
+        [SerializeField]
+        [ReadOnly]
+        private float _groundSlope;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _isSliding;
+
+        public bool IsSliding => _isSliding;
 #endregion
 
         [Space(10)]
@@ -107,9 +117,11 @@ namespace pdxpartyparrot.Game.Actors
 
             float dt = Time.fixedDeltaTime;
 
-            _isFalling = !IsGrounded && Rigidbody.velocity.y < 0.0f;
-
             FudgeVelocity(dt);
+
+            // turn off gravity if we're grounded and not moving and not sliding
+            // this should stop us slipping down slopes we shouldn't slip down
+            Rigidbody.useGravity = !IsGrounded || IsMoving || IsSliding;
         }
 
         protected virtual void OnDrawGizmos()
@@ -119,13 +131,13 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(Rigidbody.position, transform.position + Rigidbody.angularVelocity);
+            Gizmos.DrawLine(Rigidbody.position, Rigidbody.position + Rigidbody.angularVelocity);
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(Rigidbody.position, transform.position + Rigidbody.velocity);
+            Gizmos.DrawLine(Rigidbody.position, Rigidbody.position + Rigidbody.velocity);
 
             Gizmos.color = IsGrounded ? Color.red : Color.yellow;
-            Gizmos.DrawWireSphere(GroundCheckCenter, _groundCheckRadius);
+            Gizmos.DrawWireSphere(GroundCheckCenter + (ControllerData.GroundedCheckEpsilon * Vector3.down), GroundCheckRadius);
         }
 #endregion
 
@@ -199,9 +211,19 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            Vector3 velocity = axes * speed;
+            Vector3 fixedAxes = new Vector3(axes.x, 0.0f, axes.y);
+
+            // prevent moving up slopes we can't move up
+            if(_groundSlope >= ControllerData.SlopeLimit) {
+                float dp = Vector3.Dot(transform.forward, _groundCheckNormal);
+                if(dp < 0.0f) {
+                    fixedAxes.z = 0.0f;
+                }
+            }
+
+            Vector3 velocity = fixedAxes * speed;
             Quaternion rotation = null != Owner.Viewer ? Quaternion.AngleAxis(Owner.Viewer.transform.localEulerAngles.y, Vector3.up) : Rigidbody.rotation;
-            velocity = rotation * new Vector3(velocity.x, 0.0f, velocity.y);
+            velocity = rotation * velocity;
             velocity.y = Rigidbody.velocity.y;
 
             if(Rigidbody.isKinematic) {
@@ -270,6 +292,8 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             Rigidbody.isKinematic = false;
+            Rigidbody.useGravity = true;
+            _didGroundCheckCollide = _isGrounded = false;
 
             // factor in fall speed adjust
             float gravity = -Physics.gravity.y + ControllerData.FallSpeedAdjustment;
@@ -293,9 +317,26 @@ namespace pdxpartyparrot.Game.Actors
         }
 
 #region Grounded Check
-        protected bool CheckIsGrounded(Vector3 center)
+        protected bool CheckIsGrounded()
         {
-            return Physics.CheckSphere(center, _groundCheckRadius, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
+            Vector3 origin = GroundCheckCenter;
+
+            int hitCount = Physics.SphereCastNonAlloc(origin, GroundCheckRadius, Vector3.down, _groundCheckHits, ControllerData.GroundedCheckEpsilon, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
+            if(hitCount < 1) {
+                // no slope if not grounded
+                _groundSlope = 0;
+                return false;
+            }
+
+            _groundCheckNormal = Vector3.zero;
+            for(int i=0; i<hitCount; ++i) {
+                _groundCheckNormal += _groundCheckHits[i].normal;
+            }
+            _groundCheckNormal /= hitCount;
+
+            _groundSlope = Vector3.Angle(Vector3.up, _groundCheckNormal);
+
+            return true;
         }
 
         private void UpdateIsGrounded()
@@ -304,10 +345,16 @@ namespace pdxpartyparrot.Game.Actors
             try {
                 bool wasGrounded = IsGrounded;
 
-                _didGroundCheckCollide = CheckIsGrounded(GroundCheckCenter);
-                if(!Rigidbody.isKinematic) {
+                _didGroundCheckCollide = CheckIsGrounded();
+
+                if(Rigidbody.isKinematic) {
+                    // something else is handling this case?
+                } else {
                     _isGrounded = _didGroundCheckCollide;
                 }
+
+                // if we're on a slope, we're sliding down it
+                _isSliding = _groundSlope >= ControllerData.SlopeLimit;
 
                 if(!wasGrounded && IsGrounded) {
                     Owner.Animator.SetTrigger(ControllerData.GroundedParam);
@@ -325,15 +372,19 @@ namespace pdxpartyparrot.Game.Actors
         {
             Vector3 adjustedVelocity = Rigidbody.velocity;
 
-            // do some fudging to jumping/falling so it feels better
-            if(!IsGrounded) {
+            if(IsGrounded && !IsMoving) {
+                // prevent any weird ground adjustment shenanigans
+                // when we're grounded and not moving
+                adjustedVelocity.y = 0.0f;
+            } else if(Rigidbody.useGravity) {
+                // do some fudging to jumping/falling so it feels better
                 float adjustment = ControllerData.FallSpeedAdjustment * dt;
                 adjustedVelocity.y -= adjustment;
-            }
 
-            // apply terminal velocity
-            if(adjustedVelocity.y < -ControllerData.TerminalVelocity) {
-                adjustedVelocity.y = -ControllerData.TerminalVelocity;
+                // apply terminal velocity
+                if(adjustedVelocity.y < -ControllerData.TerminalVelocity) {
+                    adjustedVelocity.y = -ControllerData.TerminalVelocity;
+                }
             }
 
             Rigidbody.velocity = adjustedVelocity;

@@ -124,6 +124,11 @@ namespace pdxpartyparrot.Game.Data
         private float _groundedCheckEpsilon = 0.1f;
 
         public float GroundedCheckEpsilon => _groundedCheckEpsilon;
+
+        [SerializeField]
+        private float _slopeLimit = 30.0f;
+
+        public float SlopeLimit => _slopeLimit;
 #endregion
 
         [Space(10)]

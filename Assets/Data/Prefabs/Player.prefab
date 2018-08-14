@@ -72,21 +72,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1344290718557684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4636036025737090}
-  m_Layer: 9
-  m_Name: GroundCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1356650051019368
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,13 +91,13 @@ GameObject:
   - component: {fileID: 114211211029005834}
   - component: {fileID: 114331638870797786}
   - component: {fileID: 54429878804720558}
+  - component: {fileID: 114529441601372064}
+  - component: {fileID: 114063931701214196}
   - component: {fileID: 114742398105448036}
   - component: {fileID: 114521932353532936}
   - component: {fileID: 114005285931988784}
   - component: {fileID: 114307707372532762}
   - component: {fileID: 114841388732295906}
-  - component: {fileID: 114529441601372064}
-  - component: {fileID: 114063931701214196}
   - component: {fileID: 114450802372136796}
   - component: {fileID: 114416925496739310}
   - component: {fileID: 114600849254743278}
@@ -335,7 +320,6 @@ Transform:
   m_Children:
   - {fileID: 4624783218183112}
   - {fileID: 4083026718235180}
-  - {fileID: 4636036025737090}
   - {fileID: 4426796019341964}
   - {fileID: 4943192097314312}
   - {fileID: 4350808608469060}
@@ -396,7 +380,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4389707901160988
 Transform:
@@ -422,7 +406,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4434651203760912
 Transform:
@@ -448,7 +432,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4578373547177296
 Transform:
@@ -461,7 +445,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4594389412127694
 Transform:
@@ -474,7 +458,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4624783218183112
 Transform:
@@ -496,19 +480,6 @@ Transform:
   - {fileID: 4790289547711174}
   m_Father: {fileID: 4021666756528148}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4636036025737090
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1344290718557684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4681233222874696
 Transform:
@@ -560,7 +531,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4894975309813268
 Transform:
@@ -586,7 +557,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &54429878804720558
 Rigidbody:
@@ -819,7 +790,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controller: {fileID: 114450802372136796}
-  _invertLookY: 0
   _mouseSensitivity: 0.5
   _lastControllerMove: {x: 0, y: 0, z: 0}
   _lastControllerLook: {x: 0, y: 0, z: 0}
@@ -853,11 +823,11 @@ MonoBehaviour:
     Velocity: {x: 0, y: 0, z: 0}
   _controllerData: {fileID: 11400000, guid: b1063409d4080b544b23ec155a621d14, type: 2}
   _raycastRoutineRate: 0.1
-  _groundCheckTransform: {fileID: 4636036025737090}
-  _groundCheckRadius: 0.5
-  _isGrounded: 0
   _didGroundCheckCollide: 0
-  _isFalling: 0
+  _groundCheckNormal: {x: 0, y: 0, z: 0}
+  _isGrounded: 0
+  _groundSlope: 0
+  _isSliding: 0
   _groundedEffect: {fileID: 114600849254743278}
   _playerControllerData: {fileID: 11400000, guid: af08040e7e4167f4f8ffe6e4f844c5f3,
     type: 2}

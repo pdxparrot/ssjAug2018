@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 
 using pdxpartyparrot.Core.DebugMenu;
@@ -643,10 +643,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
-            StopClimbing();
-
             Vector3 offset = Controller.Owner.Radius * 2.0f * transform.forward;
-            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition(hit, offset), Controller.Rigidbody.rotation, Controller.ControllerData.ClimbUpTimeSeconds);
+            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition(hit, offset), Controller.Rigidbody.rotation, Controller.ControllerData.ClimbUpTimeSeconds, () => {
+                StopClimbing();
+            });
 
             return true;
         }
@@ -657,10 +657,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
-            StartHanging();
-
             Vector3 offset = -_hangTransform.localPosition;
-            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition((_leftHandHangHitResult ?? _rightHandHangHitResult).Value, offset), Controller.Rigidbody.rotation, Controller.ControllerData.HangTimeSeconds);
+            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition((_leftHandHangHitResult ?? _rightHandHangHitResult).Value, offset), Controller.Rigidbody.rotation, Controller.ControllerData.HangTimeSeconds, () => {
+                StartHanging();
+            });
 
             return true;
         }
