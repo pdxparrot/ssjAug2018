@@ -1,4 +1,4 @@
-﻿using pdxpartyparrot.Core.Camera;
+using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.ssjAug2018.Players;
 
 using UnityEngine;
@@ -10,6 +10,8 @@ namespace pdxpartyparrot.ssjAug2018.Camera
         private Player _target;
 
         private Transform _targetTransform;
+
+        private float _maxOrbit;
 
         public void Initialize(Player target)
         {
@@ -24,16 +26,21 @@ namespace pdxpartyparrot.ssjAug2018.Camera
             SetFocus(_target.transform);
         }
 
-        public void Aim(Transform target)
+        public void Aim(Transform target, Transform focusTarget)
         {
             _target.FollowTarget.TargetTransform = target;
 
-            SetFocus(target);
+            _maxOrbit = FollowCamera.OrbitMaxRadius;
+            FollowCamera.OrbitMaxRadius = 1.0f;
+
+            SetFocus(focusTarget);
         }
 
         public void ResetTarget()
         {
             _target.FollowTarget.TargetTransform = _targetTransform;
+
+            FollowCamera.OrbitMaxRadius = _maxOrbit;
 
             SetFocus(_target.transform);
         }

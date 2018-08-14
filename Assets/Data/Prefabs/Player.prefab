@@ -155,6 +155,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1734271851195258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4177073269758908}
+  m_Layer: 9
+  m_Name: AimTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1737250241727740
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,7 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4553905968234728}
   m_Layer: 9
-  m_Name: AimTarget
+  m_Name: AimFocus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,6 +341,7 @@ Transform:
   - {fileID: 4805528540693168}
   - {fileID: 4578373547177296}
   - {fileID: 4594389412127694}
+  - {fileID: 4177073269758908}
   - {fileID: 4553905968234728}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -368,6 +384,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4624783218183112}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4177073269758908
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1734271851195258}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.5, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4021666756528148}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4350808608469060
 Transform:
@@ -432,7 +461,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4021666756528148}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4578373547177296
 Transform:
@@ -860,7 +889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34465ce126a712143b341ca7baee9bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _aimFollowTarget: {fileID: 4553905968234728}
+  _aimFollowTarget: {fileID: 4177073269758908}
+  _aimFocusTarget: {fileID: 4553905968234728}
   _isAiming: 0
 --- !u!114 &114600849254743278
 MonoBehaviour:

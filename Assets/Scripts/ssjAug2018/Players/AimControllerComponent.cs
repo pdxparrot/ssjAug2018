@@ -15,12 +15,13 @@ namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
         private Transform _aimFollowTarget;
 
         [SerializeField]
+        private Transform _aimFocusTarget;
+
+        [SerializeField]
         [ReadOnly]
         private bool _isAiming;
 
         public bool IsAiming => _isAiming;
-
-        private Transform _previousFollowTarget;
 
 #region Unity Lifecycle
         private void Update()
@@ -67,7 +68,7 @@ namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
 
             _isAiming = true;
 
-            PlayerController.Player.PlayerViewer.Aim(_aimFollowTarget);
+            PlayerController.Player.PlayerViewer.Aim(_aimFollowTarget, _aimFocusTarget);
 
             return true;
         }

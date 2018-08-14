@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace pdxpartyparrot.Core.Camera
 {
@@ -11,9 +11,7 @@ namespace pdxpartyparrot.Core.Camera
 
         private Collider _collider;
 
-        private FollowCamera _followCamera;
-
-        public FollowCamera FollowCamera => _followCamera;
+        public FollowCamera FollowCamera { get; private set; }
 
 #region Unity Lifecycle
         protected override void Awake()
@@ -26,7 +24,7 @@ namespace pdxpartyparrot.Core.Camera
             _collider = GetComponent<Collider>();
             _collider.isTrigger = true;
 
-            _followCamera = GetComponent<FollowCamera>();
+            FollowCamera = GetComponent<FollowCamera>();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -44,16 +42,6 @@ namespace pdxpartyparrot.Core.Camera
 
             // we run the follow cam in FixedUpdate() and interpolation interferes with that
             _rigidbody.interpolation = RigidbodyInterpolation.None;
-        }
-
-        public void SetMinOrbitRadius(float orbitMinRadius)
-        {
-            _followCamera.OrbitMinRadius = orbitMinRadius;
-        }
-
-        public void SetMaxOrbitRadius(float orbitMaxRadius)
-        {
-            _followCamera.OrbitMaxRadius = orbitMaxRadius;
         }
     }
 }
