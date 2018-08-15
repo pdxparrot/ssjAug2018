@@ -519,24 +519,26 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void HandleClimbingRaycasts()
         {
-            // check for wrapping / climbing up
-            if(ClimbMode.Hanging == _climbMode) {
-                if(!CanHangLeft && !CanHangRight) {
-                    Debug.LogWarning("Unexpectedly fell off!");
-                    StopClimbing();
+            if(Controller.IsAnimating) {
+                return;
+            }
 
-                    if(_breakOnFall) {
-                        Debug.Break();
+            switch(_climbMode)
+            {
+            case ClimbMode.None:
+                break;
+            case ClimbMode.Climbing:
+                if(CanGrabLeft && CanGrabRight) {
+                    if(!CheckHang()) {
+                        if(!CheckRotateLeft()) {
+                            CheckRotateRight();
+                        }
                     }
-                } if(CanHangLeft != CanHangRight) {
-                    // TODO: check to see if we can climb up
-                }
-            } else {
-                if(!CanGrabLeft && CanGrabRight) {
+                } else if(!CanGrabLeft && CanGrabRight) {
                     CheckWrapLeft();
                 } else if(CanGrabLeft && !CanGrabRight) {
                     CheckWrapRight();
-                } else if(!CanGrabLeft && !CanGrabRight && ClimbMode.Hanging != _climbMode) {
+                } else /*if(!CanGrabLeft && !CanGrabRight)*/ {
                     if(CanClimbUp) {
                         CheckClimbUp();
                     } else {
@@ -548,15 +550,25 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                         }
                     }
                 }
-            }
+                break;
+            case ClimbMode.Hanging:
+                if(CanHangLeft && CanHangRight) {
+                    CheckClimb();
+                } else if(!CanHangLeft && CanHangRight) {
+                    // TODO: climb up?
+                } else if(CanHangLeft && !CanHangRight) {
+                    // TODO: climb up?
+                } else /*if(!CanHangLeft && !CanHangRight)*/ {
+                    // TODO: climb up?
 
-            // check for hanging and non-wrap rotations
-            if(ClimbMode.Hanging == _climbMode) {
-                // TODO: check shit here
-            } else if(!Controller.IsAnimating && !CheckHang()) {
-                if(!CheckRotateLeft()) {
-                    CheckRotateRight();
+                    Debug.LogWarning("Unexpectedly fell off!");
+                    StopClimbing();
+
+                    if(_breakOnFall) {
+                        Debug.Break();
+                    }
                 }
+                break;
             }
         }
 
@@ -716,9 +728,27 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
+            RaycastHit hit = (_leftHandHangHitResult ?? _rightHandHangHitResult).Value;
+
             Vector3 offset = -_hangTransform.localPosition;
-            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition((_leftHandHangHitResult ?? _rightHandHangHitResult).Value, offset), Controller.Rigidbody.rotation, Controller.ControllerData.HangTimeSeconds, () => {
+            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition(hit, offset), Controller.Rigidbody.rotation, Controller.ControllerData.HangTimeSeconds, () => {
                 StartHanging();
+            });
+
+            return true;
+        }
+
+        private bool CheckClimb()
+        {
+            if((!CanGrabLeft && !CanGrabRight) || !Controller.IsMoving) {
+                return false;
+            }
+
+            RaycastHit hit = (_leftHandHitResult ?? _rightHandHitResult).Value;
+
+            Vector3 offset = Controller.Owner.Radius * transform.up;
+            Controller.StartAnimation(Controller.Rigidbody.position + GetSurfaceAttachmentPosition(hit, Controller.Owner.Radius * hit.normal) - offset, Controller.Rigidbody.rotation, Controller.ControllerData.ClimbDownTimeSeconds, () => {
+                StartClimbing();
             });
 
             return true;

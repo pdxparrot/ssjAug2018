@@ -38,10 +38,12 @@ namespace pdxpartyparrot.ssjAug2018.Players.ControllerComponents
                 return false;
             }
 
-            Vector3 viewerForward = null != PlayerController.Player.Viewer
-                                    ? PlayerController.Player.Viewer.transform.forward
-                                    : PlayerController.Player.transform.forward;
-            PlayerController.Player.transform.forward = new Vector3(viewerForward.x, 0.0f, viewerForward.z).normalized;
+            if(null == PlayerController.ClimbingComponent || !PlayerController.ClimbingComponent.IsClimbing) {
+                Vector3 viewerForward = null != PlayerController.Player.Viewer
+                                        ? PlayerController.Player.Viewer.transform.forward
+                                        : PlayerController.Player.transform.forward;
+                PlayerController.Player.transform.forward = new Vector3(viewerForward.x, 0.0f, viewerForward.z).normalized;
+            }
 
             return true;
         }
