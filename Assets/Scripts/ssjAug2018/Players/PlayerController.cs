@@ -47,7 +47,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         public HoverControllerComponent HoverComponent { get; private set; }
 
         [CanBeNull]
-        private ClimbingControllerComponent _climbingComponent;
+        public ClimbingControllerComponent ClimbingComponent { get; private set; }
 
         [CanBeNull]
         private AimControllerComponent _aimComponent;
@@ -59,7 +59,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
             base.Awake();
 
             HoverComponent = GetControllerComponent<HoverControllerComponent>();
-            _climbingComponent = GetControllerComponent<ClimbingControllerComponent>();
+            ClimbingComponent = GetControllerComponent<ClimbingControllerComponent>();
             _aimComponent = GetControllerComponent<AimControllerComponent>();
         }
 
@@ -67,7 +67,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
         {
             base.Update();
 
-            if(null != _climbingComponent && _climbingComponent.IsClimbing) {
+            if(null != ClimbingComponent && ClimbingComponent.IsClimbing) {
                 IsGrounded = true;
             }
 
@@ -110,8 +110,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
         public override void ActionPerformed(CharacterActorControllerComponent.CharacterActorControllerAction action)
         {
-            if(action is JumpControllerComponent.JumpAction && null != _climbingComponent) {
-                _climbingComponent.StopClimbing();
+            if(action is JumpControllerComponent.JumpAction && null != ClimbingComponent) {
+                ClimbingComponent.StopClimbing();
             }
 
             base.ActionPerformed(action);
@@ -156,8 +156,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
                 HoverComponent.StopHovering();
             }
 
-            if(null != _climbingComponent) {
-                _climbingComponent.StopClimbing();
+            if(null != ClimbingComponent) {
+                ClimbingComponent.StopClimbing();
             }
 
             Player.NetworkPlayer.Stun(PlayerControllerData.FallStunTimeSeconds);

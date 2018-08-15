@@ -79,6 +79,11 @@ namespace pdxpartyparrot.Game.Data
         public float ClimbUpTimeSeconds => _climbUpTimeSeconds;
 
         [SerializeField]
+        private float _climbDownTimeSeconds = 1.0f;
+
+        public float ClimbDownTimeSeconds => _climbDownTimeSeconds;
+
+        [SerializeField]
         private float _hangTimeSeconds = 1.0f;
 
         public float HangTimeSeconds => _hangTimeSeconds;
