@@ -61,7 +61,7 @@ namespace pdxpartyparrot.Game.Actors
 
         public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
 
-        public bool IsFalling => !IsGrounded && !IsSliding && Rigidbody.velocity.y < 0.0f;
+        public bool IsFalling => UseGravity && (!IsGrounded && !IsSliding && Rigidbody.velocity.y < 0.0f);
 
         private float GroundCheckRadius => Capsule.radius - 0.1f;
 
@@ -94,6 +94,12 @@ namespace pdxpartyparrot.Game.Actors
         private EffectTrigger _groundedEffect;
 #endregion
 
+        [SerializeField]
+        [ReadOnly]
+        private bool _useGravity;
+
+        public bool UseGravity { get { return _useGravity; } set { _useGravity = value; Rigidbody.velocity = Vector3.zero; } }
+
         private CharacterActorControllerComponent[] _components;
 
 #region Unity Lifecycle
@@ -125,7 +131,7 @@ namespace pdxpartyparrot.Game.Actors
 
             // turn off gravity if we're grounded and not moving and not sliding
             // this should stop us sliding down slopes we shouldn't slide down
-            Rigidbody.useGravity = !IsGrounded || IsMoving || IsSliding;
+            Rigidbody.useGravity = UseGravity && (!IsGrounded || IsMoving || IsSliding);
         }
 
         protected virtual void OnDrawGizmos()
@@ -299,7 +305,6 @@ namespace pdxpartyparrot.Game.Actors
             }
 
             // force physics to a sane state for the first frame of the jump
-            Rigidbody.isKinematic = false;
             Rigidbody.useGravity = true;
             _didGroundCheckCollide = _isGrounded = false;
 

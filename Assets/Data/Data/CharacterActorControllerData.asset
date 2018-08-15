@@ -53,8 +53,6 @@ MonoBehaviour:
   _headRayAngle: 30
   _hangRayLength: 2
   _chestRayLength: 2
-  _footRayLength: 2
-  _footRayAngle: 30
   _climbSpeed: 10
   _hangSpeed: 10
   _allowAirControl: 1

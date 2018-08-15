@@ -287,18 +287,6 @@ namespace pdxpartyparrot.Game.Data
         public float ChestRayLength => _chestRayLength;
 
         [SerializeField]
-        [Range(0, 10)]
-        private float _footRayLength = 1.0f;
-
-        public float FootRayLength => _footRayLength;
-
-        [SerializeField]
-        [Range(0, 90)]
-        private float _footRayAngle = 45.0f;
-
-        public float FootRayAngle => _footRayAngle;
-
-        [SerializeField]
         [Range(0, 50)]
         private float _climbSpeed = 1.0f;
 

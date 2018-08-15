@@ -36,7 +36,6 @@ namespace pdxpartyparrot.Core.Camera
         private void InitRigidbody()
         {
             _rigidbody.isKinematic = true;
-            _rigidbody.useGravity = false;
             _rigidbody.detectCollisions = true;
             _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 

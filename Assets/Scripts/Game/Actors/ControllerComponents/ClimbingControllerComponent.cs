@@ -310,8 +310,6 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(action is ReleaseAction) {
                 if(IsClimbing) {
                     StopClimbing();
-                } else {
-                    CheckDropDown();
                 }
 
                 return true;
@@ -323,7 +321,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         private void StartClimbing()
         {
             _climbMode = ClimbMode.Climbing;
-            Controller.Rigidbody.isKinematic = true;
+            Controller.UseGravity = false;
 
             Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, true);
             Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, false);
@@ -332,7 +330,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         private void StartHanging()
         {
             _climbMode = ClimbMode.Hanging;
-            Controller.Rigidbody.isKinematic = true;
+            Controller.UseGravity = false;
 
             Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, false);
             Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, true);
@@ -342,7 +340,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         public void StopClimbing()
         {
             _climbMode = ClimbMode.None;
-            Controller.Rigidbody.isKinematic = false;
+            Controller.UseGravity = true;
 
             Controller.Owner.Animator.SetBool(Controller.ControllerData.ClimbingParam, false);
             Controller.Owner.Animator.SetBool(Controller.ControllerData.HangingParam, false);
@@ -725,16 +723,6 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
             return true;
         }
-
-        private bool CheckDropDown()
-        {
-            if(Controller.LastMoveAxes.y >= 0.0f) {
-                return false;
-            }
-
-Debug.Log("TODO: check drop down");
-            return false;
-        }
 #endregion
 
         private Vector3 GetSurfaceAttachmentPosition(RaycastHit hit, Vector3 offset)
@@ -758,11 +746,6 @@ Debug.Log("TODO: check drop down");
                 transform.forward = -hit.normal;
                 Controller.Rigidbody.position += GetSurfaceAttachmentPosition(hit, Controller.Owner.Radius * hit.normal);
             }
-        }
-
-        private void DropDown()
-        {
-Debug.Log("TODO: drop down");
         }
 
         private void InitDebugMenu()
