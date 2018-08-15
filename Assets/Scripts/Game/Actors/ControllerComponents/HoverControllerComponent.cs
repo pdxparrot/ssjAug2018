@@ -30,9 +30,9 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         [SerializeField]
         [ReadOnly]
-        private float _cooldownCountdown;
+        private Timer _cooldownTimer;
 
-        private bool IsHoverCooldown => _cooldownCountdown > 0.0f;
+        private bool IsHoverCooldown => _cooldownTimer.SecondsRemaining > 0.0f;
 
         [SerializeField]
         [ReadOnly]
@@ -49,6 +49,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
             float dt = Time.deltaTime;
 
+            _cooldownTimer.Update(dt);
+
             if(Controller.IsGrounded) {
                 _isHeld = false;
                 _heldSeconds = 0;
@@ -56,7 +58,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 StopHovering();
             }
 
-            if(_isHeld) {
+            if(_isHeld && !IsHoverCooldown) {
                 _heldSeconds += dt;
             }
 
@@ -66,8 +68,6 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                     _hoverTimeSeconds = Controller.ControllerData.HoverTimeSeconds;
                     StopHovering();
                 }
-            } else if(IsHoverCooldown) {
-                _cooldownCountdown -= dt;
             } else if(CanHover) {
                 StartHovering();
             } else if(_hoverTimeSeconds > 0.0f) {
@@ -125,6 +125,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
+            if(!IsHovering) {
+                return false;
+            }
+
             _isHeld = false;
             _heldSeconds = 0;
 
@@ -152,7 +156,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             Controller.Owner.Animator.SetBool(Controller.ControllerData.HoverParam, false);
 
             if(wasHovering) {
-                _cooldownCountdown = Controller.ControllerData.HoverCooldownSeconds;
+                _cooldownTimer.Start(Controller.ControllerData.HoverCooldownSeconds);
             }
         }
     }

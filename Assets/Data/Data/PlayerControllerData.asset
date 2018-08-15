@@ -16,6 +16,7 @@ MonoBehaviour:
   _throwingSnowballParam: ReadyToThrowSnowball
   _throwSnowballParam: ThrowSnowball
   _autoThrowSeconds: 3
+  _throwCooldownSeconds: 0.5
   _throwSpeed: 25
   _throwInheritsPlayerVelocity: 1
   _throwConvergeDistance: 100

@@ -45,6 +45,12 @@ namespace pdxpartyparrot.ssjAug2018.Data
         public float AutoThrowSeconds => _autoThrowSeconds;
 
         [SerializeField]
+        [Range(0, 30)]
+        private float _throwCooldownSeconds = 1.0f;
+
+        public float ThrowCooldownSeconds => _throwCooldownSeconds;
+
+        [SerializeField]
         private float _throwSpeed = 5.0f;
 
         public float ThrowSpeed => _throwSpeed;
