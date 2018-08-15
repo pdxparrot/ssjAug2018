@@ -45,7 +45,23 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private RaycastHit? _leftHandHitResult;
 
+        [SerializeField]
+        [ReadOnly]
+        private bool _didLeftHandRaycast;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didWrapLeftRaycast;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didRotateLeftRaycast;
+
         private RaycastHit? _leftHandHangHitResult;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didLeftHandHangRaycast;
 
         private bool CanGrabLeft => null != _leftHandHitResult;
 
@@ -56,7 +72,23 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private RaycastHit? _rightHandHitResult;
 
+        [SerializeField]
+        [ReadOnly]
+        private bool _didRightHandRaycast;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didWrapRightRaycast;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didRotateRightRaycast;
+
         private RaycastHit? _rightHandHangHitResult;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didRightHandHangRaycast;
 
         private bool CanGrabRight => null != _rightHandHitResult;
 
@@ -75,6 +107,14 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         private Transform _headTransform;
 
         private RaycastHit? _headHitResult;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didHeadRaycast;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didClimbUpRaycast;
 #endregion
 
         [Space(10)]
@@ -86,6 +126,10 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         private Transform _chestTransform;
 
         private RaycastHit? _chestHitResult;
+
+        [SerializeField]
+        [ReadOnly]
+        private bool _didChestRaycast;
 #endregion
 
         private bool CanClimbUp => IsClimbing && (null == _headHitResult && null != _chestHitResult);
@@ -130,69 +174,65 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             }
 
             // left hand
-            Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
-            Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+            if(_didLeftHandRaycast) {
+                Gizmos.color = null != _leftHandHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+            }
 
-            Gizmos.color = null != _leftHandHangHitResult ? Color.red : Color.yellow;
-            Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+            if(_didLeftHandHangRaycast) {
+                Gizmos.color = null != _leftHandHangHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+            }
 
-            if(IsClimbing) {
-                //if(!CanGrabLeft && CanGrabRight) {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 2.0f);
-                //}
+            if(_didWrapLeftRaycast) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 2.0f);
+            }
 
+            if(_didRotateLeftRaycast) {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(_leftHandTransform.position, _leftHandTransform.position + (Quaternion.AngleAxis(-90.0f, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 0.5f);
             }
 
             // right hand
-            Gizmos.color = null != _rightHandHitResult ? Color.red : Color.yellow;
-            Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+            if(_didRightHandRaycast) {
+                Gizmos.color = null != _rightHandHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + transform.forward * Controller.ControllerData.ArmRayLength);
+            }
 
-            Gizmos.color = null != _rightHandHangHitResult ? Color.red : Color.yellow;
-            Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+            if(_didRightHandHangRaycast) {
+                Gizmos.color = null != _rightHandHangHitResult ? Color.red : Color.yellow;
+                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (transform.up) * Controller.ControllerData.HangRayLength);
+            }
 
-            if(IsClimbing) {
-                //if(CanGrabLeft && !CanGrabRight) {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 2.0f);
-                //}
+            if(_didWrapRightRaycast) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 2.0f);
+            }
 
+            if(_didRotateRightRaycast) {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(_rightHandTransform.position, _rightHandTransform.position + (Quaternion.AngleAxis(90.0f, transform.up) * transform.forward) * Controller.ControllerData.ArmRayLength * 0.5f);
             }
 
-            if(IsClimbing) {
-                // head
+            // head
+            if(_didHeadRaycast) {
                 Gizmos.color = null != _headHitResult ? Color.red : Color.yellow;
                 Gizmos.DrawLine(_headTransform.position, _headTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.HeadRayAngle, transform.right) * transform.forward) * Controller.ControllerData.HeadRayLength);
+            }
 
-                if(!CanGrabLeft && !CanGrabRight && CanClimbUp) {
-                    Gizmos.color = Color.white;
-                    Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.HeadRayAngle, transform.right) * transform.forward) * Controller.ControllerData.HeadRayLength;
-                    Vector3 end = start + Controller.Owner.Height * -Vector3.up;
-                    Gizmos.DrawLine(start, end);
-                }
+            if(_didClimbUpRaycast) {
+                Gizmos.color = Color.white;
+                Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.HeadRayAngle, transform.right) * transform.forward) * Controller.ControllerData.HeadRayLength;
+                Vector3 end = start + Controller.Owner.Height * -Vector3.up;
+                Gizmos.DrawLine(start, end);
+            }
 
-                // chest
+            // chest
+            if(_didChestRaycast) {
                 Gizmos.color = null != _chestHitResult ? Color.red : Color.yellow;
                 Gizmos.DrawLine(_chestTransform.position, _chestTransform.position + transform.forward * Controller.ControllerData.ChestRayLength);
             }
-
-            // feet
-/*
-            if(!IsGrabbing && IsGrounded) {
-                Gizmos.color = null != _footHitResults[0] ? Color.red : Color.yellow;
-                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(0.0f, transform.up) * Quaternion.AngleAxis(Controller.ControllerData.FootRayAngle, transform.right) * transform.forward) * Controller.ControllerData.FootRayLength);
-                Gizmos.color = null != _footHitResults[1] ? Color.red : Color.yellow;
-                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(90.0f, transform.up) * Quaternion.AngleAxis(Controller.ControllerData.FootRayAngle, transform.right) * transform.forward) * Controller.ControllerData.FootRayLength);
-                Gizmos.color = null != _footHitResults[2] ? Color.red : Color.yellow;
-                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(180.0f, transform.up) * Quaternion.AngleAxis(Controller.ControllerData.FootRayAngle, transform.right) * transform.forward) * Controller.ControllerData.FootRayLength);
-                Gizmos.color = null != _footHitResults[3] ? Color.red : Color.yellow;
-                Gizmos.DrawLine(_footTransform.position, _footTransform.position + (Quaternion.AngleAxis(270.0f, transform.up) * Quaternion.AngleAxis(Controller.ControllerData.FootRayAngle, transform.right) * transform.forward) * Controller.ControllerData.FootRayLength);
-            }
-*/
         }
 #endregion
 
@@ -327,6 +367,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void UpdateRaycasts()
         {
+            ResetRaycastDebug();
+
             if(Controller.IsAnimating) {
                 return;
             }
@@ -341,6 +383,28 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             }
         }
 
+        private void ResetRaycastDebug()
+        {
+            // left hand
+            _didLeftHandRaycast = false;
+            _didWrapLeftRaycast = false;
+            _didRotateLeftRaycast = false;
+            _didLeftHandHangRaycast = false;
+
+            // right hand
+            _didRightHandRaycast = false;
+            _didRotateRightRaycast = false;
+            _didWrapRightRaycast = false;
+            _didRightHandHangRaycast = false;
+
+            // head
+            _didHeadRaycast = false;
+            _didClimbUpRaycast = false;
+
+            // chest
+            _didChestRaycast = false;
+        }
+
 #region Hand Raycasts
         private void UpdateHandRaycasts()
         {
@@ -350,6 +414,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void UpdateLeftHandRaycasts()
         {
+            _didLeftHandRaycast = true;
+
             _leftHandHitResult = null;
 
             RaycastHit hit;
@@ -359,6 +425,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                     _leftHandHitResult = hit;
                 }
             }
+
+            _didLeftHandHangRaycast = true;
 
             _leftHandHangHitResult = null;
 
@@ -372,6 +440,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         private void UpdateRightHandRaycasts()
         {
+            _didRightHandRaycast = true;
+
             _rightHandHitResult = null;
 
             RaycastHit hit;
@@ -381,6 +451,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                     _rightHandHitResult = hit;
                 }
             }
+
+            _didRightHandHangRaycast = true;
 
             _rightHandHangHitResult = null;
 
@@ -399,6 +471,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(!IsClimbing) {
                 return;
             }
+
+            _didHeadRaycast = true;
 
             _headHitResult = null;
 
@@ -419,6 +493,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return;
             }
 
+            _didChestRaycast = true;
+
             _chestHitResult = null;
 
             RaycastHit hit;
@@ -431,31 +507,6 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
         }
 #endregion
 
-/*
-#region Foot Raycasts
-        private void UpdateFootRaycasts()
-        {
-            if(IsClimbing || !IsGrounded) {
-                return;
-            }
-
-            UpdateFootRaycast(0, 0.0f);
-            UpdateFootRaycast(1, 90.0f);
-            UpdateFootRaycast(2, 180.0f);
-            UpdateFootRaycast(3, 270.0f);
-        }
-
-        private void UpdateFootRaycast(int idx, float angle)
-        {
-            _footHitResults[idx] = null;
-
-            RaycastHit hit;
-            if(Physics.Raycast(_footTransform.position, Quaternion.AngleAxis(angle, transform.up) * Quaternion.AngleAxis(Controller.ControllerData.FootRayAngle, transform.right) * transform.forward, out hit, Controller.ControllerData.FootRayLength, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
-                _footHitResults[idx] = hit;
-            }
-        }
-#endregion
-*/
         private void HandleRaycasts()
         {
             Profiler.BeginSample("PlayerController.HandleRaycasts");
@@ -504,7 +555,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             // check for hanging and non-wrap rotations
             if(ClimbMode.Hanging == _climbMode) {
                 // TODO: check shit here
-            } else if(!CheckHang()) {
+            } else if(!Controller.IsAnimating && !CheckHang()) {
                 if(!CheckRotateLeft()) {
                     CheckRotateRight();
                 }
@@ -519,6 +570,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(null == _rightHandHitResult || Controller.LastMoveAxes.x >= 0.0f) {
                 return false;
             }
+
+            _didWrapLeftRaycast = true;
 
             RaycastHit hit;
             if(!Physics.Raycast(_leftHandTransform.position, Quaternion.AngleAxis(Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward, out hit, Controller.ControllerData.ArmRayLength * 2.0f, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
@@ -548,6 +601,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
+            _didRotateLeftRaycast = true;
+
             RaycastHit hit;
             if(!Physics.Raycast(_leftHandTransform.position, Quaternion.AngleAxis(-90.0f, transform.up) * transform.forward, out hit, Controller.ControllerData.ArmRayLength * 0.5f, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
                 return false;
@@ -575,6 +630,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(null == _leftHandHitResult || Controller.LastMoveAxes.x <= 0.0f) {
                 return false;
             }
+
+            _didWrapRightRaycast = true;
 
             RaycastHit hit;
             if(!Physics.Raycast(_rightHandTransform.position, Quaternion.AngleAxis(-Controller.ControllerData.WrapAroundAngle, transform.up) * transform.forward, out hit, Controller.ControllerData.ArmRayLength * 2.0f, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
@@ -605,6 +662,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
+            _didRotateRightRaycast = true;
+
             RaycastHit hit;
             if(!Physics.Raycast(_rightHandTransform.position, Quaternion.AngleAxis(90.0f, transform.up) * transform.forward, out hit, Controller.ControllerData.ArmRayLength * 0.5f, Controller.ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore)) {
                 return false;
@@ -633,6 +692,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(Controller.LastMoveAxes.y <= 0.0f) {
                 return false;
             }
+
+            _didClimbUpRaycast = true;
 
             // cast a ray from the end of our rotated head check straight down to see if we can stand here
             Vector3 start = _headTransform.position + (Quaternion.AngleAxis(-Controller.ControllerData.HeadRayAngle, transform.right) * transform.forward) * Controller.ControllerData.HeadRayLength;
