@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,6 +50,10 @@ namespace pdxpartyparrot.Game.Actors
         [SerializeField]
         [ReadOnly]
         private Vector3 _groundCheckNormal;
+
+        [SerializeField]
+        [ReadOnly]
+        private float _groundCheckMinDistance;
 
         [SerializeField]
         [ReadOnly]
@@ -120,7 +124,7 @@ namespace pdxpartyparrot.Game.Actors
             FudgeVelocity(dt);
 
             // turn off gravity if we're grounded and not moving and not sliding
-            // this should stop us slipping down slopes we shouldn't slip down
+            // this should stop us sliding down slopes we shouldn't slide down
             Rigidbody.useGravity = !IsGrounded || IsMoving || IsSliding;
         }
 
@@ -137,7 +141,10 @@ namespace pdxpartyparrot.Game.Actors
             Gizmos.DrawLine(Rigidbody.position, Rigidbody.position + Rigidbody.velocity);
 
             Gizmos.color = IsGrounded ? Color.red : Color.yellow;
-            Gizmos.DrawWireSphere(GroundCheckCenter + (ControllerData.GroundedCheckEpsilon * Vector3.down), GroundCheckRadius);
+            Gizmos.DrawWireSphere(GroundCheckCenter + (ControllerData.GroundedEpsilon * Vector3.down), GroundCheckRadius);
+
+            Gizmos.color = DidGroundCheckCollide ? Color.red : Color.yellow;
+            Gizmos.DrawWireSphere(GroundCheckCenter + (ControllerData.GroundCheckLength * Vector3.down), GroundCheckRadius);
         }
 #endregion
 
@@ -198,7 +205,7 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
-            if(!ControllerData.AllowAirControl && !IsGrounded) {
+            if(!ControllerData.AllowAirControl && IsFalling) {
                 return;
             }
 
@@ -291,6 +298,7 @@ namespace pdxpartyparrot.Game.Actors
                 return;
             }
 
+            // force physics to a sane state for the first frame of the jump
             Rigidbody.isKinematic = false;
             Rigidbody.useGravity = true;
             _didGroundCheckCollide = _isGrounded = false;
@@ -317,20 +325,24 @@ namespace pdxpartyparrot.Game.Actors
         }
 
 #region Grounded Check
-        protected bool CheckIsGrounded()
+        protected bool CheckIsGrounded(out float minDistance)
         {
+            minDistance = float.MaxValue;
+
             Vector3 origin = GroundCheckCenter;
 
-            int hitCount = Physics.SphereCastNonAlloc(origin, GroundCheckRadius, Vector3.down, _groundCheckHits, ControllerData.GroundedCheckEpsilon, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
+            int hitCount = Physics.SphereCastNonAlloc(origin, GroundCheckRadius, Vector3.down, _groundCheckHits, ControllerData.GroundCheckLength, ControllerData.CollisionCheckLayerMask, QueryTriggerInteraction.Ignore);
             if(hitCount < 1) {
                 // no slope if not grounded
                 _groundSlope = 0;
                 return false;
             }
 
+            // figure out the slope of whatever we hit
             _groundCheckNormal = Vector3.zero;
             for(int i=0; i<hitCount; ++i) {
                 _groundCheckNormal += _groundCheckHits[i].normal;
+                minDistance = Mathf.Min(minDistance, _groundCheckHits[i].distance);
             }
             _groundCheckNormal /= hitCount;
 
@@ -345,12 +357,12 @@ namespace pdxpartyparrot.Game.Actors
             try {
                 bool wasGrounded = IsGrounded;
 
-                _didGroundCheckCollide = CheckIsGrounded();
+                _didGroundCheckCollide = CheckIsGrounded(out _groundCheckMinDistance);
 
                 if(Rigidbody.isKinematic) {
                     // something else is handling this case?
                 } else {
-                    _isGrounded = _didGroundCheckCollide;
+                    _isGrounded = _didGroundCheckCollide && _groundCheckMinDistance < ControllerData.GroundedEpsilon;
                 }
 
                 // if we're on a slope, we're sliding down it

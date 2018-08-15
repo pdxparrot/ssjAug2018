@@ -52,7 +52,7 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
                 return false;
             }
 
-            if(!Controller.IsGrounded) {
+            if(!Controller.IsGrounded || Controller.IsSliding) {
                 return false;
             }
 
