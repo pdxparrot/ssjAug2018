@@ -31,7 +31,8 @@ MonoBehaviour:
   _runThreshold: 0.75
   _fallSpeedAdjustment: 200
   _terminalVelocity: 75
-  _groundedCheckEpsilon: 0.5
+  _GroundedEpsilon: 0.1
+  _groundCheckLength: 1
   _slopeLimit: 30
   _jumpHeight: 6
   _longJumpHoldSeconds: 0.3
@@ -40,7 +41,7 @@ MonoBehaviour:
   _doubleJumpCount: 1
   _hoverHoldSeconds: 0.25
   _hoverTimeSeconds: 5
-  _hoverCooldownSeconds: 1.5
+  _hoverCooldownSeconds: 0.5
   _hoverRechargeRate: 0.5
   _hoverAcceleration: 20
   _hoverMoveSpeed: 20
@@ -52,8 +53,6 @@ MonoBehaviour:
   _headRayAngle: 30
   _hangRayLength: 2
   _chestRayLength: 2
-  _footRayLength: 2
-  _footRayAngle: 30
   _climbSpeed: 10
   _hangSpeed: 10
   _allowAirControl: 1

@@ -121,9 +121,15 @@ namespace pdxpartyparrot.Game.Data
 
         [SerializeField]
         [Tooltip("Max distance from the ground that the character is considered grounded")]
-        private float _groundedCheckEpsilon = 0.1f;
+        private float _GroundedEpsilon = 0.1f;
 
-        public float GroundedCheckEpsilon => _groundedCheckEpsilon;
+        public float GroundedEpsilon => _GroundedEpsilon;
+
+        [SerializeField]
+        [Tooltip("The length of the ground check sphere cast (useful for checking actual slope below the character)")]
+        private float _groundCheckLength = 1.0f;
+
+        public float GroundCheckLength => _groundCheckLength;
 
         [SerializeField]
         private float _slopeLimit = 30.0f;
@@ -279,18 +285,6 @@ namespace pdxpartyparrot.Game.Data
         private float _chestRayLength = 1.0f;
 
         public float ChestRayLength => _chestRayLength;
-
-        [SerializeField]
-        [Range(0, 10)]
-        private float _footRayLength = 1.0f;
-
-        public float FootRayLength => _footRayLength;
-
-        [SerializeField]
-        [Range(0, 90)]
-        private float _footRayAngle = 45.0f;
-
-        public float FootRayAngle => _footRayAngle;
 
         [SerializeField]
         [Range(0, 50)]

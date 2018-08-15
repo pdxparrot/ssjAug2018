@@ -29,10 +29,24 @@ namespace pdxpartyparrot.ssjAug2018.Players
         private Timer _reloadTimer;
 
         public bool IsReloading => _reloadTimer.SecondsRemaining > 0.0f;
+#endregion
 
-        public bool CanThrowMail => !IsReloading && CurrentLetterCount > 0;
+#region Throw
+        [SerializeField]
+        [ReadOnly]
+        private Timer _throwMailTimer;
 
-        public bool CanThrowSnowball => true;
+        public bool IsThrowMailCooldown => _throwMailTimer.SecondsRemaining > 0.0f;
+
+        public bool CanThrowMail => !IsThrowMailCooldown && !IsReloading && CurrentLetterCount > 0;
+
+        [SerializeField]
+        [ReadOnly]
+        private Timer _throwSnowballTimer;
+
+        public bool IsThrowSnowballCooldown => _throwSnowballTimer.SecondsRemaining > 0.0f;
+
+        public bool CanThrowSnowball => !IsThrowSnowballCooldown;
 #endregion
 
 #region Score
@@ -88,6 +102,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             if(NetworkServer.active) {
                 _reloadTimer.Update(dt);
+                _throwMailTimer.Update(dt);
+                _throwSnowballTimer.Update(dt);
                 _stunTimer.Update(dt);
                 _respawnTimer.Update(dt);
             }
@@ -209,6 +225,8 @@ namespace pdxpartyparrot.ssjAug2018.Players
             if(null != mail) {
                 mail.Throw(Player, origin, velocity);
             }
+
+            _throwMailTimer.Start(Player.PlayerController.PlayerControllerData.ThrowCooldownSeconds);
 
             RpcThrowMail();
 

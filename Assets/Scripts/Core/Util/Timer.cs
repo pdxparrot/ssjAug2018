@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
 
 namespace pdxpartyparrot.Core.Util
@@ -25,9 +27,10 @@ namespace pdxpartyparrot.Core.Util
 
         public bool IsRunning => _isRunning;
 
+        [CanBeNull]
         private Action _onTimesUp;
 
-        public void Start(float timerSeconds, Action onTimesUp)
+        public void Start(float timerSeconds, Action onTimesUp=null)
         {
             _onTimesUp = onTimesUp;
             _timerSeconds = timerSeconds;
@@ -62,7 +65,7 @@ namespace pdxpartyparrot.Core.Util
 
                 _secondsRemaining = 0.0f;
 
-                _onTimesUp.Invoke();
+                _onTimesUp?.Invoke();
             }
         }
     }
