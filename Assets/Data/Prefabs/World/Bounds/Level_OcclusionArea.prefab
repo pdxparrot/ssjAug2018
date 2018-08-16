@@ -11,22 +11,6 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1962099453005580}
   m_IsPrefabAsset: 1
---- !u!1 &1042044868461778
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4682591988050506}
-  - component: {fileID: 192195398912129762}
-  m_Layer: 16
-  m_Name: West_OcclusionArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1494166361868620
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,22 +43,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1934647402476598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4141268650685846}
-  - component: {fileID: 192956710142178682}
-  m_Layer: 16
-  m_Name: East_OcclusionArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1962099453005580
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,24 +69,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4500456564084368}
-  - {fileID: 4141268650685846}
-  - {fileID: 4682591988050506}
   - {fileID: 4838715985925342}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4141268650685846
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1934647402476598}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4113029535925818}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4500456564084368
 Transform:
@@ -133,19 +86,6 @@ Transform:
   m_Father: {fileID: 4113029535925818}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4682591988050506
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1042044868461778}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4113029535925818}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4838715985925342
 Transform:
   m_ObjectHideFlags: 1
@@ -157,18 +97,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4113029535925818}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!192 &192195398912129762
-OcclusionArea:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1042044868461778}
-  serializedVersion: 2
-  m_Size: {x: 3500, y: 900, z: 1450}
-  m_Center: {x: 0, y: 150, z: -1000}
-  m_IsViewVolume: 1
 --- !u!192 &192283967598950812
 OcclusionArea:
   m_ObjectHideFlags: 1
@@ -176,8 +106,8 @@ OcclusionArea:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873814409286992}
   serializedVersion: 2
-  m_Size: {x: 3500, y: 900, z: 600}
-  m_Center: {x: 0, y: 150, z: 0}
+  m_Size: {x: 2968.3733, y: 626.67285, z: 3361.5386}
+  m_Center: {x: -265.81305, y: 38.629883, z: -119.23071}
   m_IsViewVolume: 1
 --- !u!192 &192679627029260974
 OcclusionArea:
@@ -186,16 +116,6 @@ OcclusionArea:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1494166361868620}
   serializedVersion: 2
-  m_Size: {x: 1700, y: 1400, z: 2800}
-  m_Center: {x: -800, y: 500, z: 0}
-  m_IsViewVolume: 1
---- !u!192 &192956710142178682
-OcclusionArea:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1934647402476598}
-  serializedVersion: 2
-  m_Size: {x: 3500, y: 900, z: 1350}
-  m_Center: {x: 0, y: 150, z: 900}
+  m_Size: {x: 1744.6555, y: 1437.4473, z: 2800}
+  m_Center: {x: -822.32776, y: 481.27637, z: 0}
   m_IsViewVolume: 1
