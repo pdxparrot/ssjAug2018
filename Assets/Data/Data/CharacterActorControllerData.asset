@@ -26,24 +26,25 @@ MonoBehaviour:
   _hangingParam: Hanging
   _wrapTimeSeconds: 1
   _climbUpTimeSeconds: 1
+  _climbDownTimeSeconds: 1
   _hangTimeSeconds: 1
-  _moveSpeed: 20
+  _moveSpeed: 30
   _runThreshold: 0.75
   _fallSpeedAdjustment: 200
   _terminalVelocity: 75
   _GroundedEpsilon: 0.1
   _groundCheckLength: 1
   _slopeLimit: 30
-  _jumpHeight: 6
-  _longJumpHoldSeconds: 0.3
-  _longJumpHeight: 30
-  _doubleJumpHeight: 6
+  _jumpHeight: 30
+  _longJumpHoldSeconds: 0.15
+  _longJumpHeight: 45
+  _doubleJumpHeight: 30
   _doubleJumpCount: 1
   _hoverHoldSeconds: 0.25
   _hoverTimeSeconds: 5
   _hoverCooldownSeconds: 0.5
   _hoverRechargeRate: 0.5
-  _hoverAcceleration: 20
+  _hoverAcceleration: 1
   _hoverMoveSpeed: 20
   _hoverWhenGrounded: 0
   _attachDistance: 0.1
@@ -53,6 +54,6 @@ MonoBehaviour:
   _headRayAngle: 30
   _hangRayLength: 2
   _chestRayLength: 2
-  _climbSpeed: 10
-  _hangSpeed: 10
+  _climbSpeed: 30
+  _hangSpeed: 25
   _allowAirControl: 1
