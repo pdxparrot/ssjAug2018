@@ -40,12 +40,12 @@ MonoBehaviour:
   _longJumpHeight: 45
   _doubleJumpHeight: 30
   _doubleJumpCount: 1
-  _hoverHoldSeconds: 0.25
-  _hoverTimeSeconds: 5
+  _hoverHoldSeconds: 0.1
+  _hoverTimeSeconds: 10
   _hoverCooldownSeconds: 0.5
   _hoverRechargeRate: 0.5
-  _hoverAcceleration: 1
-  _hoverMoveSpeed: 20
+  _hoverAcceleration: 5
+  _hoverMoveSpeed: 30
   _hoverWhenGrounded: 0
   _attachDistance: 0.1
   _armRayLength: 2
