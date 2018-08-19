@@ -40,7 +40,7 @@ MonoBehaviour:
   _longJumpHeight: 45
   _doubleJumpHeight: 30
   _doubleJumpCount: 1
-  _hoverHoldSeconds: 0.1
+  _hoverHoldSeconds: 0.01
   _hoverTimeSeconds: 10
   _hoverCooldownSeconds: 0.5
   _hoverRechargeRate: 0.5
