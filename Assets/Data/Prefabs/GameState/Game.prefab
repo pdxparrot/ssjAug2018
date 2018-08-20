@@ -53,7 +53,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneName: test_terrain05
   _makeSceneActive: 1
-  _viewerPrefab: {fileID: 114567109661045988, guid: 90d2034f2dac7c8418bb452cda507c68,
-    type: 2}
+  _music: {fileID: 8300000, guid: b22bb0f094fb1254dae121d9d845ddf2, type: 3}
   _gameOverState: {fileID: 114295936013911180, guid: 69d9e25074cfada4f9bd693cfd5d0aef,
     type: 2}

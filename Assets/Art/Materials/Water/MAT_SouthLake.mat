@@ -40,7 +40,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Foam:
         m_Texture: {fileID: 2800000, guid: 124150a8964a92b449735ca04b9e6d44, type: 3}
-        m_Scale: {x: 100, y: 120}
+        m_Scale: {x: 83.7, y: 149.2}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
@@ -60,7 +60,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _WaterNormal:
         m_Texture: {fileID: 2800000, guid: 27e0b5d90e0fe934b8e56f38ca3cd8b3, type: 3}
-        m_Scale: {x: 220, y: 200}
+        m_Scale: {x: 110, y: 151}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
@@ -73,7 +73,7 @@ Material:
     - _Distortion: 0.2
     - _DstBlend: 0
     - _FoamDepth: 2.7
-    - _FoamFalloff: -0.6
+    - _FoamFalloff: -0.4
     - _FoamSmoothness: 0.2
     - _FoamSpecular: 0
     - _GlossMapScale: 1
@@ -98,7 +98,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DeepColor: {r: 0, g: 0.043137256, b: 0.2509804, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Foam_Speed: {r: -0.01, g: 0.01, b: 0, a: 0}
+    - _Foam_Speed: {r: -0.03, g: 0.01, b: 0, a: 0}
     - _ShalowColor: {r: 0, g: 0.8078432, b: 0.8078432, a: 0}
     - _Water_Speed1: {r: 0.06, g: -0.02, b: 0, a: 0}
     - _Water_Speed2: {r: 0.02, g: 0.02, b: 0, a: 0}
