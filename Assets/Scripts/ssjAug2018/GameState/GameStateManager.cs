@@ -14,6 +14,7 @@ namespace pdxpartyparrot.ssjAug2018.GameState
 {
     public sealed class GameStateManager : GameStateManager<GameStateManager>
     {
+// TODO: move this back to the GameManager
         [SerializeField]
         private GameData _gameData;
 

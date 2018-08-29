@@ -35,6 +35,9 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
 
         public bool IsClimbing => _climbMode != ClimbMode.None;
 
+// TODO: the number of constant raycasts could probably be reduced even more
+// TODO: we probably also don't need to hold onto the hit results, just update and handle them one at a time
+
         [Space(10)]
 
 #region Hands
@@ -172,6 +175,8 @@ namespace pdxpartyparrot.Game.Actors.ControllerComponents
             if(!Application.isPlaying) {
                 return;
             }
+
+// TODO: encapsulate the math here so we a) don't duplicate it in the raycast methods and b) guarantee we always match the math done in the raycast methods
 
             // left hand
             if(_didLeftHandRaycast) {

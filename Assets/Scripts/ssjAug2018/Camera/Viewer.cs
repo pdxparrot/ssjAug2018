@@ -1,10 +1,11 @@
-using pdxpartyparrot.Core.Camera;
+﻿using pdxpartyparrot.Core.Camera;
 using pdxpartyparrot.ssjAug2018.Players;
 
 using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Camera
 {
+// TODO: rename PlayerViewer
     public sealed class Viewer : FollowViewer
     {
         private Player _target;

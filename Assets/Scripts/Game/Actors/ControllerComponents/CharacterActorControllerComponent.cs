@@ -1,10 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace pdxpartyparrot.Game.Actors.ControllerComponents
 {
     [RequireComponent(typeof(CharacterActorController))]
     public abstract class CharacterActorControllerComponent : MonoBehaviour
     {
+// TODO: if subclasses could register for specific action types (and we keep a dictionary ActionType => Listener)
+// then that would work out a lot faster and cleaner than how this is currently done
+
         public abstract class CharacterActorControllerAction
         {
         }

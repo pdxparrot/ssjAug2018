@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.World
 {
+// TODO: rename this to WorldZone or something and move it to Game
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(BoxCollider))]
     public sealed class WeatherZone : MonoBehaviour

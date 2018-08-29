@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.Core.Loading
 {
+// TODO: move to UI
     [RequireComponent(typeof(Canvas))]
     public sealed class LoadingScreen : MonoBehaviour
     {
@@ -14,6 +15,7 @@ namespace pdxpartyparrot.Core.Loading
 
         public ProgressBar Progress => _progressBar;
 
+// TODO: use Core Text type (and replace all TMP text's on prefabs and shit with that)
         [SerializeField]
         private TextMeshProUGUI _progressText;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {
+// TODO: this doesn't need to be a state, just build it into the main menu
     public sealed class Credits : pdxpartyparrot.Game.State.SubGameState
     {
         [SerializeField]

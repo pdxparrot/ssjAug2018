@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
+// TODO: rename this to WorldZoneEffect or something and move it to Game
     public sealed class WeatherZoneEffect : MonoBehaviour
     {
         private readonly HashSet<WeatherZone> _zones = new HashSet<WeatherZone>();

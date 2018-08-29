@@ -20,6 +20,8 @@ namespace pdxpartyparrot.Game.Effects
         [CanBeNull]
         private AudioSource _audioSource;
 
+// TODO: add animations to this
+
 #region Unity Lifecycle
         private void Awake()
         {
