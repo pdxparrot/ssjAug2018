@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35ae99a29c70e334fb4725e34080be7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneName: test_terrain05
+  _sceneName: test_terrain06
   _makeSceneActive: 1
   _music: {fileID: 8300000, guid: b22bb0f094fb1254dae121d9d845ddf2, type: 3}
   _gameOverState: {fileID: 114295936013911180, guid: 69d9e25074cfada4f9bd693cfd5d0aef,

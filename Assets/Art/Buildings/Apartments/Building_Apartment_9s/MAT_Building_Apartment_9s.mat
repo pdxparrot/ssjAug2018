@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: MAT_Building_Apartment_9s
+  m_Shader: {fileID: 4800000, guid: c892c6c5e649b8c4b85352fea5996aab, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: 68d4e4d8eee143f4a944081527807fde, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material1_Array:
+        m_Texture: {fileID: 18700000, guid: e37d3a78be4474a47ae91e96ccf36475, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material1_Normal:
+        m_Texture: {fileID: 2800000, guid: 3a5224ab44e169b43ad489f17c91301a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material2_Array:
+        m_Texture: {fileID: 18700000, guid: 5c396e22f0a34a344b65642b8718a837, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material2_Normal:
+        m_Texture: {fileID: 2800000, guid: 4e3c662d1a2712041b61a3e17a55cfd6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material3_Array:
+        m_Texture: {fileID: 18700000, guid: 7942775bec04c63488ca4259342af56a, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material3_Normal:
+        m_Texture: {fileID: 2800000, guid: ea578c546016ee142b4ae719968a936b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Material1_AOLift: 0
+    - _Material1_Rotation: 0
+    - _Material1_SmoothnessMult: 1
+    - _Material2_AOLift: 0.55
+    - _Material2_Rotation: 0
+    - _Material2_SmoothnessMult: 1
+    - _Material3_AOLift: 0.8
+    - _Material3_Rotation: 0
+    - _Material3_SmoothnessMult: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Material1_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Material1_Tiling: {r: 40, g: 40, b: 0, a: 0}
+    - _Material1_TintColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Material2_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Material2_Tiling: {r: 30, g: 30, b: 0, a: 0}
+    - _Material2_TintColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Material3_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Material3_Tiling: {r: 25, g: 25, b: 0, a: 0}
+    - _Material3_TintColor: {r: 0, g: 0, b: 0, a: 1}

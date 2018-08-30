@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: 99b7ebdb47801d74ba85fd70c8b175db
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: addon003
+    100002: addon004
+    100004: addon005
+    100006: addon006
+    100008: addon007
+    100010: addon008
+    100012: addon009
+    100014: addon010
+    100016: //RootNode
+    100018: building_apartment_3s001
+    100020: building_apartment_3s002
+    100022: building_apartment_3s003
+    100024: Object091
+    100026: Object092
+    100028: Object093
+    100030: Plane010
+    400000: addon003
+    400002: addon004
+    400004: addon005
+    400006: addon006
+    400008: addon007
+    400010: addon008
+    400012: addon009
+    400014: addon010
+    400016: //RootNode
+    400018: building_apartment_3s001
+    400020: building_apartment_3s002
+    400022: building_apartment_3s003
+    400024: Object091
+    400026: Object092
+    400028: Object093
+    400030: Plane010
+    2100000: No Name
+    2100002: 'Material #3531'
+    2100004: windows
+    2100006: 'Material #4498'
+    2100008: 'Material #4287'
+    2300000: addon003
+    2300002: addon004
+    2300004: addon005
+    2300006: addon006
+    2300008: addon007
+    2300010: addon008
+    2300012: addon009
+    2300014: addon010
+    2300016: building_apartment_3s001
+    2300018: building_apartment_3s002
+    2300020: building_apartment_3s003
+    2300022: Object091
+    2300024: Object092
+    2300026: Object093
+    2300028: Plane010
+    3300000: addon003
+    3300002: addon004
+    3300004: addon005
+    3300006: addon006
+    3300008: addon007
+    3300010: addon008
+    3300012: addon009
+    3300014: addon010
+    3300016: building_apartment_3s001
+    3300018: building_apartment_3s002
+    3300020: building_apartment_3s003
+    3300022: Object091
+    3300024: Object092
+    3300026: Object093
+    3300028: Plane010
+    4300000: Plane010
+    4300002: addon003
+    4300004: Object091
+    4300006: building_apartment_3s001
+    4300008: building_apartment_3s002
+    4300010: building_apartment_3s003
+    4300012: addon004
+    4300014: Object092
+    4300016: Object093
+    4300018: addon005
+    4300020: addon006
+    4300022: addon007
+    4300024: addon008
+    4300026: addon009
+    4300028: addon010
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
