@@ -11,7 +11,7 @@ using pdxpartyparrot.Core.UI;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
 
 namespace pdxpartyparrot.Core.DebugMenu

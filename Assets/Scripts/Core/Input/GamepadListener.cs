@@ -4,7 +4,7 @@ using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 
 namespace pdxpartyparrot.Game.Actors
 {
