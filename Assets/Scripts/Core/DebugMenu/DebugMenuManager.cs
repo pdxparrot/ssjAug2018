@@ -102,7 +102,7 @@ namespace pdxpartyparrot.Core.DebugMenu
 
         private void Update()
         {
-            if(Keyboard.current[_enableKey].wasJustPressed) {
+            if(Keyboard.current[_enableKey].wasPressedThisFrame) {
                 _enabled = !_enabled;
             }
 

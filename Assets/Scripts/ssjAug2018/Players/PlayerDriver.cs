@@ -8,7 +8,7 @@ using pdxpartyparrot.Game.Actors.ControllerComponents;
 using pdxpartyparrot.ssjAug2018.Players.ControllerComponents;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 
 namespace pdxpartyparrot.ssjAug2018.Players
 {
@@ -66,7 +66,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.move.started -= OnMove;
                 InputManager.Instance.Controls.game.move.performed -= OnMove;
-                InputManager.Instance.Controls.game.move.cancelled -= OnMoveStop;
+                InputManager.Instance.Controls.game.move.canceled -= OnMoveStop;
 
                 InputManager.Instance.Controls.game.moveforward.started -= OnMoveForward;
                 InputManager.Instance.Controls.game.moveforward.performed -= OnMoveForwardStop;
@@ -79,7 +79,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
                 InputManager.Instance.Controls.game.look.started -= OnLook;
                 InputManager.Instance.Controls.game.look.performed -= OnLook;
-                InputManager.Instance.Controls.game.look.cancelled -= OnLookStop;
+                InputManager.Instance.Controls.game.look.canceled -= OnLookStop;
 
                 InputManager.Instance.Controls.game.jump.started -= OnJumpStart;
                 InputManager.Instance.Controls.game.jump.performed -= OnJump;
@@ -114,7 +114,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             InputManager.Instance.Controls.game.move.started += OnMove;
             InputManager.Instance.Controls.game.move.performed += OnMove;
-            InputManager.Instance.Controls.game.move.cancelled += OnMoveStop;
+            InputManager.Instance.Controls.game.move.canceled += OnMoveStop;
 
             InputManager.Instance.Controls.game.moveforward.started += OnMoveForward;
             InputManager.Instance.Controls.game.moveforward.performed += OnMoveForwardStop;
@@ -127,7 +127,7 @@ namespace pdxpartyparrot.ssjAug2018.Players
 
             InputManager.Instance.Controls.game.look.started += OnLook;
             InputManager.Instance.Controls.game.look.performed += OnLook;
-            InputManager.Instance.Controls.game.look.cancelled += OnLookStop;
+            InputManager.Instance.Controls.game.look.canceled += OnLookStop;
 
             InputManager.Instance.Controls.game.jump.started += OnJumpStart;
             InputManager.Instance.Controls.game.jump.performed += OnJump;

@@ -3,7 +3,7 @@ using pdxpartyparrot.Core.Actors;
 using pdxpartyparrot.Core.Util;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 
 namespace pdxpartyparrot.Game.Players
 {

@@ -4,7 +4,7 @@ using pdxpartyparrot.Core.Input;
 using pdxpartyparrot.Game.State;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 
 namespace pdxpartyparrot.ssjAug2018.GameState
 {

@@ -7,7 +7,7 @@ using pdxpartyparrot.Core.Util;
 using pdxpartyparrot.ssjAug2018.Camera;
 
 using UnityEngine;
-using UnityEngine.Experimental.Input;
+using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 namespace pdxpartyparrot.ssjAug2018.Actors
@@ -63,7 +63,7 @@ namespace pdxpartyparrot.ssjAug2018.Actors
 
             InputManager.Instance.Controls.game.look.started += OnLook;
             InputManager.Instance.Controls.game.look.performed += OnLook;
-            InputManager.Instance.Controls.game.look.cancelled += OnLookStop;
+            InputManager.Instance.Controls.game.look.canceled += OnLookStop;
         }
 
         private void OnDestroy()
@@ -86,7 +86,7 @@ namespace pdxpartyparrot.ssjAug2018.Actors
 
                 InputManager.Instance.Controls.game.look.started -= OnLook;
                 InputManager.Instance.Controls.game.look.performed -= OnLook;
-                InputManager.Instance.Controls.game.look.cancelled -= OnLookStop;
+                InputManager.Instance.Controls.game.look.canceled -= OnLookStop;
             }
 
             if(ViewerManager.HasInstance) {

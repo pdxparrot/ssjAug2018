@@ -87,7 +87,7 @@ namespace pdxpartyparrot.Core.UI
 
             Rect windowHandle = new Rect(_rect.x + _rect.width - WindowHandleSize, _rect.y + _rect.height - WindowHandleSize, WindowHandleSize, WindowHandleSize);
 
-            if(Mouse.current.leftButton.wasJustPressed && windowHandle.Contains(mousePosition)) {
+            if(Mouse.current.leftButton.wasPressedThisFrame && windowHandle.Contains(mousePosition)) {
                 _isResizing = true;
                 _resizeStartPosition = mousePosition;
                 _resizeOriginalRect = _rect;
@@ -99,7 +99,7 @@ namespace pdxpartyparrot.Core.UI
                     _rect.height = Mathf.Clamp(_resizeOriginalRect.height + (mousePosition.y - _resizeStartPosition.y), 0, Screen.height);
                 }
 
-                if(Mouse.current.leftButton.wasJustReleased) {
+                if(Mouse.current.leftButton.wasReleasedThisFrame) {
                     _isResizing = false;
                 }
             }
